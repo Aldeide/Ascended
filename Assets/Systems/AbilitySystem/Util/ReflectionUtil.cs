@@ -83,6 +83,43 @@ namespace Systems.AbilitySystem.Util
 
             return list.ToArray();
         }
-        
+
+        private static string[] _attributeSetsNames;
+
+        public static IEnumerable<string> AttributeSetsNames
+        {
+            get
+            {
+                _attributeSetNames ??= LoadAttributeSetNames();
+                return _attributeSetNames;
+            }
+        }
+
+        private static string[] LoadAttributeSetNames()
+        {
+            var libType = TypeUtil.FindTypeInAllAssemblies("Authoring.AttributeSets.AttributeSetLibrary");
+            if (libType == null)
+            {
+                Debug.LogError("AttributeSetLibrary not found!");
+                return Array.Empty<string>();
+            }
+            const string fieldName = "AttrSetTypeDict";
+            var field = libType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
+            if (field == null)
+            {
+                Debug.LogError($"Field \"{fieldName}\" not found in AttributeSetLibrary!");
+                return Array.Empty<string>();
+            }
+
+            var value = field.GetValue(null);
+            if (value is not Dictionary<string, Type> dict)
+            {
+                Debug.LogError($"Field \"{fieldName}\" is not a Dictionary<string, Type> in AttributeSetLibrary!");
+                return Array.Empty<string>();
+            }
+
+            return dict.Keys.ToArray();
+        }
+
     }
 }
