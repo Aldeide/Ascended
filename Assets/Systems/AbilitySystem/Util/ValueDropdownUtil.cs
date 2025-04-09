@@ -19,5 +19,7 @@ namespace Systems.AbilitySystem.Util
         }
         
         public static IEnumerable<string> AttributeChoices => ReflectionUtil.AttributeNames;
+        
+        public static IEnumerable<string> AttributeSetsChoices => ReflectionUtil.AttributeSetsNames;
     }
 }

@@ -121,5 +121,31 @@ namespace Systems.AbilitySystem.Util
             return dict.Keys.ToArray();
         }
 
+        public static Type GetAttributeSetType(string name)
+        {
+            var libType = TypeUtil.FindTypeInAllAssemblies("Authoring.AttributeSets.AttributeSetLibrary");
+            if (libType == null)
+            {
+                Debug.LogError("AttributeSetLibrary not found!");
+                return null;
+            }
+            const string fieldName = "AttrSetTypeDict";
+            var field = libType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
+            if (field == null)
+            {
+                Debug.LogError($"Field \"{fieldName}\" not found in AttributeSetLibrary!");
+                return null;
+            }
+
+            var value = field.GetValue(null);
+            if (value is not Dictionary<string, Type> dict)
+            {
+                Debug.LogError($"Field \"{fieldName}\" is not a Dictionary<string, Type> in AttributeSetLibrary!");
+                return null;
+            }
+
+            return dict[name];
+        }
+        
     }
 }
