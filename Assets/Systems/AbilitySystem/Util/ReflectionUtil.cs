@@ -26,7 +26,7 @@ namespace Systems.AbilitySystem.Util
             var tagLibType = TypeUtil.FindTypeInAllAssemblies("Authoring.Tags.TagLibrary");
             if (tagLibType == null)
             {
-                Debug.LogError("[EX] Type 'GTagLib' not found. Please generate the TAGS CODE first!");
+                Debug.LogError("TagLibrary not found!");
                 return Array.Empty<GameplayTag>();
             }
 
@@ -34,14 +34,14 @@ namespace Systems.AbilitySystem.Util
             var field = tagLibType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
             if (field == null)
             {
-                Debug.LogError($"[EX] Field \"{fieldName}\" not found in GTagLib!");
+                Debug.LogError($"Field \"{fieldName}\" not found in TagLibrary!");
                 return Array.Empty<GameplayTag>();
             }
 
             var value = field.GetValue(null);
             if (value is not Dictionary<string, GameplayTag> tagMap)
             {
-                Debug.LogError($"[EX] Field \"{fieldName}\" is not a Dictionary<string, GameplayTag> in GTagLib!");
+                Debug.LogError($"Field \"{fieldName}\" is not a Dictionary<string, GameplayTag> in TagLibrary!");
                 return Array.Empty<GameplayTag>();
             }
 
@@ -62,7 +62,7 @@ namespace Systems.AbilitySystem.Util
             var libType = TypeUtil.FindTypeInAllAssemblies("Authoring.AttributeSets.AttributeSetLibrary");
             if (libType == null)
             {
-                Debug.LogError("[EX] Type 'GAttrSetLib' not found. Please generate the GAttrSetLib CODE first!");
+                Debug.LogError("AttributeSetLibrary not found!");
                 return Array.Empty<string>();
             }
 
@@ -70,14 +70,14 @@ namespace Systems.AbilitySystem.Util
             var field = libType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
             if (field == null)
             {
-                Debug.LogError($"[EX] Field \"{fieldName}\" not found in GAttrSetLib!");
+                Debug.LogError($"Field \"{fieldName}\" not found in AttributeSetLibrary!");
                 return Array.Empty<string>();
             }
 
             var value = field.GetValue(null);
             if (value is not List<string> list)
             {
-                Debug.LogError($"[EX] Field \"{fieldName}\" is not a List<string> in GAttrSetLib!");
+                Debug.LogError($"Field \"{fieldName}\" is not a List<string> in AttributeSetLibrary!");
                 return Array.Empty<string>();
             }
 
