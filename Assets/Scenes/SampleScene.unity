@@ -1175,6 +1175,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4103597361958929506, guid: 6263f90c9061d184390e916643240c41, type: 3}
+      propertyPath: Preset
+      value: 
+      objectReference: {fileID: 11400000, guid: 5012c38e41f4125479f59bed7b210de2, type: 2}
+    - target: {fileID: 4103597361958929506, guid: 6263f90c9061d184390e916643240c41, type: 3}
+      propertyPath: DevelopmentComponent
+      value: 
+      objectReference: {fileID: 1771986404}
     - target: {fileID: 4109396783815272707, guid: 6263f90c9061d184390e916643240c41, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1452,6 +1460,17 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 791
+--- !u!114 &1771986404 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2802221078617364154, guid: 6263f90c9061d184390e916643240c41, type: 3}
+  m_PrefabInstance: {fileID: 1771986393}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771986394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cde52a55a8646c99f659cf4e31a6a95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1868660234
 GameObject:
   m_ObjectHideFlags: 0

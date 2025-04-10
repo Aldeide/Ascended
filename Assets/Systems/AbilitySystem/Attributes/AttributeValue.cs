@@ -12,7 +12,7 @@ namespace Systems.AbilitySystem.Attributes
         public float MinValue { get; set; }
         public float MaxValue { get; set; }
 
-        public AttributeValue(float baseValue, float minValue, float maxValue)
+        public AttributeValue(float baseValue, float minValue = float.MinValue, float maxValue = float.MaxValue)
         {
             BaseValue = baseValue;
             CurrentValue = BaseValue;
