@@ -36,6 +36,8 @@ namespace Systems.AbilitySystem.Tags
         public int HashCode => hashCode;
         
         public int[] AncestorsHashCodes => ancestorsHashCodes;
+
+        public string[] AncestorNames => ancestorsNames;
         
         public string GetName()
         {
@@ -47,7 +49,7 @@ namespace Systems.AbilitySystem.Tags
             return name.Contains(otherGameplayTag.GetName());
         }
         
-        public bool IsDescendantOf(GameplayTag other)
+        public bool IsAncestorOf(GameplayTag other)
         {
             return other.AncestorsHashCodes.Contains(HashCode);
         }

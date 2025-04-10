@@ -16,7 +16,6 @@ namespace Systems.AbilitySystem.Attributes
         public string attributeName;
         public string attributeSetName;
         
-        
         protected event Action<AttributeBase, float, float> _onPostCurrentValueChange;
         protected event Action<AttributeBase, float, float> _onPostBaseValueChange;
         protected event Action<AttributeBase, float> _onPreCurrentValueChange;
@@ -25,6 +24,8 @@ namespace Systems.AbilitySystem.Attributes
 
         public float BaseValue => value.BaseValue;
         public float CurrentValue => value.CurrentValue;
+        public float MinValue => value.MinValue;
+        public float MaxValue => value.MaxValue;
         
         public AttributeBase(AttributeAuthoring preset)
         {
@@ -38,10 +39,10 @@ namespace Systems.AbilitySystem.Attributes
             value = new AttributeValue(baseValue, minValue, maxValue);
         }
 
-        public void InitAttribute(float value)
+        public void InitAttribute(float initialValue)
         {
-            this.value.BaseValue = value;
-            this.value.CurrentValue = value;
+            value.BaseValue = initialValue;
+            value.CurrentValue = initialValue;
         }
         
         public string AttributeName()
