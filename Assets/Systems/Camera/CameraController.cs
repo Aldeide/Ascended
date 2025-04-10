@@ -16,7 +16,7 @@ namespace Systems.Camera
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;
-            UpdateCamera(context.ReadValue<Vector2>());
+            //UpdateCamera(context.ReadValue<Vector2>());
         }
 
         private void UpdateCamera(Vector2 mouseInput)
