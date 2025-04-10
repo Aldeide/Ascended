@@ -27,7 +27,6 @@ namespace Systems.AbilitySystem.Tags
             {
                 if (t.HasTag(tag)) return true;
             }
-
             return false;
         }
         
