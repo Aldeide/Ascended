@@ -7,22 +7,24 @@ namespace Systems.Camera
     {
         [SerializeField] private Transform followTarget;
         [SerializeField] private float rotationSpeed = 1.0f;
-        [SerializeField] private float topAngleClamp = 70f;
+        [SerializeField] private float topAngleClamp = 40f;
         [SerializeField] private float bottomAngleClamp = -40f;
-
+        private Vector2 mouseDelta = new();
         private float cinemachineTargetPitch = 0f;
         private float cinemachineTargetYaw = 0f;
 
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;
-            //UpdateCamera(context.ReadValue<Vector2>());
+            //mouseDelta = context.ReadValue<Vector2>();
+            UpdateCamera(context.ReadValue<Vector2>());
         }
 
         private void UpdateCamera(Vector2 mouseInput)
         {
             float mouseX = mouseInput.x;
             float mouseY = mouseInput.y;
+            
             cinemachineTargetPitch =
                 UpdateRotation(cinemachineTargetPitch, mouseY, bottomAngleClamp, topAngleClamp, true);
             cinemachineTargetYaw = UpdateRotation(cinemachineTargetYaw, mouseX, float.MinValue, float.MaxValue, false);
