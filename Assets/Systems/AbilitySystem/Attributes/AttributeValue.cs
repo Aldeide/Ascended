@@ -7,7 +7,6 @@ namespace Systems.AbilitySystem.Attributes
     public struct AttributeValue
     {
         public float BaseValue { get; set; }
-        [SerializeField]
         public float CurrentValue { get; set; }
         public float MinValue { get; set; }
         public float MaxValue { get; set; }
