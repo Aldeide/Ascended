@@ -1,4 +1,6 @@
-﻿using Systems.AbilitySystem.Authoring;
+﻿using Systems.AbilitySystem.Abilities;
+using Systems.AbilitySystem.Authoring;
+using Systems.AbilitySystem.Components;
 using Unity.VisualScripting;
 
 namespace Systems.Abilities
@@ -13,6 +15,8 @@ namespace Systems.Abilities
         {
             Asset = asset;
         }
+        
+        public abstract AbilitySpec CreateSpec(AbilitySystemComponent owner);
     }
     
     public abstract class AbstractAbility<T> : AbstractAbility where T : AbilityAsset

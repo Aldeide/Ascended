@@ -33,8 +33,10 @@ namespace Systems.AbilitySystem.Abilities
         }
 
         public abstract void ActivateAbility(params object[] args);
-        
-        
+
+        public abstract void CancelAbility();
+
+        public abstract void EndAbility();
 
         public virtual AbilityActivationResult CanActivate()
         {

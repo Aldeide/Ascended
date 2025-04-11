@@ -16,6 +16,7 @@ namespace Authoring.AttributeSets
         public static List<string> AttributeFullNames = new List<string>()
         {
             "CharacteristicsAttributeSet.Health",
+            "CharacteristicsAttributeSet.Energy",
             "CharacteristicsAttributeSet.MovementSpeed",
         };
     }
@@ -26,7 +27,10 @@ namespace Authoring.AttributeSets
         [SerializeField]
         public AttributeBase Health = 
             new AttributeBase("CharacteristicsAttributeSet", "Health", 100, 0, 100000);
-
+        [SerializeField]
+        public AttributeBase Energy = 
+            new AttributeBase("CharacteristicsAttributeSet", "Energy", 100, 0, 100000);
+        [SerializeField]
         public AttributeBase MovementSpeed =
             new AttributeBase("CharacteristicsAttributeSet", "MovementSpeed", 4, 0, 1000);
         public override AttributeBase this[string key]
@@ -37,6 +41,8 @@ namespace Authoring.AttributeSets
                 {
                     case "Health":
                         return Health;
+                    case "Energy":
+                        return Energy;
                     case "MovementSpeed":
                         return MovementSpeed;
                 }
@@ -47,12 +53,14 @@ namespace Authoring.AttributeSets
         public CharacteristicsAttributeSet()
         {
             this.AddAttribute("Health", Health);
+            this.AddAttribute("Energy", Energy);
             this.AddAttribute("MovementSpeed", MovementSpeed);
         }
         
         public override string[] AttributeNames { get; } =
         {
             "Health",
+            "Energy",
             "MovementSpeed"
         };
         
