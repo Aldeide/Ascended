@@ -79,9 +79,14 @@ namespace Systems.AbilitySystem.Components
 
         public void ApplyModifierFromInstantGameplayEffect(EffectSpec instantEffectSpec)
         {
+            Debug.Log("ApplyMod");
             foreach (var modifier in instantEffectSpec.Modifiers)
             {
-                var attributeValue = GetAttributeValue(modifier.attributeSetName, modifier.attributeName);
+                var splits = modifier.attributeName.Split(".");
+                var attributeSet = splits[0];
+                var attributeName = splits[1];
+                
+                var attributeValue = GetAttributeValue(attributeSet, attributeName);
                 if (attributeValue == null) continue;
                 var magnitude = modifier.CalculateModifier(instantEffectSpec);
                 var baseValue = attributeValue.Value.BaseValue;
@@ -105,8 +110,8 @@ namespace Systems.AbilitySystem.Components
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
-                AttributesSystem.SetAttributeBaseValue(modifier.attributeSetName, modifier.attributeName, baseValue);
+                Debug.Log("Base: " + baseValue);
+                AttributesSystem.SetAttributeBaseValue(attributeSet, attributeName, baseValue);
             }
         }
         

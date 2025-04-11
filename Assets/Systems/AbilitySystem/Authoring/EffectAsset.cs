@@ -20,7 +20,7 @@ namespace Systems.AbilitySystem.Authoring
         public float durationSeconds = 0;
 
         [Unit(Units.Second)]
-        [ShowIf("@DurationPolicy != EffectDurationType.FixedDuration")]
+        [ShowIf("@durationType != EffectDurationType.FixedDuration")]
         [EnableIf("IsDurationalPolicy")]
         public float Period = 0;
         
@@ -34,7 +34,6 @@ namespace Systems.AbilitySystem.Authoring
         
         [EnableIf("IsPeriodic")]
         [AssetSelector]
-        [PropertyOrder(4)]
         public EffectAsset periodicEffect;
         
         [FormerlySerializedAs("AssetTags")]
@@ -52,6 +51,8 @@ namespace Systems.AbilitySystem.Authoring
         [ValueDropdown("@ValueDropdownUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] applicationImmunityTags;
         
+        [Space]
+        [Title("Modifiers")]
         public EffectModifier[] modifiers;
         
         bool IsPeriodic()

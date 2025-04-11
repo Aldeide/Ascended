@@ -20,6 +20,7 @@ namespace Systems.AbilitySystem.Effects
         public EffectDurationType DurationType { get; private set; }
         public EffectModifier[] Modifiers { get; private set; }
         public EffectSpec PeriodicEffect { get; private set; }
+        public EffectPeriodTicker EffectPeriodTicker { get; }
         
         public EffectSpec(Effect effect)
         {
@@ -27,6 +28,10 @@ namespace Systems.AbilitySystem.Effects
             Duration = effect.Duration;
             Modifiers = effect.Modifiers;
             DurationType = effect.EffectDurationType;
+            if (DurationType != EffectDurationType.Instant)
+            {
+                EffectPeriodTicker = new EffectPeriodTicker(this);
+            }
         }
 
         public void Initialise(AbilitySystemComponent creator, AbilitySystemComponent owner, float level)
@@ -34,16 +39,15 @@ namespace Systems.AbilitySystem.Effects
             Source = creator;
             Owner = owner;
             Level = level;
+            if (Effect.EffectDurationType != EffectDurationType.Instant)
+            {
+                PeriodicEffect = Effect.PeriodicEffect?.ToEffectSpec(creator, owner);
+            }
         }
 
         public void Tick()
         {
-            if (DurationType != EffectDurationType.FixedDuration) return;
-            if (ActivationTime + Duration <= Time.time)
-            {
-                Debug.Log("Removing");
-                Remove();
-            }
+            EffectPeriodTicker?.Tick();
         }
 
         public void Activate()
@@ -61,6 +65,7 @@ namespace Systems.AbilitySystem.Effects
         public void TriggerOnExecute()
         {
             // TODO: remove all effects with 'RemoveEffectsWithTag'
+            Debug.Log("TriggerOnExecute");
             Owner.ApplyModifierFromInstantGameplayEffect(this);
         }
         

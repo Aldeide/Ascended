@@ -10,29 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa3a6f084e144d92adc16d35f6faadf7, type: 3}
-  m_Name: Test
+  m_Name: EnergyRegenTickEffect
   m_EditorClassIdentifier: 
   description: 
-  durationType: 3
-  durationSeconds: 5
-  assetTags:
-  - name: Unit
-    hashCode: 2126706964
-    ancestorsNames: []
-    ancestorsHashCodes: 
-  - name: Unit.Player
-    hashCode: 744092167
-    ancestorsNames:
-    - Unit
-    ancestorsHashCodes: 14f9c27e
+  durationType: 1
+  durationSeconds: 0
+  Period: 0
+  periodicEffect: {fileID: 0}
+  assetTags: []
   grantedTags: []
   applicationRequiredTags: []
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
   modifiers:
-  - attributeName: CharacteristicsAttributeSet.Health
+  - attributeName: CharacteristicsAttributeSet.Energy
     attributeSetName: 
-    modifierMagnitude: 50
+    modifierMagnitude: 1
     operation: 0
     modifierMagnitudeCalculation: {fileID: 0}

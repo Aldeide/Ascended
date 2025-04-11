@@ -15,6 +15,7 @@ namespace Systems.AbilitySystem.Effects
 
         public void Tick()
         {
+            
             // TODO: trigger tick;
             UpdatePeriod();
 
@@ -26,27 +27,30 @@ namespace Systems.AbilitySystem.Effects
 
         private void UpdatePeriod()
         {
+            
             if (Period <= 0) return;
 
             var actualDuration = Time.time - _effectSpec.ActivationTime;
-            if (actualDuration < Mathf.Epsilon)
-            {
-                return;
-            }
+            
+            //if (actualDuration < Mathf.Epsilon)
+            //{
+            //    return;
+            //}
 
             var deltaTime = Time.deltaTime;
             var excessDuration = actualDuration - _effectSpec.Duration;
             if (excessDuration >= 0)
             {
-                deltaTime -= excessDuration;
-                deltaTime += 0.0001f;
+                //deltaTime -= excessDuration;
+                //deltaTime += 0.0001f;
             }
 
             _remainingPeriod -= deltaTime;
 
-            while (_remainingPeriod < 0)
+            
+            if (_remainingPeriod <= 0)
             {
-                _remainingPeriod += Period;
+                ResetPeriod();
                 _effectSpec.PeriodicEffect?.TriggerOnExecute();
             }
         }
