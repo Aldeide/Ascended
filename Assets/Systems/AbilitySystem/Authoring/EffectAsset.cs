@@ -16,7 +16,26 @@ namespace Systems.AbilitySystem.Authoring
         public EffectDurationType durationType = EffectDurationType.Instant;
         
         [ShowIf("@durationType == EffectDurationType.FixedDuration")]
+        [Unit(Units.Second)]
         public float durationSeconds = 0;
+
+        [Unit(Units.Second)]
+        [ShowIf("@DurationPolicy != EffectDurationType.FixedDuration")]
+        [EnableIf("IsDurationalPolicy")]
+        public float Period = 0;
+        
+        [EnableIf("IsDurationalPolicy")]
+        [Unit(Units.Second)]
+        public float PeriodForDurational
+        {
+            get => Period;
+            set => Period = value;
+        }
+        
+        [EnableIf("IsPeriodic")]
+        [AssetSelector]
+        [PropertyOrder(4)]
+        public EffectAsset periodicEffect;
         
         [FormerlySerializedAs("AssetTags")]
         [Title("Effect Tags")]
@@ -34,5 +53,15 @@ namespace Systems.AbilitySystem.Authoring
         public GameplayTag[] applicationImmunityTags;
         
         public EffectModifier[] modifiers;
+        
+        bool IsPeriodic()
+        {
+            return IsDurationalPolicy() && Period > 0;
+        }
+
+        bool IsDurationalPolicy()
+        {
+            return durationType == EffectDurationType.FixedDuration || durationType == EffectDurationType.Infinite;
+        }
     }
 }

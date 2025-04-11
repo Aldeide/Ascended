@@ -14,7 +14,11 @@ namespace Systems.AbilitySystem.Effects
         public readonly float Duration;
         public readonly float Period;
 
+        // Modifiers
         public readonly EffectModifier[] Modifiers;
+        
+        // Ticks
+        public readonly Effect PeriodicEffect;
         
         public Effect(EffectAsset effectAsset)
         {
@@ -24,6 +28,15 @@ namespace Systems.AbilitySystem.Effects
             EffectDurationType = effectAsset.durationType;
             Duration = effectAsset.durationSeconds;
             Modifiers = effectAsset.modifiers;
+            Period = effectAsset.Period;
+            var periodicEffect = effectAsset.periodicEffect;
+#if UNITY_EDITOR
+            if (periodicEffect != null && periodicEffect.durationType != EffectDurationType.Instant)
+            {
+                UnityEngine.Debug.LogError("The periodic effect should be an instant type.");
+            }
+#endif
+            PeriodicEffect = periodicEffect != null ? new Effect(periodicEffect) : null;
         }
 
         public EffectSpec ToEffectSpec(AbilitySystemComponent creator, AbilitySystemComponent owner, float level = 1)

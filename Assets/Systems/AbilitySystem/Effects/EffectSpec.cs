@@ -19,6 +19,7 @@ namespace Systems.AbilitySystem.Effects
         
         public EffectDurationType DurationType { get; private set; }
         public EffectModifier[] Modifiers { get; private set; }
+        public EffectSpec PeriodicEffect { get; private set; }
         
         public EffectSpec(Effect effect)
         {
@@ -55,6 +56,19 @@ namespace Systems.AbilitySystem.Effects
         public void Remove()
         {
             Owner.EffectSystem.RemoveEffect(this);
+        }
+
+        public void TriggerOnExecute()
+        {
+            
+        }
+        
+        public float RemainingDuration()
+        {
+            if (DurationType == EffectDurationType.Infinite)
+                return -1;
+
+            return Mathf.Max(0, Duration - (Time.time - ActivationTime));
         }
     }
 }
