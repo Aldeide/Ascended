@@ -25,12 +25,14 @@ namespace Systems.AbilitySystem.Attributes
         {
             _asc.EffectSystem.RegisterOnEffectAdded(RefreshModifierCache);
             _asc.EffectSystem.RegisterOnEffectRemoved(RefreshModifierCache);
+            _attribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueChanged);
         }
 
         public void Disable()
         {
             _asc.EffectSystem.UnregisterOnEffectAdded(RefreshModifierCache);
             _asc.EffectSystem.UnregisterOnEffectRemoved(RefreshModifierCache);
+            _attribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueChanged);
         }
 
         private float CalculateCurrentValue()
@@ -91,6 +93,14 @@ namespace Systems.AbilitySystem.Attributes
         private void UpdateCurrentValue()
         {
             _attribute.SetCurrentValue(CalculateCurrentValue());
+        }
+
+        private void UpdateCurrentValueWhenBaseValueChanged(AttributeBase attribute, float oldBaseValue, float newBaseValue)
+        {
+            if (Mathf.Approximately(oldBaseValue, newBaseValue)) return;
+
+            float newValue = CalculateCurrentValue();
+            _attribute.SetCurrentValue(newValue);
         }
     }
 }
