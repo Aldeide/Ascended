@@ -41,7 +41,7 @@ namespace Systems.Movement
             //cameraTarget.transform.Rotate(new Vector3(0f, -angle, 0f));
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            _rigidbody.MovePosition(this.transform.position += moveDirection * Time.deltaTime);
+            _rigidbody.MovePosition(this.transform.position += moveDirection * Time.deltaTime * 2.0f);
             //Rotate(this.transform.position + movement);
             UpdateAnimator();
         }
