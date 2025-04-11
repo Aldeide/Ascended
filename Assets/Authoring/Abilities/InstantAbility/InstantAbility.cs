@@ -1,8 +1,10 @@
 ﻿using Systems.Abilities;
-using Systems.AbilitySystem.Authoring.Abilities;
+using Systems.AbilitySystem.Abilities;
 using Systems.AbilitySystem.Components;
+using Systems.Camera;
+using UnityEngine;
 
-namespace Systems.AbilitySystem.Abilities.InstantAbility
+namespace Authoring.Abilities.InstantAbility
 {
     public abstract class InstantAbilityT<T> : AbstractAbility<T> where T : InstantAbilityAssetBase
     {
@@ -19,14 +21,20 @@ namespace Systems.AbilitySystem.Abilities.InstantAbility
         
         public override void ActivateAbility(params object[] args)
         {
+            var camera = GameObject.Find("Camera").GetComponent<CameraController>();
+            camera.aimVirtualCamera.SetActive(true);
         }
 
         public override void CancelAbility()
         {
+            var camera = GameObject.Find("Camera").GetComponent<CameraController>();
+            camera.aimVirtualCamera.SetActive(false);
         }
 
         public override void EndAbility()
         {
+            var camera = GameObject.Find("Camera").GetComponent<CameraController>();
+            camera.aimVirtualCamera.SetActive(false);
         }
 
         protected override void AbilityTick()

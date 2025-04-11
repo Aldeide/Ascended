@@ -13,6 +13,10 @@ namespace Systems.AbilitySystem.Abilities
         
         public int Level { get; protected set; }
         public bool IsActive { get; private set; }
+        public int ActiveCount { get; private set; }
+        protected event Action<AbilityActivationResult> _onActivateResult;
+        protected event Action _onEndAbility;
+        protected event Action _onCancelAbility;
         
         public AbilitySpec(AbstractAbility ability, AbilitySystemComponent owner)
         {
@@ -40,7 +44,51 @@ namespace Systems.AbilitySystem.Abilities
 
         public virtual AbilityActivationResult CanActivate()
         {
+            // TODO
             return AbilityActivationResult.Success;
+        }
+        
+        public virtual bool TryActivateAbility(params object[] args)
+        {
+            AbilityArguments = args;
+            var result = CanActivate();
+            var success = result == AbilityActivationResult.Success;
+            if (success)
+            {
+                IsActive = true;
+                ActiveCount++;
+                //Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
+
+                ActivateAbility(AbilityArguments);
+            }
+
+            _onActivateResult?.Invoke(result);
+            return success;
+        }
+        
+        public virtual void TryEndAbility()
+        {
+            if (!IsActive) return;
+            IsActive = false;
+            // Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            EndAbility();
+            _onEndAbility?.Invoke();
+        }
+        
+        public virtual void TryCancelAbility()
+        {
+            if (!IsActive) return;
+            IsActive = false;
+            //Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            CancelAbility();
+            _onCancelAbility?.Invoke();
+        }
+        
+        public virtual void Dispose()
+        {
+            _onActivateResult = null;
+            _onEndAbility = null;
+            _onCancelAbility = null;
         }
         
     }

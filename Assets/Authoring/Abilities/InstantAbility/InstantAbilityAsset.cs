@@ -1,8 +1,8 @@
 ﻿using System;
-using Systems.AbilitySystem.Abilities.InstantAbility;
+using Systems.AbilitySystem.Authoring;
 using UnityEngine;
 
-namespace Systems.AbilitySystem.Authoring.Abilities
+namespace Authoring.Abilities.InstantAbility
 {
     public abstract class InstantAbilityAssetBase : AbilityAsset
     {

@@ -1,9 +1,8 @@
 {
-    "name": "Authoring",
+    "name": "Camera",
     "rootNamespace": "",
     "references": [
-        "GUID:4fac15158846a8247be07c8ee1f890ef",
-        "GUID:5b6bf4ad96333f645a722e6ed223ed0c"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

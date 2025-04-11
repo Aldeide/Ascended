@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a8bfce7d4634592bbcea3f9928f3e76, type: 3}
-  m_Name: InstantAbilityTest
+  m_Name: Aim
   m_EditorClassIdentifier: 
   description: 
   icon: {fileID: 0}
-  uniqueName: InstantAbilityTest
+  uniqueName: Aim
   cost: {fileID: 11400000, guid: c149501c0234c174b916434a9e41ce08, type: 2}
   AssetTags: []
   CancelAbilityTags: []

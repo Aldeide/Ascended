@@ -1,4 +1,5 @@
 ﻿using System;
+using Systems.AbilitySystem.Abilities;
 using Systems.AbilitySystem.Attributes;
 using Systems.AbilitySystem.Components;
 using Systems.AbilitySystem.Effects;
@@ -27,17 +28,24 @@ namespace Systems.Development
             }
             var effects = _asc.EffectSystem.GetAllEffects();
             var attributes = _asc.AttributesSystem.GetAllAttributes();
+            var abilities = _asc.GetAllAbilities();
+            
             var output = "";
             foreach (var effect in effects)
             {
                 output += DisplayEffect(effect);
             }
 
+            output += "----\n";
             foreach (var attribute in attributes)
             {
                 output += DisplayAttribute(attribute);
             }
-
+            output += "----\n";
+            foreach (var ability in abilities)
+            {
+                output += DisplayAbility(ability);
+            }
             _text.text = output;
         }
 
@@ -73,6 +81,17 @@ namespace Systems.Development
             output += attribute.AttributeName() + "\n";
             output += "Base: " + attribute.BaseValue + " Current: " + attribute.CurrentValue + "\n";
             return output;
+        }
+
+        private string DisplayAbility(AbilitySpec ability)
+        {
+            string output = "";
+            output += ability.Ability.Name;
+            if (ability.IsActive)
+            {
+                output += " (Active)";
+            }
+            return output += "\n";
         }
     }
 }

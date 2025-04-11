@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using FishNet.Object;
+using Systems.Abilities;
+using Systems.AbilitySystem.Abilities;
 using Systems.AbilitySystem.Attributes;
 using Systems.AbilitySystem.Authoring;
 using Systems.AbilitySystem.Effects;
@@ -17,6 +20,7 @@ namespace Systems.AbilitySystem.Components
         public AbilitySystemPreset Preset;
         
         public AttributeSystem AttributesSystem;
+        private AbilitySystem _abilitySystem;
         public TagSystem TagSystem;
         public EffectSystem EffectSystem;
         
@@ -27,6 +31,7 @@ namespace Systems.AbilitySystem.Components
             AttributesSystem = new AttributeSystem(this);
             TagSystem = new TagSystem(this);
             EffectSystem = new EffectSystem(this);
+            _abilitySystem = new AbilitySystem(this);
             
             AttributesSystem.Initialise(this);
             EffectSystem.Initialise(this);
@@ -50,11 +55,51 @@ namespace Systems.AbilitySystem.Components
                 Type type = ReflectionUtil.GetAttributeSetType(attributeSet);
                 AttributesSystem.AddAttributeSet(type);
             }
+
+            foreach (var ability in Preset.baseAbilities)
+            {
+                GrantAbility(ability);
+            }
+        }
+
+        private void GrantAbility(AbilityAsset asset)
+        {
+            if (!asset) return;
+            try
+            {
+                var ability = Activator.CreateInstance(asset.AbilityType(), args: asset) as AbstractAbility;
+                _abilitySystem.GrantAbility(ability);
+            }
+            catch (MissingMethodException e)
+            {
+                Debug.LogError("Failed to add ability: " + asset.GetType().FullName);
+                //throw;
+            }
         }
 
         public void Tick()
         {
             EffectSystem.Tick();
+        }
+
+        public void TryActivateAbility(string abilityName)
+        {
+            _abilitySystem.TryActivateAbility(abilityName);
+        }
+        
+        public void EndAbility(string abilityName)
+        {
+            _abilitySystem.EndAbility(abilityName);
+        }
+        
+        public void CancelAbility(string abilityName)
+        {
+            _abilitySystem.CancelAbility(abilityName);
+        }
+
+        public List<AbilitySpec> GetAllAbilities()
+        {
+            return _abilitySystem.GetAllAbilities();
         }
 
         public void AddEffect(EffectSpec effectSpec)

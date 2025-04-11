@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Systems.Camera
 {
@@ -13,6 +14,9 @@ namespace Systems.Camera
         private float cinemachineTargetPitch = 0f;
         private float cinemachineTargetYaw = 0f;
 
+        public GameObject defaultVirtualCamera;
+        public GameObject aimVirtualCamera;
+        
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;

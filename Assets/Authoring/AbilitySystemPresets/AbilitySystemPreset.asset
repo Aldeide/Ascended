@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttributeSets:
   - CharacteristicsAttributeSet
+  inherentTags: []
+  baseAbilities:
+  - {fileID: 11400000, guid: 2432e504082648641af304263981c20f, type: 2}

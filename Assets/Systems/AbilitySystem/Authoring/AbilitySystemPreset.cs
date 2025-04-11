@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using Systems.AbilitySystem.Tags;
 using UnityEngine;
 
 namespace Systems.AbilitySystem.Authoring
@@ -8,5 +9,10 @@ namespace Systems.AbilitySystem.Authoring
     {
         [ValueDropdown("@ValueDropdownUtil.AttributeSetsChoices", IsUniqueList = true)]
         public string[] AttributeSets;
+
+        [ValueDropdown("@ValueDropdownUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public GameplayTag[] inherentTags;
+        
+        public AbilityAsset[] baseAbilities;
     }
 }
