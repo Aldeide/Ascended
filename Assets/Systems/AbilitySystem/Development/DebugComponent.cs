@@ -1,5 +1,7 @@
 ﻿using System;
+using Systems.AbilitySystem.Attributes;
 using Systems.AbilitySystem.Components;
+using Systems.AbilitySystem.Effects;
 using UnityEngine;
 using TMPro;
 
@@ -24,14 +26,53 @@ namespace Systems.Development
                 return;
             }
             var effects = _asc.EffectSystem.GetAllEffects();
+            var attributes = _asc.AttributesSystem.GetAllAttributes();
             var output = "";
             foreach (var effect in effects)
             {
-                var delta = (Time.time - effect.ActivationTime);
-                output += effect.Effect.EffectName + " (" + (effect.Duration - delta) + ")";
+                output += DisplayEffect(effect);
+            }
+
+            foreach (var attribute in attributes)
+            {
+                output += DisplayAttribute(attribute);
             }
 
             _text.text = output;
+        }
+
+        private string DisplayEffect(EffectSpec effectSpec)
+        {
+            var output = "";
+            output += effectSpec.Effect.EffectName;
+            if (effectSpec.IsActive)
+            {
+                output += " (Active)";
+            }
+            else
+            {
+                output += " (Inactive)";
+            }
+            output += "\n";
+            if (effectSpec.DurationType == EffectDurationType.Infinite)
+            {
+                output += "Infinite duration";
+            }
+
+            if (effectSpec.DurationType == EffectDurationType.FixedDuration)
+            {
+                output += "Duration: " + (effectSpec.Duration - Time.time + effectSpec.ActivationTime);
+            }
+
+            return output += "\n";
+        }
+
+        private string DisplayAttribute(AttributeBase attribute)
+        {
+            string output = "";
+            output += attribute.AttributeName() + "\n";
+            output += "Base: " + attribute.BaseValue + " Current: " + attribute.CurrentValue + "\n";
+            return output;
         }
     }
 }

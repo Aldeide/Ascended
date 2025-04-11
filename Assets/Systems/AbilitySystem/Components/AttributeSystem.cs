@@ -33,6 +33,20 @@ namespace Systems.AbilitySystem.Components
             _asc.EffectSystem.OnEffectAdded += OnEffectAdded;
         }
 
+        public List<AttributeBase> GetAllAttributes()
+        {
+            List<AttributeBase> attributes = new List<AttributeBase>();
+            foreach (var attributeSet in _attributeSets.Values)
+            {
+                foreach (var attribute in attributeSet.Attributes.Values)
+                {
+                    attributes.Add(attribute);
+                }
+            }
+
+            return attributes;
+        }
+
         public void AddAttributeSet<T>() where T : AttributeSet
         {
             AddAttributeSet(typeof(T));
