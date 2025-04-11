@@ -72,7 +72,6 @@ namespace Systems.AbilitySystem.Effects
         public void TriggerOnExecute()
         {
             // TODO: remove all effects with 'RemoveEffectsWithTag'
-            Debug.Log("TriggerOnExecute");
             Owner.ApplyModifierFromInstantGameplayEffect(this);
         }
         

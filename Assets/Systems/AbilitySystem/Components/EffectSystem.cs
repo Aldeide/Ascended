@@ -40,12 +40,31 @@ namespace Systems.AbilitySystem.Components
             return _effectSpecs;
         }
 
-        public void AddEffectSpec(AbilitySystemComponent source, EffectSpec effectSpec)
+        public EffectSpec AddEffectSpec(AbilitySystemComponent source, EffectSpec effectSpec)
         {
-            effectSpec.Initialise(source, _asc, 1);
-            effectSpec.Activate();
-            _effectSpecs.Add(effectSpec);
-            OnEffectAdded.Invoke();
+            if (effectSpec.DurationType == EffectDurationType.Instant)
+            {
+                effectSpec.Initialise(source, _asc, effectSpec.Level);
+                effectSpec.TriggerOnExecute();
+                return null;
+            }
+
+            if (effectSpec.EffectStack.EffectStackType == EffectStackType.None)
+            {
+                return AddNewEffectSpec(source, effectSpec);
+            }
+
+            if (effectSpec.EffectStack.EffectStackType == EffectStackType.AggregateByTarget)
+            {
+                
+            }
+            
+            if (effectSpec.EffectStack.EffectStackType == EffectStackType.AggregateBySource)
+            {
+                
+            }
+
+            return null;
         }
 
         public void RemoveEffect(EffectSpec effectSpec)
@@ -54,6 +73,7 @@ namespace Systems.AbilitySystem.Components
             OnEffectRemoved?.Invoke();
         }
 
+        
         public void RegisterOnEffectAdded(Action action)
         {
             OnEffectAdded += action;
@@ -72,6 +92,16 @@ namespace Systems.AbilitySystem.Components
         public void UnregisterOnEffectRemoved(Action action)
         {
             OnEffectRemoved -= action;
+        }
+
+        private EffectSpec AddNewEffectSpec(AbilitySystemComponent source, EffectSpec effectSpec)
+        {
+            effectSpec.Initialise(source, _asc, effectSpec.Level);
+            _effectSpecs.Add(effectSpec);
+            // effectSpec.TriggerOnAdd();
+            effectSpec.Activate();
+            OnEffectAdded?.Invoke();
+            return effectSpec;
         }
     }
 }
