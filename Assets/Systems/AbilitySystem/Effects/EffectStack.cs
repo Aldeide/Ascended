@@ -1,4 +1,6 @@
-﻿namespace Systems.AbilitySystem.Effects
+﻿using System;
+
+namespace Systems.AbilitySystem.Effects
 {
     public enum EffectStackType
     {
@@ -7,7 +9,7 @@
         AggregateByTarget
     }
 
-    public enum EffectStackRefreshPolicy
+    public enum EffectStackPeriodPolicy
     {
         NeverRefresh,
         RefreshOnNewApplication
@@ -32,12 +34,13 @@
         public Effect[] OverflowEffects;
     }
     
+    [Serializable]
     public struct EffectStack
     {
         public EffectStackType EffectStackType;
         public int MaxStacks;
         public EffectStackDurationPolicy EffectStackDurationPolicy;
-        public EffectStackRefreshPolicy EffectStackRefreshPolicy;
+        public EffectStackPeriodPolicy EffectStackPeriodPolicy;
         public EffectStackExpirationPolicy EffectStackExpirationPolicy;
         public EffectStackOverflowPolicy EffectStackOverflowPolicy;
 

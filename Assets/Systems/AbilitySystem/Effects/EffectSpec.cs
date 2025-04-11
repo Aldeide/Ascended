@@ -1,4 +1,5 @@
-﻿using Systems.AbilitySystem.Components;
+﻿using System;
+using Systems.AbilitySystem.Components;
 using Systems.AbilitySystem.Effects.Modifiers;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -21,6 +22,10 @@ namespace Systems.AbilitySystem.Effects
         public EffectModifier[] Modifiers { get; private set; }
         public EffectSpec PeriodicEffect { get; private set; }
         public EffectPeriodTicker EffectPeriodTicker { get; }
+        public EffectStack EffectStack { get; private set; }
+        public int StackCount { get; private set; } = 1;
+        
+        public event Action<int,int> onStackCountChanged;
         
         public EffectSpec(Effect effect)
         {
@@ -28,6 +33,8 @@ namespace Systems.AbilitySystem.Effects
             Duration = effect.Duration;
             Modifiers = effect.Modifiers;
             DurationType = effect.EffectDurationType;
+            EffectStack = effect.EffectStack;
+            
             if (DurationType != EffectDurationType.Instant)
             {
                 EffectPeriodTicker = new EffectPeriodTicker(this);
@@ -75,6 +82,61 @@ namespace Systems.AbilitySystem.Effects
                 return -1;
 
             return Mathf.Max(0, Duration - (Time.time - ActivationTime));
+        }
+
+        #region Stacks
+
+        public bool AddStack()
+        {
+            var previousStacks = StackCount;
+            SetStacks(previousStacks + 1);
+            OnStackCountChange(previousStacks, StackCount);
+            return previousStacks != StackCount;
+        }
+        
+        
+        public void SetStacks(int stackCount)
+        {
+            if (stackCount <= EffectStack.MaxStacks)
+            {
+                StackCount = Mathf.Max(1, stackCount);
+                if (EffectStack.EffectStackDurationPolicy == EffectStackDurationPolicy.RefreshOnNewApplication)
+                {
+                    RefreshDuration();
+                }
+
+                if (EffectStack.EffectStackPeriodPolicy == EffectStackPeriodPolicy.RefreshOnNewApplication)
+                {
+                    EffectPeriodTicker.ResetPeriod();
+                }
+
+                return;
+            }
+            
+            // TODO: stack overflow behaviour.
+        }
+        
+        private void OnStackCountChange(int oldStackCount, int newStackCount)
+        {
+            
+            onStackCountChanged?.Invoke(oldStackCount, newStackCount);
+        }
+        
+        public void RegisterOnStackCountChanged(Action<int, int> callback)
+        {
+            onStackCountChanged += callback;
+        }
+
+        public void UnregisterOnStackCountChanged(Action<int, int> callback)
+        {
+            onStackCountChanged -= callback;
+        }
+
+        #endregion
+        
+        public void RefreshDuration()
+        {
+            ActivationTime = Time.time;
         }
     }
 }

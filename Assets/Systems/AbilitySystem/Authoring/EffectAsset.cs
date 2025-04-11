@@ -64,5 +64,9 @@ namespace Systems.AbilitySystem.Authoring
         {
             return durationType == EffectDurationType.FixedDuration || durationType == EffectDurationType.Infinite;
         }
+
+        [Space]
+        [Title("Stacking Behaviour")]
+        public EffectStack EffectStack;
     }
 }

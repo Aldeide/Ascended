@@ -20,6 +20,9 @@ namespace Systems.AbilitySystem.Effects
         // Ticks
         public readonly Effect PeriodicEffect;
         
+        // Stacking behaviour
+        public readonly EffectStack EffectStack;
+        
         public Effect(EffectAsset effectAsset)
         {
             // EffectTags = effectAsset;
@@ -37,6 +40,7 @@ namespace Systems.AbilitySystem.Effects
             }
 #endif
             PeriodicEffect = periodicEffect != null ? new Effect(periodicEffect) : null;
+            EffectStack = effectAsset.EffectStack;
         }
 
         public EffectSpec ToEffectSpec(AbilitySystemComponent creator, AbilitySystemComponent owner, float level = 1)
