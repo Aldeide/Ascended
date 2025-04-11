@@ -59,6 +59,7 @@ namespace Systems.AbilitySystem.Components
             _attributeSets.Add(setName, Activator.CreateInstance(attrSetType) as AttributeSet);
 
             var attrSet = _attributeSets[setName];
+            attrSet.SetOwner(_asc);
             foreach (var attr in attrSet.AttributeNames)
             {
                 if (!_attributeAggregators.ContainsKey(attrSet[attr]))

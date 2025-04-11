@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.Serialization;
+using Systems.AbilitySystem.Components;
 using Systems.Attributes;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -15,6 +16,7 @@ namespace Systems.AbilitySystem.Attributes
         public AttributeValue value;
         public string attributeName;
         public string attributeSetName;
+        private AbilitySystemComponent _owner;
         
         protected event Action<AttributeBase, float, float> _onPostCurrentValueChange;
         protected event Action<AttributeBase, float, float> _onPostBaseValueChange;
@@ -43,6 +45,11 @@ namespace Systems.AbilitySystem.Attributes
         {
             value.BaseValue = initialValue;
             value.CurrentValue = initialValue;
+        }
+
+        public void SetOwner(AbilitySystemComponent owner)
+        {
+            _owner = owner;
         }
         
         public string AttributeName()

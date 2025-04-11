@@ -33,6 +33,10 @@ namespace Systems.Attributes
         public void SetOwner(AbilitySystemComponent asc)
         {
             _asc = asc;
+            foreach (var attributeBase in Attributes.Values)
+            {
+                attributeBase.SetOwner(asc);
+            }
         }
 
         public void AddAttribute(string name, AttributeBase attribute)
