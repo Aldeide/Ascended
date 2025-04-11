@@ -82,6 +82,11 @@ namespace Systems.AbilitySystem.Components
             return false;
         }
 
+        public AttributeValue? GetAttributeValue(string attributeSet, string attributeName)
+        {
+            return _attributeSets[attributeSet].Attributes[attributeName].value;
+        }
+        
         public float GetAttributeCurrentValue(string attributeSet, string attributeName)
         {
             return _attributeSets[attributeSet].Attributes[attributeName].GetCurrentValue();
@@ -91,6 +96,11 @@ namespace Systems.AbilitySystem.Components
         {
             _attributeSets[attributeSet].Attributes[attributeName].SetCurrentValue(newValue);
             NotifyAttributeChanged( attributeSet,  attributeName, newValue);
+        }
+        
+        public void SetAttributeBaseValue(string attributeSet, string attributeName, float newValue)
+        {
+            _attributeSets[attributeSet].Attributes[attributeName].SetBaseValue(newValue);
         }
         
         public void NotifyAttributeChanged(string attributeSet, string attributeName, float newValue)

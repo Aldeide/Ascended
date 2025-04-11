@@ -60,7 +60,8 @@ namespace Systems.AbilitySystem.Effects
 
         public void TriggerOnExecute()
         {
-            
+            // TODO: remove all effects with 'RemoveEffectsWithTag'
+            Owner.ApplyModifierFromInstantGameplayEffect(this);
         }
         
         public float RemainingDuration()

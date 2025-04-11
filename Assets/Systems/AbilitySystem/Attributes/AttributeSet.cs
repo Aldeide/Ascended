@@ -44,6 +44,11 @@ namespace Systems.Attributes
         {
             Attributes[attributeName].SetCurrentValue(newValue);
         }
+
+        public void SetBaseValue(string attributeName, float newValue)
+        {
+            Attributes[attributeName].SetBaseValue(newValue);
+        }
         
     }
 }

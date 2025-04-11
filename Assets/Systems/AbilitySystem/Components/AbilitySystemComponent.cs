@@ -1,7 +1,9 @@
 ﻿using System;
 using FishNet.Object;
+using Systems.AbilitySystem.Attributes;
 using Systems.AbilitySystem.Authoring;
 using Systems.AbilitySystem.Effects;
+using Systems.AbilitySystem.Effects.Modifiers;
 using Systems.AbilitySystem.Tags;
 using Systems.AbilitySystem.Util;
 using Systems.Attributes;
@@ -68,6 +70,44 @@ namespace Systems.AbilitySystem.Components
         public bool HasAnyTags(GameplayTagSet tags)
         {
             return TagSystem.HasAnyTags(tags.Tags);
+        }
+
+        public AttributeValue? GetAttributeValue(string attributeSet, string attributeName)
+        {
+            return AttributesSystem.GetAttributeValue(attributeSet, attributeName);
+        }
+
+        public void ApplyModifierFromInstantGameplayEffect(EffectSpec instantEffectSpec)
+        {
+            foreach (var modifier in instantEffectSpec.Modifiers)
+            {
+                var attributeValue = GetAttributeValue(modifier.attributeSetName, modifier.attributeName);
+                if (attributeValue == null) continue;
+                var magnitude = modifier.CalculateModifier(instantEffectSpec);
+                var baseValue = attributeValue.Value.BaseValue;
+                switch (modifier.operation)
+                {
+                    case EffectOperation.Additive:
+                        baseValue += magnitude;
+                        break;
+                    case EffectOperation.Subtractive:
+                        baseValue -= magnitude;
+                        break;
+                    case EffectOperation.Multiplicative:
+                        baseValue *= magnitude;
+                        break;
+                    case EffectOperation.Divisive:
+                        baseValue /= magnitude;
+                        break;
+                    case EffectOperation.Override:
+                        baseValue = magnitude;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
+                AttributesSystem.SetAttributeBaseValue(modifier.attributeSetName, modifier.attributeName, baseValue);
+            }
         }
         
     }

@@ -64,6 +64,24 @@ namespace Systems.AbilitySystem.Attributes
             return value.CurrentValue;
         }
         
+        public void SetBaseValue(float newValue)
+        {
+            if (_onPreBaseValueChange != null)
+            {
+                newValue = InvokePreBaseValueChangeListeners(newValue);
+            }
+
+            var oldValue = value.BaseValue;
+            value.BaseValue = newValue;
+
+            if (!Mathf.Approximately(oldValue, newValue)) _onPostBaseValueChange?.Invoke(this, oldValue, newValue);
+        }
+
+        public float GetBaseValue()
+        {
+            return value.BaseValue;
+        }
+        
         public void RegisterPreBaseValueChange(Func<AttributeBase, float, float> func)
         {
             _onPreBaseValueChange += func;
@@ -106,6 +124,23 @@ namespace Systems.AbilitySystem.Attributes
         public void UnregisterPostCurrentValueChange(Action<AttributeBase, float, float> action)
         {
             _onPostCurrentValueChange -= action;
+        }
+        
+        public virtual void Dispose()
+        {
+            _onPreBaseValueChange = null;
+            _onPostBaseValueChange = null;
+            _onPreCurrentValueChange = null;
+            _onPostCurrentValueChange = null;
+        }
+
+        private float InvokePreBaseValueChangeListeners(float value)
+        {
+            if (_preBaseValueChangeListeners == null) return value;
+
+            foreach (var t in _preBaseValueChangeListeners)
+                value = t.Invoke(this, value);
+            return value;
         }
     }
 
