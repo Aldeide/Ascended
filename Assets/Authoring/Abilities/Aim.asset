@@ -22,3 +22,7 @@ MonoBehaviour:
   ActivationOwnedTags: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
+  OnActivateTasks:
+  - {fileID: 11400000, guid: 441a34590e0e32b418fefb15a4df1b82, type: 2}
+  OnEndTasks:
+  - {fileID: 11400000, guid: 2af542120441546489a7792a2b6ea9d6, type: 2}
