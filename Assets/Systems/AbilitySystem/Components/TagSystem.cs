@@ -8,15 +8,10 @@ namespace Systems.AbilitySystem.Components
 {
     public class TagSystem
     {
-        [FormerlySerializedAs("Tags")] public List<GameplayTag> tags = new();
+        public List<GameplayTag> tags = new();
         private AbilitySystemComponent _asc;
 
         public TagSystem(AbilitySystemComponent owner)
-        {
-            _asc = owner;
-        }
-        
-        public void Initialise(AbilitySystemComponent owner)
         {
             _asc = owner;
         }
