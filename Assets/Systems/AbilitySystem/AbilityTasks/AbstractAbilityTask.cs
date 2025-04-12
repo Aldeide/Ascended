@@ -2,7 +2,7 @@
 
 namespace Systems.AbilitySystem.AbilityTasks
 {
-    public class AbstractAbilityTask
+    public abstract class AbstractAbilityTask
     {
         protected AbilitySpec AbilitySpec;
 

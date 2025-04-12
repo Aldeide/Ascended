@@ -87,7 +87,7 @@ namespace Systems.AbilitySystem.Components
             EffectSystem.Tick();
         }
 
-        [Client]
+        //[Client]
         public void TryActivateAbility(string abilityName)
         {
             bool result = _abilitySystem.TryActivateAbility(abilityName);
