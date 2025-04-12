@@ -1,4 +1,5 @@
 ﻿using System;
+using FishNet.Object;
 using Systems.Abilities;
 using Systems.AbilitySystem.Components;
 
@@ -23,7 +24,7 @@ namespace Systems.AbilitySystem.Abilities
             Ability = ability;
             Owner = owner;
         }
-
+        
         public void Tick()
         {
             if (IsActive)

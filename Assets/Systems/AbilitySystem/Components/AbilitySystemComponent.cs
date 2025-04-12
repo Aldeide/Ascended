@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FishNet.Connection;
 using FishNet.Object;
 using Systems.Abilities;
 using Systems.AbilitySystem.Abilities;
@@ -7,6 +8,7 @@ using Systems.AbilitySystem.Attributes;
 using Systems.AbilitySystem.Authoring;
 using Systems.AbilitySystem.Effects;
 using Systems.AbilitySystem.Effects.Modifiers;
+using Systems.AbilitySystem.Replication;
 using Systems.AbilitySystem.Tags;
 using Systems.AbilitySystem.Util;
 using Systems.Attributes;
@@ -23,6 +25,8 @@ namespace Systems.AbilitySystem.Components
         private AbilitySystem _abilitySystem;
         public TagSystem TagSystem;
         public EffectSystem EffectSystem;
+
+        public PredictionKey PredictionKey;
         
         public DevelopmentComponent DevelopmentComponent;
         
@@ -32,6 +36,7 @@ namespace Systems.AbilitySystem.Components
             TagSystem = new TagSystem(this);
             EffectSystem = new EffectSystem(this);
             _abilitySystem = new AbilitySystem(this);
+            PredictionKey = new PredictionKey();
             
             AttributesSystem.Initialise(this);
             EffectSystem.Initialise(this);
@@ -72,7 +77,7 @@ namespace Systems.AbilitySystem.Components
             }
             catch (MissingMethodException e)
             {
-                Debug.LogError("Failed to add ability: " + asset.GetType().FullName);
+                Debug.LogError("Failed to add ability: " + asset.GetType().FullName + " / " + e.Message);
                 //throw;
             }
         }
@@ -82,9 +87,28 @@ namespace Systems.AbilitySystem.Components
             EffectSystem.Tick();
         }
 
+        [Client]
         public void TryActivateAbility(string abilityName)
         {
-            _abilitySystem.TryActivateAbility(abilityName);
+            bool result = _abilitySystem.TryActivateAbility(abilityName);
+            if (result) TryActivateAbilityServer(abilityName, PredictionKey.GetNextPredictionKey());
+        }
+
+        [ServerRpc]
+        public void TryActivateAbilityServer(string abilityName, int predictionKey, NetworkConnection conn = null)
+        {
+            bool success = _abilitySystem.TryActivateAbility(abilityName);
+            if (!success)
+            {
+                ClientActivateAbilityFailed(conn, abilityName);
+            }
+        }
+
+        [TargetRpc]
+        public void ClientActivateAbilityFailed(NetworkConnection connection, string abilityName)
+        {
+            CancelAbility(abilityName);
+            // RODO: Rollback ability.
         }
         
         public void EndAbility(string abilityName)
