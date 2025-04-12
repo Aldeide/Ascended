@@ -1,5 +1,4 @@
 ﻿using System;
-using FishNet.Object;
 using Systems.Abilities;
 using Systems.AbilitySystem.Components;
 
@@ -58,7 +57,7 @@ namespace Systems.AbilitySystem.Abilities
             {
                 IsActive = true;
                 ActiveCount++;
-                //Owner.GameplayTagAggregator.ApplyGameplayAbilityDynamicTag(this);
+                Owner.TagSystem.ApplyAbilityTags(this);
 
                 ActivateAbility(AbilityArguments);
             }
@@ -71,7 +70,7 @@ namespace Systems.AbilitySystem.Abilities
         {
             if (!IsActive) return;
             IsActive = false;
-            // Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            Owner.TagSystem.RemoveAbilityTags(this);
             EndAbility();
             _onEndAbility?.Invoke();
         }
@@ -80,7 +79,7 @@ namespace Systems.AbilitySystem.Abilities
         {
             if (!IsActive) return;
             IsActive = false;
-            //Owner.GameplayTagAggregator.RestoreGameplayAbilityDynamicTags(this);
+            Owner.TagSystem.RemoveAbilityTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
         }

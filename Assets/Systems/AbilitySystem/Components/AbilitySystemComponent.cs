@@ -33,12 +33,13 @@ namespace Systems.AbilitySystem.Components
         public void Start()
         {
             AttributesSystem = new AttributeSystem(this);
-            TagSystem = new TagSystem(this);
+            TagSystem = GetComponent<TagSystem>();
             EffectSystem = new EffectSystem(this);
             _abilitySystem = new AbilitySystem(this);
             PredictionKey = new PredictionKey();
             
             AttributesSystem.Initialise(this);
+            TagSystem?.Initialise(this);
             EffectSystem.Initialise(this);
             DevelopmentComponent = GetComponent<DevelopmentComponent>();
             DevelopmentComponent.Initialise(this);

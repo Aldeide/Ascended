@@ -19,7 +19,12 @@ MonoBehaviour:
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
-  ActivationOwnedTags: []
+  ActivationOwnedTags:
+  - name: Status.Aiming
+    hashCode: 1054599471
+    ancestorsNames:
+    - Status
+    ancestorsHashCodes: b0c3cf74
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   OnActivateTasks:

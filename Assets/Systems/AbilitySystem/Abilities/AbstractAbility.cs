@@ -1,9 +1,7 @@
-﻿using Systems.AbilitySystem.Abilities;
-using Systems.AbilitySystem.Authoring;
+﻿using Systems.AbilitySystem.Authoring;
 using Systems.AbilitySystem.Components;
-using Unity.VisualScripting;
 
-namespace Systems.Abilities
+namespace Systems.AbilitySystem.Abilities
 {
     public abstract class AbstractAbility
     {
