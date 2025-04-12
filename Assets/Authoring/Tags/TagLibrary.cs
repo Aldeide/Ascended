@@ -7,11 +7,15 @@ namespace Authoring.Tags
     {
         public static GameplayTag Unit { get; } = new GameplayTag("Unit");
         public static GameplayTag UnitPlayer { get; } = new GameplayTag("Unit.Player");
+        public static GameplayTag Status { get; } = new GameplayTag("Status");
+        public static GameplayTag StatusDead { get; } = new GameplayTag("Status.Dead");
 
         public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
         {
             ["Unit"] = Unit,
-            ["Unit.Player"] = UnitPlayer
+            ["Unit.Player"] = UnitPlayer,
+            ["Status"] = Status,
+            ["Status.Dead"] = StatusDead
         };
     }
 }
