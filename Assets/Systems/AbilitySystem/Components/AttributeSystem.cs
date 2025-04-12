@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FishNet.Object;
+using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Systems.AbilitySystem.Attributes;
@@ -100,6 +101,11 @@ namespace Systems.AbilitySystem.Components
         public AttributeValue? GetAttributeValue(string attributeSet, string attributeName)
         {
             return _attributeSets[attributeSet].Attributes[attributeName].value;
+        }
+        
+        public AttributeBase GetAttribute(string attributeSet, string attributeName)
+        {
+            return _attributeSets[attributeSet].Attributes[attributeName];
         }
         
         public float GetAttributeCurrentValue(string attributeSet, string attributeName)

@@ -16,7 +16,9 @@ namespace Authoring.AttributeSets
         public static List<string> AttributeFullNames = new List<string>()
         {
             "CharacteristicsAttributeSet.Health",
+            "CharacteristicsAttributeSet.MaxHealth",
             "CharacteristicsAttributeSet.Energy",
+            "CharacteristicsAttributeSet.MaxEnergy",
             "CharacteristicsAttributeSet.MovementSpeed",
         };
     }
@@ -28,7 +30,13 @@ namespace Authoring.AttributeSets
         public AttributeBase Health = 
             new AttributeBase("CharacteristicsAttributeSet", "Health", 100, 0, 100000);
         [SerializeField]
+        public AttributeBase MaxHealth = 
+            new AttributeBase("CharacteristicsAttributeSet", "MaxHealth", 100, 0, 100000);
+        [SerializeField]
         public AttributeBase Energy = 
+            new AttributeBase("CharacteristicsAttributeSet", "Energy", 100, 0, 100000);
+        [SerializeField]
+        public AttributeBase MaxEnergy = 
             new AttributeBase("CharacteristicsAttributeSet", "Energy", 100, 0, 100000);
         [SerializeField]
         public AttributeBase MovementSpeed =
@@ -41,8 +49,12 @@ namespace Authoring.AttributeSets
                 {
                     case "Health":
                         return Health;
+                    case "MaxHealth":
+                        return MaxHealth;
                     case "Energy":
                         return Energy;
+                    case "MaxEnergy":
+                        return MaxEnergy;
                     case "MovementSpeed":
                         return MovementSpeed;
                 }
@@ -53,14 +65,18 @@ namespace Authoring.AttributeSets
         public CharacteristicsAttributeSet()
         {
             this.AddAttribute("Health", Health);
+            this.AddAttribute("MaxHealth", MaxHealth);
             this.AddAttribute("Energy", Energy);
+            this.AddAttribute("MaxEnergy", MaxEnergy);
             this.AddAttribute("MovementSpeed", MovementSpeed);
         }
         
         public override string[] AttributeNames { get; } =
         {
             "Health",
+            "MaxHealth",
             "Energy",
+            "MaxEnergy",
             "MovementSpeed"
         };
         

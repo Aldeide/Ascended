@@ -41,14 +41,13 @@ namespace Systems.AbilitySystem.Components
             AttributesSystem.Initialise(this);
             TagSystem?.Initialise(this);
             EffectSystem.Initialise(this);
-            DevelopmentComponent = GetComponent<DevelopmentComponent>();
-            DevelopmentComponent.Initialise(this);
+
             
             if (Preset != null) InitialiseWithPreset();
             
         }
 
-        [Server]
+        
         public void Update()
         {
             Tick();
@@ -83,6 +82,7 @@ namespace Systems.AbilitySystem.Components
             }
         }
 
+        [Server]
         public void Tick()
         {
             EffectSystem.Tick();
@@ -182,6 +182,17 @@ namespace Systems.AbilitySystem.Components
                 AttributesSystem.SetAttributeBaseValue(attributeSet, attributeName, baseValue);
             }
         }
+        
+        #region Events
+
+        public void RegisterOnAttributeChanged(string attributeSet, string attributeName, Action<AttributeBase, float, float> action)
+        {
+            var attribute = AttributesSystem.GetAttribute(attributeSet, attributeName);
+            attribute.RegisterPostBaseValueChange(action);
+            attribute.RegisterPostCurrentValueChange(action);
+        }
+        
+        #endregion
         
     }
 }
