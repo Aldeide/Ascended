@@ -1,4 +1,5 @@
 ﻿using System;
+using FishNet.Object;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,11 +7,10 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace Systems.Movement
 {
-    public class PlayerMovementController : MonoBehaviour
+    public class PlayerMovementController : NetworkBehaviour
     {
         private Vector3 movementInput = new Vector3(0, 0, 0);
-        private Vector2 mousePosition = new Vector2(0, 0);
-        private Vector3 movement = new Vector3(0, 0, 0);
+
         [SerializeField] private GameObject cameraTarget;
         
         private Animator _animator;
@@ -27,13 +27,14 @@ namespace Systems.Movement
 
         public void Update()
         {
+            if (!IsOwner) return;
+            
             if (movementInput.magnitude <= 0.01f)
             {
                 UpdateAnimator();
                 return;
             }
-
-
+            
             float targetAngle = Mathf.Atan2(movementInput.x, movementInput.z) * Mathf.Rad2Deg +
                                 UnityEngine.Camera.main.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
@@ -77,10 +78,9 @@ namespace Systems.Movement
             }
         }
         
-        
         public void OnLookInput(InputAction.CallbackContext context)
         {
-            mousePosition = context.ReadValue<Vector2>();
+            //mousePosition = context.ReadValue<Vector2>();
         }
     }
 }
