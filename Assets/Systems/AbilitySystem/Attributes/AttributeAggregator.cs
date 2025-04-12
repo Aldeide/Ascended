@@ -38,6 +38,12 @@ namespace Systems.AbilitySystem.Attributes
         private float CalculateCurrentValue()
         {
             float newValue = _attribute.BaseValue;
+
+            float additiveModifiers = 0;
+            float multiplicativeModifiers = 0;
+            float overrideModifiers = 0;
+            bool hasOverride = false;
+            
             foreach (var tuple in _modifierCache)
             {
                 var spec = tuple.Item1;
@@ -47,26 +53,29 @@ namespace Systems.AbilitySystem.Attributes
                 switch (modifier.operation)
                 {
                     case EffectOperation.Additive:
-                        newValue += magnitude;
+                        additiveModifiers += magnitude;
                         break;
                     case EffectOperation.Subtractive:
-                        newValue -= magnitude;
+                        additiveModifiers -= magnitude;
                         break;
                     case EffectOperation.Multiplicative:
-                        newValue *= magnitude;
+                        multiplicativeModifiers *= magnitude;
                         break;
                     case EffectOperation.Divisive:
-                        newValue /= magnitude;
+                        multiplicativeModifiers /= magnitude;
                         break;
                     case EffectOperation.Override:
-                        newValue = magnitude;
+                        // TODO: currently only the latest override is considered. Might want to define a property for 
+                        // attributes as to whether they prefer the smallest or largest override.
+                        hasOverride = true;
+                        overrideModifiers = magnitude;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();   
                 }
             }
 
-            return newValue;
+            return hasOverride ? overrideModifiers : (newValue + additiveModifiers) * multiplicativeModifiers;
         }
 
         private void RefreshModifierCache()
