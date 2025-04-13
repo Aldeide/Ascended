@@ -19,9 +19,14 @@ namespace Systems.Development
             _asc = player.GetComponent<AbilitySystemComponent>();
         }
 
+        public void SetOwner(AbilitySystemComponent owner)
+        {
+            _asc = owner;
+        }
+
         public void Update()
         {
-            if (!_asc)
+            if (!_asc || ! player || !player.activeInHierarchy)
             {
                 _asc = player.GetComponent<AbilitySystemComponent>();
                 return;

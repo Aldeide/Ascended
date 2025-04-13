@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using FishNet.Object;
+using UnityEngine;
 
 namespace Systems.Camera
 {

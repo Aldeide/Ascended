@@ -30,7 +30,17 @@ namespace Systems.AbilitySystem.Components
         
         public DevelopmentComponent DevelopmentComponent;
         
-        public void Start()
+        public void Update()
+        {
+            if (base.IsServerInitialized)
+            {
+                Debug.Log("Server Tick!");
+                Tick();
+            }
+            
+        }
+
+        public void Initialise()
         {
             AttributesSystem = new AttributeSystem(this);
             TagSystem = GetComponent<TagSystem>();
@@ -41,16 +51,8 @@ namespace Systems.AbilitySystem.Components
             AttributesSystem.Initialise(this);
             TagSystem?.Initialise(this);
             EffectSystem.Initialise(this);
-
             
             if (Preset != null) InitialiseWithPreset();
-            
-        }
-
-        
-        public void Update()
-        {
-            Tick();
         }
 
         public void InitialiseWithPreset()
@@ -181,6 +183,12 @@ namespace Systems.AbilitySystem.Components
                 }
                 AttributesSystem.SetAttributeBaseValue(attributeSet, attributeName, baseValue);
             }
+        }
+
+        [ObserversRpc]
+        public void NotifyAttributeBaseChanged(string attributeSet, string attributeName, float newValue)
+        {
+            AttributesSystem.GetAttribute(attributeSet, attributeName).SetBaseValue(newValue);
         }
         
         #region Events

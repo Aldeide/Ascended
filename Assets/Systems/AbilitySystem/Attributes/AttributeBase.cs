@@ -84,6 +84,11 @@ namespace Systems.AbilitySystem.Attributes
             if (!Mathf.Approximately(oldValue, newValue)) _onPostBaseValueChange?.Invoke(this, oldValue, newValue);
         }
 
+        public void SetBaseValueSilent(float newValue)
+        {
+            value.BaseValue = newValue;
+        }
+
         public float GetBaseValue()
         {
             return value.BaseValue;

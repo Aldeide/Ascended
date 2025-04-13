@@ -11,9 +11,9 @@ namespace Systems.Interface
         [SerializeField] private Slider healthSlider;
         private AbilitySystemComponent _asc;
 
-        public void Initialise()
+        public void Initialise(AbilitySystemComponent owner)
         {
-            _asc = GetComponent<AbilitySystemComponent>();
+            _asc = owner;
             _asc.RegisterOnAttributeChanged("CharacteristicsAttributeSet","Health", OnHealthChanged);
             _asc.RegisterOnAttributeChanged("CharacteristicsAttributeSet","MaxHealth", OnHealthChanged);
             healthSlider.value = 1;

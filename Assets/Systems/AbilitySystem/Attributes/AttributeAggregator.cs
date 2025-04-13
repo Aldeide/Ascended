@@ -40,7 +40,7 @@ namespace Systems.AbilitySystem.Attributes
             float newValue = _attribute.BaseValue;
 
             float additiveModifiers = 0;
-            float multiplicativeModifiers = 0;
+            float multiplicativeModifiers = 1;
             float overrideModifiers = 0;
             bool hasOverride = false;
             
@@ -74,7 +74,7 @@ namespace Systems.AbilitySystem.Attributes
                         throw new ArgumentOutOfRangeException();   
                 }
             }
-
+            _asc.NotifyAttributeBaseChanged(_attribute.attributeSetName, _attribute.attributeName, newValue);
             return hasOverride ? overrideModifiers : (newValue + additiveModifiers) * multiplicativeModifiers;
         }
 

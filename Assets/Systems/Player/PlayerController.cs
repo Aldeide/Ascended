@@ -1,5 +1,6 @@
 ﻿using FishNet.Connection;
 using FishNet.Object;
+using Systems.AbilitySystem.Components;
 using Systems.Camera;
 using Systems.Development;
 using Systems.Interface;
@@ -10,16 +11,45 @@ namespace Systems.Player
     public class PlayerController : NetworkBehaviour
     {
         private InterfaceController _interfaceController;
-        
-        public void Start()
+
+        public override void OnStartClient()
         {
-            Debug.Log("OwnershipClient");
-            if (!Owner.IsLocalClient) return;
-            Debug.Log("OwnershipClient2");
-            _interfaceController = GameObject.Find("Interface").GetComponent<InterfaceController>();
-            _interfaceController.Initialise();
+            base.OnStartClient();
+            if (!IsOwner) return;
+            SetupCamera();
+            SetupAsc();
+            SetupInterface();
+            SetupDebug();
+        }
+
+        public override void OnStartServer()
+        {
+            base.OnStartServer();
+            SetupAsc();
+            SetupDebug();
+        }
+
+        private void SetupCamera()
+        {
             GameObject.Find("CameraTarget").GetComponent<CameraTargetController>().SetTarget(this.transform);
-            GameObject.Find("Debug/Text").GetComponent<DebugComponent>().player = this.gameObject;
+        }
+
+        private void SetupAsc()
+        {
+            GetComponent<AbilitySystemComponent>().Initialise();
+        }
+
+        private void SetupInterface()
+        {
+            _interfaceController = GameObject.Find("Interface").GetComponent<InterfaceController>();
+            _interfaceController.Initialise(GetComponent<AbilitySystemComponent>());
+        }
+
+        private void SetupDebug()
+        {
+            var debug = GameObject.Find("Debug/Text").GetComponent<DebugComponent>();
+            debug.player = this.gameObject;
+            debug.SetOwner(GetComponent<AbilitySystemComponent>());
         }
     }
 }
