@@ -129,7 +129,7 @@ namespace Systems.AbilitySystem.Components
             _attributeSets[attributeSet].Attributes[attributeName].SetCurrentValue(newValue);
         }
 
-        private void OnEffectAdded()
+        private void OnEffectAdded(EffectSpec effectSpec)
         {
             _effectSpecsSnapshot.AddRange(_asc.EffectSystem.GetAllEffects());
             

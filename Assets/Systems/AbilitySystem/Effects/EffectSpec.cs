@@ -1,4 +1,6 @@
 ﻿using System;
+using FishNet;
+using FishNet.Serializing;
 using Systems.AbilitySystem.Components;
 using Systems.AbilitySystem.Effects.Modifiers;
 using UnityEditor.SceneManagement;
@@ -16,7 +18,7 @@ namespace Systems.AbilitySystem.Effects
         public bool IsApplied { get; private set; }
         public bool IsActive { get; private set; }
         public float Duration { get; private set; }
-        public float ActivationTime { get; private set; }
+        public float ActivationTime { get; set; }
         
         public EffectDurationType DurationType { get; private set; }
         public EffectModifier[] Modifiers { get; private set; }

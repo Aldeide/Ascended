@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Systems.AbilitySystem.Components;
 using Systems.AbilitySystem.Effects;
 using Systems.AbilitySystem.Effects.Modifiers;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Systems.AbilitySystem.Attributes
@@ -78,7 +77,7 @@ namespace Systems.AbilitySystem.Attributes
             return hasOverride ? overrideModifiers : (newValue + additiveModifiers) * multiplicativeModifiers;
         }
 
-        private void RefreshModifierCache()
+        private void RefreshModifierCache(EffectSpec newEffectSpec)
         {
             // TODO: only do this if the added or removed modifier concerns this attribute.
             _modifierCache.Clear();

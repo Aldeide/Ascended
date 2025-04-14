@@ -12,8 +12,8 @@ namespace Systems.AbilitySystem.Components
         private readonly List<EffectSpec> _effectSpecs = new List<EffectSpec>();
         private readonly List<EffectSpec> _effectSpecsSnapshot = new List<EffectSpec>();
 
-        public Action OnEffectAdded;
-        public Action OnEffectRemoved;
+        public Action<EffectSpec> OnEffectAdded;
+        public Action<EffectSpec> OnEffectRemoved;
 
         public EffectSystem(AbilitySystemComponent owner)
         {
@@ -67,29 +67,34 @@ namespace Systems.AbilitySystem.Components
             return null;
         }
 
+        public void AddEffectSpecClient(EffectSpec effectSpec)
+        {
+            _effectSpecs.Add(effectSpec);
+        }
+        
         public void RemoveEffect(EffectSpec effectSpec)
         {
             _effectSpecs.Remove(effectSpec);
-            OnEffectRemoved?.Invoke();
+            OnEffectRemoved?.Invoke(effectSpec);
         }
 
         
-        public void RegisterOnEffectAdded(Action action)
+        public void RegisterOnEffectAdded(Action<EffectSpec> action)
         {
             OnEffectAdded += action;
         }
         
-        public void RegisterOnEffectRemoved(Action action)
+        public void RegisterOnEffectRemoved(Action<EffectSpec> action)
         {
             OnEffectRemoved += action;
         }
 
-        public void UnregisterOnEffectAdded(Action action)
+        public void UnregisterOnEffectAdded(Action<EffectSpec> action)
         {
             OnEffectAdded -= action;
         }
         
-        public void UnregisterOnEffectRemoved(Action action)
+        public void UnregisterOnEffectRemoved(Action<EffectSpec> action)
         {
             OnEffectRemoved -= action;
         }
@@ -100,7 +105,7 @@ namespace Systems.AbilitySystem.Components
             _effectSpecs.Add(effectSpec);
             // effectSpec.TriggerOnAdd();
             effectSpec.Activate();
-            OnEffectAdded?.Invoke();
+            OnEffectAdded?.Invoke(effectSpec);
             return effectSpec;
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FishNet.Connection;
 using FishNet.Object;
+using Sirenix.OdinInspector.Editor;
 using Systems.Abilities;
 using Systems.AbilitySystem.Abilities;
 using Systems.AbilitySystem.Attributes;
@@ -32,12 +33,10 @@ namespace Systems.AbilitySystem.Components
         
         public void Update()
         {
-            if (base.IsServerInitialized)
+            if (IsServerInitialized)
             {
-                Debug.Log("Server Tick!");
                 Tick();
             }
-            
         }
 
         public void Initialise()
@@ -51,6 +50,8 @@ namespace Systems.AbilitySystem.Components
             AttributesSystem.Initialise(this);
             TagSystem?.Initialise(this);
             EffectSystem.Initialise(this);
+
+            EffectSystem.OnEffectAdded += OnEffectAdded;
             
             if (Preset != null) InitialiseWithPreset();
         }
@@ -189,6 +190,33 @@ namespace Systems.AbilitySystem.Components
         public void NotifyAttributeBaseChanged(string attributeSet, string attributeName, float newValue)
         {
             AttributesSystem.GetAttribute(attributeSet, attributeName).SetBaseValue(newValue);
+        }
+        
+        public void OnEffectAdded(EffectSpec effectSpec)
+        {
+            if (!IsServerInitialized) return;
+            string effectName = effectSpec.Effect.EffectName;
+            float activationTime = effectSpec.ActivationTime;
+            float serverTime = Time.time;
+            NotifyEffectAdded(effectName, activationTime, serverTime); 
+        }
+
+        [ObserversRpc]
+        public void NotifyEffectAdded(string effectName, float activationTime, float serverTime)
+        {
+            EffectAssetLibrary library = GameObject.Find("DataManager").GetComponent<EffectAssetLibrary>();
+            EffectAsset asset = library.GetEffectByName(effectName);
+            if (asset)
+            {
+                EffectSpec effectSpec = new EffectSpec(new Effect(asset));
+                effectSpec.ActivationTime = activationTime - (serverTime - Time.time);
+                EffectSystem.AddEffectSpecClient(effectSpec);
+            }
+            else
+            {
+                Debug.Log("Effect " + effectName + " not found in library");
+            }
+            
         }
         
         #region Events

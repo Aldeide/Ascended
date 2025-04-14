@@ -6,6 +6,7 @@ namespace Systems.AbilitySystem.Effects
 {
     public class Effect
     {
+        public readonly EffectAsset Asset;
         public readonly string EffectName;
         public readonly EffectTags EffectTags;
         
@@ -25,7 +26,7 @@ namespace Systems.AbilitySystem.Effects
         
         public Effect(EffectAsset effectAsset)
         {
-            // EffectTags = effectAsset;
+            Asset = effectAsset;
             EffectName = effectAsset.name;
             EffectTags = new EffectTags(effectAsset);
             EffectDurationType = effectAsset.durationType;
@@ -34,12 +35,12 @@ namespace Systems.AbilitySystem.Effects
             Period = effectAsset.Period;
             var periodicEffect = effectAsset.periodicEffect;
 #if UNITY_EDITOR
-            if (periodicEffect != null && periodicEffect.durationType != EffectDurationType.Instant)
+            if (periodicEffect && periodicEffect.durationType != EffectDurationType.Instant)
             {
                 UnityEngine.Debug.LogError("The periodic effect should be an instant type.");
             }
 #endif
-            PeriodicEffect = periodicEffect != null ? new Effect(periodicEffect) : null;
+            PeriodicEffect = periodicEffect ? new Effect(periodicEffect) : null;
             EffectStack = effectAsset.EffectStack;
         }
 
