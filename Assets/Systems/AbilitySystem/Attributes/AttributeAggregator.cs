@@ -23,14 +23,14 @@ namespace Systems.AbilitySystem.Attributes
         public void Enable()
         {
             _asc.EffectSystem.RegisterOnEffectAdded(RefreshModifierCache);
-            _asc.EffectSystem.RegisterOnEffectRemoved(RefreshModifierCache);
+            _asc.EffectSystem.RegisterOnEffectRemoved(OnEffectRemoved);
             _attribute.RegisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueChanged);
         }
 
         public void Disable()
         {
             _asc.EffectSystem.UnregisterOnEffectAdded(RefreshModifierCache);
-            _asc.EffectSystem.UnregisterOnEffectRemoved(RefreshModifierCache);
+            _asc.EffectSystem.UnregisterOnEffectRemoved(OnEffectRemoved);
             _attribute.UnregisterPostBaseValueChange(UpdateCurrentValueWhenBaseValueChanged);
         }
 
@@ -77,7 +77,12 @@ namespace Systems.AbilitySystem.Attributes
             return hasOverride ? overrideModifiers : (newValue + additiveModifiers) * multiplicativeModifiers;
         }
 
-        private void RefreshModifierCache(EffectSpec newEffectSpec)
+        private void OnEffectRemoved(int key)
+        {
+            RefreshModifierCache(0, null);
+        }
+        
+        private void RefreshModifierCache(int key, EffectSpec newEffectSpec)
         {
             // TODO: only do this if the added or removed modifier concerns this attribute.
             _modifierCache.Clear();
@@ -100,7 +105,9 @@ namespace Systems.AbilitySystem.Attributes
 
         private void UpdateCurrentValue()
         {
-            _attribute.SetCurrentValue(CalculateCurrentValue());
+            float newValue = CalculateCurrentValue();
+            _attribute.SetCurrentValue(newValue);
+            _asc.NotifyAttributeCurrentChanged(_attribute.attributeSetName, _attribute.attributeName, newValue);
         }
 
         private void UpdateCurrentValueWhenBaseValueChanged(AttributeBase attribute, float oldBaseValue, float newBaseValue)

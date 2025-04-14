@@ -57,7 +57,7 @@ namespace Systems.Development
         private string DisplayEffect(EffectSpec effectSpec)
         {
             var output = "";
-            output += effectSpec.Effect.EffectName;
+            output += effectSpec.Effect.EffectName + "Key: " + effectSpec.EffectApplicationKey + " ";
             if (effectSpec.IsActive)
             {
                 output += " (Active)";

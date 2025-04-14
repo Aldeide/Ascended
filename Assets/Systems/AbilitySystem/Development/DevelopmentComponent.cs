@@ -31,7 +31,7 @@ namespace Systems.Development
 
         public void AddEffect()
         {
-            _asc.AddEffect(new EffectSpec(new Effect(effect)));
+            _asc.AddEffect(_asc, new EffectSpec(new Effect(effect)));
         }
     }
 }

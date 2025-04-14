@@ -16,7 +16,7 @@ namespace Systems.Development
             Debug.Log("OnTriggerEnter Server Side");
             AbilitySystemComponent asc = other.GetComponent<AbilitySystemComponent>();
             if (!asc) return;
-            asc.AddEffect(new EffectSpec(new Effect(effectAsset)));
+            asc.AddEffect(asc, new EffectSpec(new Effect(effectAsset)));
         }
     }
 }

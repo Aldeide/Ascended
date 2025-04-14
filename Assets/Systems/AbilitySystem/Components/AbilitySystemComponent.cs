@@ -52,6 +52,7 @@ namespace Systems.AbilitySystem.Components
             EffectSystem.Initialise(this);
 
             EffectSystem.OnEffectAdded += OnEffectAdded;
+            EffectSystem.OnEffectRemoved += OnEffectRemoved;
             
             if (Preset != null) InitialiseWithPreset();
         }
@@ -130,9 +131,9 @@ namespace Systems.AbilitySystem.Components
             return _abilitySystem.GetAllAbilities();
         }
 
-        public void AddEffect(EffectSpec effectSpec)
+        public void AddEffect(AbilitySystemComponent source, EffectSpec effectSpec)
         {
-            EffectSystem.AddEffectSpec(this, effectSpec);
+            EffectSystem.AddEffectSpec(source, effectSpec);
         }
 
         public bool HasAllTags(GameplayTagSet tags)
@@ -192,17 +193,30 @@ namespace Systems.AbilitySystem.Components
             AttributesSystem.GetAttribute(attributeSet, attributeName).SetBaseValue(newValue);
         }
         
-        public void OnEffectAdded(EffectSpec effectSpec)
+        [ObserversRpc]
+        public void NotifyAttributeCurrentChanged(string attributeSet, string attributeName, float newValue)
+        {
+            AttributesSystem.GetAttribute(attributeSet, attributeName).SetCurrentValue(newValue);
+        }
+        
+        [Server]
+        public void OnEffectAdded(int key, EffectSpec effectSpec)
         {
             if (!IsServerInitialized) return;
             string effectName = effectSpec.Effect.EffectName;
             float activationTime = effectSpec.ActivationTime;
             float serverTime = Time.time;
-            NotifyEffectAdded(effectName, activationTime, serverTime); 
+            NotifyEffectAdded(key, effectName, activationTime, serverTime); 
+        }
+        
+        public void OnEffectRemoved(int key)
+        {
+            if (!IsServerInitialized) return;
+            NotifyEffectRemoved(key); 
         }
 
         [ObserversRpc]
-        public void NotifyEffectAdded(string effectName, float activationTime, float serverTime)
+        public void NotifyEffectAdded(int effectKey, string effectName, float activationTime, float serverTime)
         {
             EffectAssetLibrary library = GameObject.Find("DataManager").GetComponent<EffectAssetLibrary>();
             EffectAsset asset = library.GetEffectByName(effectName);
@@ -210,13 +224,18 @@ namespace Systems.AbilitySystem.Components
             {
                 EffectSpec effectSpec = new EffectSpec(new Effect(asset));
                 effectSpec.ActivationTime = activationTime - (serverTime - Time.time);
-                EffectSystem.AddEffectSpecClient(effectSpec);
+                EffectSystem.AddEffectSpecClient(effectKey, effectSpec);
             }
             else
             {
                 Debug.Log("Effect " + effectName + " not found in library");
             }
-            
+        }
+        
+        [ObserversRpc]
+        public void NotifyEffectRemoved(int effectKey)
+        {
+            EffectSystem.RemoveEffect(effectKey);
         }
         
         #region Events

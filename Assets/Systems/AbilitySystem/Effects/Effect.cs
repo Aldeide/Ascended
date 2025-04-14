@@ -44,10 +44,10 @@ namespace Systems.AbilitySystem.Effects
             EffectStack = effectAsset.EffectStack;
         }
 
-        public EffectSpec ToEffectSpec(AbilitySystemComponent creator, AbilitySystemComponent owner, float level = 1)
+        public EffectSpec ToEffectSpec(AbilitySystemComponent creator, AbilitySystemComponent owner, int applicationKey, float level = 1)
         {
             var spec = new EffectSpec(this);
-            spec.Initialise(creator, owner, level);
+            spec.Initialise(creator, owner, level, applicationKey);
             return spec;
         }
 

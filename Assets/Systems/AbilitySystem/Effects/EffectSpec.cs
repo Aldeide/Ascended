@@ -11,12 +11,14 @@ namespace Systems.AbilitySystem.Effects
     public class EffectSpec
     {
         public Effect Effect { get; }
-
+        
+        public int EffectApplicationKey { get; set; }
+        
         public float Level { get; private set; }
         public AbilitySystemComponent Source { get; private set; }
         public AbilitySystemComponent Owner { get; private set; }
         public bool IsApplied { get; private set; }
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; set; }
         public float Duration { get; private set; }
         public float ActivationTime { get; set; }
         
@@ -43,14 +45,15 @@ namespace Systems.AbilitySystem.Effects
             }
         }
 
-        public void Initialise(AbilitySystemComponent creator, AbilitySystemComponent owner, float level)
+        public void Initialise(AbilitySystemComponent creator, AbilitySystemComponent owner, float level, int applicationKey)
         {
             Source = creator;
             Owner = owner;
             Level = level;
+            EffectApplicationKey = applicationKey;
             if (Effect.EffectDurationType != EffectDurationType.Instant)
             {
-                PeriodicEffect = Effect.PeriodicEffect?.ToEffectSpec(creator, owner);
+                PeriodicEffect = Effect.PeriodicEffect?.ToEffectSpec(creator, owner, EffectApplicationKey);
             }
         }
 
@@ -68,7 +71,7 @@ namespace Systems.AbilitySystem.Effects
 
         public void Remove()
         {
-            Owner.EffectSystem.RemoveEffect(this);
+            Owner.EffectSystem.RemoveEffect(EffectApplicationKey);
         }
 
         public void TriggerOnExecute()
