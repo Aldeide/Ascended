@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 namespace Systems.AbilitySystem.Authoring
 {
-    [CreateAssetMenu(fileName = "Effect", menuName = "AbilitySystem/Effect")]
+    [CreateAssetMenu(fileName = "Effect", menuName = "AbilitySystem2/Effect")]
     public class EffectAsset : ScriptableObject
     {
         [Title("General Information")]

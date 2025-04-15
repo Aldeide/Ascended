@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Systems.AbilitySystem.Replication;
 using Systems.AbilitySystem.Tags;
 using Systems.AbilitySystem.Util;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Systems.AbilitySystem.Authoring
         public string uniqueName;
 
         public EffectAsset cost;
-        
+        [Title("Tags")]
         [ValueDropdown("@ValueDropdownUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] AssetTags;
         [ValueDropdown("@ValueDropdownUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
@@ -37,6 +38,7 @@ namespace Systems.AbilitySystem.Authoring
         public GameplayTag[] ActivationRequiredTags;
         [ValueDropdown("@ValueDropdownUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] ActivationBlockedTags;
-        
+
+        [Space] [Title("Prediction")] public AbilityNetworkPolicy networkPolicy;
     }
 }

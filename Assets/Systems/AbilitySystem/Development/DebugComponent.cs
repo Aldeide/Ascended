@@ -34,6 +34,7 @@ namespace Systems.Development
             var effects = _asc.EffectSystem.GetAllEffects();
             var attributes = _asc.AttributesSystem.GetAllAttributes();
             var abilities = _asc.GetAllAbilities();
+            var tags = _asc.TagSystem.tags;
             
             var output = "";
             foreach (var effect in effects)
@@ -50,6 +51,11 @@ namespace Systems.Development
             foreach (var ability in abilities)
             {
                 output += DisplayAbility(ability);
+            }
+            output += "----\n";
+            foreach (var tag in tags)
+            {
+                output += tag.Name + "\n";
             }
             _text.text = output;
         }

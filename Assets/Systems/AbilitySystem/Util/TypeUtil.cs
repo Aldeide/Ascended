@@ -7,9 +7,9 @@ namespace Systems.AbilitySystem.Util
 {
     public static class TypeUtil
     {
-        public static Type[] GetAllSonTypesOf(Type parentType)
+        public static Type[] GetAllInheritedTypesOf(Type parentType)
         {
-            List<Type> sonTypes = new List<Type>();
+            List<Type> inheritedTypes = new List<Type>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             foreach (var assembly in assemblies)
@@ -18,14 +18,14 @@ namespace Systems.AbilitySystem.Util
                 {
                     var types = assembly.GetTypes();
 
-                    sonTypes.AddRange(types.Where(type => type.IsSubclassOf(parentType) && !type.IsAbstract));
+                    inheritedTypes.AddRange(types.Where(type => type.IsSubclassOf(parentType) && !type.IsAbstract));
                 }
                 catch (ReflectionTypeLoadException)
                 {
                 }
             }
 
-            return sonTypes.ToArray();
+            return inheritedTypes.ToArray();
         }
 
         public static Type FindTypeInAllAssemblies(string typeName)

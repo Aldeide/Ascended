@@ -1470,7 +1470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isServer: 1
-  isClient: 0
+  isClient: 1
 --- !u!4 &1070285928
 Transform:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System;
 using Systems.Abilities;
 using Systems.AbilitySystem.Components;
+using Systems.AbilitySystem.Replication;
 
 namespace Systems.AbilitySystem.Abilities
 {
@@ -14,6 +15,7 @@ namespace Systems.AbilitySystem.Abilities
         public int Level { get; protected set; }
         public bool IsActive { get; private set; }
         public int ActiveCount { get; private set; }
+        
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
@@ -90,7 +92,6 @@ namespace Systems.AbilitySystem.Abilities
             _onEndAbility = null;
             _onCancelAbility = null;
         }
-        
     }
     
     public abstract class AbilitySpec<T> : AbilitySpec where T : AbstractAbility
