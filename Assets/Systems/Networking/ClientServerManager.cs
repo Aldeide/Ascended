@@ -1,5 +1,4 @@
-﻿using FishNet;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Systems.Networking
 {
@@ -12,8 +11,8 @@ namespace Systems.Networking
 
         private void Awake()
         {
-            if (isServer) InstanceFinder.ServerManager.StartConnection();
-            if (isClient) InstanceFinder.ClientManager.StartConnection();
+            //if (isServer) InstanceFinder.ServerManager.StartConnection();
+            //if (isClient) InstanceFinder.ClientManager.StartConnection();
             //InstanceFinder.ClientManager.StartConnection();
         }
     }
