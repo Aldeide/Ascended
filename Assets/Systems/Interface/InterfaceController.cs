@@ -1,6 +1,7 @@
-﻿using System;
-using Systems.AbilitySystem.Attributes;
-using Systems.AbilitySystem.Components;
+﻿using AbilitySystem.Runtime.Attributes;
+using AbilitySystem.Runtime.Core;
+using AbilitySystem.Scripts;
+using AbilitySystemExtension.Runtime.AttributeSets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,20 +10,20 @@ namespace Systems.Interface
     public class InterfaceController : MonoBehaviour
     {
         [SerializeField] private Slider healthSlider;
-        private AbilitySystemComponent _asc;
+        private AbilitySystemManager _asc;
 
-        public void Initialise(AbilitySystemComponent owner)
+        public void Initialise(AbilitySystemManager owner)
         {
             _asc = owner;
-            _asc.RegisterOnAttributeChanged("CharacteristicsAttributeSet","Health", OnHealthChanged);
-            _asc.RegisterOnAttributeChanged("CharacteristicsAttributeSet","MaxHealth", OnHealthChanged);
+            _asc.AttributeSetManager.RegisterOnAttributeChanged("Health", OnHealthChanged);
+            _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxHealth", OnHealthChanged);
             healthSlider.value = 1;
         }
 
-        public void OnHealthChanged(AttributeBase attribute, float oldValue, float newValue)
+        public void OnHealthChanged(Attribute attribute, float oldValue, float newValue)
         {
-            float maxHealth = _asc.GetAttributeValue("CharacteristicsAttributeSet", "MaxHealth").Value.CurrentValue;
-            float health = _asc.GetAttributeValue("CharacteristicsAttributeSet", "Health").Value.CurrentValue;
+            float maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
+            float health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
             healthSlider.value = health / maxHealth;
         }
         
@@ -30,5 +31,6 @@ namespace Systems.Interface
         {
             
         }
+
     }
 }

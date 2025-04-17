@@ -1,6 +1,7 @@
-﻿using System;
-using FishNet.Object;
+﻿
+using NUnit.Framework;
 using Unity.Mathematics;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
@@ -18,6 +19,11 @@ namespace Systems.Movement
         
         public float turnSmoothTime = 0.1f;   
         private float turnSmoothVelocity = 2.0f;
+
+        public override void OnNetworkSpawn()
+        {
+            
+        }
         
         public void Start()
         {
@@ -27,7 +33,8 @@ namespace Systems.Movement
 
         public void Update()
         {
-            if (!IsOwner) return;
+            Debug.Log(IsOwner);
+            if (!IsLocalPlayer) return;
             
             if (movementInput.magnitude <= 0.01f)
             {
