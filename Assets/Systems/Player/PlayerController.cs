@@ -1,9 +1,9 @@
-﻿using FishNet.Connection;
-using FishNet.Object;
-using Systems.AbilitySystem.Components;
+﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Scripts;
+using AbilitySystemExtension.Scripts;
 using Systems.Camera;
-using Systems.Development;
 using Systems.Interface;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Systems.Player
@@ -12,20 +12,13 @@ namespace Systems.Player
     {
         private InterfaceController _interfaceController;
 
-        public override void OnStartClient()
+        public override void OnNetworkSpawn()
         {
-            base.OnStartClient();
-            if (!IsOwner) return;
+            if (!HasAuthority) return;
+            base.OnNetworkSpawn();
             SetupCamera();
             SetupAsc();
             SetupInterface();
-            SetupDebug();
-        }
-
-        public override void OnStartServer()
-        {
-            base.OnStartServer();
-            SetupAsc();
             SetupDebug();
         }
 
@@ -37,19 +30,19 @@ namespace Systems.Player
         private void SetupAsc()
         {
             GetComponent<AbilitySystemComponent>().Initialise();
+            GetComponent<AbilitySystemComponent>().AbilitySystem.AbilityManager.TryActivateAbility("EnergyRegenAbility");
         }
 
         private void SetupInterface()
         {
             _interfaceController = GameObject.Find("Interface").GetComponent<InterfaceController>();
-            _interfaceController.Initialise(GetComponent<AbilitySystemComponent>());
+            _interfaceController.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
         }
 
         private void SetupDebug()
         {
-            var debug = GameObject.Find("Debug/Text").GetComponent<DebugComponent>();
-            debug.player = this.gameObject;
-            debug.SetOwner(GetComponent<AbilitySystemComponent>());
+            var debug = GameObject.Find("Debug/Text").GetComponent<AbilitySystemDebugComponent>();
+            debug.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
         }
     }
 }

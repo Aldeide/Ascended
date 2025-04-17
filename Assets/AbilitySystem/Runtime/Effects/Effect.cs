@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Runtime.Serialization;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
@@ -61,7 +63,9 @@ namespace AbilitySystem.Runtime.Effects
 
         public void Execute()
         {
+            Debug.Log("Execute");
             if (!Definition.IsInstant()) return;
+            Owner.AttributeSetManager.ApplyInstantEffectModifiers(this);
         }
 
         public float RemainingDuration()
@@ -70,6 +74,21 @@ namespace AbilitySystem.Runtime.Effects
                 return -1;
 
             return Mathf.Max(0, Duration - (Owner.GetTime() - ActivationTime));
+        }
+
+        public string DebugString()
+        {
+            var typeDuration = "";
+            if (Definition.IsInfinite())
+            {
+                typeDuration = "Infinite";
+            }
+            else
+            {
+                typeDuration = RemainingDuration().ToString(CultureInfo.InvariantCulture);
+            }
+
+            return $"{Definition.Asset.name} ({typeDuration})";
         }
     }
 }

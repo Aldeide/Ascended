@@ -24,7 +24,8 @@ namespace AbilitySystem.Runtime.Core
 
         public void Tick()
         {
-            throw new System.NotImplementedException();
+            EffectManager.Tick();
+            
         }
 
         public float GetTime()

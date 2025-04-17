@@ -41,5 +41,12 @@ namespace AbilitySystem.Runtime.AttributeSets
         {
             return _attributes.Values.ToList();
         }
+
+        public string DebugString()
+        {
+            var output = Name + "\n";
+            return _attributes.Values.Aggregate(
+                output, (current, attribute) => current + (attribute.DebugString() + "\n"));
+        }
     }
 }

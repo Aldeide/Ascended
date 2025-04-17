@@ -27,7 +27,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void Tick()
         {
-            if (_owner.IsLocalClient()) return;
+            //if (_owner.IsLocalClient()) return;
             _effectSnapshot.AddRange(Effects);
             _effectSnapshot.ForEach(e=>e.Tick());
             _effectSnapshot.Clear();
@@ -83,6 +83,18 @@ namespace AbilitySystem.Runtime.Effects
         {
             PredictedEffects.Remove(predictionKey.currentKey);
             OnEffectRemoved?.Invoke();
+        }
+
+        public string DebugString()
+        {
+            var output = Effects.Aggregate(
+                "Effects\n", (current, effect) => current + (effect.DebugString() + "\n"));
+            foreach (var effect in PredictedEffects)
+            {
+                output += "Prediction Key " + effect.Key;
+                output = effect.Value.Aggregate(output, (current, e) => current + (e.DebugString() + "\n"));
+            }
+            return output;
         }
     }
 }

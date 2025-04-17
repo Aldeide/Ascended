@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 
@@ -15,6 +17,8 @@ namespace AbilitySystem.Runtime.Abilities
         public int ActiveCount { get; private set; }
         
         public PredictionKey PredictionKey { get; private set; }
+
+        private List<Effect> _activatedEffects;
         
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
@@ -24,6 +28,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             Definition = ability;
             Owner = owner;
+            _activatedEffects = new List<Effect>();
         }
         
         public void Tick()
@@ -60,7 +65,13 @@ namespace AbilitySystem.Runtime.Abilities
                 IsActive = true;
                 ActiveCount++;
                 Owner.TagManager.ApplyAbilityTags(this);
-
+                foreach (var grantedEffect in Definition.Asset.grantedEffects)
+                {
+                    var effect = new EffectDefinition(grantedEffect).ToEffect(Owner, Owner);
+                    effect.Activate();
+                    _activatedEffects.Add(effect);
+                    Owner.EffectManager.AddEffect(effect);
+                }
                 ActivateAbility(AbilityArguments);
             }
 
@@ -90,9 +101,13 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (!IsActive) return;
             IsActive = false;
-            
+            foreach (var activatedEffect in _activatedEffects)
+            {
+                Owner.EffectManager.RemoveEffect(activatedEffect);
+            }
             Owner.TagManager.RemoveAbilityTags(this);
             EndAbility();
+            _activatedEffects.Clear();
             _onEndAbility?.Invoke();
         }
         

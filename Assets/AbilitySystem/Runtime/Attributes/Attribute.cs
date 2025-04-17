@@ -1,6 +1,7 @@
 ﻿using System;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Attributes
 {
@@ -55,6 +56,11 @@ namespace AbilitySystem.Runtime.Attributes
             _value.CurrentValue = value;
             _value.Clamp();
             OnAttributeCurrentValueChanged?.Invoke(this, previousValue, _value.CurrentValue);
+        }
+
+        public string DebugString()
+        {
+            return $"{_name} : Base {BaseValue}, Current {CurrentValue}";
         }
     }
 }

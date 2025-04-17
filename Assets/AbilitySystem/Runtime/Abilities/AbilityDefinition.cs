@@ -1,10 +1,10 @@
-﻿using AbilitySystem.Scripts;
+﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Runtime.Abilities
 {
     public abstract class AbilityDefinition
     {
-
             public readonly string Name;
             public readonly AbilityAsset Asset;
             public AbilityTags AbilityTags;
@@ -19,7 +19,7 @@ namespace AbilitySystem.Runtime.Abilities
                 );
             }
 
-            public abstract Ability CreateSpec(AbilitySystemComponent owner);
+            public abstract Ability CreateSpec(IAbilitySystem owner);
 
             public bool HasLocalPrediction()
             {

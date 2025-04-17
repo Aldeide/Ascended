@@ -38,6 +38,8 @@ namespace AbilitySystem.Runtime.Abilities
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] ActivationBlockedTags;
 
+        [Space] [Title("Granted Effects")] public EffectAsset[] grantedEffects; 
+        
         [Space] [Title("Prediction")] public AbilityNetworkPolicy networkPolicy;
     }
 }

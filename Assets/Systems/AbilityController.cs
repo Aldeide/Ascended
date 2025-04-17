@@ -1,5 +1,6 @@
 ﻿using System;
-using Systems.AbilitySystem.Components;
+using AbilitySystem.Runtime.Core;
+using AbilitySystem.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,12 +19,12 @@ namespace Systems
         {
             if (context.phase == InputActionPhase.Started)
             {
-                _asc.TryActivateAbility("Aim");
+                _asc.TryActivateAbility("AimCameraAbility");
             }
             
             if (context.phase == InputActionPhase.Canceled)
             {
-                _asc.EndAbility("Aim");
+                _asc.EndAbility("AimCameraAbility");
             }
         }
     }

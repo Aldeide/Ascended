@@ -7,7 +7,7 @@ namespace AbilitySystem.Runtime.Effects
     [Serializable]
     public struct EffectModifier
     {
-        [ValueDropdown("@ValueDropdownUtil.AttributeChoices", IsUniqueList = true)]
+        [ValueDropdown("@DropdownValuesUtil.AttributeChoices", IsUniqueList = true)]
         public string attributeName;
         public string attributeSetName;
         public float modifierMagnitude;

@@ -1,10 +1,10 @@
-﻿using Systems.Development;
-using Unity.VisualScripting;
+﻿using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor
 {
+    /*
     [CustomEditor(typeof(DevelopmentComponent))]
     public class DevelopmentComponentEditor : UnityEditor.Editor
     {
@@ -21,4 +21,5 @@ namespace Editor
             }
         }
     }
+    */
 }

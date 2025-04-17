@@ -59,7 +59,7 @@ namespace AbilitySystem.Runtime.Utilities
 
         private static string[] LoadAttributeNames()
         {
-            var libType = TypeUtil.FindTypeInAllAssemblies("Authoring.AttributeSets.AttributeSetLibrary");
+            var libType = TypeUtil.FindTypeInAllAssemblies("AbilitySystemExtension.Runtime.AttributeSets.AttributeSetLibrary");
             if (libType == null)
             {
                 Debug.LogError("AttributeSetLibrary not found!");
@@ -97,13 +97,13 @@ namespace AbilitySystem.Runtime.Utilities
 
         private static string[] LoadAttributeSetNames()
         {
-            var libType = TypeUtil.FindTypeInAllAssemblies("Authoring.AttributeSets.AttributeSetLibrary");
+            var libType = TypeUtil.FindTypeInAllAssemblies("AbilitySystemExtension.Runtime.AttributeSets.AttributeSetLibrary");
             if (libType == null)
             {
                 Debug.LogError("AttributeSetLibrary not found!");
                 return Array.Empty<string>();
             }
-            const string fieldName = "AttrSetTypeDict";
+            const string fieldName = "AttributeSetTypeDict";
             var field = libType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
             if (field == null)
             {
@@ -123,13 +123,13 @@ namespace AbilitySystem.Runtime.Utilities
 
         public static Type GetAttributeSetType(string name)
         {
-            var libType = TypeUtil.FindTypeInAllAssemblies("Authoring.AttributeSets.AttributeSetLibrary");
+            var libType = TypeUtil.FindTypeInAllAssemblies("AbilitySystemExtension.Runtime.AttributeSets.AttributeSetLibrary");
             if (libType == null)
             {
                 Debug.LogError("AttributeSetLibrary not found!");
                 return null;
             }
-            const string fieldName = "AttrSetTypeDict";
+            const string fieldName = "AttributeSetTypeDict";
             var field = libType.GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
             if (field == null)
             {

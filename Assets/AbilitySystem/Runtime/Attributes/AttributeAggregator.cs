@@ -93,7 +93,7 @@ namespace AbilitySystem.Runtime.Attributes
                 {
                     foreach (var modifier in effectSpec.Definition.Asset.Modifiers)
                     {
-                        if (modifier.attributeName == _attribute.GetName())
+                        if (modifier.attributeName == _attribute.GetFullName())
                         {
                             _modifierCache.Add(new Tuple<Effect, EffectModifier>(effectSpec, modifier));
                         }
