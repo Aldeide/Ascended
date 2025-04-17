@@ -1,4 +1,5 @@
 ﻿using System;
+using AbilitySystem.Runtime.Modifiers;
 using Sirenix.OdinInspector;
 
 namespace AbilitySystem.Runtime.Effects

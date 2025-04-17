@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Scripts;
+using AbilitySystem.Runtime.Core;
 
 namespace AbilitySystem.Runtime.Tags
 {
     public class GameplayTagManager
     {
         public List<GameplayTag> tags = new();
-        private AbilitySystemComponent _asc;
+        private IAbilitySystem _owner;
 
         private event Action OnTagsChanged;
-        
-        public void Initialise(AbilitySystemComponent owner)
+
+        public GameplayTagManager(IAbilitySystem owner)
         {
-            _asc = owner;
+            _owner = owner;
         }
 
         public void AddTag(GameplayTag gameplayTag)

@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 
 namespace AbilitySystem.Runtime.Effects
 {
+    [CreateAssetMenu(fileName = "Effect", menuName = "AbilitySystem/Effect")]
     public class EffectAsset : ScriptableObject
     {
         [Title("General Information")]

@@ -7,41 +7,39 @@ namespace AbilitySystem.Runtime.Networking
     public struct PredictionKey
     {
         public int currentKey;
-        public int baseKey;
+        [NonSerialized]
+        public int BaseKey;
+
+        private static int _counter;
 
         public PredictionKey(int currentKey, int baseKey = 0)
         {
             this.currentKey = currentKey;
-            this.baseKey = baseKey;
+            this.BaseKey = baseKey;
+        }
+
+        public static PredictionKey CreatePredictionKey()
+        {
+            _counter++;
+            if (_counter <= 0) _counter = 1;
+            return new PredictionKey(_counter);
+        }
+
+        public static PredictionKey CreateDependentPredictionKey(PredictionKey baseKey)
+        {
+            _counter++;
+            if (_counter <= 0) _counter = 1;
+            return new PredictionKey(_counter, baseKey.currentKey);
+        }
+
+        public bool IsValidKey()
+        {
+            return currentKey > 0;
+        }
+
+        public void Invalidate()
+        {
+            currentKey = 0;
         }
     }
-
-
-public class PredictionKeyGenerator
-{
-    private int _counter;
-
-    public PredictionKeyGenerator()
-    {
-        _counter = 0;
-    }
-    
-    public PredictionKey CreatePredictionKey()
-    {
-        _counter++;
-        if (_counter <= 0) _counter = 1;
-        var predictionKey = new PredictionKey(_counter);
-        return predictionKey;
-    }
-
-    public PredictionKey CreateDependentPredictionKey(PredictionKey key)
-    {
-        _counter++;
-        var dependentPredictionKey = new PredictionKey(_counter, key.currentKey);
-        return dependentPredictionKey;
-    }
-}
-
-    
-    
 }

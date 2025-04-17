@@ -1,6 +1,5 @@
-﻿using AbilitySystem.Runtime.AttributeSet;
-using AbilitySystem.Runtime.Core;
-using AbilitySystem.Test.TestUtils;
+﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Test.Utilities;
 using Moq;
 using NUnit.Framework;
 
@@ -13,7 +12,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
         {
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
-            var attribute = new AbilitySystem.Runtime.Attribute.Attribute(
+            var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
                 "TestAttributeName", owner.Object, attributeSet, 45f);
             
             Assert.AreEqual( "TestAttributeName", attribute.GetName());
@@ -27,7 +26,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
         {
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
-            var attribute = new AbilitySystem.Runtime.Attribute.Attribute(
+            var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
                 "TestAttributeName", owner.Object, attributeSet, 45f, 50f, 100f);
             
             Assert.AreEqual(50, attribute.BaseValue);
@@ -39,7 +38,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
         {
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
-            var attribute = new AbilitySystem.Runtime.Attribute.Attribute(
+            var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
                 "TestAttributeName", owner.Object, attributeSet, 45f, 10f, 20f);
             
             Assert.AreEqual(20, attribute.BaseValue);
@@ -51,7 +50,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
         {
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
-            var attribute = new AbilitySystem.Runtime.Attribute.Attribute(
+            var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
                 "TestAttributeName", owner.Object, attributeSet, 45f, 10f, 100f);
             
             attribute.SetBaseValue(60);
@@ -66,7 +65,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
         {
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
-            var attribute = new AbilitySystem.Runtime.Attribute.Attribute(
+            var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
                 "TestAttributeName", owner.Object, attributeSet, 45f, 10f, 100f);
             
             attribute.SetBaseValue(200);
@@ -81,7 +80,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
         {
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
-            var attribute = new AbilitySystem.Runtime.Attribute.Attribute(
+            var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
                 "TestAttributeName", owner.Object, attributeSet, 45f, 10f, 100f);
             
             attribute.SetBaseValue(1);

@@ -16,7 +16,7 @@ namespace AbilitySystem.Runtime.Tags
         {
             this.name = name;
             hashCode = name.GetHashCode();
-            var tags = name.Split('.');
+            var tags = name.Split(new char[] {'.'});
             ancestorsNames = new string[tags.Length - 1];
             ancestorsHashCodes = new int[tags.Length - 1];
             var i = 0;

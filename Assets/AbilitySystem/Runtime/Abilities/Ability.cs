@@ -11,10 +11,10 @@ namespace AbilitySystem.Runtime.Abilities
         
         public AbilityDefinition Definition { get; }
         public IAbilitySystem Owner { get; protected set; }
-        
-        public int Level { get; protected set; }
         public bool IsActive { get; private set; }
         public int ActiveCount { get; private set; }
+        
+        public PredictionKey PredictionKey { get; private set; }
         
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
@@ -78,7 +78,7 @@ namespace AbilitySystem.Runtime.Abilities
                 IsActive = true;
                 ActiveCount++;
                 Owner.TagManager.ApplyAbilityTags(this);
-
+                PredictionKey = key;
                 ActivateAbility(AbilityArguments);
             }
 
@@ -90,6 +90,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (!IsActive) return;
             IsActive = false;
+            
             Owner.TagManager.RemoveAbilityTags(this);
             EndAbility();
             _onEndAbility?.Invoke();

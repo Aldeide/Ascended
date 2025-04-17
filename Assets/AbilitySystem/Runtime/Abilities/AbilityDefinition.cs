@@ -7,7 +7,6 @@ namespace AbilitySystem.Runtime.Abilities
 
             public readonly string Name;
             public readonly AbilityAsset Asset;
-            public int Level;
             public AbilityTags AbilityTags;
 
             public AbilityDefinition(AbilityAsset asset)
@@ -21,6 +20,16 @@ namespace AbilitySystem.Runtime.Abilities
             }
 
             public abstract Ability CreateSpec(AbilitySystemComponent owner);
+
+            public bool HasLocalPrediction()
+            {
+                return Asset.networkPolicy == AbilityNetworkPolicy.ClientPredicted;
+            }
+
+            public bool IsLocalAbility()
+            {
+                return Asset.networkPolicy == AbilityNetworkPolicy.ClientOnly;
+            }
         
     }
 }

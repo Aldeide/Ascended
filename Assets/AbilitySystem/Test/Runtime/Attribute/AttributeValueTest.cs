@@ -1,5 +1,6 @@
-﻿using AbilitySystem.Runtime.Attribute;
+﻿using AbilitySystem.Runtime.Attributes;
 using NUnit.Framework;
+
 
 namespace AbilitySystem.Test.Runtime.Attribute
 {
