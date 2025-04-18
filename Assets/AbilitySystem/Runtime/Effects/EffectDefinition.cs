@@ -1,4 +1,5 @@
 ﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Runtime.Tags;
 using Sirenix.OdinInspector;
 using UnityEditor.VersionControl;
@@ -53,6 +54,10 @@ namespace AbilitySystem.Runtime.Effects
         [Space]
         [Title("Modifiers")]
         public EffectModifier[] Modifiers;
+        
+        [ShowInInspector]
+        [SerializeReference]
+        public AbstractTest test;
         
         bool IsPeriodic()
         {

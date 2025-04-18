@@ -66,10 +66,23 @@ namespace AbilitySystem.Runtime.Abilities
             return false;
         }
 
+        public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, params object[] args)
+        {
+            if (!_owner.IsServer()) return false;
+            
+            _abilities.TryGetValue(name, out Ability ability);
+            if (ability == null) return false;
+            return ability.TryActivateAbility(key, args);
+        }
+
         public void EndAbility(string abilityName)
         {
             _abilities.TryGetValue(abilityName, out Ability ability);
             ability?.TryEndAbility();
+            if (_owner.IsLocalClient())
+            {
+                _owner.Component.ServerTryEndAbilityRpc(abilityName);
+            }
         }
 
         public void EndAbility(PredictionKey key)

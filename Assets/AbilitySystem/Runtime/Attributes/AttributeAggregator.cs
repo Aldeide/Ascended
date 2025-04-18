@@ -92,6 +92,12 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 if (effectSpec.IsActive)
                 {
+                    if (effectSpec.Definition.test != null)
+                    {
+                        Debug.Log("HI: " +effectSpec.Definition.test.Calculate());
+                        Debug.Log("HI: " +effectSpec.Definition.test.SaySomething());
+                    }
+                    
                     foreach (var modifier in effectSpec.Definition.Modifiers)
                     {
                         if (modifier.attributeName == _attribute.GetFullName())

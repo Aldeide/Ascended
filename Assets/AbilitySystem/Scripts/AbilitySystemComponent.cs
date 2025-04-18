@@ -89,16 +89,24 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Server)]
         public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key)
         {
-            if (!AbilitySystem.AbilityManager.TryActivateAbility(abilityName))
+            if (!AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key))
             {
                 NotifyAbilityActivationFailedRpc(abilityName, key);
             }
+        }
+        
+        [Rpc(SendTo.Server)]
+        public void ServerTryEndAbilityRpc(string abilityName)
+        {
+            AbilitySystem.AbilityManager.EndAbility(abilityName);
+
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationFailedRpc(string abilityName, PredictionKey key)
         {
             AbilitySystem.AbilityManager.EndAbility(key);
+            AbilitySystem.EffectManager.RetractPredictedEffect(key);
         }
 
         public void EndAbility(string abilityName)
@@ -117,6 +125,11 @@ namespace AbilitySystem.Scripts
         {
             if (IsServer && ! IsHost)
             {
+                if (effect.PredictionKey.IsValidKey())
+                {
+                    NotifyOwnerEffectAddedRpc(effect.PredictionKey, effect.Definition.name, effect.ActivationTime);
+                    return;
+                }
                 NotifyOwnerEffectAddedRpc(effect.Definition.name, effect.ActivationTime);
             }
         }
@@ -137,6 +150,16 @@ namespace AbilitySystem.Scripts
             var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
             effect.ActivationTime = applicationTime;
             AbilitySystem.EffectManager.AddEffectFromServer(effect);
+        }
+        
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime)
+        {
+            var effectDefinition = _effectLibrary.GetEffectByName(effectName);
+            // TODO: find an identifier to identify the abilitysystem and source player.
+            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            effect.ActivationTime = applicationTime;
+            AbilitySystem.EffectManager.ReconcilePredictedEffect(key);
         }
         
         [Rpc(SendTo.Owner)]

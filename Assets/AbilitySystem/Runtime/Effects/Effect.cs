@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Networking;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
@@ -22,6 +23,8 @@ namespace AbilitySystem.Runtime.Effects
         
         private EffectTicker _effectTicker = null;
         public Effect PeriodicEffect { get; private set; }
+        
+        public PredictionKey PredictionKey { get; set; }
         
         public Effect(EffectDefinition definition)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Modifiers;
 using Sirenix.OdinInspector;
 
@@ -13,7 +14,7 @@ namespace AbilitySystem.Runtime.Effects
         public float modifierMagnitude;
         public EffectOperation operation;
         public ModifierMagnitudeCalculation modifierMagnitudeCalculation;
-
+        
         public EffectModifier(string attributeName, float modifierMagnitude, EffectOperation operation,
             ModifierMagnitudeCalculation modifierMagnitudeCalculation)
         {
