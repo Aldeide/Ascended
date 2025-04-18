@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Abilities
 {
-    [CreateAssetMenu(fileName = "AimCameraAbility", menuName = "AbilitySystem/Abilities/AimCameraAbility")]
+    
     public class AimCameraAbilityAsset : AbilityAsset
     {
         public override Type AbilityType()

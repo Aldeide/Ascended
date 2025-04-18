@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities
@@ -11,48 +12,58 @@ namespace AbilitySystem.Runtime.Abilities
     {
         private IAbilitySystem _owner;
         private Dictionary<string, Ability> _abilities;
-        
+        private PredictionKey _predictionKey;
+
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
             _abilities = new Dictionary<string, Ability>();
         }
 
-        public void GrantAbility(AbilityAsset asset)
+        public void GrantAbility(AbilityDefinition abilityDefinition)
         {
-            if (!asset) return;
+            if (!abilityDefinition) return;
             try
             {
-                Debug.Log(asset.AbilityType().FullName);
-                var abilityDefinition = Activator.CreateInstance(asset.AbilityType(), args: asset) as AbilityDefinition;
-                if (_abilities.ContainsKey(abilityDefinition.Name)) return;
-                var ability = abilityDefinition.CreateSpec(_owner);
-                _abilities.Add(abilityDefinition.Name, ability);
+                if (_abilities.ContainsKey(abilityDefinition.uniqueName)) return;
+                var ability = abilityDefinition.ToAbility(_owner);
+                _abilities.Add(ability.Definition.uniqueName, ability);
             }
             catch (MissingMethodException e)
             {
-                Debug.LogError("Failed to add ability: " + asset.GetType().FullName + " / " + e.Message);
+                Debug.LogError("Failed to add ability: " + abilityDefinition.GetType().FullName + " / " + e.Message);
             }
         }
 
-        public void TryActivateAbility(string name, params object[] args)
+        public bool TryActivateAbility(string name, params object[] args)
         {
-            if (_abilities.TryGetValue(name, out Ability ability))
+            _abilities.TryGetValue(name, out Ability ability);
+            if (ability == null) return false;
+
+            if (_owner.IsServer() && !ability.Definition.IsLocalAbility())
             {
-                /*
-                if (_owner.IsLocalClient() && ability.Definition.Asset.networkPolicy == AbilityNetworkPolicy.Server)
+                return ability.TryActivateAbility(args);
+            }
+            
+            if (ability.Definition.IsLocalAbility() && _owner.IsLocalClient())
+            {
+                return ability.TryActivateAbility(args);
+            }
+
+            if (ability.Definition.HasLocalPrediction() && _owner.IsLocalClient())
+            {
+                var key = PredictionKey.CreatePredictionKey();
+                var success = ability.TryActivateAbility(key, args);
+                if (success)
                 {
-                    return;
+                    _owner.Component.ServerTryActivateAbilityRpc(name, key);
+                    return true;
                 }
 
-                if (_owner.IsLocalClient() &&
-                    ability.Definition.Asset.networkPolicy == AbilityNetworkPolicy.ClientPredicted)
-                {
-                    
-                }
-                */
-                ability.TryActivateAbility(args);
+                return false;
             }
+
+            return false;
         }
 
         public void EndAbility(string abilityName)
@@ -61,9 +72,12 @@ namespace AbilitySystem.Runtime.Abilities
             ability?.TryEndAbility();
         }
 
-        public void NotifyAbilityActivationFailed(PredictionKey key)
+        public void EndAbility(PredictionKey key)
         {
-            
+            _abilities.Where(kv =>
+                    kv.Value.PredictionKey.BaseKey == key.currentKey ||
+                    kv.Value.PredictionKey.currentKey == key.currentKey)
+                .ForEach(a => a.Value.EndAbility());
         }
 
         public string DebugString()

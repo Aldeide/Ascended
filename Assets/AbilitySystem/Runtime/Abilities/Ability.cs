@@ -65,9 +65,9 @@ namespace AbilitySystem.Runtime.Abilities
                 IsActive = true;
                 ActiveCount++;
                 Owner.TagManager.ApplyAbilityTags(this);
-                foreach (var grantedEffect in Definition.Asset.grantedEffects)
+                foreach (var grantedEffect in Definition.grantedEffects)
                 {
-                    var effect = new EffectDefinition(grantedEffect).ToEffect(Owner, Owner);
+                    var effect = grantedEffect.ToEffect(Owner, Owner);
                     effect.Activate();
                     _activatedEffects.Add(effect);
                     Owner.EffectManager.AddEffect(effect);

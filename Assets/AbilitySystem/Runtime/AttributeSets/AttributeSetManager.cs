@@ -13,19 +13,19 @@ namespace AbilitySystem.Runtime.AttributeSets
     public class AttributeSetManager
     {
         private IAbilitySystem _owner;
-        private Dictionary<string, AttributeSet> _attributeSets;
+        private Dictionary<Type, AttributeSet> _attributeSets;
         private Dictionary<string, AttributeAggregator> _attributeAggregators;
         
         public AttributeSetManager(IAbilitySystem owner)
         {
             _owner = owner;
-            _attributeSets = new Dictionary<string, AttributeSet>();
+            _attributeSets = new Dictionary<Type, AttributeSet>();
             _attributeAggregators = new Dictionary<string, AttributeAggregator>();
         }
 
         public T GetAttributeSet<T>() where T : AttributeSet
         {
-            _attributeSets.TryGetValue(typeof(T).Name, out AttributeSet result);
+            _attributeSets.TryGetValue(typeof(T), out AttributeSet result);
             return (T)result;
         }
         
@@ -35,9 +35,9 @@ namespace AbilitySystem.Runtime.AttributeSets
             return _attributeSets.Values.FirstOrDefault(a => a.Name == attributeSetName);
         }
         
-        public void AddAttributeSet<T>(T attributeSet) where T : AttributeSet
+        public void AddAttributeSet(Type type, AttributeSet attributeSet)
         {
-            _attributeSets[attributeSet.Name] = attributeSet;
+            _attributeSets[type] = attributeSet;
             foreach (var attribute in attributeSet.GetAllAttributes())
             {
                 var aggregator = new AttributeAggregator(attribute, _owner);
@@ -46,21 +46,29 @@ namespace AbilitySystem.Runtime.AttributeSets
             }
         }
 
-        public Attribute GetAttribute(Type attributeSet, string attributeName)
+        [CanBeNull]
+        public Attribute GetAttribute<T>(string attributeName)
         {
-            _attributeSets.TryGetValue(attributeSet.Name, out AttributeSet result);
+            return GetAttribute(typeof(T), attributeName);
+        }
+
+        [CanBeNull]
+        public Attribute GetAttribute(Type attributeSetType, string attributeName)
+        {
+            _attributeSets.TryGetValue(attributeSetType, out AttributeSet result);
             return result.GetAttribute(attributeName);
         }
         
         public Attribute GetAttribute(string attributeSetName, string attributeName)
         {
-            return _attributeSets[attributeSetName].GetAttribute(attributeName);
+            return _attributeSets.FirstOrDefault(
+                k => k.Value.Name == attributeSetName).Value.GetAttribute(attributeName);
         }
         
         public AttributeValue GetAttributeValue<T>(string attributeName) where T : AttributeSet
         {
             Debug.Log(attributeName + " " + typeof(T).Name);
-            return GetAttributeSet(typeof(T).Name).GetAttribute(attributeName).GetValue();
+            return GetAttribute<T>(attributeName).GetValue();
         }
 
         public Dictionary<string, AttributeValue> Snapshot()
@@ -89,7 +97,7 @@ namespace AbilitySystem.Runtime.AttributeSets
         
         public void ApplyInstantEffectModifiers(Effect instantEffect)
         {
-            foreach (var modifier in instantEffect.Definition.Asset.Modifiers)
+            foreach (var modifier in instantEffect.Definition.Modifiers)
             {
                 var splits = modifier.attributeName.Split(".");
                 var attributeSet = splits[0];

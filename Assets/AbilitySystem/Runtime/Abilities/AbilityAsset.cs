@@ -17,9 +17,13 @@ namespace AbilitySystem.Runtime.Abilities
         
         public string description;
         public Sprite icon;
+        [ShowInInspector]
         public string InstanceAbilityClassFullName => AbilityType() != null ? AbilityType().FullName : null;
+        [ShowInInspector]
         public string TypeName => GetType().Name;
+        [ShowInInspector]
         public string TypeFullName => GetType().FullName;
+        [ShowInInspector]
         public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
         public string uniqueName;
 

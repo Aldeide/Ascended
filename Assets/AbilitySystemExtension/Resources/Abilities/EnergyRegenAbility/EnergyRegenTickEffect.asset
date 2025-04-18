@@ -10,20 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
-  m_Name: EnergyRegenEffect
+  m_Name: EnergyRegenTickEffect
   m_EditorClassIdentifier: 
   description: 
-  durationType: 2
+  durationType: 1
   durationSeconds: 0
-  Period: 2
-  periodicEffect: {fileID: 11400000, guid: 12efc8cabf7bfbd44a0f6d5a62f07697, type: 2}
+  Period: 0
+  periodicEffect: {fileID: 0}
   assetTags: []
   grantedTags: []
   applicationRequiredTags: []
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
-  Modifiers: []
+  Modifiers:
+  - attributeName: CharacteristicsAttributeSet.Energy
+    attributeSetName: 
+    modifierMagnitude: 2
+    operation: 0
+    modifierMagnitudeCalculation: {fileID: 0}
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0

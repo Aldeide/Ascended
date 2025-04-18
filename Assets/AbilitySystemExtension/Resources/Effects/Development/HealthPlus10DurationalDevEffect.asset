@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d979a1fb0652492dbf53fb3e134df98e, type: 3}
-  m_Name: EnergyRegenTick
+  m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
+  m_Name: HealthPlus10DurationalDevEffect
   m_EditorClassIdentifier: 
   description: 
-  durationType: 1
-  durationSeconds: 0
+  durationType: 3
+  durationSeconds: 10
   Period: 0
   periodicEffect: {fileID: 0}
   assetTags: []
@@ -24,9 +24,9 @@ MonoBehaviour:
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
   Modifiers:
-  - attributeName: CharacteristicsAttributeSet.Energy
+  - attributeName: CharacteristicsAttributeSet.Health
     attributeSetName: 
-    modifierMagnitude: 1
+    modifierMagnitude: 10
     operation: 0
     modifierMagnitudeCalculation: {fileID: 0}
   EffectStack:

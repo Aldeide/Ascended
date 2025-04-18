@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa9fc4ca113d43f6add6550be4d0bdaa, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b4b6bd928f3440bbe97a401c2f7418f, type: 3}
   m_Name: AimCameraAbility
   m_EditorClassIdentifier: 
   description: 
@@ -24,4 +24,4 @@ MonoBehaviour:
   ActivationBlockedTags: []
   grantedEffects:
   - {fileID: 11400000, guid: 146f7bbdcb0f052418efc8d52752665c, type: 2}
-  networkPolicy: 0
+  networkPolicy: 1

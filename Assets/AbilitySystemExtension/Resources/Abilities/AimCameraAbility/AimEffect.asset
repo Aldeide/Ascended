@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d979a1fb0652492dbf53fb3e134df98e, type: 3}
+  m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
   m_Name: AimEffect
   m_EditorClassIdentifier: 
-  description: AimEffect
+  description: 
   durationType: 2
   durationSeconds: 0
   Period: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
   applicationImmunityTags: []
   Modifiers:
   - attributeName: CharacteristicsAttributeSet.MovementSpeed
-    attributeSetName: CharacteristicsAttributeSet
+    attributeSetName: 
     modifierMagnitude: 2
     operation: 3
     modifierMagnitudeCalculation: {fileID: 0}

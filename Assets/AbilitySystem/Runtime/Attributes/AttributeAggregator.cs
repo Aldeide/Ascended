@@ -79,10 +79,10 @@ namespace AbilitySystem.Runtime.Attributes
 
         private void OnEffectRemoved()
         {
-            RefreshModifierCache();
+            RefreshModifierCache(null);
         }
         
-        private void RefreshModifierCache()
+        private void RefreshModifierCache(Effect effect)
         {
             // TODO: only do this if the added or removed modifier concerns this attribute.
             _modifierCache.Clear();
@@ -91,7 +91,7 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 if (effectSpec.IsActive)
                 {
-                    foreach (var modifier in effectSpec.Definition.Asset.Modifiers)
+                    foreach (var modifier in effectSpec.Definition.Modifiers)
                     {
                         if (modifier.attributeName == _attribute.GetFullName())
                         {

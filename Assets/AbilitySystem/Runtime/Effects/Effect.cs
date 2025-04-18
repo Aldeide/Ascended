@@ -26,7 +26,7 @@ namespace AbilitySystem.Runtime.Effects
         public Effect(EffectDefinition definition)
         {
             Definition = definition;
-            Duration = Definition.Asset.durationSeconds;
+            Duration = Definition.durationSeconds;
             if (!Definition.IsInstant()) _effectTicker = new EffectTicker(this);
         }
 
@@ -34,7 +34,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Owner = target;
             Source = source;
-            if (Definition.Asset.periodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
+            if (Definition.periodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
             {
                 PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target);
             }
@@ -88,7 +88,7 @@ namespace AbilitySystem.Runtime.Effects
                 typeDuration = RemainingDuration().ToString(CultureInfo.InvariantCulture);
             }
 
-            return $"{Definition.Asset.name} ({typeDuration})";
+            return $"{Definition.name} ({typeDuration})";
         }
     }
 }

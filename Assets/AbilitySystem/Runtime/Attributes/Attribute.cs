@@ -15,7 +15,9 @@ namespace AbilitySystem.Runtime.Attributes
         public float BaseValue => _value.BaseValue;
         public float CurrentValue => _value.CurrentValue;
 
+        public Action<Attribute, float, float> OnAttributeBaseValuePreChange;
         public Action<Attribute, float, float> OnAttributeBaseValueChanged;
+        public Action<Attribute, float, float> OnAttributeCurrentValuePreChange;
         public Action<Attribute, float, float> OnAttributeCurrentValueChanged;
         
         public Attribute(string name, IAbilitySystem owner, AttributeSet attributeSet, float baseValue,
