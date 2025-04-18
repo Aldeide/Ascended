@@ -63,5 +63,10 @@ namespace AbilitySystem.Runtime.Tags
             }
             OnTagsChanged?.Invoke();
         }
+
+        public string DebugString()
+        {
+            return tags.Aggregate("Tags\n", (current, tag) => current + (tag.GetName() + "\n"));
+        }
     }
 }

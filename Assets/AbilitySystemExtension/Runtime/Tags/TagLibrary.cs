@@ -9,7 +9,10 @@ namespace AbilitySystemExtension.Runtime.Tags
         public static GameplayTag UnitPlayer { get; } = new GameplayTag("Unit.Player");
         public static GameplayTag Status { get; } = new GameplayTag("Status");
         public static GameplayTag StatusAiming { get; } = new GameplayTag("Status.Aiming");
+        public static GameplayTag StatusImmobilised { get; } = new GameplayTag("Status.Immobilised");
+        public static GameplayTag StatusImmobilisedStunned { get; } = new GameplayTag("Status.Immobilised.Stunned");
         public static GameplayTag StatusDead { get; } = new GameplayTag("Status.Dead");
+        public static GameplayTag StatusImmuneStun { get; } = new GameplayTag("Status.Immune.Stun");
 
         public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
         {
@@ -17,7 +20,10 @@ namespace AbilitySystemExtension.Runtime.Tags
             ["Unit.Player"] = UnitPlayer,
             ["Status"] = Status,
             ["Status.Aiming"] = StatusAiming,
-            ["Status.Dead"] = StatusDead
+            ["Status.Immobilised"] = StatusImmobilised,
+            ["Status.Immobilised.Stunned"] = StatusImmobilisedStunned,
+            ["Status.Dead"] = StatusDead,
+            ["Status.Immune.Stun"] = StatusImmuneStun
         };
     }
 }
