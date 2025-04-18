@@ -11,17 +11,17 @@ namespace AbilitySystem.Runtime.Core
     public class AbilitySystemManager : IAbilitySystem
     {
         public AbilitySystemComponent Component { get; set; }
-        public GameplayTagManager TagManager { get; set; }
         public EffectManager EffectManager { get; set; }
         public AbilityManager AbilityManager { get; set; }
+        public GameplayTagManager TagManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
 
         public AbilitySystemManager()
         {
             AttributeSetManager = new AttributeSetManager(this);
-            TagManager = new GameplayTagManager(this);
             EffectManager = new EffectManager(this);
             AbilityManager = new AbilityManager(this);
+            TagManager = new GameplayTagManager(this);
             AttributeSetManager = new AttributeSetManager(this);
         }
 

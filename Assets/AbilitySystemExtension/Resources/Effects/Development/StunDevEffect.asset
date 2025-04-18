@@ -10,31 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
-  m_Name: HealthPlus10DurationalDevEffect
+  m_Name: StunDevEffect
   m_EditorClassIdentifier: 
   description: 
   durationType: 3
-  durationSeconds: 15
+  durationSeconds: 4
   Period: 0
   periodicEffect: {fileID: 0}
   assetTags: []
   grantedTags:
+  - name: Status.Immobilised.Stunned
+    hashCode: 1793278141
+    ancestorsNames:
+    - Status
+    - Status.Immobilised
+    ancestorsHashCodes: b0c3cf744299aae0
+  applicationRequiredTags: []
+  ongoingRequiredTags: []
+  removeGameplayEffectsWithTags: []
+  applicationImmunityTags:
   - name: Status.Immune.Stun
     hashCode: 2120846943
     ancestorsNames:
     - Status
     - Status.Immune
     ancestorsHashCodes: b0c3cf74ddd40c3b
-  applicationRequiredTags: []
-  ongoingRequiredTags: []
-  removeGameplayEffectsWithTags: []
-  applicationImmunityTags: []
-  Modifiers:
-  - attributeName: CharacteristicsAttributeSet.Health
-    attributeSetName: 
-    modifierMagnitude: 40
-    operation: 0
-    modifierMagnitudeCalculation: {fileID: 0}
+  Modifiers: []
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0

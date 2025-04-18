@@ -36,7 +36,6 @@ namespace AbilitySystem.Runtime.Effects
         [AssetSelector]
         public EffectDefinition periodicEffect;
         
-        [FormerlySerializedAs("AssetTags")]
         [Title("Effect Tags")]
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] assetTags;

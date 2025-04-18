@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
 {
@@ -48,6 +49,11 @@ namespace AbilitySystem.Runtime.Effects
         public void AddEffect(Effect effect)
         {
             // TODO: add tag checks etc etc
+            if (_owner.TagManager.HasAnyTags(effect.Definition.applicationImmunityTags))
+            {
+                Debug.Log("Immune!");
+                return;
+            }
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);
         }
