@@ -31,6 +31,10 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             Health.OnAttributeBaseValuePreChange += OnHealthChange;
             Health.OnAttributeCurrentValuePreChange += OnHealthChange;
             MaxHealth.OnAttributeCurrentValueChanged += OnMaxHealthChange;
+            
+            Energy.OnAttributeBaseValuePreChange += OnEnergyChange;
+            Energy.OnAttributeCurrentValuePreChange += OnEnergyChange;
+            MaxEnergy.OnAttributeCurrentValueChanged += OnMaxEnergyChange;
         }
 
         private float OnHealthChange(Attribute attribute, float nextValue)
@@ -43,6 +47,18 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         {
             if (Health.CurrentValue > nextValue) Health.SetCurrentValueNoEvent(nextValue);
             if (Health.BaseValue > nextValue) Health.SetBaseValueNoEvent(nextValue);
+        }
+        
+        private float OnEnergyChange(Attribute attribute, float nextValue)
+        {
+            float maxEnergy = MaxEnergy.CurrentValue;
+            return Mathf.Min(nextValue, maxEnergy);
+        }
+        
+        private void OnMaxEnergyChange(Attribute attribute, float previousValue, float nextValue)
+        {
+            if (Energy.CurrentValue > nextValue) Energy.SetCurrentValueNoEvent(nextValue);
+            if (Energy.BaseValue > nextValue) Energy.SetBaseValueNoEvent(nextValue);
         }
     }
 }

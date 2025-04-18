@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: 
   durationType: 3
-  durationSeconds: 10
+  durationSeconds: 15
   Period: 0
   periodicEffect: {fileID: 0}
   assetTags: []
@@ -26,7 +26,7 @@ MonoBehaviour:
   Modifiers:
   - attributeName: CharacteristicsAttributeSet.Health
     attributeSetName: 
-    modifierMagnitude: 10
+    modifierMagnitude: 40
     operation: 0
     modifierMagnitudeCalculation: {fileID: 0}
   EffectStack:
