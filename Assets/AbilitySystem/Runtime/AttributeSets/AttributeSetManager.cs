@@ -12,10 +12,13 @@ namespace AbilitySystem.Runtime.AttributeSets
 {
     public class AttributeSetManager
     {
+        public Action<Attribute, float, float> OnAnyAttributeBaseValueChanged;
+        public Action<Attribute, float, float> OnAnyAttributeCurrentValueChanged;
+
         private IAbilitySystem _owner;
         private Dictionary<Type, AttributeSet> _attributeSets;
         private Dictionary<string, AttributeAggregator> _attributeAggregators;
-        
+
         public AttributeSetManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -28,22 +31,32 @@ namespace AbilitySystem.Runtime.AttributeSets
             _attributeSets.TryGetValue(typeof(T), out AttributeSet result);
             return (T)result;
         }
-        
+
         [CanBeNull]
         public AttributeSet GetAttributeSet(string attributeSetName)
         {
             return _attributeSets.Values.FirstOrDefault(a => a.Name == attributeSetName);
         }
-        
+
         public void AddAttributeSet(Type type, AttributeSet attributeSet)
         {
             _attributeSets[type] = attributeSet;
             foreach (var attribute in attributeSet.GetAllAttributes())
             {
+                attribute.OnAttributeBaseValueChanged += OnAttributeBaseValueChanged;
+                attribute.OnAttributeCurrentValueChanged += OnAttributeCurrentValueChanged;
                 var aggregator = new AttributeAggregator(attribute, _owner);
                 aggregator.Enable();
                 _attributeAggregators.Add(attribute.GetName(), aggregator);
             }
+        }
+
+        [CanBeNull]
+        public Attribute GetAttribute(string attributeName)
+        {
+            return _attributeSets.Values.SelectMany(attributeSet =>
+                    attributeSet.GetAllAttributes().Where(attribute => attribute.GetName() == attributeName))
+                .FirstOrDefault();
         }
 
         [CanBeNull]
@@ -58,16 +71,15 @@ namespace AbilitySystem.Runtime.AttributeSets
             _attributeSets.TryGetValue(attributeSetType, out AttributeSet result);
             return result.GetAttribute(attributeName);
         }
-        
+
         public Attribute GetAttribute(string attributeSetName, string attributeName)
         {
             return _attributeSets.FirstOrDefault(
                 k => k.Value.Name == attributeSetName).Value.GetAttribute(attributeName);
         }
-        
+
         public AttributeValue GetAttributeValue<T>(string attributeName) where T : AttributeSet
         {
-            Debug.Log(attributeName + " " + typeof(T).Name);
             return GetAttribute<T>(attributeName).GetValue();
         }
 
@@ -81,6 +93,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                     output.Add(attribute.GetName(), attribute.GetValue());
                 }
             }
+
             return output;
         }
 
@@ -94,7 +107,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                 }
             }
         }
-        
+
         public void ApplyInstantEffectModifiers(Effect instantEffect)
         {
             foreach (var modifier in instantEffect.Definition.Modifiers)
@@ -102,7 +115,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                 var splits = modifier.attributeName.Split(".");
                 var attributeSet = splits[0];
                 var attributeName = splits[1];
-                
+
                 var attribute = GetAttribute(attributeSet, attributeName);
                 if (attribute == null) continue;
                 var magnitude = modifier.CalculateModifier(instantEffect);
@@ -127,8 +140,19 @@ namespace AbilitySystem.Runtime.AttributeSets
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
                 attribute.SetBaseValue(baseValue);
             }
+        }
+
+        public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            OnAnyAttributeBaseValueChanged?.Invoke(attribute, oldValue, newValue);
+        }
+        
+        public void OnAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            OnAnyAttributeCurrentValueChanged?.Invoke(attribute, oldValue, newValue);
         }
 
         public string DebugString()

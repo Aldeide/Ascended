@@ -11,8 +11,8 @@ namespace AbilitySystem.Runtime.Effects
     {
         public EffectDefinition Definition { get; private set; }
         public float Duration { get; private set; }
-        public bool IsActive { get; private set; }
-        public float ActivationTime { get; private set; }
+        public bool IsActive { get; set; }
+        public float ActivationTime { get; set; }
         public IAbilitySystem Owner { get; private set; }
         public IAbilitySystem Source { get; private set; }
 

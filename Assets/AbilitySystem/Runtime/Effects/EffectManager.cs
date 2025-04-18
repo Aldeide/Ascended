@@ -47,6 +47,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void AddEffect(Effect effect)
         {
+            // TODO: add tag checks etc etc
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);
         }
@@ -55,6 +56,22 @@ namespace AbilitySystem.Runtime.Effects
         {
             Effects.Remove(effect);
             OnEffectRemoved?.Invoke(effect);
+        }
+
+        public void RemoveEffect(string effectName)
+        {
+            var effectToRemove = Effects.FirstOrDefault(e=>e.Definition.name == effectName);
+            if (effectToRemove != null)
+            {
+                RemoveEffect(effectToRemove);
+            }
+        }
+
+        public void AddEffectFromServer(Effect effect)
+        {
+            effect.IsActive = true;
+            Effects.Add(effect);
+            OnEffectAdded?.Invoke(effect);
         }
 
         public void AddPredictedEffect(PredictionKey predictionKey, Effect predictedEffect)

@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Core
@@ -37,7 +38,7 @@ namespace AbilitySystem.Runtime.Core
 
         public float GetTime()
         {
-            return Time.time;
+            return (float)Component.NetworkManager.ServerTime.Time;
         }
 
         public bool IsLocalClient()

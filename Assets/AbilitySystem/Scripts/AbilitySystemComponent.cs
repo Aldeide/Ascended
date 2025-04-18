@@ -1,4 +1,5 @@
 ﻿using System;
+using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
@@ -7,6 +8,7 @@ using AbilitySystem.Runtime.Utilities;
 using Unity.Netcode;
 using UnityEditor.Presets;
 using UnityEngine;
+using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Scripts
 {
@@ -15,13 +17,17 @@ namespace AbilitySystem.Scripts
         public AbilitySystemDefinition definition;
         public IAbilitySystem AbilitySystem { get; private set; }
 
+        private EffectDefinitionLibrary _effectLibrary;
+        
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            Initialise();
         }
 
         public void Initialise()
         {
+            _effectLibrary = GameObject.Find("DataManager").GetComponent<EffectDefinitionLibrary>();
             AbilitySystem = new AbilitySystemManager();
             AbilitySystem.Initialise(this);
             foreach (var attributeSet in definition.attributeSets)
@@ -36,12 +42,43 @@ namespace AbilitySystem.Scripts
                 AbilitySystem.AbilityManager.GrantAbility(ability);
             }
 
+            AbilitySystem.AttributeSetManager.OnAnyAttributeBaseValueChanged += OnAttributeBaseValueChanged;
+            AbilitySystem.AttributeSetManager.OnAnyAttributeCurrentValueChanged += OnAttributeBaseCurrentChanged;
             AbilitySystem.EffectManager.OnEffectAdded += OnEffectAdded;
+            AbilitySystem.EffectManager.OnEffectRemoved += OnEffectRemoved;
         }
 
         public void Update()
         {
             AbilitySystem.Tick();
+        }
+        
+        public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            if (IsServer && ! IsHost)
+            {
+                NotifyClientsBaseValueChangedRpc(attribute.GetName(), oldValue, newValue);
+            }
+        }
+        
+        public void OnAttributeBaseCurrentChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            if (IsServer && ! IsHost)
+            {
+                NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
+            }
+        }
+
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsBaseValueChangedRpc(string attributeName, float oldValue, float newValue)
+        {
+            AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetBaseValue(newValue);
+        }
+        
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsCurrentValueChangedRpc(string attributeName, float oldValue, float newValue)
+        {
+            AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetCurrentValue(newValue);
         }
 
         public void TryActivateAbility(string abilityName)
@@ -78,13 +115,34 @@ namespace AbilitySystem.Scripts
 
         public void OnEffectAdded(Effect effect)
         {
-            
+            if (IsServer && ! IsHost)
+            {
+                NotifyOwnerEffectAddedRpc(effect.Definition.name, effect.ActivationTime);
+            }
+        }
+        
+        public void OnEffectRemoved(Effect effect)
+        {
+            if (IsServer && ! IsHost)
+            {
+                NotifyOwnerEffectRemovedRpc(effect.Definition.name);
+            }
         }
 
         [Rpc(SendTo.Owner)]
-        public void NotifyOwnerEffectAddedRpc()
+        public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime)
         {
-            
+            var effectDefinition = _effectLibrary.GetEffectByName(effectName);
+            // TODO: find an identifier to identify the abilitysystem and source player.
+            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            effect.ActivationTime = applicationTime;
+            AbilitySystem.EffectManager.AddEffectFromServer(effect);
+        }
+        
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectRemovedRpc(string effectName)
+        {
+            AbilitySystem.EffectManager.RemoveEffect(effectName);
         }
     }
 }

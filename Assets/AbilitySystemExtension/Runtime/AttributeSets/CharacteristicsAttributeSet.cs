@@ -1,6 +1,7 @@
 ﻿using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
+using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.AttributeSets
 {
@@ -26,6 +27,22 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             AddAttribute(Energy);
             AddAttribute(MaxEnergy);
             AddAttribute(MovementSpeed);
+
+            Health.OnAttributeBaseValuePreChange += OnHealthChange;
+            Health.OnAttributeCurrentValuePreChange += OnHealthChange;
+            MaxHealth.OnAttributeCurrentValueChanged += OnMaxHealthChange;
+        }
+
+        private float OnHealthChange(Attribute attribute, float nextValue)
+        {
+            float maxHealth = MaxHealth.CurrentValue;
+            return Mathf.Min(nextValue, maxHealth);
+        }
+        
+        private void OnMaxHealthChange(Attribute attribute, float previousValue, float nextValue)
+        {
+            if (Health.CurrentValue > nextValue) Health.SetCurrentValueNoEvent(nextValue);
+            if (Health.BaseValue > nextValue) Health.SetBaseValueNoEvent(nextValue);
         }
     }
 }
