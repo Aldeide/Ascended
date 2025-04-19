@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
+using AbilitySystemExtension.Runtime.Tags;
 using NUnit.Framework;
 using Unity.Mathematics;
 using Unity.Netcode;
@@ -45,6 +46,8 @@ namespace Systems.Movement
         public void Update()
         {
             if (!IsLocalPlayer) return;
+
+            if (!CanMove()) return;
             
             if (_movementInput.magnitude <= 0.01f)
             {
@@ -99,6 +102,11 @@ namespace Systems.Movement
         public void OnMovementSpeedChanged(Attribute attribute, float oldValue, float newValue)
         {
             _movementSpeed = newValue;
+        }
+
+        public bool CanMove()
+        {
+            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised);
         }
     }
 }

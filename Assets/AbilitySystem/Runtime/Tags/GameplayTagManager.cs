@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
@@ -41,6 +42,7 @@ namespace AbilitySystem.Runtime.Tags
                     EffectTags[tag].Add(effect);
                     continue;
                 }
+
                 EffectTags[tag] = new List<Effect> { effect };
             }
         }
@@ -79,14 +81,25 @@ namespace AbilitySystem.Runtime.Tags
             return Tags.Contains(gameplayTag) || EffectTags.ContainsKey(gameplayTag);
         }
 
+        public bool HasPartialTag(GameplayTag gameplayTag)
+        {
+            return Tags.Any(tag => gameplayTag.IsAncestorOf(tag)) ||
+                   EffectTags.Keys.Any(tag => gameplayTag.IsAncestorOf(tag));
+        }
+
         public bool HasAllTags(GameplayTagSet gameplayTags)
         {
             return gameplayTags.Tags.All(HasTag);
         }
-        
+
         public bool HasAnyTags(params GameplayTag[] gameplayTags)
         {
             return gameplayTags.Any(HasTag);
+        }
+
+        public bool HasAnyPartialTag(params GameplayTag[] gameplayTags)
+        {
+            return gameplayTags.Any(HasTag) || gameplayTags.Any(HasPartialTag);
         }
 
         public void ApplyAbilityTags(Ability ability)
@@ -95,15 +108,17 @@ namespace AbilitySystem.Runtime.Tags
             {
                 AddTag(tag);
             }
+
             OnTagsChanged?.Invoke();
         }
-        
+
         public void RemoveAbilityTags(Ability ability)
         {
             foreach (var tag in ability.Definition.AbilityTags.ActivationOwnedTag.Tags)
             {
                 RemoveTag(tag);
             }
+
             OnTagsChanged?.Invoke();
         }
 
@@ -114,9 +129,11 @@ namespace AbilitySystem.Runtime.Tags
             foreach (var tag in EffectTags)
             {
                 effectTags += tag.Key.GetName() + " (";
-                effectTags = tag.Value.Aggregate(effectTags, (current, effect) => current + (effect.Definition.name + " "));
+                effectTags = tag.Value.Aggregate(effectTags,
+                    (current, effect) => current + (effect.Definition.name + " "));
                 effectTags += ")\n";
             }
+
             return inherentTags + "\n" + effectTags;
         }
     }

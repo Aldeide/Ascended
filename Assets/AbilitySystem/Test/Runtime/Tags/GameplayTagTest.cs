@@ -45,7 +45,7 @@ public class GameplayTagTest
         }
         
         [Test]
-        public void GameplayTagTests_GetHasCode_ReturnsTagHashCode()
+        public void GameplayTagTests_GetHashCode_ReturnsTagHashCode()
         {
             GameplayTag tag = new GameplayTag("Testing.Tag.TagA");
             

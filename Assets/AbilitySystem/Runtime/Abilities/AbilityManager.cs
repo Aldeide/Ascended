@@ -40,7 +40,7 @@ namespace AbilitySystem.Runtime.Abilities
             _abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
 
-            if (_owner.IsServer() && !ability.Definition.IsLocalAbility())
+            if ((_owner.IsServer() || _owner.IsHost())  && !ability.Definition.IsLocalAbility())
             {
                 return ability.TryActivateAbility(args);
             }
@@ -79,7 +79,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             _abilities.TryGetValue(abilityName, out Ability ability);
             ability?.TryEndAbility();
-            if (_owner.IsLocalClient())
+            if (_owner.IsLocalClient() && !_owner.IsHost())
             {
                 _owner.Component.ServerTryEndAbilityRpc(abilityName);
             }
