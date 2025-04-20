@@ -26,7 +26,7 @@ namespace Systems.Movement
         
         public float turnSmoothTime = 0.1f;   
         private float turnSmoothVelocity = 2.0f;
-        
+        private bool _isAiming;
         
         public override void OnNetworkSpawn()
         {
@@ -48,6 +48,9 @@ namespace Systems.Movement
             if (!IsLocalPlayer) return;
 
             if (!CanMove()) return;
+
+            _isAiming = _abilitySystem.TagManager.HasTag(TagLibrary.StatusAiming);
+            
             
             if (_movementInput.magnitude <= 0.01f)
             {
@@ -58,7 +61,16 @@ namespace Systems.Movement
             float targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
                                 UnityEngine.Camera.main.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            if (_isAiming)
+            {
+                Vector3 target = transform.position + UnityEngine.Camera.main.transform.forward;
+                transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            }
+            
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             _rigidbody.MovePosition(this.transform.position += moveDirection * Time.deltaTime * _movementSpeed);
             UpdateAnimator();
@@ -76,8 +88,16 @@ namespace Systems.Movement
             if (_movementInput.magnitude > 0.01f)
             {
                 _animator.SetBool("IsMoving", true);
-                _animator.SetFloat("MovementX", 0.0f);
-                _animator.SetFloat("MovementY", 1.0f);
+                if (_isAiming)
+                {
+                    _animator.SetFloat("MovementX", _movementInput.x);
+                    _animator.SetFloat("MovementY", _movementInput.z);
+                }
+                else
+                {
+                    _animator.SetFloat("MovementX", 0.0f);
+                    _animator.SetFloat("MovementY", 1.0f);
+                }
             }
             else
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Tags
 {
@@ -104,8 +105,10 @@ namespace AbilitySystem.Runtime.Tags
 
         public void ApplyAbilityTags(Ability ability)
         {
-            foreach (var tag in ability.Definition.AbilityTags.ActivationOwnedTag.Tags)
+            Debug.Log("Applying tags");
+            foreach (var tag in ability.Definition.ActivationOwnedTags)
             {
+                Debug.Log(tag.GetName());
                 AddTag(tag);
             }
 
@@ -114,7 +117,7 @@ namespace AbilitySystem.Runtime.Tags
 
         public void RemoveAbilityTags(Ability ability)
         {
-            foreach (var tag in ability.Definition.AbilityTags.ActivationOwnedTag.Tags)
+            foreach (var tag in ability.Definition.ActivationOwnedTags)
             {
                 RemoveTag(tag);
             }

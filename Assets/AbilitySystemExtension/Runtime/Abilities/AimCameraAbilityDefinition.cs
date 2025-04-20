@@ -10,6 +10,10 @@ namespace AbilitySystemExtension.Runtime.Abilities
     {
         public AimCameraAbilityDefinition() : base()
         {
+            AbilityTags = new AbilityTags(
+                AssetTags, CancelAbilityTags, BlockAbilityTags, ActivationOwnedTags,
+                ActivationRequiredTags, ActivationBlockedTags
+            );
         }
 
         public override Type AbilityType()
