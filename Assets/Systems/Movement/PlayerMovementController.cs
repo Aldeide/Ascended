@@ -49,8 +49,14 @@ namespace Systems.Movement
 
             if (!CanMove()) return;
 
-            _isAiming = _abilitySystem.TagManager.HasTag(TagLibrary.StatusAiming);
-            
+            //_isAiming = _abilitySystem.TagManager.HasTag(TagLibrary.StatusAiming);
+            _isAiming = true;
+
+            if (_isAiming)
+            {
+                Vector3 target = transform.position + UnityEngine.Camera.main.transform.forward;
+                transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
+            }
             
             if (_movementInput.magnitude <= 0.01f)
             {
