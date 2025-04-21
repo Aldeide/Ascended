@@ -107,15 +107,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b599d91613140e2429196b67727577fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.0702677
+      value: 1.0207083
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b599d91613140e2429196b67727577fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0000009536743
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b599d91613140e2429196b67727577fd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.8033266
+      value: 8.795475
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b599d91613140e2429196b67727577fd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 127883739
+  GlobalObjectIdHash: 1622939609
   InScenePlacedSourceGlobalObjectIdHash: 4140274085
   DeferredDespawnTick: 0
   Ownership: 1
@@ -667,6 +667,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1452835322339888693}
+        m_TargetAssemblyTypeName: Systems.Targeting.PlayerTargetController, Assembly-CSharp
+        m_MethodName: OnLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 1fb549a7-de0d-4511-b29e-f264184feb75
     m_ActionName: 'Player/Look[/Mouse/position]'
   - m_PersistentCalls:
@@ -689,6 +701,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8167c9d9-4a65-4a02-8938-0aa763a40aca
     m_ActionName: 'Player/Aim[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5387229077635824681}
+        m_TargetAssemblyTypeName: Systems.AbilityController, Assembly-CSharp
+        m_MethodName: OnFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 44a00069-6f3e-4b74-b4a9-0ed20eb2af72
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
