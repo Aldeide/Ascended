@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Scripts;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace AbilitySystem.Runtime.Attributes
         private readonly Attribute _attribute;
         private readonly IAbilitySystem _owner;
         
-        private List<Tuple<Effect, EffectModifier>> _modifierCache = new();
+        private List<Tuple<Effect, Modifier>> _modifierCache = new();
 
         public AttributeAggregator(Attribute attribute, IAbilitySystem owner)
         {
@@ -45,9 +46,9 @@ namespace AbilitySystem.Runtime.Attributes
             
             foreach (var tuple in _modifierCache)
             {
-                var spec = tuple.Item1;
+                var effect = tuple.Item1;
                 var modifier = tuple.Item2;
-                var magnitude = modifier.CalculateModifier(spec);
+                var magnitude = modifier.Calculate(effect);
 
                 switch (modifier.operation)
                 {
@@ -92,17 +93,11 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 if (effectSpec.IsActive)
                 {
-                    if (effectSpec.Definition.test != null)
-                    {
-                        Debug.Log("HI: " +effectSpec.Definition.test.Calculate());
-                        Debug.Log("HI: " +effectSpec.Definition.test.SaySomething());
-                    }
-                    
-                    foreach (var modifier in effectSpec.Definition.Modifiers)
+                    foreach (var modifier in effectSpec.Definition.modifiers)
                     {
                         if (modifier.attributeName == _attribute.GetFullName())
                         {
-                            _modifierCache.Add(new Tuple<Effect, EffectModifier>(effectSpec, modifier));
+                            _modifierCache.Add(new Tuple<Effect, Modifier>(effectSpec, modifier));
                         }
                     }
                 }

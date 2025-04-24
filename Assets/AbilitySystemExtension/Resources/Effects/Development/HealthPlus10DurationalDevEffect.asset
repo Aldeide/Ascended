@@ -35,8 +35,8 @@ MonoBehaviour:
     modifierMagnitude: 40
     operation: 0
     modifierMagnitudeCalculation: {fileID: 0}
-  test:
-    rid: 1913512398593458301
+  newModifiers:
+  - rid: 1913512530359353421
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0
@@ -46,7 +46,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1913512398593458301
-      type: {class: TestTwo, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
+    - rid: 1913512530359353421
+      type: {class: FloatModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
       data:
-        anotherTestName: 
+        attributeName: CharacteristicsAttributeSet.Health
+        operation: 0
+        ModifierMagnitude: 1

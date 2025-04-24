@@ -52,12 +52,10 @@ namespace AbilitySystem.Runtime.Effects
         public GameplayTag[] applicationImmunityTags;
         
         [Space]
-        [Title("Modifiers")]
-        public EffectModifier[] Modifiers;
-        
         [ShowInInspector]
+        [Title("Modifiers")]
         [SerializeReference]
-        public AbstractTest test;
+        public Modifier[] modifiers;
         
         bool IsPeriodic()
         {

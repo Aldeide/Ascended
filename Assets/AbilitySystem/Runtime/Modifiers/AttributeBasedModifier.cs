@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Modifiers
 {
+    // TODO: deprecate
     [CreateAssetMenu(fileName = "AttributeBasedModifier", menuName = "AbilitySystem/Modifiers/AttributeBasedModifier")]
     public class AttributeBasedModifier : ModifierMagnitudeCalculation
     {

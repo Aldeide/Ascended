@@ -81,9 +81,9 @@ namespace AbilitySystem.Scripts
             AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetCurrentValue(newValue);
         }
 
-        public void TryActivateAbility(string abilityName)
+        public void TryActivateAbility(string abilityName, params object[] args)
         {
-            AbilitySystem.AbilityManager.TryActivateAbility(abilityName);
+            AbilitySystem.AbilityManager.TryActivateAbility(abilityName, args);
         }
 
         [Rpc(SendTo.Server)]

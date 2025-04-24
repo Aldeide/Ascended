@@ -110,7 +110,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public void ApplyInstantEffectModifiers(Effect instantEffect)
         {
-            foreach (var modifier in instantEffect.Definition.Modifiers)
+            foreach (var modifier in instantEffect.Definition.modifiers)
             {
                 var splits = modifier.attributeName.Split(".");
                 var attributeSet = splits[0];
@@ -118,7 +118,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
                 var attribute = GetAttribute(attributeSet, attributeName);
                 if (attribute == null) continue;
-                var magnitude = modifier.CalculateModifier(instantEffect);
+                var magnitude = modifier.Calculate(instantEffect);
                 var baseValue = attribute.BaseValue;
                 switch (modifier.operation)
                 {
