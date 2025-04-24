@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Modifiers
 {
+    // TODO: deprecate
     [Serializable]
     public abstract class ModifierMagnitudeCalculation : ScriptableObject
     {

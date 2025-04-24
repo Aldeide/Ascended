@@ -14,12 +14,22 @@ namespace Systems.Player
 
         public override void OnNetworkSpawn()
         {
-            if (!HasAuthority) return;
             base.OnNetworkSpawn();
-            SetupCamera();
+            if (IsLocalPlayer)
+            {
+                SetupCamera();
+            }
             SetupAsc();
-            SetupInterface();
-            SetupDebug();
+            if (IsLocalPlayer)
+            {
+                SetupInterface();
+            }
+
+            if (IsLocalPlayer || IsServer)
+            {
+                SetupDebug();
+            }
+
         }
 
         private void SetupCamera()

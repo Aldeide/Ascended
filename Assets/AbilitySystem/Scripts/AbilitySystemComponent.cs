@@ -1,47 +1,171 @@
 ﻿using System;
+using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Utilities;
+using Unity.Netcode;
 using UnityEditor.Presets;
 using UnityEngine;
+using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Scripts
 {
-    public class AbilitySystemComponent : MonoBehaviour
+    public class AbilitySystemComponent : NetworkBehaviour
     {
         public AbilitySystemDefinition definition;
-        
         public IAbilitySystem AbilitySystem { get; private set; }
+
+        private EffectDefinitionLibrary _effectLibrary;
+        
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            Initialise();
+        }
 
         public void Initialise()
         {
+            _effectLibrary = GameObject.Find("DataManager").GetComponent<EffectDefinitionLibrary>();
             AbilitySystem = new AbilitySystemManager();
+            AbilitySystem.Initialise(this);
             foreach (var attributeSet in definition.attributeSets)
             {
                 Type type = ReflectionUtil.GetAttributeSetType(attributeSet);
-                dynamic set = Activator.CreateInstance(type, AbilitySystem);
-                AbilitySystem.AttributeSetManager.AddAttributeSet(set as AttributeSet);
+                var set = Activator.CreateInstance(type, AbilitySystem) as AttributeSet;
+                AbilitySystem.AttributeSetManager.AddAttributeSet(type, set);
             }
 
             foreach (var ability in definition.baseAbilities)
             {
                 AbilitySystem.AbilityManager.GrantAbility(ability);
             }
+
+            AbilitySystem.AttributeSetManager.OnAnyAttributeBaseValueChanged += OnAttributeBaseValueChanged;
+            AbilitySystem.AttributeSetManager.OnAnyAttributeCurrentValueChanged += OnAttributeBaseCurrentChanged;
+            AbilitySystem.EffectManager.OnEffectAdded += OnEffectAdded;
+            AbilitySystem.EffectManager.OnEffectRemoved += OnEffectRemoved;
         }
 
         public void Update()
         {
             AbilitySystem.Tick();
         }
-
-        public void TryActivateAbility(string abilityName)
+        
+        public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            AbilitySystem.AbilityManager.TryActivateAbility(abilityName);
+            if (IsServer && ! IsHost)
+            {
+                NotifyClientsBaseValueChangedRpc(attribute.GetName(), oldValue, newValue);
+            }
+        }
+        
+        public void OnAttributeBaseCurrentChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            if (IsServer && ! IsHost)
+            {
+                NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
+            }
+        }
+
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsBaseValueChangedRpc(string attributeName, float oldValue, float newValue)
+        {
+            AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetBaseValue(newValue);
+        }
+        
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsCurrentValueChangedRpc(string attributeName, float oldValue, float newValue)
+        {
+            AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetCurrentValue(newValue);
+        }
+
+        public void TryActivateAbility(string abilityName, params object[] args)
+        {
+            AbilitySystem.AbilityManager.TryActivateAbility(abilityName, args);
+        }
+
+        [Rpc(SendTo.Server)]
+        public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key)
+        {
+            if (!AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key))
+            {
+                NotifyAbilityActivationFailedRpc(abilityName, key);
+            }
+        }
+        
+        [Rpc(SendTo.Server)]
+        public void ServerTryEndAbilityRpc(string abilityName)
+        {
+            AbilitySystem.AbilityManager.EndAbility(abilityName);
+
+        }
+
+        [Rpc(SendTo.Owner)]
+        public void NotifyAbilityActivationFailedRpc(string abilityName, PredictionKey key)
+        {
+            AbilitySystem.AbilityManager.EndAbility(key);
+            AbilitySystem.EffectManager.RetractPredictedEffect(key);
         }
 
         public void EndAbility(string abilityName)
         {
             AbilitySystem.AbilityManager.EndAbility(abilityName);
+        }
+
+        public void ApplyEffect(EffectDefinition effectDefinition)
+        {
+            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            effect.Activate();
+            AbilitySystem.EffectManager.AddEffect(effect);
+        }
+
+        public void OnEffectAdded(Effect effect)
+        {
+            if (IsServer && ! IsHost)
+            {
+                if (effect.PredictionKey.IsValidKey())
+                {
+                    NotifyOwnerEffectAddedRpc(effect.PredictionKey, effect.Definition.name, effect.ActivationTime);
+                    return;
+                }
+                NotifyOwnerEffectAddedRpc(effect.Definition.name, effect.ActivationTime);
+            }
+        }
+        
+        public void OnEffectRemoved(Effect effect)
+        {
+            if (IsServer && ! IsHost)
+            {
+                NotifyOwnerEffectRemovedRpc(effect.Definition.name);
+            }
+        }
+
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime)
+        {
+            var effectDefinition = _effectLibrary.GetEffectByName(effectName);
+            // TODO: find an identifier to identify the abilitysystem and source player.
+            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            effect.ActivationTime = applicationTime;
+            AbilitySystem.EffectManager.AddEffectFromServer(effect);
+        }
+        
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime)
+        {
+            var effectDefinition = _effectLibrary.GetEffectByName(effectName);
+            // TODO: find an identifier to identify the abilitysystem and source player.
+            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            effect.ActivationTime = applicationTime;
+            AbilitySystem.EffectManager.ReconcilePredictedEffect(key);
+        }
+        
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectRemovedRpc(string effectName)
+        {
+            AbilitySystem.EffectManager.RemoveEffect(effectName);
         }
     }
 }

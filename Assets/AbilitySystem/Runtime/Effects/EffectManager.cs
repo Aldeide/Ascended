@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
 {
@@ -12,8 +13,8 @@ namespace AbilitySystem.Runtime.Effects
         public List<Effect> Effects { get; private set; }
         public Dictionary<int, List<Effect>> PredictedEffects { get; private set; }
 
-        public Action OnEffectAdded;
-        public Action OnEffectRemoved;
+        public Action<Effect> OnEffectAdded;
+        public Action<Effect> OnEffectRemoved;
         
         private readonly List<Effect> _effectSnapshot;
         
@@ -27,7 +28,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void Tick()
         {
-            //if (_owner.IsLocalClient()) return;
+            if (!_owner.IsServer()) return;
             _effectSnapshot.AddRange(Effects);
             _effectSnapshot.ForEach(e=>e.Tick());
             _effectSnapshot.Clear();
@@ -47,14 +48,36 @@ namespace AbilitySystem.Runtime.Effects
 
         public void AddEffect(Effect effect)
         {
+            // TODO: add tag checks etc etc
+            if (_owner.TagManager.HasAnyTags(effect.Definition.applicationImmunityTags))
+            {
+                Debug.Log("Immune!");
+                return;
+            }
             Effects.Add(effect);
-            OnEffectAdded?.Invoke();
+            OnEffectAdded?.Invoke(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
             Effects.Remove(effect);
-            OnEffectRemoved?.Invoke();
+            OnEffectRemoved?.Invoke(effect);
+        }
+
+        public void RemoveEffect(string effectName)
+        {
+            var effectToRemove = Effects.FirstOrDefault(e=>e.Definition.name == effectName);
+            if (effectToRemove != null)
+            {
+                RemoveEffect(effectToRemove);
+            }
+        }
+
+        public void AddEffectFromServer(Effect effect)
+        {
+            effect.IsActive = true;
+            Effects.Add(effect);
+            OnEffectAdded?.Invoke(effect);
         }
 
         public void AddPredictedEffect(PredictionKey predictionKey, Effect predictedEffect)
@@ -67,7 +90,7 @@ namespace AbilitySystem.Runtime.Effects
             {
                 PredictedEffects[predictionKey.currentKey] = new List<Effect> { predictedEffect };
             }
-            OnEffectAdded?.Invoke();
+            OnEffectAdded?.Invoke(predictedEffect);
         }
         
         public void ReconcilePredictedEffect(PredictionKey predictionKey)
@@ -82,7 +105,6 @@ namespace AbilitySystem.Runtime.Effects
         public void RetractPredictedEffect(PredictionKey predictionKey)
         {
             PredictedEffects.Remove(predictionKey.currentKey);
-            OnEffectRemoved?.Invoke();
         }
 
         public string DebugString()

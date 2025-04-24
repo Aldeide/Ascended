@@ -65,13 +65,7 @@ namespace AbilitySystem.Runtime.Abilities
                 IsActive = true;
                 ActiveCount++;
                 Owner.TagManager.ApplyAbilityTags(this);
-                foreach (var grantedEffect in Definition.Asset.grantedEffects)
-                {
-                    var effect = new EffectDefinition(grantedEffect).ToEffect(Owner, Owner);
-                    effect.Activate();
-                    _activatedEffects.Add(effect);
-                    Owner.EffectManager.AddEffect(effect);
-                }
+                ApplyEffects();
                 ActivateAbility(AbilityArguments);
             }
 
@@ -90,6 +84,7 @@ namespace AbilitySystem.Runtime.Abilities
                 ActiveCount++;
                 Owner.TagManager.ApplyAbilityTags(this);
                 PredictionKey = key;
+                ApplyEffects();
                 ActivateAbility(AbilityArguments);
             }
 
@@ -126,5 +121,28 @@ namespace AbilitySystem.Runtime.Abilities
             _onEndAbility = null;
             _onCancelAbility = null;
         }
+
+        public void ApplyEffects()
+        {
+            foreach (var grantedEffect in Definition.grantedEffects)
+            {
+                var effect = grantedEffect.ToEffect(Owner, Owner);
+                effect.Activate();
+                _activatedEffects.Add(effect);
+                if (PredictionKey.IsValidKey() && !Owner.IsServer())
+                {
+                    effect.PredictionKey = PredictionKey;
+                    Owner.EffectManager.AddPredictedEffect(PredictionKey, effect);
+                    return;
+                }
+
+                if (PredictionKey.IsValidKey())
+                {
+                    effect.PredictionKey = PredictionKey;
+                }
+                Owner.EffectManager.AddEffect(effect);
+            }
+        }
+            
     }
 }

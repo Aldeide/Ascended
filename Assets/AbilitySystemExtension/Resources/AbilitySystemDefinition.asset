@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attributeSets:
   - CharacteristicsAttributeSet
-  inherentTags: []
+  inherentTags:
+  - name: Unit.Player
+    hashCode: 744092167
+    ancestorsNames:
+    - Unit
+    ancestorsHashCodes: 14f9c27e
   baseAbilities:
   - {fileID: 11400000, guid: 945f8440da1e9444abc4f9d9039e6eda, type: 2}
+  - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
+  - {fileID: 11400000, guid: b9dd22f7d4439514ab4ebca326c79f53, type: 2}

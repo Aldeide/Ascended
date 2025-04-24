@@ -28,7 +28,7 @@ namespace AbilitySystem.Runtime.Effects
             ApplicationImmunityTags = new GameplayTagSet(applicationImmunityTags);
         }
 
-        public EffectTags(EffectAsset effectAsset)
+        public EffectTags(EffectDefinition effectAsset)
         {
             AssetTags = new GameplayTagSet(effectAsset.assetTags);
             GrantedTags = new GameplayTagSet(effectAsset.grantedTags);
