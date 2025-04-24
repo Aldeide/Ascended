@@ -1,15 +1,16 @@
 ﻿using System;
+using Unity.Netcode;
 using UnityEngine.Serialization;
 
 namespace AbilitySystem.Runtime.Networking
 {
     [Serializable]
-    public struct PredictionKey
+    public struct PredictionKey : INetworkSerializable
     {
         public int currentKey;
         [NonSerialized]
         public int BaseKey;
-
+        [NonSerialized]
         private static int _counter;
 
         public PredictionKey(int currentKey, int baseKey = 0)
@@ -40,6 +41,11 @@ namespace AbilitySystem.Runtime.Networking
         public void Invalidate()
         {
             currentKey = 0;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref currentKey);
         }
     }
 }

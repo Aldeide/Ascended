@@ -14,6 +14,6 @@ namespace AbilitySystem.Scripts
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] inherentTags;
         
-        public AbilityAsset[] baseAbilities;
+        public AbilityDefinition[] baseAbilities;
     }
 }

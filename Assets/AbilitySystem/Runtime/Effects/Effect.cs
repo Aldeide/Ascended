@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Networking;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
@@ -11,8 +12,8 @@ namespace AbilitySystem.Runtime.Effects
     {
         public EffectDefinition Definition { get; private set; }
         public float Duration { get; private set; }
-        public bool IsActive { get; private set; }
-        public float ActivationTime { get; private set; }
+        public bool IsActive { get; set; }
+        public float ActivationTime { get; set; }
         public IAbilitySystem Owner { get; private set; }
         public IAbilitySystem Source { get; private set; }
 
@@ -23,10 +24,12 @@ namespace AbilitySystem.Runtime.Effects
         private EffectTicker _effectTicker = null;
         public Effect PeriodicEffect { get; private set; }
         
+        public PredictionKey PredictionKey { get; set; }
+        
         public Effect(EffectDefinition definition)
         {
             Definition = definition;
-            Duration = Definition.Asset.durationSeconds;
+            Duration = Definition.durationSeconds;
             if (!Definition.IsInstant()) _effectTicker = new EffectTicker(this);
         }
 
@@ -34,7 +37,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Owner = target;
             Source = source;
-            if (Definition.Asset.periodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
+            if (Definition.periodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
             {
                 PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target);
             }
@@ -88,7 +91,7 @@ namespace AbilitySystem.Runtime.Effects
                 typeDuration = RemainingDuration().ToString(CultureInfo.InvariantCulture);
             }
 
-            return $"{Definition.Asset.name} ({typeDuration})";
+            return $"{Definition.name} ({typeDuration})";
         }
     }
 }

@@ -23,7 +23,7 @@ namespace AbilitySystem.Runtime.Utilities
 
         private static GameplayTag[] LoadTags()
         {
-            var tagLibType = TypeUtil.FindTypeInAllAssemblies("Authoring.Tags.TagLibrary");
+            var tagLibType = TypeUtil.FindTypeInAllAssemblies("AbilitySystemExtension.Runtime.Tags.TagLibrary");
             if (tagLibType == null)
             {
                 Debug.LogError("TagLibrary not found!");

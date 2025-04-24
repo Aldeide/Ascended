@@ -26,6 +26,7 @@ namespace AbilitySystemExtension.Scripts
             var output = _asc.AttributeSetManager.DebugString() + "\n\n";
             output += _asc.EffectManager.DebugString() + "\n\n";
             output += _asc.AbilityManager.DebugString() + "\n\n";
+            output += _asc.TagManager.DebugString() + "\n\n";
             if (!text) return;
             text.text = output;
         }

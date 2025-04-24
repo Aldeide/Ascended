@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e77cf26dcd7242c7ae987f559bbe3afa, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e82ceadccd84b888e806947253ff8ad, type: 3}
   m_Name: EnergyRegenAbility
   m_EditorClassIdentifier: 
   description: 
   icon: {fileID: 0}
-  uniqueName: 
+  uniqueName: EnergyRegenAbility
   cost: {fileID: 0}
   AssetTags: []
   CancelAbilityTags: []

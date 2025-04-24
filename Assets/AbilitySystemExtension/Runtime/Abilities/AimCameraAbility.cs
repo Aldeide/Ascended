@@ -23,7 +23,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
         public override void CancelAbility()
         {
-            _cameraController.aimVirtualCamera.SetActive(false);
+            EndAbility();
         }
 
         public override void EndAbility()

@@ -27,8 +27,8 @@ namespace AbilitySystem.Test.Runtime.Effects
         {
             var owner = new Mock<IAbilitySystem>();
             var effectManager = new EffectManager(owner.Object);
-            var effectAsset = ScriptableObject.CreateInstance<EffectAsset>();
-            var effect = new EffectDefinition(effectAsset).ToEffect(owner.Object, owner.Object);
+            var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);
             
@@ -41,8 +41,8 @@ namespace AbilitySystem.Test.Runtime.Effects
         {
             var owner = new Mock<IAbilitySystem>();
             var effectManager = new EffectManager(owner.Object);
-            var effectAsset = ScriptableObject.CreateInstance<EffectAsset>();
-            var effect = new EffectDefinition(effectAsset).ToEffect(owner.Object, owner.Object);
+            var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);
             effectManager.RemoveEffect(effect);
