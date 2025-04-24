@@ -18,7 +18,6 @@ namespace AbilitySystem.Runtime.Effects
         public IAbilitySystem Source { get; private set; }
 
         public Dictionary<string, AttributeValue> OwnerAttributeSnapshot { get; private set; }
-        
         public Dictionary<string, AttributeValue> SourceAttributeSnapshot { get; private set; }
         
         private EffectTicker _effectTicker = null;
@@ -66,7 +65,6 @@ namespace AbilitySystem.Runtime.Effects
 
         public void Execute()
         {
-            Debug.Log("Execute");
             if (!Definition.IsInstant()) return;
             Owner.AttributeSetManager.ApplyInstantEffectModifiers(this);
         }
