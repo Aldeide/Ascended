@@ -92,6 +92,11 @@ namespace AbilitySystem.Runtime.Tags
         {
             return gameplayTags.Tags.All(HasTag);
         }
+        
+        public bool HasAllTags(GameplayTag[] gameplayTags)
+        {
+            return gameplayTags.All(HasTag);
+        }
 
         public bool HasAnyTags(params GameplayTag[] gameplayTags)
         {

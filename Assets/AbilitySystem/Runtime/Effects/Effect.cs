@@ -14,6 +14,9 @@ namespace AbilitySystem.Runtime.Effects
         public float Duration { get; private set; }
         public bool IsActive { get; set; }
         public float ActivationTime { get; set; }
+        
+        public int NumStacks { get; set; }
+        
         public IAbilitySystem Owner { get; private set; }
         public IAbilitySystem Source { get; private set; }
 
@@ -36,6 +39,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Owner = target;
             Source = source;
+            NumStacks = 1;
             if (Definition.periodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
             {
                 PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target);
@@ -60,6 +64,18 @@ namespace AbilitySystem.Runtime.Effects
 
         public void RemoveSelf()
         {
+            if (Definition.EffectStack.EffectStackType != EffectStackType.None && NumStacks > 1)
+            {
+                if (Definition.EffectStack.EffectStackExpirationPolicy ==
+                    EffectStackExpirationPolicy.RemoveSingleStackAndRefreshDuration)
+                {
+                    NumStacks -= 1;
+                    RefreshDuration();
+                    // TODO: make a 'effect stacks changed' event.
+                    Owner.EffectManager.OnEffectRemoved?.Invoke(this);
+                    return;
+                }
+            }
             Owner.EffectManager.RemoveEffect(this);
         }
 
@@ -77,6 +93,26 @@ namespace AbilitySystem.Runtime.Effects
             return Mathf.Max(0, Duration - (Owner.GetTime() - ActivationTime));
         }
 
+        public void AddStack()
+        {
+            var maxStacks = Definition.EffectStack.MaxStacks;
+            if (NumStacks < maxStacks)
+            {
+                NumStacks++;
+            }
+
+            if (Definition.EffectStack.EffectStackDurationPolicy == EffectStackDurationPolicy.RefreshOnNewApplication)
+            {
+                RefreshDuration();
+            }
+            // TODO: refresh period for ticking effects.
+        }
+
+        public void RefreshDuration()
+        {
+            ActivationTime = Owner.GetTime();
+        }
+
         public string DebugString()
         {
             var typeDuration = "";
@@ -89,7 +125,7 @@ namespace AbilitySystem.Runtime.Effects
                 typeDuration = RemainingDuration().ToString(CultureInfo.InvariantCulture);
             }
 
-            return $"{Definition.name} ({typeDuration})";
+            return $"{Definition.name} ({typeDuration}) Stacks: {NumStacks}";
         }
     }
 }
