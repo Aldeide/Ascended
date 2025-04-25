@@ -29,14 +29,8 @@ MonoBehaviour:
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
-  Modifiers:
-  - attributeName: CharacteristicsAttributeSet.Health
-    attributeSetName: 
-    modifierMagnitude: 40
-    operation: 0
-    modifierMagnitudeCalculation: {fileID: 0}
-  newModifiers:
-  - rid: 1913512530359353421
+  modifiers:
+  - rid: 1913512553863708749
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0
@@ -46,9 +40,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1913512530359353421
+    - rid: 1913512553863708749
       type: {class: FloatModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
       data:
         attributeName: CharacteristicsAttributeSet.Health
         operation: 0
-        ModifierMagnitude: 1
+        ModifierMagnitude: 10
