@@ -46,16 +46,38 @@ namespace AbilitySystem.Runtime.Effects
             return activeEffects;
         }
 
-        public void AddEffect(Effect effect)
+        public EffectApplicationResult AddEffect(Effect effect)
         {
-            // TODO: add tag checks etc etc
             if (_owner.TagManager.HasAnyTags(effect.Definition.applicationImmunityTags))
             {
-                Debug.Log("Immune!");
-                return;
+                return EffectApplicationResult.Immune;
+            }
+
+            if (!_owner.TagManager.HasAllTags(effect.Definition.applicationRequiredTags))
+            {
+                return EffectApplicationResult.ApplicationRequiredTagsFailure;
+            }
+            // If that effect is already applied, check stacking behaviour.
+            if (Effects.Exists(e => e.Definition.name == effect.Definition.name))
+            {
+                var existingEffect = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name);
+                if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.None)
+                {
+                    Effects.Add(effect);
+                    OnEffectAdded?.Invoke(effect);
+                    return EffectApplicationResult.Success;
+                }
+
+                if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.AggregateByTarget)
+                {
+                    existingEffect.AddStack();
+                    OnEffectAdded?.Invoke(effect);
+                    return EffectApplicationResult.Success;
+                }
             }
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);
+            return EffectApplicationResult.Success;
         }
 
         public void RemoveEffect(Effect effect)
@@ -76,8 +98,7 @@ namespace AbilitySystem.Runtime.Effects
         public void AddEffectFromServer(Effect effect)
         {
             effect.IsActive = true;
-            Effects.Add(effect);
-            OnEffectAdded?.Invoke(effect);
+            AddEffect(effect);
         }
 
         public void AddPredictedEffect(PredictionKey predictionKey, Effect predictedEffect)

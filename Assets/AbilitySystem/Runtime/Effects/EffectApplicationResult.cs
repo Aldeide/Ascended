@@ -3,6 +3,7 @@
     public enum EffectApplicationResult
     {
         Success = 1,
-        TargetImmune = 2,
+        Immune = 2,
+        ApplicationRequiredTagsFailure = 3,
     }
 }

@@ -48,30 +48,34 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 var effect = tuple.Item1;
                 var modifier = tuple.Item2;
-                var magnitude = modifier.Calculate(effect);
-
-                switch (modifier.operation)
+                
+                for (int i = 0; i < effect.NumStacks; i++)
                 {
-                    case EffectOperation.Additive:
-                        additiveModifiers += magnitude;
-                        break;
-                    case EffectOperation.Subtractive:
-                        additiveModifiers -= magnitude;
-                        break;
-                    case EffectOperation.Multiplicative:
-                        multiplicativeModifiers *= magnitude;
-                        break;
-                    case EffectOperation.Divisive:
-                        multiplicativeModifiers /= magnitude;
-                        break;
-                    case EffectOperation.Override:
-                        // TODO: currently only the latest override is considered. Might want to define a property for 
-                        // attributes as to whether they prefer the smallest or largest override.
-                        hasOverride = true;
-                        overrideModifiers = magnitude;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();   
+                    Debug.Log("Stacks: " + effect.NumStacks);
+                    var magnitude = modifier.Calculate(effect);
+                    switch (modifier.operation)
+                    {
+                        case EffectOperation.Additive:
+                            additiveModifiers += magnitude;
+                            break;
+                        case EffectOperation.Subtractive:
+                            additiveModifiers -= magnitude;
+                            break;
+                        case EffectOperation.Multiplicative:
+                            multiplicativeModifiers *= magnitude;
+                            break;
+                        case EffectOperation.Divisive:
+                            multiplicativeModifiers /= magnitude;
+                            break;
+                        case EffectOperation.Override:
+                            // TODO: currently only the latest override is considered. Might want to define a property for 
+                            // attributes as to whether they prefer the smallest or largest override.
+                            hasOverride = true;
+                            overrideModifiers = magnitude;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();   
+                    }
                 }
             }
             //_owner.NotifyAttributeBaseChanged(_attribute.attributeSetName, _attribute.attributeName, newValue);

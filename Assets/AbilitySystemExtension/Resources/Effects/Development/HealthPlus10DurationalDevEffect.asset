@@ -32,11 +32,11 @@ MonoBehaviour:
   modifiers:
   - rid: 1913512553863708749
   EffectStack:
-    EffectStackType: 0
-    MaxStacks: 0
-    EffectStackDurationPolicy: 0
-    EffectStackPeriodPolicy: 0
-    EffectStackExpirationPolicy: 0
+    EffectStackType: 2
+    MaxStacks: 3
+    EffectStackDurationPolicy: 1
+    EffectStackPeriodPolicy: 1
+    EffectStackExpirationPolicy: 1
   references:
     version: 2
     RefIds:
