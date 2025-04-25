@@ -23,10 +23,13 @@ MonoBehaviour:
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
-  Modifiers: []
+  modifiers: []
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0
     EffectStackDurationPolicy: 0
     EffectStackPeriodPolicy: 0
     EffectStackExpirationPolicy: 0
+  references:
+    version: 2
+    RefIds: []

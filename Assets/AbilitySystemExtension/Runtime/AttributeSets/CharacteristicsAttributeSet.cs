@@ -10,6 +10,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         public Attribute Health { get; private set; }
         public Attribute MaxHealth { get; private set; }
         public Attribute Energy { get; private set; }
+        public Attribute EnergyRegen { get; private set; }
         public Attribute MaxEnergy { get; private set; }
         public Attribute MovementSpeed { get; private set; }
         
@@ -19,12 +20,14 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             Health = new Attribute("Health", owner, this,100);
             MaxHealth = new Attribute("MaxHealth", owner, this,150);
             Energy = new Attribute("Energy", owner, this,200);
+            EnergyRegen = new Attribute("EnergyRegen", owner, this,4);
             MaxEnergy = new Attribute("MaxEnergy", owner, this,1000);
             MovementSpeed = new Attribute("MovementSpeed", owner, this,4);
             
             AddAttribute(Health);
             AddAttribute(MaxHealth);
             AddAttribute(Energy);
+            AddAttribute(EnergyRegen);
             AddAttribute(MaxEnergy);
             AddAttribute(MovementSpeed);
 

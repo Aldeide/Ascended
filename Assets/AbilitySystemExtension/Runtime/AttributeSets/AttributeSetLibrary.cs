@@ -15,6 +15,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             "CharacteristicsAttributeSet.Health",
             "CharacteristicsAttributeSet.MaxHealth",
             "CharacteristicsAttributeSet.Energy",
+            "CharacteristicsAttributeSet.EnergyRegen",
             "CharacteristicsAttributeSet.MaxEnergy",
             "CharacteristicsAttributeSet.MovementSpeed",
         };

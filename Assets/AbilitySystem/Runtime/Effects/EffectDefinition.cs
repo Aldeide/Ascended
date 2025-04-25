@@ -1,4 +1,5 @@
-﻿using AbilitySystem.Runtime.Core;
+﻿using System;
+using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Runtime.Tags;
 using Sirenix.OdinInspector;
@@ -8,6 +9,7 @@ using UnityEngine.Serialization;
 
 namespace AbilitySystem.Runtime.Effects
 {
+    [Serializable]
     [CreateAssetMenu(fileName = "Effect", menuName = "AbilitySystem/Effect")]
     public class EffectDefinition : ScriptableObject
     {

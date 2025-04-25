@@ -23,15 +23,20 @@ MonoBehaviour:
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
-  Modifiers:
-  - attributeName: CharacteristicsAttributeSet.MovementSpeed
-    attributeSetName: 
-    modifierMagnitude: 2
-    operation: 3
-    modifierMagnitudeCalculation: {fileID: 0}
+  modifiers:
+  - rid: 1913512553863708752
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0
     EffectStackDurationPolicy: 0
     EffectStackPeriodPolicy: 0
     EffectStackExpirationPolicy: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 1913512553863708752
+      type: {class: FloatModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
+      data:
+        attributeName: CharacteristicsAttributeSet.MovementSpeed
+        operation: 3
+        ModifierMagnitude: 2

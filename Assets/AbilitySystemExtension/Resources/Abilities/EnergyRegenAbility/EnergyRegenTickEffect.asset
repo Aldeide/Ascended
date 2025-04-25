@@ -23,15 +23,24 @@ MonoBehaviour:
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
-  Modifiers:
-  - attributeName: CharacteristicsAttributeSet.Energy
-    attributeSetName: 
-    modifierMagnitude: 2
-    operation: 0
-    modifierMagnitudeCalculation: {fileID: 0}
+  modifiers:
+  - rid: 1913512553863708755
   EffectStack:
     EffectStackType: 0
     MaxStacks: 0
     EffectStackDurationPolicy: 0
     EffectStackPeriodPolicy: 0
     EffectStackExpirationPolicy: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 1913512553863708755
+      type: {class: AttributeBasedModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
+      data:
+        attributeName: CharacteristicsAttributeSet.Energy
+        operation: 0
+        captureType: 1
+        attributeFromType: 0
+        attributeFromName: CharacteristicsAttributeSet.EnergyRegen
+        k: 1
+        b: 0

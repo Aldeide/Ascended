@@ -31,7 +31,7 @@ namespace AbilitySystem.Runtime.Effects
     {
         public bool ClearStackOnOverflow;
         public bool DenyOverflowApplication;
-        public Effect[] OverflowEffects;
+        public EffectDefinition[] OverflowEffects;
     }
     
     [Serializable]
