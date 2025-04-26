@@ -25,7 +25,7 @@ namespace Systems.Movement
         private float _movementSpeed;
         
         public float turnSmoothTime = 0.1f;   
-        private float turnSmoothVelocity = 2.0f;
+        private float _turnSmoothVelocity = 2.0f;
         private bool _isAiming;
         
         public override void OnNetworkSpawn()
@@ -66,7 +66,7 @@ namespace Systems.Movement
             
             float targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
                                 UnityEngine.Camera.main.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
             if (_isAiming)
             {
                 Vector3 target = transform.position + UnityEngine.Camera.main.transform.forward;
@@ -78,7 +78,7 @@ namespace Systems.Movement
             }
             
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _rigidbody.MovePosition(this.transform.position += moveDirection * Time.deltaTime * _movementSpeed);
+            _rigidbody.MovePosition(this.transform.position += moveDirection * (Time.deltaTime * _movementSpeed));
             UpdateAnimator();
         }
         

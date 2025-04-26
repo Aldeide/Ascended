@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             Definition = ability;
             Owner = owner;
+            IsActive = false;
             _activatedEffects = new List<Effect>();
         }
         
@@ -45,7 +46,10 @@ namespace AbilitySystem.Runtime.Abilities
 
         public abstract void ActivateAbility(params object[] args);
 
-        public abstract void CancelAbility();
+        public virtual void CancelAbility()
+        {
+            EndAbility();
+        }
 
         public abstract void EndAbility();
 

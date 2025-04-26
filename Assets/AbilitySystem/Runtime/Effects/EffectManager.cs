@@ -9,7 +9,7 @@ namespace AbilitySystem.Runtime.Effects
 {
     public class EffectManager
     {
-        private IAbilitySystem _owner;
+        private readonly IAbilitySystem _owner;
         public List<Effect> Effects { get; private set; }
         public Dictionary<int, List<Effect>> PredictedEffects { get; private set; }
 
@@ -36,7 +36,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public List<Effect> GetActiveEffects()
         {
-            List<Effect> activeEffects = Effects.Where(effect => effect.IsActive).ToList();
+            var activeEffects = Effects.Where(effect => effect.IsActive).ToList();
     
             foreach (List<Effect> effectList in PredictedEffects.Values)
             {

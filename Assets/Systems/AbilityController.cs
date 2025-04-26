@@ -40,6 +40,14 @@ namespace Systems
                 _asc.EndAbility("FireAbility");
             }
         }
+
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Performed)
+            {
+                _asc.TryActivateAbility("DashAbility");
+            }
+        }
     }
     
 }
