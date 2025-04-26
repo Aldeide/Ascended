@@ -15,6 +15,7 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: DashAbility
+  cost: {fileID: 11400000, guid: eb99d6a0a26d54f42b1a92ccd35f4c6b, type: 2}
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
