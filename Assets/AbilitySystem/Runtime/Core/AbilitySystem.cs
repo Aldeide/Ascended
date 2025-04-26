@@ -22,7 +22,6 @@ namespace AbilitySystem.Runtime.Core
             EffectManager = new EffectManager(this);
             AbilityManager = new AbilityManager(this);
             TagManager = new GameplayTagManager(this);
-            AttributeSetManager = new AttributeSetManager(this);
         }
 
         public void Initialise(AbilitySystemComponent component)
@@ -33,7 +32,7 @@ namespace AbilitySystem.Runtime.Core
         public void Tick()
         {
             EffectManager.Tick();
-            
+            AbilityManager.Tick();
         }
 
         public float GetTime()

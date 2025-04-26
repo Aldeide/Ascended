@@ -12,12 +12,24 @@ namespace AbilitySystem.Runtime.Abilities
     {
         private IAbilitySystem _owner;
         private Dictionary<string, Ability> _abilities;
+        private List<Ability> _abilitySnapshot;
         private PredictionKey _predictionKey;
 
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
             _abilities = new Dictionary<string, Ability>();
+            _abilitySnapshot = new List<Ability>();
+        }
+
+        public void Tick()
+        {
+            _abilitySnapshot.AddRange(_abilities.Values);
+            foreach (var ability in _abilitySnapshot)
+            {
+                ability.Tick();
+            }
+            _abilitySnapshot.Clear();
         }
 
         public void GrantAbility(AbilityDefinition abilityDefinition)
