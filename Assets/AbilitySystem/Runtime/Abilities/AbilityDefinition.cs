@@ -27,7 +27,7 @@ namespace AbilitySystem.Runtime.Abilities
         [ShowInInspector] public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
         public string uniqueName;
 
-        public Effect cost;
+        public EffectDefinition cost;
 
         [Title("Tags")]
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]

@@ -55,8 +55,24 @@ namespace AbilitySystem.Runtime.Abilities
 
         public virtual AbilityActivationResult CanActivate()
         {
-            // TODO
+            if (!CanAffordCost()) return AbilityActivationResult.CostFailed;
+            // TODO: Check tag requirements.
             return AbilityActivationResult.Success;
+        }
+
+        public bool CanAffordCost()
+        {
+            if (Definition.cost == null) return true;
+            foreach (var modifier in Definition.cost.modifiers)
+            {
+                var attribute = modifier.attributeName.Split(".")[1];
+                var cost = modifier.Calculate(Definition.cost.ToEffect(Owner, Owner));
+                if (Owner.AttributeSetManager.GetAttribute(attribute).CurrentValue < cost)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         
         public virtual bool TryActivateAbility(params object[] args)
@@ -117,6 +133,12 @@ namespace AbilitySystem.Runtime.Abilities
             Owner.TagManager.RemoveAbilityTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
+        }
+
+        public virtual void CommitCostAndCooldown()
+        {
+            if (Definition.cost == null) return;
+            Definition.cost.ToEffect(Owner, Owner).Execute();
         }
         
         public virtual void Dispose()

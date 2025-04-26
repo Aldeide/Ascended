@@ -23,6 +23,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             _startPosition = _movementController.transform.position;
             _endPosition = _startPosition + _movementController.transform.forward * _distance;
             _startTime = Owner.GetTime();
+            CommitCostAndCooldown();
         }
 
         protected override void AbilityTick()
