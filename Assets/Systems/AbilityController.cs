@@ -1,6 +1,7 @@
 ﻿using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
+using Systems.Targeting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,10 +10,14 @@ namespace Systems
     public class AbilityController : MonoBehaviour
     {
         private AbilitySystemComponent _asc;
-        
+        private WeaponController _weaponController;
+        private PlayerTargetController _targetController;
+
         public void Start()
         {
             _asc = GetComponent<AbilitySystemComponent>();
+            _weaponController = GetComponent<WeaponController>();
+            _targetController = GetComponent<PlayerTargetController>();
         }
 
         public void OnAim(InputAction.CallbackContext context)
@@ -21,7 +26,7 @@ namespace Systems
             {
                 _asc.TryActivateAbility("AimCameraAbility");
             }
-            
+
             if (context.phase == InputActionPhase.Canceled)
             {
                 _asc.EndAbility("AimCameraAbility");
@@ -32,9 +37,10 @@ namespace Systems
         {
             if (context.phase == InputActionPhase.Started)
             {
-                _asc.TryActivateAbility("FireAbility");
+                _asc.TryActivateAbility("FireAbility", _weaponController.GetMuzzlePosition(),
+                    _targetController.GetTargetPosition());
             }
-            
+
             if (context.phase == InputActionPhase.Canceled)
             {
                 _asc.EndAbility("FireAbility");
@@ -49,5 +55,4 @@ namespace Systems
             }
         }
     }
-    
 }

@@ -24,3 +24,6 @@ MonoBehaviour:
   ActivationBlockedTags: []
   grantedEffects: []
   networkPolicy: 1
+  activationCues:
+  - {fileID: 11400000, guid: 5e97068f0eaf4fc4db236ff54ed1b521, type: 2}
+  - {fileID: 11400000, guid: 08663847233e8da44827a54d286ad089, type: 2}

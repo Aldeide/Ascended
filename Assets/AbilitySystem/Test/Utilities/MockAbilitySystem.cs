@@ -1,6 +1,7 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
@@ -47,6 +48,11 @@ namespace AbilitySystem.Test.Utilities
         public bool HasAuthority()
         {
             return true;
+        }
+
+        public void PlayCue(CueDefinition cue)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

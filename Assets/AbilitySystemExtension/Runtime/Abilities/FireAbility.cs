@@ -12,7 +12,8 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
         public override void ActivateAbility(params object[] args)
         {
-            Debug.Log("Fire!");
+            Debug.Log(args[0]);
+            PlayActivationCues();
         }
 
         public override void CancelAbility()

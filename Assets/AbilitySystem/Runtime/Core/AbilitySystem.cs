@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
@@ -58,6 +59,11 @@ namespace AbilitySystem.Runtime.Core
         public bool HasAuthority()
         {
             return Component.HasAuthority;
+        }
+
+        public void PlayCue(CueDefinition cue)
+        {
+            Component.ObserversPlayCueRpc(cue.cueTag.GetName());
         }
     }
 }

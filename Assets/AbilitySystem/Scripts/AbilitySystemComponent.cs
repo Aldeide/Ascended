@@ -18,6 +18,7 @@ namespace AbilitySystem.Scripts
         public IAbilitySystem AbilitySystem { get; private set; }
 
         private EffectDefinitionLibrary _effectLibrary;
+        private CueManagerComponent _cueManagerComponent;
         
         public override void OnNetworkSpawn()
         {
@@ -28,6 +29,8 @@ namespace AbilitySystem.Scripts
         public void Initialise()
         {
             _effectLibrary = GameObject.Find("DataManager").GetComponent<EffectDefinitionLibrary>();
+            _cueManagerComponent = GetComponent<CueManagerComponent>();
+            
             AbilitySystem = new AbilitySystemManager();
             AbilitySystem.Initialise(this);
             foreach (var attributeSet in definition.attributeSets)
@@ -166,6 +169,13 @@ namespace AbilitySystem.Scripts
         public void NotifyOwnerEffectRemovedRpc(string effectName)
         {
             AbilitySystem.EffectManager.RemoveEffect(effectName);
+        }
+
+        // TODO: only send to observers if cue is predicted.
+        [Rpc(SendTo.Everyone)]
+        public void ObserversPlayCueRpc(string cueTag)
+        {
+            _cueManagerComponent.PlayCue(cueTag);
         }
     }
 }

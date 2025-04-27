@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
@@ -27,5 +28,6 @@ namespace AbilitySystem.Runtime.Core
         public bool IsHost();
 
         public bool HasAuthority();
+        public void PlayCue(CueDefinition cue);
     }
 }

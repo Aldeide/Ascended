@@ -53,6 +53,15 @@ namespace AbilitySystem.Runtime.Effects
             OwnerAttributeSnapshot = Owner.AttributeSetManager.Snapshot();
             SourceAttributeSnapshot = Source.AttributeSetManager.Snapshot();
             IsActive = true;
+            PlayApplicationCues();
+        }
+
+        public void PlayApplicationCues()
+        {
+            foreach (var cue in Definition.cues)
+            {
+                Owner.PlayCue(cue);
+            }
         }
 
         public void Tick()

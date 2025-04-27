@@ -27,7 +27,8 @@ namespace Systems.Movement
         public float turnSmoothTime = 0.1f;   
         private float _turnSmoothVelocity = 2.0f;
         private bool _isAiming;
-        
+        private UnityEngine.Camera _camera;
+
         public override void OnNetworkSpawn()
         {
             
@@ -35,6 +36,7 @@ namespace Systems.Movement
         
         public void Start()
         {
+            _camera = UnityEngine.Camera.main;
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody>();
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
@@ -54,7 +56,7 @@ namespace Systems.Movement
 
             if (_isAiming)
             {
-                Vector3 target = transform.position + UnityEngine.Camera.main.transform.forward;
+                Vector3 target = transform.position + _camera.transform.forward;
                 transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
             }
             
@@ -65,11 +67,11 @@ namespace Systems.Movement
             }
             
             float targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
-                                UnityEngine.Camera.main.transform.eulerAngles.y;
+                                _camera.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
             if (_isAiming)
             {
-                Vector3 target = transform.position + UnityEngine.Camera.main.transform.forward;
+                Vector3 target = transform.position + _camera.transform.forward;
                 transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
             }
             else
@@ -113,7 +115,7 @@ namespace Systems.Movement
 
         public void OnMoveAction(InputAction.CallbackContext context)
         {
-            if (context.phase == InputActionPhase.Performed || context.phase == InputActionPhase.Canceled)
+            if (context.phase is InputActionPhase.Performed or InputActionPhase.Canceled)
             {
                 Vector2 input = context.ReadValue<Vector2>();
                 _movementInput = new Vector3(input.x, 0, input.y);

@@ -7,6 +7,7 @@ namespace AbilitySystem.Runtime.Utilities
     public static class DropdownValuesUtil
     {
         private static ValueDropdownItem[] _gameplayTagChoices;
+        private static ValueDropdownItem[] _cueTagChoices;
         public static IEnumerable<ValueDropdownItem> GameplayTagChoices
         {
             get
@@ -15,6 +16,17 @@ namespace AbilitySystem.Runtime.Utilities
                     .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag))
                     .ToArray();
                 return _gameplayTagChoices;
+            }
+        }
+        
+        public static IEnumerable<ValueDropdownItem> CueTagChoices
+        {
+            get
+            {
+                _cueTagChoices ??= ReflectionUtil.CueTags
+                    .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag))
+                    .ToArray();
+                return _cueTagChoices;
             }
         }
         

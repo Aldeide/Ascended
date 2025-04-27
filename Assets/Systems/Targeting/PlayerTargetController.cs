@@ -14,6 +14,11 @@ namespace Systems.Targeting
             
         }
 
+        public Vector3 GetTargetPosition()
+        {
+            return target.transform.position;
+        }
+
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;
