@@ -103,7 +103,11 @@ namespace AbilitySystem.Runtime.AttributeSets
             {
                 foreach (var attribute in attributeSet.GetAllAttributes())
                 {
-                    if (attribute.GetName() == attributeName) attribute.OnAttributeCurrentValueChanged += action;
+                    if (attribute.GetName() == attributeName)
+                    {
+                        attribute.OnAttributeCurrentValueChanged += action;
+                        attribute.OnAttributeBaseValueChanged += action;
+                    }
                 }
             }
         }

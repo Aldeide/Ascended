@@ -125,6 +125,13 @@ namespace AbilitySystem.Scripts
             AbilitySystem.EffectManager.AddEffect(effect);
         }
 
+        public void ExecuteEffect(EffectDefinition effectDefinition, IAbilitySystem source)
+        {
+            Debug.Log("Executing effect");
+            var effect = effectDefinition.ToEffect(source, AbilitySystem);
+            effect.Execute();
+        }
+
         public void OnEffectAdded(Effect effect)
         {
             if (IsServer && ! IsHost)
