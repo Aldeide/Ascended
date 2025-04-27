@@ -54,5 +54,10 @@ namespace AbilitySystem.Test.Utilities
         {
             throw new System.NotImplementedException();
         }
+
+        public void PlayCue(CueDefinition cue, CueData data)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -65,5 +65,10 @@ namespace AbilitySystem.Runtime.Core
         {
             Component.ObserversPlayCueRpc(cue.cueTag.GetName());
         }
+
+        public void PlayCue(CueDefinition cue, CueData data)
+        {
+            Component.ObserversPlayCueWithDataRpc(cue.cueTag.GetName(), data);
+        }
     }
 }
