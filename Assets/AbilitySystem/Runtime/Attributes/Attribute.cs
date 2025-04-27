@@ -50,6 +50,7 @@ namespace AbilitySystem.Runtime.Attributes
 
         public void SetBaseValue(float value)
         {
+            Debug.Log("Base Value: " + value);
             var previousValue = _value.BaseValue;
             value = InvokePreBaseValueListeners(value);
             _value.BaseValue = value;

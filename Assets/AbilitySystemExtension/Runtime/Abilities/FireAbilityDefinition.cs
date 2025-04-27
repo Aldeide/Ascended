@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Effects;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Abilities
@@ -10,6 +11,8 @@ namespace AbilitySystemExtension.Runtime.Abilities
     public class FireAbilityDefinition : AbilityDefinition
     {
         public CueDefinition impactVisualEffect;
+        public EffectDefinition damageEffect;
+        public LayerMask layerMask;
         
         public override Type AbilityType()
         {

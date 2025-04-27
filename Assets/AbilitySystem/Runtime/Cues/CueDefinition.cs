@@ -14,6 +14,7 @@ namespace AbilitySystem.Runtime.Cues
         public AudioClip audioClip;
         public VisualEffectAsset visualEffectAsset;
         public GameObject prefab;
+        public string animationState;
         
         [ValueDropdown("@DropdownValuesUtil.CueTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag cueTag;
