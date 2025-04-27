@@ -148,6 +148,14 @@ namespace AbilitySystem.Runtime.Abilities
             _onCancelAbility = null;
         }
 
+        public virtual void PlayActivationCues()
+        {
+            foreach (var cue in Definition.activationCues)
+            {
+                Owner.PlayCue(cue);
+            }
+        }
+
         public void ApplyEffects()
         {
             foreach (var grantedEffect in Definition.grantedEffects)

@@ -1,5 +1,6 @@
 ﻿using System;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Runtime.Tags;
 using Sirenix.OdinInspector;
@@ -58,7 +59,10 @@ namespace AbilitySystem.Runtime.Effects
         [Title("Modifiers")]
         [SerializeReference]
         public Modifier[] modifiers;
-        
+
+
+        [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
+        public CueDefinition[] cues;
         bool IsPeriodic()
         {
             return IsDurationalPolicy() && Period > 0;

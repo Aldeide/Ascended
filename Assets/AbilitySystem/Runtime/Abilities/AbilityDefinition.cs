@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Runtime.Utilities;
@@ -53,6 +54,8 @@ namespace AbilitySystem.Runtime.Abilities
         [Space] [Title("Prediction")] public AbilityNetworkPolicy networkPolicy;
         public AbilityTags AbilityTags;
 
+        [Space] [Title("Cues")] public CueDefinition[] activationCues;
+        
         public AbilityDefinition()
         {
             AbilityTags = new AbilityTags(
