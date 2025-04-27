@@ -26,5 +26,18 @@ namespace AbilitySystem.Scripts
             CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
             OnCueAdded?.Invoke(cueTag, cue);
         }
+
+        public void PlayCue(string cueTag, CueData data)
+        {
+            if (!_abilitySystem.IsServer()) return;
+            CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
+            if (cueTag.StartsWith("Cue.Prefab"))
+            {
+                var prefab = Instantiate(cue.prefab);
+                prefab.transform.position = data.position;
+                var instanceNetworkObject = prefab.GetComponent<NetworkObject>();
+                instanceNetworkObject.Spawn();
+            }
+        }
     }
 }

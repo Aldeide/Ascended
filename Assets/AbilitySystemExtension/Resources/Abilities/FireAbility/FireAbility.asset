@@ -27,3 +27,4 @@ MonoBehaviour:
   activationCues:
   - {fileID: 11400000, guid: 5e97068f0eaf4fc4db236ff54ed1b521, type: 2}
   - {fileID: 11400000, guid: 08663847233e8da44827a54d286ad089, type: 2}
+  impactVisualEffect: {fileID: 11400000, guid: 606f9323f1538bf4e9ecdbd0908e1535, type: 2}

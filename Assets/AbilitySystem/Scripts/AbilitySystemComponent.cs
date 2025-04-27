@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Utilities;
@@ -176,6 +177,13 @@ namespace AbilitySystem.Scripts
         public void ObserversPlayCueRpc(string cueTag)
         {
             _cueManagerComponent.PlayCue(cueTag);
+        }
+        
+        // TODO: only send to observers if cue is predicted.
+        [Rpc(SendTo.Everyone)]
+        public void ObserversPlayCueWithDataRpc(string cueTag, CueData data)
+        {
+            _cueManagerComponent.PlayCue(cueTag, data);
         }
     }
 }
