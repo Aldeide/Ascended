@@ -70,13 +70,12 @@ namespace AbilitySystem.Runtime.Abilities
                 var success = ability.TryActivateAbility(key, args);
                 if (success)
                 {
+                    // args not serialisable
                     _owner.Component.ServerTryActivateAbilityRpc(name, key);
                     return true;
                 }
-
                 return false;
             }
-
             return false;
         }
 

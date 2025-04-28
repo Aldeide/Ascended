@@ -18,7 +18,7 @@ namespace AbilitySystem.Runtime.Abilities
         
         public PredictionKey PredictionKey { get; private set; }
 
-        private List<Effect> _activatedEffects;
+        private readonly List<Effect> _activatedEffects;
         
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
