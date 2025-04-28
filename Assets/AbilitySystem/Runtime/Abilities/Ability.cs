@@ -34,19 +34,17 @@ namespace AbilitySystem.Runtime.Abilities
         
         public void Tick()
         {
-            if (IsActive)
-            {
-                AbilityTick();
-            }
+            if (!IsActive) return;
+            AbilityTick();
         }
 
         protected virtual void AbilityTick()
         {
         }
 
-        public abstract void ActivateAbility(params object[] args);
+        protected abstract void ActivateAbility(params object[] args);
 
-        public virtual void CancelAbility()
+        protected virtual void CancelAbility()
         {
             EndAbility();
         }
@@ -56,7 +54,9 @@ namespace AbilitySystem.Runtime.Abilities
         public virtual AbilityActivationResult CanActivate()
         {
             if (!CanAffordCost()) return AbilityActivationResult.CostFailed;
-            // TODO: Check tag requirements.
+            if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
+            if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
+            // TODO: cooldown check.
             return AbilityActivationResult.Success;
         }
 
@@ -74,23 +74,20 @@ namespace AbilitySystem.Runtime.Abilities
             }
             return true;
         }
+
+        public bool OwnerHasRequiredTags()
+        {
+            return Owner.TagManager.HasAllTags(Definition.ActivationRequiredTags);
+        }
+
+        public bool OwnerHasBlockingTag()
+        {
+            return Owner.TagManager.HasAnyTags(Definition.ActivationBlockedTags);
+        }
         
         public virtual bool TryActivateAbility(params object[] args)
         {
-            AbilityArguments = args;
-            var result = CanActivate();
-            var success = result == AbilityActivationResult.Success;
-            if (success)
-            {
-                IsActive = true;
-                ActiveCount++;
-                Owner.TagManager.ApplyAbilityTags(this);
-                ApplyEffects();
-                ActivateAbility(AbilityArguments);
-            }
-
-            _onActivateResult?.Invoke(result);
-            return success;
+            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), args); 
         }
         
         public virtual bool TryActivateAbility(PredictionKey key, params object[] args)
@@ -105,6 +102,7 @@ namespace AbilitySystem.Runtime.Abilities
                 Owner.TagManager.ApplyAbilityTags(this);
                 PredictionKey = key;
                 ApplyEffects();
+                Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags);
                 ActivateAbility(AbilityArguments);
             }
 
@@ -135,7 +133,7 @@ namespace AbilitySystem.Runtime.Abilities
             _onCancelAbility?.Invoke();
         }
 
-        public virtual void CommitCostAndCooldown()
+        protected virtual void CommitCostAndCooldown()
         {
             if (Definition.cost == null) return;
             Definition.cost.ToEffect(Owner, Owner).Execute();
@@ -177,6 +175,10 @@ namespace AbilitySystem.Runtime.Abilities
                 Owner.EffectManager.AddEffect(effect);
             }
         }
-            
+
+        public bool IsPredicted()
+        {
+            return PredictionKey.IsValidKey();
+        }
     }
 }

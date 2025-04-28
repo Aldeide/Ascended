@@ -8,11 +8,11 @@ namespace AbilitySystem.Runtime.Abilities.PassiveAbility
         {
         }
 
-        public override void ActivateAbility(params object[] args)
+        protected override void ActivateAbility(params object[] args)
         {
         }
 
-        public override void CancelAbility()
+        protected override void CancelAbility()
         {
         }
 

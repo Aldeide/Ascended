@@ -6,6 +6,7 @@
         CostFailed = 1,
         CooldownFailed = 2,
         BlockedByTag = 3,
-        Success = 4
+        MissingRequiredTag = 4,
+        Success = 5
     }
 }

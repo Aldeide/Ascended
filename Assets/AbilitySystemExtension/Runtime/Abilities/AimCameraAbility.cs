@@ -14,14 +14,14 @@ namespace AbilitySystemExtension.Runtime.Abilities
             _cameraController = GameObject.Find("Camera").GetComponent<CameraController>();
         }
 
-        public override void ActivateAbility(params object[] args)
+        protected override void ActivateAbility(params object[] args)
         {
             if (!_cameraController) return;
             _cameraController.aimVirtualCamera.SetActive(true);
             
         }
 
-        public override void CancelAbility()
+        protected override void CancelAbility()
         {
             EndAbility();
         }

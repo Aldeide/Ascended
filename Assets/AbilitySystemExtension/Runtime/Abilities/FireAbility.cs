@@ -12,7 +12,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
         }
 
-        public override void ActivateAbility(params object[] args)
+        protected override void ActivateAbility(params object[] args)
         {
             var target = (Vector3)args[1];
             var muzzle = (Vector3)args[0];
@@ -38,7 +38,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
         }
 
-        public override void CancelAbility()
+        protected override void CancelAbility()
         {
 
         }

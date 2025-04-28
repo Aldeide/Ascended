@@ -18,7 +18,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             _movementController = Owner.Component.GetComponent<PlayerMovementController>();
         }
 
-        public override void ActivateAbility(params object[] args)
+        protected override void ActivateAbility(params object[] args)
         {
             _startPosition = _movementController.transform.position;
             _endPosition = _startPosition + _movementController.transform.forward * _distance;
@@ -38,7 +38,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
                 Vector3.Lerp(_startPosition, _endPosition, (Owner.GetTime() - _startTime) / _duration);
         }
 
-        public override void CancelAbility()
+        protected override void CancelAbility()
         {
             base.CancelAbility();
         }
