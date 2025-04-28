@@ -33,6 +33,11 @@ namespace AbilitySystem.Runtime.Networking
             return new PredictionKey(_counter, baseKey.currentKey);
         }
 
+        public static PredictionKey CreateInvalidPredictionKey()
+        {
+            return new PredictionKey(0);
+        }
+
         public bool IsValidKey()
         {
             return currentKey > 0;

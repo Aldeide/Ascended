@@ -32,6 +32,7 @@ namespace Systems
 
         public void Update()
         {
+            Debug.Log("Update nameplate");
             float maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
             float health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
             slider.value = health / maxHealth;

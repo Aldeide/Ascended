@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Runtime.Tags;
 using Sirenix.Utilities;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 ability.Tick();
             }
+
             _abilitySnapshot.Clear();
         }
 
@@ -52,11 +54,11 @@ namespace AbilitySystem.Runtime.Abilities
             _abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
 
-            if ((_owner.IsServer() || _owner.IsHost())  && !ability.Definition.IsLocalAbility())
+            if ((_owner.IsServer() || _owner.IsHost()) && !ability.Definition.IsLocalAbility())
             {
                 return ability.TryActivateAbility(args);
             }
-            
+
             if (ability.Definition.IsLocalAbility() && _owner.IsLocalClient())
             {
                 return ability.TryActivateAbility(args);
@@ -81,7 +83,7 @@ namespace AbilitySystem.Runtime.Abilities
         public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, params object[] args)
         {
             if (!_owner.IsServer()) return false;
-            
+
             _abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
             return ability.TryActivateAbility(key, args);
@@ -103,6 +105,15 @@ namespace AbilitySystem.Runtime.Abilities
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
                 .ForEach(a => a.Value.EndAbility());
+        }
+
+        public void CancelAbilitiesWithTags(GameplayTag[] tags)
+        {
+            foreach (var ability in _abilities.Values.Where(ability =>
+                         ability.Definition.AssetTags.Any(tags.Contains)))
+            {
+                ability.TryCancelAbility();
+            }
         }
 
         public string DebugString()
