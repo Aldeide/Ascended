@@ -95,7 +95,6 @@ namespace AbilitySystem.Runtime.Attributes
         private void RefreshModifierCache(Effect effect)
         {
             // TODO: only do this if the added or removed modifier concerns this attribute.
-            Debug.Log("ModifierCacheCalled");
             _modifierCache.Clear();
             var effects = _owner.EffectManager.GetActiveEffects();
             foreach (var effectSpec in effects)

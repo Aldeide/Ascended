@@ -22,19 +22,11 @@ namespace Systems
             slider.value = 1;
         }
 
-        public void OnHealthChanged(Attribute attribute, float oldValue, float newValue)
+        private void OnHealthChanged(Attribute attribute, float oldValue, float newValue)
         {
             Debug.Log("Health Changed");
-            float maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
-            float health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
-            slider.value = health / maxHealth;
-        }
-
-        public void Update()
-        {
-            Debug.Log("Update nameplate");
-            float maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
-            float health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
+            var maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
+            var health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
             slider.value = health / maxHealth;
         }
     }

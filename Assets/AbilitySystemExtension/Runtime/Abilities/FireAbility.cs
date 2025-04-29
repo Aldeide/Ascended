@@ -21,16 +21,14 @@ namespace AbilitySystemExtension.Runtime.Abilities
             if (impact)
             {
                 CueData data = new CueData();
-                data.position = (Vector3)target;
+                data.position = target;
                 Owner.PlayCue(impact, data);
             }
 
             Ray ray = new Ray(muzzle, target - muzzle);
             RaycastHit hit;
-            Debug.Log("Raycasting");
             if (Physics.Raycast(ray, out hit, 100f, ((FireAbilityDefinition)Definition).layerMask))
             {
-                Debug.Log("Hit!");
                 Debug.DrawLine(muzzle, hit.point, Color.red, 1.0f);
                 var asc = hit.collider.GetComponent<AbilitySystemComponent>();
                 if (!asc) return;

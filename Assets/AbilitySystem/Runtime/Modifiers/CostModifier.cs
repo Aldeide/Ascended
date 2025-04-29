@@ -38,7 +38,6 @@ namespace AbilitySystem.Runtime.Modifiers
                      where modifier.Item1.Definition.assetTags.Any(e => e.IsAncestorOf(tag))
                      select modifier)
             {
-                Debug.Log("Adding " + modifier);
                 _relevantModifiers.Add(modifier);
             }
 
