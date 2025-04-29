@@ -10,28 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
-  m_Name: DashAbilityCost
+  m_Name: CostAbilityHalf
   m_EditorClassIdentifier: 
   description: 
-  durationType: 1
+  durationType: 2
   durationSeconds: 0
   Period: 0
   periodicEffect: {fileID: 0}
   assetTags:
-  - name: Cost.Ability.Active.Dash
-    hashCode: -1519414655
+  - name: Cost.Ability
+    hashCode: -60541025
     ancestorsNames:
     - Cost
-    - Cost.Ability
-    - Cost.Ability.Active
-    ancestorsHashCodes: 8bd97bcc9f3764fc197b11a7
+    ancestorsHashCodes: 8bd97bcc
   grantedTags: []
   applicationRequiredTags: []
   ongoingRequiredTags: []
   removeGameplayEffectsWithTags: []
   applicationImmunityTags: []
   modifiers:
-  - rid: 1913512553863709454
+  - rid: 1913512553863709539
   cues: []
   EffectStack:
     EffectStackType: 0
@@ -42,18 +40,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1913512553863709454
-      type: {class: CostModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
+    - rid: 1913512553863709539
+      type: {class: FloatModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
       data:
-        attributeName: CharacteristicsAttributeSet.Energy
-        operation: 1
-        costMetaAttribute: MetaAttributeSet.AbilityCost
-        baseCost: 20
-        modifierTags:
-        - name: Cost.Ability.Active.Dash
-          hashCode: -1519414655
-          ancestorsNames:
-          - Cost
-          - Cost.Ability
-          - Cost.Ability.Active
-          ancestorsHashCodes: 8bd97bcc9f3764fc197b11a7
+        attributeName: MetaAttributeSet.AbilityCost
+        operation: 2
+        ModifierMagnitude: 0.5

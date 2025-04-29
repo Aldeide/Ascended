@@ -1,5 +1,6 @@
 ﻿using System;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Tags;
 using Sirenix.OdinInspector;
 
 namespace AbilitySystem.Runtime.Modifiers
