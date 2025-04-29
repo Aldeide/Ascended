@@ -180,5 +180,13 @@ namespace AbilitySystem.Runtime.Abilities
         {
             return PredictionKey.IsValidKey();
         }
+
+        public void RemoveTags()
+        {
+            foreach (var tag in Definition.ActivationOwnedTags)
+            {
+                Owner.TagManager.RemoveTag(tag);
+            }
+        }
     }
 }

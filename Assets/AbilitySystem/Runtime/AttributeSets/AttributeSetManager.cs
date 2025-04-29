@@ -26,6 +26,14 @@ namespace AbilitySystem.Runtime.AttributeSets
             _attributeAggregators = new Dictionary<string, AttributeAggregator>();
         }
 
+        public void Reset()
+        {
+            foreach (var attributeSet in _attributeSets.Values)
+            {
+                attributeSet.Reset();
+            }
+        }
+
         public T GetAttributeSet<T>() where T : AttributeSet
         {
             _attributeSets.TryGetValue(typeof(T), out AttributeSet result);

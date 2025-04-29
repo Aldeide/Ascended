@@ -30,5 +30,7 @@ namespace AbilitySystem.Runtime.Core
         public bool HasAuthority();
         public void PlayCue(CueDefinition cue);
         public void PlayCue(CueDefinition cue, CueData data);
+
+        public void Reset();
     }
 }
