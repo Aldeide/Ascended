@@ -54,7 +54,6 @@ namespace AbilitySystem.Runtime.Attributes
             value = InvokePreBaseValueListeners(value);
             _value.BaseValue = value;
             _value.Clamp();
-            Debug.Log("Base Value2: " + _value.BaseValue);
             OnAttributeBaseValueChanged?.Invoke(this, previousValue, _value.BaseValue);
         }
         
@@ -70,7 +69,6 @@ namespace AbilitySystem.Runtime.Attributes
             value = InvokePreCurrentValueListeners(value);
             _value.CurrentValue = value;
             _value.Clamp();
-            Debug.Log("Current Value2: " + _value.CurrentValue);
             OnAttributeCurrentValueChanged?.Invoke(this, previousValue, _value.CurrentValue);
         }
         

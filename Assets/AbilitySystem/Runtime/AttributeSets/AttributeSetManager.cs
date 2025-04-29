@@ -144,7 +144,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
+                Debug.Log("ApplyInstantEffectModifiers");
                 attribute.SetBaseValue(baseValue);
             }
         }

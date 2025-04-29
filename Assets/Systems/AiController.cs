@@ -12,6 +12,10 @@ namespace Systems
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            SetupAsc();
+            var nameplateController = GetComponentInChildren<NameplateController>();
+            nameplateController.Initialise(
+                GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
         }
 
         public void Start()
