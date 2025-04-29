@@ -164,5 +164,10 @@ namespace AbilitySystem.Runtime.AttributeSets
             return _attributeSets.Values.Aggregate(
                 "Attributes\n", (current, attributeSet) => current + (attributeSet.DebugString() + "\n"));
         }
+
+        public AttributeAggregator GetAggregator(string attributeName)
+        {
+            return _attributeAggregators[attributeName];
+        }
     }
 }

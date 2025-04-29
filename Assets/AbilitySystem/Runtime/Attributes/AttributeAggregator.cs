@@ -21,6 +21,11 @@ namespace AbilitySystem.Runtime.Attributes
             _owner = owner;
         }
 
+        public List<Tuple<Effect, Modifier>> GetModifiers()
+        {
+            return _modifierCache;
+        }
+
         public void Enable()
         {
             _owner.EffectManager.OnEffectAdded += RefreshModifierCache;
