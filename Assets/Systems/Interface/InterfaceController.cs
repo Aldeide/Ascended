@@ -18,18 +18,19 @@ namespace Systems.Interface
             _asc.AttributeSetManager.RegisterOnAttributeChanged("Health", OnHealthChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxHealth", OnHealthChanged);
             healthSlider.value = 1;
+            UpdateHealth();
         }
 
         public void OnHealthChanged(Attribute attribute, float oldValue, float newValue)
         {
+            UpdateHealth();
+        }
+        
+        private void UpdateHealth()
+        {
             float maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
             float health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
             healthSlider.value = health / maxHealth;
-        }
-        
-        private void Update()
-        {
-            
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.AttributeSets
@@ -42,6 +43,10 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
 
         private float OnHealthChange(Attribute attribute, float nextValue)
         {
+            if (nextValue <= 0)
+            {
+                _owner.AbilityManager.TryActivateAbility("DeathAbility");
+            }
             float maxHealth = MaxHealth.CurrentValue;
             return Mathf.Min(nextValue, maxHealth);
         }
@@ -62,6 +67,12 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         {
             if (Energy.CurrentValue > nextValue) Energy.SetCurrentValueNoEvent(nextValue);
             if (Energy.BaseValue > nextValue) Energy.SetBaseValueNoEvent(nextValue);
+        }
+
+        public override void Reset()
+        {
+            Health.SetBaseValueNoEvent(MaxHealth.BaseValue);
+            Health.SetCurrentValueNoEvent(MaxHealth.BaseValue);
         }
     }
 }

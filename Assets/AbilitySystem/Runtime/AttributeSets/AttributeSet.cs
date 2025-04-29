@@ -10,7 +10,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 {
     public abstract class AttributeSet
     {
-        private IAbilitySystem _owner;
+        protected IAbilitySystem _owner;
         private Dictionary<string, Attribute> _attributes;
         
         public string Name { get; protected set; }
@@ -48,5 +48,7 @@ namespace AbilitySystem.Runtime.AttributeSets
             return _attributes.Values.Aggregate(
                 output, (current, attribute) => current + (attribute.DebugString() + "\n"));
         }
+
+        public abstract void Reset();
     }
 }

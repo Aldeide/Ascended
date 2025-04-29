@@ -134,7 +134,7 @@ namespace Systems.Movement
 
         public bool CanMove()
         {
-            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised);
+            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised) && !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusDead);
         }
     }
 }

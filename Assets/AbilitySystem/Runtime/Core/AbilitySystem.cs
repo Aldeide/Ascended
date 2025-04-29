@@ -70,5 +70,10 @@ namespace AbilitySystem.Runtime.Core
         {
             Component.ObserversPlayCueWithDataRpc(cue.cueTag.GetName(), data);
         }
+
+        public void Reset()
+        {
+            AttributeSetManager.Reset();
+        }
     }
 }

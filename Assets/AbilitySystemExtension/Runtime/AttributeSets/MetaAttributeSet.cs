@@ -21,5 +21,10 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             AddAttribute(AbilityCost);
             AddAttribute(EffectDuration);
         }
+
+        public override void Reset()
+        {
+            return;
+        }
     }
 }

@@ -59,5 +59,10 @@ namespace AbilitySystem.Test.Utilities
         {
             throw new System.NotImplementedException();
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

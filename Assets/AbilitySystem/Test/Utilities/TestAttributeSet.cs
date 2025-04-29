@@ -27,5 +27,10 @@ namespace AbilitySystem.Test.Utilities
             AddAttribute(MaxEnergy);
             AddAttribute(MovementSpeed);
         }
+
+        public override void Reset()
+        {
+            return;
+        }
     }
 }

@@ -58,6 +58,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void PlayApplicationCues()
         {
+            if (Definition.cues == null) return;
             foreach (var cue in Definition.cues)
             {
                 Owner.PlayCue(cue);
