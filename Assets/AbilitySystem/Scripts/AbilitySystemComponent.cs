@@ -1,4 +1,5 @@
 ﻿using System;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
@@ -85,15 +86,15 @@ namespace AbilitySystem.Scripts
             AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetCurrentValue(newValue);
         }
 
-        public void TryActivateAbility(string abilityName, params object[] args)
+        public void TryActivateAbility(string abilityName, AbilityData data = new())
         {
-            AbilitySystem.AbilityManager.TryActivateAbility(abilityName, args);
+            AbilitySystem.AbilityManager.TryActivateAbility(abilityName, data);
         }
 
         [Rpc(SendTo.Server)]
-        public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key)
+        public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data)
         {
-            if (!AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key))
+            if (!AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key, data))
             {
                 NotifyAbilityActivationFailedRpc(abilityName, key);
             }
@@ -103,7 +104,6 @@ namespace AbilitySystem.Scripts
         public void ServerTryEndAbilityRpc(string abilityName)
         {
             AbilitySystem.AbilityManager.EndAbility(abilityName);
-
         }
 
         [Rpc(SendTo.Owner)]
@@ -134,7 +134,7 @@ namespace AbilitySystem.Scripts
 
         public void OnEffectAdded(Effect effect)
         {
-            if (IsServer && ! IsHost)
+            if (IsServer && !IsHost)
             {
                 if (effect.PredictionKey.IsValidKey())
                 {
@@ -147,7 +147,7 @@ namespace AbilitySystem.Scripts
         
         public void OnEffectRemoved(Effect effect)
         {
-            if (IsServer && ! IsHost)
+            if (IsServer && !IsHost)
             {
                 NotifyOwnerEffectRemovedRpc(effect.Definition.name);
             }
@@ -156,6 +156,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime)
         {
+            if (IsServer) return;
             var effectDefinition = _effectLibrary.GetEffectByName(effectName);
             // TODO: find an identifier to identify the abilitysystem and source player.
             var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
@@ -166,6 +167,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime)
         {
+            if (IsServer) return;
             var effectDefinition = _effectLibrary.GetEffectByName(effectName);
             // TODO: find an identifier to identify the abilitysystem and source player.
             var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);

@@ -1,7 +1,6 @@
 ﻿using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.AttributeSets
