@@ -8,7 +8,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [Test]
         public void PredictionKeyTest_CreatePredictionKey_CreatesValidPredictionKey()
         {
-            PredictionKey key = PredictionKey.CreatePredictionKey();
+            var key = PredictionKey.CreatePredictionKey();
             
             Assert.IsTrue(key.IsValidKey());
         }
@@ -16,7 +16,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [Test]
         public void PredictionKeyTest_Invalidate_InvalidatesPredictionKey()
         {
-            PredictionKey key = PredictionKey.CreatePredictionKey();
+            var key = PredictionKey.CreatePredictionKey();
             key.Invalidate();
             
             Assert.IsFalse(key.IsValidKey());
@@ -25,8 +25,8 @@ namespace AbilitySystem.Test.Runtime.Networking
         [Test]
         public void PredictionKeyTest_CreatePredictionKey_IncrementsCorrectly()
         {
-            PredictionKey firstKey = PredictionKey.CreatePredictionKey();
-            PredictionKey secondKey = PredictionKey.CreatePredictionKey();
+            var firstKey = PredictionKey.CreatePredictionKey();
+            var secondKey = PredictionKey.CreatePredictionKey();
             
             Assert.IsTrue(secondKey.currentKey == firstKey.currentKey + 1);
         }
@@ -34,11 +34,20 @@ namespace AbilitySystem.Test.Runtime.Networking
         [Test]
         public void PredictionKeyTest_CreateDependentPredictionKey_CreatesCorrectDependency()
         {
-            PredictionKey firstKey = PredictionKey.CreatePredictionKey();
-            PredictionKey secondKey = PredictionKey.CreateDependentPredictionKey(firstKey);
+            var firstKey = PredictionKey.CreatePredictionKey();
+            var secondKey = PredictionKey.CreateDependentPredictionKey(firstKey);
             
             Assert.IsTrue(secondKey.BaseKey == firstKey.currentKey);
             Assert.IsTrue(secondKey.currentKey > firstKey.currentKey);
+        }
+        
+        [Test]
+        public void PredictionKeyTest_CreateInvalidPredictionKey_CreatedKeyIsInvalid()
+        {
+            var invalidKey = PredictionKey.CreateInvalidPredictionKey();
+            
+            Assert.IsTrue(invalidKey.currentKey == 0);
+            Assert.IsFalse(invalidKey.IsValidKey());
         }
     }
 }

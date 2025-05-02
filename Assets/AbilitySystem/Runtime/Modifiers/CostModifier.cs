@@ -35,7 +35,7 @@ namespace AbilitySystem.Runtime.Modifiers
             _relevantModifiers.Clear();
             foreach (var modifier in from modifier in modifiers
                      from tag in modifierTags
-                     where modifier.Item1.Definition.assetTags.Any(e => e.IsAncestorOf(tag))
+                     where modifier.Item1.Definition.assetTags.Any(e => e.IsAncestorOf(tag) || e.Equals(tag))
                      select modifier)
             {
                 _relevantModifiers.Add(modifier);
@@ -49,7 +49,8 @@ namespace AbilitySystem.Runtime.Modifiers
             var value = baseCost;
             var additive = 0f;
             var multiplicative = 1f;
-
+            var overrideValue = 0f;
+            bool hasOverride = false;
             foreach (var modifier in _relevantModifiers)
             {
                 switch (modifier.Item2.operation)
@@ -66,11 +67,16 @@ namespace AbilitySystem.Runtime.Modifiers
                     case EffectOperation.Divisive:
                         multiplicative /= modifier.Item2.Calculate(modifier.Item1);
                         break;
+                    case EffectOperation.Override:
+                        overrideValue = modifier.Item2.Calculate(modifier.Item1);
+                        hasOverride = true;
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
 
+            if (hasOverride) return overrideValue;
             return (value + additive) * multiplicative;
         }
     }
