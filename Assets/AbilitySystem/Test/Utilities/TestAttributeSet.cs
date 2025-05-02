@@ -1,4 +1,6 @@
-﻿using AbilitySystem.Runtime.Attributes;
+﻿using System.Runtime.CompilerServices;
+using System.Web;
+using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 
@@ -11,7 +13,7 @@ namespace AbilitySystem.Test.Utilities
         public Attribute Energy;
         public Attribute MaxEnergy;
         public Attribute MovementSpeed;
-        
+        public Attribute AbilityCost;
         public TestAttributeSet(IAbilitySystem owner) : base(owner)
         {
             Name = nameof(TestAttributeSet);
@@ -20,12 +22,14 @@ namespace AbilitySystem.Test.Utilities
             Energy = new Attribute("Energy", owner, this,200);
             MaxEnergy = new Attribute("MaxEnergy", owner, this,300);
             MovementSpeed = new Attribute("MovementSpeed", owner, this,4);
+            AbilityCost = new Attribute("AbilityCost", owner, this, 0);
             
             AddAttribute(Health);
             AddAttribute(MaxHealth);
             AddAttribute(Energy);
             AddAttribute(MaxEnergy);
             AddAttribute(MovementSpeed);
+            AddAttribute(AbilityCost);
         }
 
         public override void Reset()

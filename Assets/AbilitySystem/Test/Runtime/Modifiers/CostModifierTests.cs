@@ -1,0 +1,172 @@
+﻿using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Modifiers;
+using AbilitySystem.Runtime.Tags;
+using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
+using static AbilitySystem.Test.Utilities.EffectUtilities;
+using NUnit.Framework;
+
+namespace AbilitySystem.Test.Runtime.Modifiers
+{
+    public class CostModifierTests
+    {
+        [Test]
+        public void CostModifierTests_CalculateWithNoRelevantEffect_ReturnsBaseCost()
+        {
+            var abilitySystem = CreateMockAbilitySystem();
+            var costModifier = new CostModifier()
+            {
+                costMetaAttribute = "TestAttributeSet.AbilityCost",
+                baseCost = 10,
+                modifierTags = new GameplayTag[] { new GameplayTag("Cost.Ability.TestAbility") }
+            };
+
+            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            abilitySystem.Object.EffectManager.AddEffect(effect);
+
+            Assert.AreEqual(10, costModifier.Calculate(effect));
+        }
+
+        [Test]
+        public void CostModifierTests_CalculateWithRelevantEffect_ReturnsModifierCost()
+        {
+            var abilitySystem = CreateMockAbilitySystem();
+            var costModifier = new CostModifier()
+            {
+                costMetaAttribute = "TestAttributeSet.AbilityCost",
+                baseCost = 10,
+                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+            };
+
+            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            var additiveModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Additive,
+                ModifierMagnitude = 5
+            };
+            var subtractiveModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Subtractive,
+                ModifierMagnitude = 1
+            };
+            var multiplicativeModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Multiplicative,
+                ModifierMagnitude = 1.5f
+            };
+            var divisiveModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Divisive,
+                ModifierMagnitude = 2f
+            };
+            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            modifyCostEffect.Definition.modifiers = new Modifier[]
+                { additiveModifier, multiplicativeModifier, divisiveModifier, subtractiveModifier };
+            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Cost.Ability.TestAbility") };
+            modifyCostEffect.Activate();
+            abilitySystem.Object.EffectManager.AddEffect(effect);
+            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+
+            Assert.AreEqual(10.5f, costModifier.Calculate(effect));
+        }
+
+        [Test]
+        public void CostModifierTests_CalculateWithRelevantAncestorEffect_ReturnsModifierCost()
+        {
+            var abilitySystem = CreateMockAbilitySystem();
+            var costModifier = new CostModifier()
+            {
+                costMetaAttribute = "TestAttributeSet.AbilityCost",
+                baseCost = 10,
+                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+            };
+
+            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            var additiveModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Additive,
+                ModifierMagnitude = 5
+            };
+            var multiplicativeModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Multiplicative,
+                ModifierMagnitude = 1.5f
+            };
+            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            modifyCostEffect.Definition.modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
+            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Cost.Ability") };
+            modifyCostEffect.Activate();
+            abilitySystem.Object.EffectManager.AddEffect(effect);
+            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+
+            Assert.AreEqual(22.5f, costModifier.Calculate(effect));
+        }
+
+        [Test]
+        public void CostModifierTests_CalculateWithIrrelevantEffect_ReturnsBaseCost()
+        {
+            var abilitySystem = CreateMockAbilitySystem();
+            var costModifier = new CostModifier()
+            {
+                costMetaAttribute = "TestAttributeSet.AbilityCost",
+                baseCost = 10,
+                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+            };
+
+            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            var additiveModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Additive,
+                ModifierMagnitude = 5
+            };
+            var multiplicativeModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Multiplicative,
+                ModifierMagnitude = 1.5f
+            };
+            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            modifyCostEffect.Definition.modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
+            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Irrelevant.Tag") };
+            modifyCostEffect.Activate();
+            abilitySystem.Object.EffectManager.AddEffect(effect);
+            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+
+            Assert.AreEqual(10f, costModifier.Calculate(effect));
+        }
+
+        [Test]
+        public void CostModifierTests_CalculateWithOverride_ReturnsOverridenCost()
+        {
+            var abilitySystem = CreateMockAbilitySystem();
+            var costModifier = new CostModifier()
+            {
+                costMetaAttribute = "TestAttributeSet.AbilityCost",
+                baseCost = 10,
+                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+            };
+
+            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            var overrideModifier = new FloatModifier()
+            {
+                attributeName = "TestAttributeSet.AbilityCost",
+                operation = EffectOperation.Override,
+                ModifierMagnitude = 100f
+            };
+            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            modifyCostEffect.Definition.modifiers = new Modifier[] { overrideModifier };
+            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Cost.Ability") };
+            modifyCostEffect.Activate();
+            abilitySystem.Object.EffectManager.AddEffect(effect);
+            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+
+            Assert.AreEqual(100f, costModifier.Calculate(effect));
+        }
+    }
+}

@@ -49,12 +49,13 @@ namespace AbilitySystem.Test.Runtime.AttributeSets
 
             var allAttributes = attributeSet.GetAllAttributes();
             
-            Assert.AreEqual(5, allAttributes.Count);
+            Assert.AreEqual(6, allAttributes.Count);
             Assert.AreEqual("TestAttributeSet.Health", allAttributes[0].GetFullName());
             Assert.AreEqual("TestAttributeSet.MaxHealth", allAttributes[1].GetFullName());
             Assert.AreEqual("TestAttributeSet.Energy", allAttributes[2].GetFullName());
             Assert.AreEqual("TestAttributeSet.MaxEnergy", allAttributes[3].GetFullName());
             Assert.AreEqual("TestAttributeSet.MovementSpeed", allAttributes[4].GetFullName());
+            Assert.AreEqual("TestAttributeSet.AbilityCost", allAttributes[5].GetFullName());
         }
     }
 }

@@ -13,8 +13,19 @@ namespace AbilitySystem.Test.Utilities
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.durationType = EffectDurationType.FixedDuration;
             asset.applicationImmunityTags = Array.Empty<GameplayTag>();
+            asset.grantedTags = Array.Empty<GameplayTag>();
             asset.applicationRequiredTags = Array.Empty<GameplayTag>();
             asset.durationSeconds = 100;
+            return asset.ToEffect(source, target);
+        }
+        
+        public static Effect CreateInfiniteEffect(IAbilitySystem source, IAbilitySystem target)
+        {
+            var asset = ScriptableObject.CreateInstance<EffectDefinition>();
+            asset.durationType = EffectDurationType.Infinite;
+            asset.applicationImmunityTags = Array.Empty<GameplayTag>();
+            asset.grantedTags = Array.Empty<GameplayTag>();
+            asset.applicationRequiredTags = Array.Empty<GameplayTag>();
             return asset.ToEffect(source, target);
         }
 
