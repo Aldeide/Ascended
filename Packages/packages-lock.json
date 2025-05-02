@@ -1,5 +1,26 @@
 {
   "dependencies": {
+    "com.gentlymad.graphviewbase": {
+      "version": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7bd2aaa6b7a85bcc5f96720c309e286358a794bb"
+    },
+    "com.gentlymad.newgraph": {
+      "version": "https://github.com/Gentlymad-Studios/NewGraph.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d27ce0611a98f325890ecf1f7232de76fba3b3e2"
+    },
+    "com.gentlymad.odinserializer": {
+      "version": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "162f7fc612972842c7a7324bb785998ff10c4821"
+    },
     "com.unity.addressables": {
       "version": "2.4.3",
       "depth": 0,
@@ -335,16 +356,6 @@
         "com.unity.shadergraph": "17.0.4",
         "com.unity.render-pipelines.core": "17.0.4"
       }
-    },
-    "com.unity.visualscripting": {
-      "version": "1.9.6",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "nuget.castle-core": {
       "version": "2.0.0",

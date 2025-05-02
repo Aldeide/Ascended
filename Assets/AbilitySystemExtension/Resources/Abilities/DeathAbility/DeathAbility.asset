@@ -28,5 +28,5 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   grantedEffects: []
-  networkPolicy: 0
+  networkPolicy: 2
   activationCues: []

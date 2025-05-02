@@ -9,7 +9,7 @@ namespace AbilitySystem.Runtime.Abilities
 {
     public abstract class Ability
     {
-        protected object[] AbilityArguments = Array.Empty<object>();
+        protected AbilityData AbilityArguments;
         
         public AbilityDefinition Definition { get; }
         public IAbilitySystem Owner { get; protected set; }
@@ -24,7 +24,7 @@ namespace AbilitySystem.Runtime.Abilities
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
         
-        public Ability(AbilityDefinition ability, IAbilitySystem owner)
+        protected Ability(AbilityDefinition ability, IAbilitySystem owner)
         {
             Definition = ability;
             Owner = owner;
@@ -42,7 +42,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
         }
 
-        protected abstract void ActivateAbility(params object[] args);
+        protected abstract void ActivateAbility(AbilityData data);
 
         protected virtual void CancelAbility()
         {
@@ -85,14 +85,14 @@ namespace AbilitySystem.Runtime.Abilities
             return Owner.TagManager.HasAnyTags(Definition.ActivationBlockedTags);
         }
         
-        public virtual bool TryActivateAbility(params object[] args)
+        public virtual bool TryActivateAbility(AbilityData data)
         {
-            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), args); 
+            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), data); 
         }
         
-        public virtual bool TryActivateAbility(PredictionKey key, params object[] args)
+        public virtual bool TryActivateAbility(PredictionKey key, AbilityData data)
         {
-            AbilityArguments = args;
+            AbilityArguments = data;
             var result = CanActivate();
             var success = result == AbilityActivationResult.Success;
             if (success)

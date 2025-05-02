@@ -12,7 +12,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
         }
 
-        protected override void ActivateAbility(params object[] args)
+        protected override void ActivateAbility(AbilityData data)
         {
             _currentTimer = 0;
             Debug.Log("Death ability activated");

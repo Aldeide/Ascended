@@ -16,6 +16,8 @@ namespace AbilitySystem.Runtime.Abilities
         private List<Ability> _abilitySnapshot;
         private PredictionKey _predictionKey;
 
+        public Action OnAbilityGranted;
+        
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -48,30 +50,29 @@ namespace AbilitySystem.Runtime.Abilities
                 Debug.LogError("Failed to add ability: " + abilityDefinition.GetType().FullName + " / " + e.Message);
             }
         }
-
-        public bool TryActivateAbility(string name, params object[] args)
+        
+        public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
         {
             _abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
 
             if ((_owner.IsServer() || _owner.IsHost()) && !ability.Definition.IsLocalAbility())
             {
-                return ability.TryActivateAbility(args);
+                return ability.TryActivateAbility(data);
             }
 
             if (ability.Definition.IsLocalAbility() && _owner.IsLocalClient())
             {
-                return ability.TryActivateAbility(args);
+                return ability.TryActivateAbility(data);
             }
 
             if (ability.Definition.HasLocalPrediction() && _owner.IsLocalClient())
             {
                 var key = PredictionKey.CreatePredictionKey();
-                var success = ability.TryActivateAbility(key, args);
+                var success = ability.TryActivateAbility(key, data);
                 if (success)
                 {
-                    // args not serialisable
-                    _owner.Component.ServerTryActivateAbilityRpc(name, key);
+                    _owner.Component.ServerTryActivateAbilityRpc(name, key, data);
                     return true;
                 }
                 return false;
@@ -79,13 +80,13 @@ namespace AbilitySystem.Runtime.Abilities
             return false;
         }
 
-        public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, params object[] args)
+        public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, AbilityData data)
         {
             if (!_owner.IsServer()) return false;
 
             _abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
-            return ability.TryActivateAbility(key, args);
+            return ability.TryActivateAbility(key, data);
         }
 
         public void EndAbility(string abilityName)

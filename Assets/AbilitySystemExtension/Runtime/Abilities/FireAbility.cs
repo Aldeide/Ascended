@@ -12,10 +12,10 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
         }
 
-        protected override void ActivateAbility(params object[] args)
+        protected override void ActivateAbility(AbilityData abilityData)
         {
-            var target = (Vector3)args[1];
-            var muzzle = (Vector3)args[0];
+            var target = abilityData.TargetPosition;
+            var muzzle = abilityData.MuzzlePosition;
             var impact = ((FireAbilityDefinition)Definition).impactVisualEffect;
             PlayActivationCues();
             if (impact)
