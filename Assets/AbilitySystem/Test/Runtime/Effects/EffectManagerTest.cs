@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Test.Utilities;
 using Moq;
 using NUnit.Framework;
@@ -27,7 +29,13 @@ namespace AbilitySystem.Test.Runtime.Effects
         {
             var owner = new Mock<IAbilitySystem>();
             var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
+            
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectAsset.applicationImmunityTags = Array.Empty<GameplayTag>();
+            effectAsset.applicationRequiredTags = Array.Empty<GameplayTag>();
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);
@@ -41,7 +49,12 @@ namespace AbilitySystem.Test.Runtime.Effects
         {
             var owner = new Mock<IAbilitySystem>();
             var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectAsset.applicationImmunityTags = Array.Empty<GameplayTag>();
+            effectAsset.applicationRequiredTags = Array.Empty<GameplayTag>();
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);
@@ -54,12 +67,16 @@ namespace AbilitySystem.Test.Runtime.Effects
         public void EffectManagerTest_TickAsServer_TicksEffects()
         {
             var owner = new Mock<IAbilitySystem>();
+            var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
             var attributeSystem = new Mock<AttributeSetManager>(owner.Object);
             owner.Setup(mock => mock.IsLocalClient()).Returns(false);
+            owner.Setup(mock => mock.IsServer()).Returns(true);
             owner.Setup(mock => mock.GetTime()).Returns(1);
             owner.Setup(mock => mock.AttributeSetManager).Returns(attributeSystem.Object);
-            var effectManager = new EffectManager(owner.Object);
-            var effect = EffectUtilities.CreateDurationalEffect();
+            var effect = EffectUtilities.CreateDurationalEffect(owner.Object, owner.Object);
             effectManager.AddEffect(effect);
             effect.Initialise(owner.Object, owner.Object);
             effect.Activate();
@@ -76,10 +93,13 @@ namespace AbilitySystem.Test.Runtime.Effects
             var attributeSystem = new Mock<AttributeSetManager>(owner.Object);
             var effectManager = new EffectManager(owner.Object);
             owner.Setup(mock => mock.IsLocalClient()).Returns(false);
+            owner.Setup(mock => mock.IsServer()).Returns(true);
             owner.Setup(mock => mock.GetTime()).Returns(1);
             owner.Setup(mock => mock.AttributeSetManager).Returns(attributeSystem.Object);
             owner.Setup(mock => mock.EffectManager).Returns(effectManager);
-            var effect = EffectUtilities.CreateDurationalEffect();
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
+            var effect = EffectUtilities.CreateDurationalEffect(owner.Object, owner.Object);
             effectManager.AddEffect(effect);
             effect.Initialise(owner.Object, owner.Object);
             effect.Activate();
