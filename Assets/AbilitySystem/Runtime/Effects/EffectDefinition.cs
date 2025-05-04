@@ -28,14 +28,6 @@ namespace AbilitySystem.Runtime.Effects
         [EnableIf("IsDurationalPolicy")]
         public float Period = 0;
         
-        [EnableIf("IsDurationalPolicy")]
-        [Unit(Units.Second)]
-        public float PeriodForDurational
-        {
-            get => Period;
-            set => Period = value;
-        }
-        
         [EnableIf("IsPeriodic")]
         [AssetSelector]
         public EffectDefinition periodicEffect;
