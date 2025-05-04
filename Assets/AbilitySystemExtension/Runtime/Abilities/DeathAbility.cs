@@ -16,6 +16,10 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
             _currentTimer = 0;
             Debug.Log("Death ability activated");
+            if (Owner.IsServer())
+            {
+                Owner.Component.ObserversPlayCueRpc("Cue.Animation.State.Player.Death");
+            }
         }
 
         protected override void AbilityTick()

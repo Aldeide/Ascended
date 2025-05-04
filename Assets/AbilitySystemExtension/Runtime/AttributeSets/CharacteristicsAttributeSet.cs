@@ -70,8 +70,8 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
 
         public override void Reset()
         {
-            Health.SetBaseValueNoEvent(MaxHealth.BaseValue);
-            Health.SetCurrentValueNoEvent(MaxHealth.BaseValue);
+            Health.SetBaseValue(MaxHealth.BaseValue);
+            Health.SetCurrentValue(MaxHealth.BaseValue);
         }
     }
 }
