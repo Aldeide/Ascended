@@ -62,7 +62,7 @@ namespace AbilitySystem.Runtime.Effects
 
         bool IsDurationalPolicy()
         {
-            return durationType == EffectDurationType.FixedDuration || durationType == EffectDurationType.Infinite;
+            return durationType is EffectDurationType.FixedDuration or EffectDurationType.Infinite;
         }
 
         [Space]
