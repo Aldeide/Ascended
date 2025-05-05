@@ -12,8 +12,13 @@ namespace AbilityGraph
 {
     public class AbilityGraph : Ability
     {
+        private ActivateAbilityNode _activateNode;
+        
         public AbilityGraph(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
+            _activateNode =
+                (Definition as AbilityGraphDefinition)?.abilityGraph.Nodes.First(n =>
+                    n.nodeType == typeof(ActivateAbilityNode)).nodeData as ActivateAbilityNode;
         }
 
         protected override void ActivateAbility(AbilityData data)
@@ -21,9 +26,9 @@ namespace AbilityGraph
             var activateNode =
                 (Definition as AbilityGraphDefinition).abilityGraph.Nodes.Where(n =>
                     n.GetName() == "ActivateAbilityNode").First();
-            (activateNode.nodeData as AbilityNode).Execute();
+            (activateNode.nodeData as InstantAbilityNode).Execute();
 
-            (activateNode.nodeData as AbilityNode).nextNode.Execute();
+            //(activateNode.nodeData as InstantAbilityNode).executeNext.Execute();
         }
 
         public override void EndAbility()
