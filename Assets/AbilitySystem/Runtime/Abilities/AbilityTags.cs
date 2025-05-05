@@ -43,5 +43,13 @@ namespace AbilitySystem.Runtime.Abilities
             // TargetRequiredTags = new GameplayTagSet(targetRequiredTags);
             // TargetBlockedTags = new GameplayTagSet(targetBlockedTags);
         }
+
+        public static AbilityTags CreateEmpty()
+        {
+            return new AbilityTags
+            (Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>(),
+                Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>()
+            );
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Runtime.Core;
 using AbilitySystem.Test.Utilities;
+using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 using Moq;
 using NUnit.Framework;
 
@@ -88,6 +89,17 @@ namespace AbilitySystem.Test.Runtime.Attribute
             
             Assert.AreEqual(10f, attribute.BaseValue);
             Assert.AreEqual(10f, attribute.CurrentValue);
+        }
+        
+        [Test]
+        public void AttributeTest_ChangingBaseValue_ChangesCurrentValue()
+        {
+            var owner = CreateMockAbilitySystem();
+            var attribute = owner.Object.AttributeSetManager.GetAttribute("Health");
+            attribute.SetBaseValue(200);
+            
+            Assert.AreEqual(200f, attribute.BaseValue);
+            Assert.AreEqual(200f, attribute.CurrentValue);
         }
         
     }

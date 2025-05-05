@@ -12,7 +12,7 @@ namespace AbilitySystem.Runtime.Abilities
     public class AbilityManager
     {
         private IAbilitySystem _owner;
-        private Dictionary<string, Ability> _abilities;
+        public Dictionary<string, Ability> Abilities;
         private List<Ability> _abilitySnapshot;
         private PredictionKey _predictionKey;
 
@@ -21,13 +21,13 @@ namespace AbilitySystem.Runtime.Abilities
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
-            _abilities = new Dictionary<string, Ability>();
+            Abilities = new Dictionary<string, Ability>();
             _abilitySnapshot = new List<Ability>();
         }
 
         public void Tick()
         {
-            _abilitySnapshot.AddRange(_abilities.Values);
+            _abilitySnapshot.AddRange(Abilities.Values);
             foreach (var ability in _abilitySnapshot)
             {
                 ability.Tick();
@@ -41,9 +41,9 @@ namespace AbilitySystem.Runtime.Abilities
             if (!abilityDefinition) return;
             try
             {
-                if (_abilities.ContainsKey(abilityDefinition.uniqueName)) return;
+                if (Abilities.ContainsKey(abilityDefinition.uniqueName)) return;
                 var ability = abilityDefinition.ToAbility(_owner);
-                _abilities.Add(ability.Definition.uniqueName, ability);
+                Abilities.Add(ability.Definition.uniqueName, ability);
             }
             catch (MissingMethodException e)
             {
@@ -53,7 +53,7 @@ namespace AbilitySystem.Runtime.Abilities
         
         public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
         {
-            _abilities.TryGetValue(name, out Ability ability);
+            Abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
 
             if ((_owner.IsServer() || _owner.IsHost()) && !ability.Definition.IsLocalAbility())
@@ -84,14 +84,14 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (!_owner.IsServer()) return false;
 
-            _abilities.TryGetValue(name, out Ability ability);
+            Abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
             return ability.TryActivateAbility(key, data);
         }
 
         public void EndAbility(string abilityName)
         {
-            _abilities.TryGetValue(abilityName, out Ability ability);
+            Abilities.TryGetValue(abilityName, out Ability ability);
             ability?.TryEndAbility();
             if (_owner.IsLocalClient() && !_owner.IsHost())
             {
@@ -101,7 +101,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public void EndAbility(PredictionKey key)
         {
-            _abilities.Where(kv =>
+            Abilities.Where(kv =>
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
                 .ForEach(a => a.Value.EndAbility());
@@ -109,7 +109,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public void CancelAbilitiesWithTags(GameplayTag[] tags)
         {
-            foreach (var ability in _abilities.Values.Where(ability =>
+            foreach (var ability in Abilities.Values.Where(ability =>
                          ability.Definition.AssetTags.Any(tags.Contains)))
             {
                 ability.TryCancelAbility();
@@ -118,7 +118,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public string DebugString()
         {
-            return _abilities.Keys.Aggregate("Abilities\n", (current, ability) => current + (ability + "\n"));
+            return Abilities.Keys.Aggregate("Abilities\n", (current, ability) => current + (ability + "\n"));
         }
     }
 }
