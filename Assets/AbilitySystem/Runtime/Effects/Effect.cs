@@ -122,6 +122,11 @@ namespace AbilitySystem.Runtime.Effects
         {
             ActivationTime = Owner.GetTime();
         }
+        
+        public bool IsPredictable() 
+        {
+            return Definition.durationType != EffectDurationType.Instant;
+        }
 
         public string DebugString()
         {
