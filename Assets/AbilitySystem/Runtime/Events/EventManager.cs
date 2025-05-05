@@ -7,7 +7,7 @@ namespace AbilitySystem.Runtime.Events
     {
         private readonly Dictionary<Type, Delegate> _typeToHandlers = new();
         
-        public void Subscribe<T>(Action<GameplayEvent<T>> handler)
+        public void Subscribe<T>(Action<GameplayEvent<T>> handler) where T : EventArgs
         {
             var type = typeof(T);
             if (!_typeToHandlers.TryAdd(type, handler))
@@ -16,7 +16,7 @@ namespace AbilitySystem.Runtime.Events
             }
         }
 
-        public void Unsubscribe<T>(Action<GameplayEvent<T>> handler)
+        public void Unsubscribe<T>(Action<GameplayEvent<T>> handler) where T : EventArgs
         {
             var type = typeof(T);
             if (_typeToHandlers.ContainsKey(type))
@@ -25,7 +25,7 @@ namespace AbilitySystem.Runtime.Events
             }
         }
         
-        public void TriggerEvent<T>(GameplayEvent<T> gameEvent)
+        public void TriggerEvent<T>(GameplayEvent<T> gameEvent) where T : EventArgs
         {
             if (!_typeToHandlers.TryGetValue(typeof(T), out var d)) return;
             if (d is Action<GameplayEvent<T>> callback)

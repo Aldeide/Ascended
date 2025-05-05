@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.gentlymad.graphviewbase": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
-    "com.gentlymad.newgraph": "https://github.com/Gentlymad-Studios/NewGraph.git",
     "com.gentlymad.odinserializer": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
     "com.unity.addressables": "2.4.3",
     "com.unity.cinemachine": "2.10.3",

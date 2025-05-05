@@ -30,6 +30,9 @@ namespace AbilitySystem.Runtime.Abilities
 
         public EffectDefinition cost;
 
+        [SerializeReference]
+        public AbilityActivation.AbilityActivation abilityActivation;
+        
         [Title("Tags")]
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] AssetTags;

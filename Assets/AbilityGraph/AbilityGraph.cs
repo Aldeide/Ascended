@@ -1,16 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Core;
 using NewGraph;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AbilityGraph
 {
-    [Serializable]
-    [CreateAssetMenu(fileName = "GraphAbility", menuName = "AbilitySystem/Ability/GraphAbility")]
-    public class AbilityGraph : ScriptableGraphModel
+    public class AbilityGraph : Ability
     {
-        public AbilityGraph()
+        public AbilityGraph(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
-            
+        }
+
+        protected override void ActivateAbility(AbilityData data)
+        {
+            var activateNode =
+                (Definition as AbilityGraphDefinition).abilityGraph.Nodes.Where(n =>
+                    n.GetName() == "ActivateAbilityNode").First();
+            (activateNode.nodeData as AbilityNode).Execute();
+
+            (activateNode.nodeData as AbilityNode).nextNode.Execute();
+        }
+
+        public override void EndAbility()
+        {
+            throw new NotImplementedException();
         }
     }
 }

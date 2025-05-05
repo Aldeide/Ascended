@@ -7,6 +7,8 @@ namespace AbilityGraph
     [Serializable]
     public abstract class AbilityNode : INode
     {
+        [Port, SerializeReference]
+        public AbilityNode nextNode;
         public virtual void Execute()
         {
             Debug.Log("Executing node");
@@ -14,18 +16,19 @@ namespace AbilityGraph
     }
     
     [Serializable, Node("#007F00FF", "Special", createInputPort = false)]
-    public class ActivateNode : AbilityNode
+    public class ActivateAbilityNode : AbilityNode
     {
-
-        [Port, SerializeReference]
-        public AbilityNode nextNode;
+        
     }
     
     [Serializable, Node("#007F00FF", "Special", createInputPort = true)]
     public class TestAbilityNode : AbilityNode
     {
+        
 
-        [Port, SerializeReference]
-        public AbilityNode nextNode;
+        public override void Execute()
+        {
+            Debug.Log("Executing Test node");
+        }
     }
 }

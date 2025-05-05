@@ -16,6 +16,8 @@ MonoBehaviour:
   icon: {fileID: 0}
   uniqueName: FireAbility
   cost: {fileID: 0}
+  abilityActivation:
+    rid: -2
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
@@ -32,3 +34,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

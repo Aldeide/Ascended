@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a1b792a57f4d9692205d029fb233fe, type: 3}
+  m_Name: AbilityGraph
+  m_EditorClassIdentifier: 
+  description: 
+  icon: {fileID: 0}
+  uniqueName: AbilityGraph
+  cost: {fileID: 0}
+  abilityActivation:
+    rid: -2
+  AssetTags: []
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTags: []
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  grantedEffects: []
+  networkPolicy: 0
+  activationCues: []
+  abilityGraph: {fileID: 11400000, guid: bc064f43e030c674b8a3189e9749a554, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "7bd2aaa6b7a85bcc5f96720c309e286358a794bb"
     },
-    "com.gentlymad.newgraph": {
-      "version": "https://github.com/Gentlymad-Studios/NewGraph.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "d27ce0611a98f325890ecf1f7232de76fba3b3e2"
-    },
     "com.gentlymad.odinserializer": {
       "version": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
       "depth": 0,
