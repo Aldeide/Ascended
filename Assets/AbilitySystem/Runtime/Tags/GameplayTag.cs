@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Tags
 {
     [Serializable]
-    public struct GameplayTag
+    public struct GameplayTag : INetworkSerializable, IEquatable<GameplayTag>
     {
         [SerializeField] private string name;
         [SerializeField] private int hashCode;
@@ -72,6 +73,16 @@ namespace AbilitySystem.Runtime.Tags
         public override int GetHashCode()
         {
             return HashCode;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref name);
+        }
+
+        public bool Equals(GameplayTag other)
+        {
+            return hashCode == other.hashCode;
         }
     }
 }

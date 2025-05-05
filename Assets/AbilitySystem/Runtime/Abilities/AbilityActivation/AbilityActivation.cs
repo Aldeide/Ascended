@@ -18,6 +18,6 @@ namespace AbilitySystem.Runtime.Abilities.AbilityActivation
     public class OnEventActivation : AbilityActivation
     {
         [SerializeReference]
-        public GameplayEvent<EventArgs> activationEvent;
+        public GameplayEvent<EventArgs> ActivationEvent;
     }
 }
