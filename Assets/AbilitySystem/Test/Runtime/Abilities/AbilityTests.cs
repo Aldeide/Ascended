@@ -1,5 +1,4 @@
 ﻿using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Abilities.PassiveAbility;
 using AbilitySystem.Runtime.Tags;
 using static AbilitySystem.Test.Utilities.AbilityUtilities;
 using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
