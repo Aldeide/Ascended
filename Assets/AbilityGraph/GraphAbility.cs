@@ -7,7 +7,7 @@ namespace AbilityGraph
 {
     public class GraphAbility : Ability
     {
-        private ScriptableGraphModel _graph;
+        //private ScriptableGraphModel _graph;
         
         public GraphAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {

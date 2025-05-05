@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c2cc3c9f77a9d7439a5d56bd830aa92, type: 3}
+  m_Name: ScriptableGraphModel 1
+  m_EditorClassIdentifier: 
+  baseModel:
+    nodes:
+    - rid: 1400474455179788655
+    - rid: 1400474455179788657
+    utilityNodes: []
+    tmpName: ScriptableGraphModel 1
+    viewportInitiallySet: 1
+    viewPosition: {x: 0, y: 0, z: 0}
+    viewScale: {x: 1, y: 1, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1400474455179788655
+      type: {class: NodeModel, ns: NewGraph, asm: NewGraph}
+      data:
+        nodeData:
+          rid: 1400474455179788656
+        nodeX: 70
+        nodeY: 219
+        name: ActivateAbilityNode
+        isUtilityNode: 0
+        foldouts: []
+    - rid: 1400474455179788656
+      type: {class: ActivateAbilityNode, ns: AbilityGraph, asm: Assembly-CSharp}
+      data:
+        nextNode:
+          rid: 1400474455179788658
+    - rid: 1400474455179788657
+      type: {class: NodeModel, ns: NewGraph, asm: NewGraph}
+      data:
+        nodeData:
+          rid: 1400474455179788658
+        nodeX: 454
+        nodeY: 263
+        name: TestAbilityNode
+        isUtilityNode: 0
+        foldouts: []
+    - rid: 1400474455179788658
+      type: {class: TestAbilityNode, ns: AbilityGraph, asm: Assembly-CSharp}
+      data:
+        nextNode:
+          rid: -2

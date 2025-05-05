@@ -2,7 +2,7 @@
 
 namespace AbilitySystem.Runtime.Events
 {
-    public abstract class GameplayEvent<T>
+    public abstract class GameplayEvent<T> where T : EventArgs
     {
         public Type Type { get; private set; }
         public T Arguments { get; private set; }
