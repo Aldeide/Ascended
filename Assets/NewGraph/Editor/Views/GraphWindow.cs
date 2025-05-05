@@ -18,7 +18,6 @@ namespace NewGraph {
 
         private static readonly Dictionary<Type, Type> inspectorControllerLookup = new Dictionary<Type, Type>() {
             { typeof(ScriptableGraphModel), typeof(ScriptableInspectorController) },
-            { typeof(AbilityGraphModel), typeof(ScriptableInspectorController) },
             { typeof(MonoGraphModel), typeof(MonoInspectorController) },
         };
 
