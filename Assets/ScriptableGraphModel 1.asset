@@ -19,7 +19,7 @@ MonoBehaviour:
     utilityNodes: []
     tmpName: ScriptableGraphModel 1
     viewportInitiallySet: 1
-    viewPosition: {x: 0, y: 0, z: 0}
+    viewPosition: {x: 485, y: 351, z: 0}
     viewScale: {x: 1, y: 1, z: 1}
   references:
     version: 2
@@ -31,8 +31,8 @@ MonoBehaviour:
       data:
         nodeData:
           rid: 1400474455179788656
-        nodeX: 70
-        nodeY: 219
+        nodeX: -324
+        nodeY: -170
         name: ActivateAbilityNode
         isUtilityNode: 0
         foldouts: []
@@ -46,8 +46,8 @@ MonoBehaviour:
       data:
         nodeData:
           rid: 1400474455179788658
-        nodeX: 454
-        nodeY: 263
+        nodeX: -70
+        nodeY: -170
         name: TestAbilityNode
         isUtilityNode: 0
         foldouts: []

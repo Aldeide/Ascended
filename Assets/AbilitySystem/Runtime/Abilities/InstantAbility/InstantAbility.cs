@@ -2,10 +2,20 @@
 
 namespace AbilitySystem.Runtime.Abilities.InstantAbility
 {
-    public abstract class InstantAbility : Ability
+    public class InstantAbility : Ability
     {
-        protected InstantAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
+        public InstantAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
+        }
+
+        protected override void ActivateAbility(AbilityData data)
+        {
+            
+        }
+
+        public override void EndAbility()
+        {
+            
         }
     }
 }

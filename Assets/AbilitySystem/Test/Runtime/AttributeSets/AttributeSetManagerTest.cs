@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Test.Utilities;
+using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 using Moq;
 using NUnit.Framework;
 
@@ -17,12 +18,12 @@ namespace AbilitySystem.Test.Runtime.AttributeSets
             owner.Setup(mock => mock.EffectManager).Returns(effectManager.Object);
             var attributeSetManager = new AttributeSetManager(owner.Object);
             var attributeSet = new TestAttributeSet(owner.Object);
-            
+
             attributeSetManager.AddAttributeSet(typeof(TestAttributeSet), attributeSet);
-            
+
             Assert.AreEqual(attributeSet, attributeSetManager.GetAttributeSet<TestAttributeSet>());
         }
-        
+
         [Test]
         public void AttributeSetManagerTest_GetAttributeSet_GetsAttributeSetByName()
         {
@@ -34,8 +35,17 @@ namespace AbilitySystem.Test.Runtime.AttributeSets
             attributeSetManager.AddAttributeSet(typeof(TestAttributeSet), attributeSet);
 
             var actualAttributeSet = attributeSetManager.GetAttributeSet("TestAttributeSet");
-            
+
             Assert.AreEqual(attributeSet, actualAttributeSet);
+        }
+
+        [Test]
+        public void AttributeSetManagerTest_GetAttribute_GetsAttributeByName()
+        {
+            var owner = CreateMockAbilitySystem();
+            var actualAttribute = owner.Object.AttributeSetManager.GetAttribute("Health");
+
+            Assert.AreEqual("TestAttributeSet.Health", actualAttribute.GetFullName());
         }
     }
 }
