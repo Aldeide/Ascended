@@ -23,12 +23,12 @@ namespace Systems.Controllers
             if (!IsLocalPlayer) return;
             if (context.phase == InputActionPhase.Started)
             {
-                _asc.TryActivateAbility("AbilityGraph");
+                _asc.TryActivateAbility("TestDurational");
             }
 
             if (context.phase == InputActionPhase.Canceled)
             {
-                _asc.EndAbility("AbilityGraph");
+                _asc.EndAbility("TestDurational");
             }
         }
 

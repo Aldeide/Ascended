@@ -7,12 +7,13 @@ namespace AbilitySystem.Runtime.AbilityTasks
     [Serializable]
     public abstract class AbilityTask
     {
-        private Ability _owningAbility;
-        private IAbilitySystem _owner;
-        protected AbilityTask(Ability owningAbility)
+        protected Ability _owningAbility;
+        protected IAbilitySystem _owner;
+
+        public void Initialize(Ability owningAbility, IAbilitySystem owner)
         {
             _owningAbility = owningAbility;
-            _owner = owningAbility.Owner;
+            _owner = owner;
         }
     }
 }
