@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79c13839409e4523938712cf9fd90169, type: 3}
+  m_Name: DurationalAbility
+  m_EditorClassIdentifier: 
+  description: 
+  icon: {fileID: 0}
+  uniqueName: TestDurational
+  cost: {fileID: 0}
+  abilityActivation:
+    rid: -2
+  AssetTags: []
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTags: []
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  grantedEffects: []
+  networkPolicy: 1
+  activationCues: []
+  ActivationTasks:
+  - rid: 4336599336265449556
+  CancelTasks: []
+  EndTasks:
+  - rid: 4336599336265449555
+  TickTasks:
+  - rid: 4336599336265449557
+  - rid: 4336599336265449554
+  - rid: 4336599336265449558
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 4336599336265449554
+      type: {class: WaitTask, ns: AbilitySystem.Runtime.AbilityTasks, asm: AbilitySystem}
+      data:
+        StartTime: 0
+        Duration: 3
+    - rid: 4336599336265449555
+      type: {class: DebugLogTask, ns: AbilitySystem.Runtime.AbilityTasks, asm: AbilitySystem}
+      data:
+        Message: Ended
+    - rid: 4336599336265449556
+      type: {class: DebugLogTask, ns: AbilitySystem.Runtime.AbilityTasks, asm: AbilitySystem}
+      data:
+        Message: Activated
+    - rid: 4336599336265449557
+      type: {class: DebugLogTask, ns: AbilitySystem.Runtime.AbilityTasks, asm: AbilitySystem}
+      data:
+        Message: Prewait
+    - rid: 4336599336265449558
+      type: {class: DebugLogTask, ns: AbilitySystem.Runtime.AbilityTasks, asm: AbilitySystem}
+      data:
+        Message: Postwait
