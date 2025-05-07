@@ -1,10 +1,10 @@
 {
-    "name": "AbilitySystemExtension",
+    "name": "AbilityGraph",
     "rootNamespace": "",
     "references": [
-        "GUID:fd228ffb3c18f7343b2fddb130915e28",
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:bc169f93cfa55c34fbb4e95a2ce629c2"
+        "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
+        "GUID:a432eb0a70c5c4a37ab50d59671586f8",
+        "GUID:fd228ffb3c18f7343b2fddb130915e28"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

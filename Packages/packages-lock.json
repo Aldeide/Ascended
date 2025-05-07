@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.alelievr.node-graph-processor": {
+      "version": "file:C:/Users/Anthony/Desktop/NodeGraphProcessor-master/Assets/com.alelievr.NodeGraphProcessor",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.gentlymad.graphviewbase": {
       "version": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
       "depth": 0,
