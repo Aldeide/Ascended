@@ -1,30 +1,40 @@
+using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class AbilityGraphWindow : EditorWindow
+namespace AbilityGraph.Editor
 {
-    [SerializeField]
-    private VisualTreeAsset m_VisualTreeAsset = default;
-
-    [MenuItem("Window/UI Toolkit/AbilityGraphWindow")]
-    public static void ShowExample()
+    public class AbilityGraphWindow : BaseGraphWindow
     {
-        AbilityGraphWindow wnd = GetWindow<AbilityGraphWindow>();
-        wnd.titleContent = new GUIContent("AbilityGraphWindow");
-    }
+        private BaseGraph _tmpGraph;
+        // Add the window in the editor menu
+        [MenuItem("Window/01_DefaultGraph")]
+        public static AbilityGraphWindow Open()
+        {
+            var graphWindow = EditorWindow.CreateWindow<AbilityGraphWindow>();
+            graphWindow._tmpGraph = CreateInstance<Runtime.AbilityGraph>();
+            graphWindow._tmpGraph.hideFlags = HideFlags.HideAndDontSave;
+            graphWindow.InitializeGraph(graphWindow._tmpGraph);
+            graphWindow.Show();
+            
+            return graphWindow;
+        }
 
-    public void CreateGUI()
-    {
-        // Each editor window contains a root VisualElement object
-        VisualElement root = rootVisualElement;
+        protected override void InitializeWindow(BaseGraph baseGraph)
+        {
+            // Set the window title
+            titleContent = new GUIContent("Default Graph");
 
-        // VisualElements objects can contain other VisualElement following a tree hierarchy.
-        VisualElement label = new Label("Hello World! From C#");
-        root.Add(label);
+            // Here you can use the default BaseGraphView or a custom one (see section below)
+            if (graphView == null)
+                graphView = new AbilityGraphView(this);
 
-        // Instantiate UXML
-        VisualElement labelFromUXML = m_VisualTreeAsset.Instantiate();
-        root.Add(labelFromUXML);
+            rootView.Add(graphView);
+        }
+
+        protected override void InitializeGraphView(BaseGraphView view)
+        {
+            view.OpenPinned<ExposedParameterView>();
+        }
     }
 }

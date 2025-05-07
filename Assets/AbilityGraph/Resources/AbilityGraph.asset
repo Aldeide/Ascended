@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a12d35abe94a98be47b61c7b78c028, type: 3}
+  m_Name: AbilityGraph
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 1400474455179788716
+  - rid: 1400474455179788717
+  edges:
+  - GUID: 91d5282f-af91-41e4-9ae5-a4c1dd4c4fa9
+    owner: {fileID: 11400000}
+    inputNodeGUID: f8662bc7-d19b-4b52-8e13-9040556bd796
+    outputNodeGUID: 9225e993-3ff0-4ad0-99f5-2e16fdb95c27
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1400474455179788716
+      type: {class: ActivateAbilityNode, ns: AbilityGraph.Runtime.Nodes, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 9225e993-3ff0-4ad0-99f5-2e16fdb95c27
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 327
+          y: 244
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 1400474455179788717
+      type: {class: DebugNode, ns: AbilityGraph.Runtime.Nodes, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: f8662bc7-d19b-4b52-8e13-9040556bd796
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 616
+          y: 262
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Message: Hi
