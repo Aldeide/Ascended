@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using AbilityGraph.Runtime.Nodes;
+using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using GraphProcessor;
@@ -10,17 +13,20 @@ namespace AbilityGraph.Runtime
     public class TestAbilityGraph : Ability
     {
         private readonly AbilityGraphDefinition _graphDefinition;
+        private readonly AbilityGraph _graph;
         private readonly ActivateAbilityNode _activateNode;
         private readonly EndAbilityNode _endNode;
+        private readonly GraphRunner _activateRunner;
         public TestAbilityGraph(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
-            Debug.Log("Creating Graph");
-            _graphDefinition = ability as AbilityGraphDefinition;
+            _graphDefinition = (ability as AbilityGraphDefinition);
+            _graph = _graphDefinition.graph;
             if (_graphDefinition != null)
             {
-                Debug.Log("Creating Graph not null");
-                _activateNode = _graphDefinition.graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
-                _endNode = _graphDefinition.graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
+                _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
+                _endNode = _graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
+                _graph.nodes.FindAll(n=>n is AbilityNode).ForEach(n=> (n as AbilityNode)?.Initialise(this));
+                _activateRunner = new GraphRunner(_activateNode);
             }
         }
 
@@ -28,12 +34,7 @@ namespace AbilityGraph.Runtime
         {
             Debug.Log("Activate graph!");
             if (_activateNode == null) return;
-            Debug.Log("Activate graph 2!");
-            var exec = _activateNode.GetExecutedNodes();
-            foreach (var n in exec)
-            {
-                n.OnProcess();
-            }
+            _activateRunner.Run();
         }
 
         public override void EndAbility()
@@ -45,5 +46,7 @@ namespace AbilityGraph.Runtime
                 n.OnProcess();
             }
         }
+        
+
     }
 }

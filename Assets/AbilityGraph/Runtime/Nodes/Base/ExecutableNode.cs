@@ -6,7 +6,7 @@ using GraphProcessor;
 namespace AbilityGraph.Runtime.Nodes.Base
 {
     [Serializable]
-    public abstract class ExecutableNode : BaseNode, IExecutableNode
+    public abstract class ExecutableNode : AbilityNode, IExecutableNode
     {
         [Input(name = "Executed", allowMultiple = true)]
         public ExecutableLink Executed;

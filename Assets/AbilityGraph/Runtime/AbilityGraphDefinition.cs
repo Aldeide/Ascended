@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AbilityGraph.Runtime
 {
-    [CreateAssetMenu(fileName = "AbilityGraph", menuName = "AbilitySystem/Abilities/AbilityGraph")]
+    [Serializable, CreateAssetMenu(fileName = "AbilityGraph", menuName = "AbilitySystem/Abilities/AbilityGraph")]
     public class AbilityGraphDefinition : AbilityDefinition
     {
         public AbilityGraph graph;
