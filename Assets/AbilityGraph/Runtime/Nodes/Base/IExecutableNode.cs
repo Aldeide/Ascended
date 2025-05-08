@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AbilityGraph.Runtime.Nodes.Base;
 
 namespace AbilityGraph.Runtime.Nodes
 {

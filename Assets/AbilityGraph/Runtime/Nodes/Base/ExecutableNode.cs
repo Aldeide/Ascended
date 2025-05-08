@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using GraphProcessor;
 
-namespace AbilityGraph.Runtime.Nodes
+namespace AbilityGraph.Runtime.Nodes.Base
 {
     [Serializable]
     public abstract class ExecutableNode : BaseNode, IExecutableNode
