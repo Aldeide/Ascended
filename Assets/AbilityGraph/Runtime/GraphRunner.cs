@@ -31,10 +31,10 @@ namespace AbilityGraph.Runtime
         
         private IEnumerator<BaseNode> RunGraph(Stack<BaseNode> nodesToExecute)
         {
-            HashSet<BaseNode> nodeDependenciesGathered = new HashSet<BaseNode>();
-            HashSet<BaseNode> skipConditionalHandling  = new HashSet<BaseNode>();
+            var nodeDependenciesGathered = new HashSet<BaseNode>();
+            var skipConditionalHandling  = new HashSet<BaseNode>();
 
-            while (nodesToExecute.Count > 0)
+            while (nodesToExecute.Count > 0 && _ability.IsActive)
             {
                 var node = nodesToExecute.Pop();
                 if(node is IExecutableNode && !skipConditionalHandling.Contains(node))
@@ -119,7 +119,7 @@ namespace AbilityGraph.Runtime
 
         IEnumerable<BaseNode> GatherNonConditionalDependencies(BaseNode node)
         {
-	        Stack<BaseNode> dependencies = new Stack<BaseNode>();
+	        var dependencies = new Stack<BaseNode>();
 
 	        dependencies.Push(node);
         
@@ -127,7 +127,7 @@ namespace AbilityGraph.Runtime
 	        {
 		        var dependency = dependencies.Pop();
 
-		        foreach (var d in dependency.GetInputNodes().Where(n => !(n is IExecutableNode)))
+		        foreach (var d in dependency.GetInputNodes().Where(n => n is not IExecutableNode))
 			        dependencies.Push(d);
 
 		        if (dependency != node)
