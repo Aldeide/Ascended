@@ -1,18 +1,16 @@
 {
-    "name": "AbilityGraph",
-    "rootNamespace": "",
+    "name": "com.alelievr.NodeGraphProcessor.Editor",
     "references": [
-        "GUID:fd228ffb3c18f7343b2fddb130915e28",
-        "GUID:a432eb0a70c5c4a37ab50d59671586f8",
         "GUID:ca937d03ee5dd4d699091438dc0f3ae6"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "versionDefines": []
 }

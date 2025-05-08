@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "com.alelievr.node-graph-processor": {
-      "version": "file:C:/Users/Anthony/Desktop/NodeGraphProcessor-master/Assets/com.alelievr.NodeGraphProcessor",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.unity.addressables": {
       "version": "2.4.3",
       "depth": 0,
