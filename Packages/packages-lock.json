@@ -6,20 +6,6 @@
       "source": "local",
       "dependencies": {}
     },
-    "com.gentlymad.graphviewbase": {
-      "version": "https://github.com/Gentlymad-Studios/GraphViewBase.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "7bd2aaa6b7a85bcc5f96720c309e286358a794bb"
-    },
-    "com.gentlymad.odinserializer": {
-      "version": "https://github.com/Gentlymad-Studios/OdinSerializer.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "162f7fc612972842c7a7324bb785998ff10c4821"
-    },
     "com.unity.addressables": {
       "version": "2.4.3",
       "depth": 0,
