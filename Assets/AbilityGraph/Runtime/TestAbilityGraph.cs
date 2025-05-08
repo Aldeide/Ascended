@@ -20,7 +20,7 @@ namespace AbilityGraph.Runtime
         public TestAbilityGraph(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
             _graphDefinition = (ability as AbilityGraphDefinition);
-            _graph = _graphDefinition.graph;
+            _graph = ScriptableObject.Instantiate(_graphDefinition.graph);
             if (_graphDefinition != null)
             {
                 _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
