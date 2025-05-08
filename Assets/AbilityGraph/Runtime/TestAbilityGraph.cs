@@ -27,7 +27,7 @@ namespace AbilityGraph.Runtime
                 _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
                 _endNode = _graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
                 _graph.nodes.FindAll(n=>n is AbilityNode).ForEach(n=> (n as AbilityNode)?.Initialise(this));
-                _activateRunner = new GraphRunner(_activateNode);
+                _activateRunner = new GraphRunner(_activateNode, this);
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using AbilityGraph.Runtime.Nodes;
 using AbilityGraph.Runtime.Nodes.Base;
+using AbilitySystem.Runtime.Abilities;
 using GraphProcessor;
 using UnityEngine;
 
@@ -9,20 +10,23 @@ namespace AbilityGraph.Runtime
 {
     public class GraphRunner
     {
-        private AbilityStartNode _startNode;
-        
-        public GraphRunner(AbilityStartNode node)
+        private readonly AbilityStartNode _startNode;
+        private readonly Ability _ability;
+        public GraphRunner(AbilityStartNode node, Ability ability)
         {
             _startNode = node;
+            _ability = ability;
         }
 
         public void Run()
         {
-            IEnumerator<BaseNode> enumerator;
-            Stack<BaseNode> nodesToExecute = new Stack<BaseNode>();
+	        var nodesToExecute = new Stack<BaseNode>();
             nodesToExecute.Push(_startNode);
-            enumerator = RunGraph(nodesToExecute);
-            while (enumerator.MoveNext());
+            var enumerator = RunGraph(nodesToExecute);
+            while (enumerator.MoveNext())
+            {
+	            if (!_ability.IsActive) return;
+            }
         }
         
         private IEnumerator<BaseNode> RunGraph(Stack<BaseNode> nodesToExecute)
