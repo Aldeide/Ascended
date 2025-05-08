@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.alelievr.node-graph-processor": "file:C:/Users/Anthony/Desktop/NodeGraphProcessor-master/Assets/com.alelievr.NodeGraphProcessor",
     "com.unity.addressables": "2.4.3",
     "com.unity.cinemachine": "2.10.3",
     "com.unity.collab-proxy": "2.7.1",
