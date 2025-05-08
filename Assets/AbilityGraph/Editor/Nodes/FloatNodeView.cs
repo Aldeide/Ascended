@@ -1,4 +1,5 @@
 ﻿using AbilityGraph.Runtime.Nodes;
+using AbilityGraph.Runtime.Nodes.Primitives;
 using GraphProcessor;
 using UnityEngine.UIElements;
 
