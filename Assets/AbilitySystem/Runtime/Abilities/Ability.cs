@@ -99,7 +99,7 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 IsActive = true;
                 ActiveCount++;
-                Owner.TagManager.ApplyAbilityTags(this);
+                Owner.TagManager.AddAbilityTags(this);
                 PredictionKey = key;
                 ApplyEffects();
                 Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags);
