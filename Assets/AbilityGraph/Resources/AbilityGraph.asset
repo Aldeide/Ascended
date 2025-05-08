@@ -21,6 +21,7 @@ MonoBehaviour:
   - rid: 4336599336265449739
   - rid: 4336599336265449740
   - rid: 4336599336265449741
+  - rid: 4336599336265449742
   edges:
   - GUID: 80434dd8-5e12-4c2b-962b-28649daf7f0c
     owner: {fileID: 11400000}
@@ -44,6 +45,22 @@ MonoBehaviour:
     outputNodeGUID: 2d47f8cb-4d73-445c-b4c6-f0c76159f82f
     inputFieldName: Executed
     outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: cf4b9fe0-206c-430e-83ce-3022bf23ee9d
+    owner: {fileID: 11400000}
+    inputNodeGUID: daac0993-f9bb-47d9-8f54-72fe10b607d8
+    outputNodeGUID: a19e8cba-e669-4ac8-acd2-29fcd94d3e43
+    inputFieldName: obj
+    outputFieldName: currentValue
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 36079031-ddd7-419b-9783-be56d777d13b
+    owner: {fileID: 11400000}
+    inputNodeGUID: daac0993-f9bb-47d9-8f54-72fe10b607d8
+    outputNodeGUID: e0c5177e-95c8-494b-844e-83be97e8cbbd
+    inputFieldName: Executed
+    outputFieldName: executeAfter
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -141,10 +158,10 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 297.60004
-          y: 236.95003
-          width: 126.99997
-          height: 74.999985
+          x: 350.90002
+          y: 238.15
+          width: 127
+          height: 75.00003
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -179,3 +196,20 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
+    - rid: 4336599336265449742
+      type: {class: DebugNode, ns: AbilityGraph.Runtime.Nodes.Utilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: daac0993-f9bb-47d9-8f54-72fe10b607d8
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 1589.6001
+          y: 221.84999
+          width: 193.00012
+          height: 123.00008
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: Log
+        logType: 3
