@@ -21,6 +21,7 @@ namespace AbilityGraph.Editor.Nodes
             });
 
             controlsContainer.Add(floatField);
+            DrawDefaultInspector();
         }
     }
 }

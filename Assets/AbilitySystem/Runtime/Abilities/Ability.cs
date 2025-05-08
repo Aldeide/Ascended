@@ -133,7 +133,7 @@ namespace AbilitySystem.Runtime.Abilities
             _onCancelAbility?.Invoke();
         }
 
-        protected virtual void CommitCostAndCooldown()
+        public virtual void CommitCostAndCooldown()
         {
             if (Definition.cost == null) return;
             Definition.cost.ToEffect(Owner, Owner).Execute();
