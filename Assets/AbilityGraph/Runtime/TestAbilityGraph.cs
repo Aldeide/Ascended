@@ -11,6 +11,7 @@ namespace AbilityGraph.Runtime
     {
         private readonly AbilityGraphDefinition _graphDefinition;
         private readonly ActivateAbilityNode _activateNode;
+        private readonly EndAbilityNode _endNode;
         public TestAbilityGraph(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
             Debug.Log("Creating Graph");
@@ -19,6 +20,7 @@ namespace AbilityGraph.Runtime
             {
                 Debug.Log("Creating Graph not null");
                 _activateNode = _graphDefinition.graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
+                _endNode = _graphDefinition.graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
             }
         }
 
@@ -36,7 +38,12 @@ namespace AbilityGraph.Runtime
 
         public override void EndAbility()
         {
-            
+            if (_endNode == null) return;
+            var exec = _endNode.GetExecutedNodes();
+            foreach (var n in exec)
+            {
+                n.OnProcess();
+            }
         }
     }
 }
