@@ -20,7 +20,6 @@ namespace AbilityGraph.Runtime
                 Debug.Log("Creating Graph not null");
                 _activateNode = _graphDefinition.graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
             }
-                
         }
 
         protected override void ActivateAbility(AbilityData data)
