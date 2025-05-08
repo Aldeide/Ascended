@@ -3,7 +3,7 @@ using AbilityGraph.Runtime.Nodes.Base;
 using GraphProcessor;
 using UnityEngine;
 
-namespace AbilityGraph.Runtime.Nodes
+namespace AbilityGraph.Runtime.Nodes.Utilities
 {
     [Serializable, NodeMenuItem("Utilities/Debug")]
     public class DebugNode : LinearExecutableNode

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AbilityGraph.Runtime.Nodes.Base;
+﻿using AbilityGraph.Runtime.Nodes.Base;
 using GraphProcessor;
 
-namespace AbilityGraph.Runtime.Nodes
+namespace AbilityGraph.Runtime.Nodes.Abilities
 {
     [System.Serializable, NodeMenuItem("Abilities/ActivateAbility")]
     public class ActivateAbilityNode : AbilityStartNode

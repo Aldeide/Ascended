@@ -1,7 +1,7 @@
 ﻿using System;
 using GraphProcessor;
 
-namespace AbilityGraph.Runtime.Nodes
+namespace AbilityGraph.Runtime.Nodes.Primitives
 {
     [Serializable]
     [NodeMenuItem("Primitives/Float")]

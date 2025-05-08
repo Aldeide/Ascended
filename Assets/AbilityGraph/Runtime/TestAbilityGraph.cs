@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using AbilityGraph.Runtime.Nodes;
+using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
