@@ -13,6 +13,7 @@ namespace AbilitySystem.Runtime.Tags
     {
         public List<GameplayTag> Tags = new();
         public Dictionary<GameplayTag, List<Effect>> EffectTags = new();
+        public Dictionary<GameplayTag, List<Ability>> AbilityTags = new();
         private IAbilitySystem _owner;
 
         private event Action OnTagsChanged;
@@ -48,6 +49,21 @@ namespace AbilitySystem.Runtime.Tags
             }
         }
 
+        public void AddAbilityTags(Ability ability)
+        {
+            foreach (var tag in ability.Definition.ActivationOwnedTags)
+            {
+                if (AbilityTags.ContainsKey(tag))
+                {
+                    AbilityTags[tag].Add(ability);
+                    continue;
+                }
+
+                AbilityTags[tag] = new List<Ability> { ability };
+            }
+            OnTagsChanged?.Invoke();
+        }
+
         public void RemoveEffectTags(Effect effect)
         {
             foreach (var tag in effect.Definition.grantedTags)
@@ -60,6 +76,23 @@ namespace AbilitySystem.Runtime.Tags
                 if (EffectTags[tag].Count == 0)
                 {
                     EffectTags.Remove(tag);
+                }
+            }
+        }
+
+        public void RemoveAbilityTags(Ability ability)
+        {
+            foreach (var tag in ability.Definition.ActivationOwnedTags)
+            {
+                if (AbilityTags.ContainsKey(tag))
+                {
+                    AbilityTags[tag].Remove(ability);
+                    OnTagsChanged?.Invoke();
+                }
+
+                if (AbilityTags[tag].Count == 0)
+                {
+                    AbilityTags.Remove(tag);
                 }
             }
         }
@@ -79,20 +112,22 @@ namespace AbilitySystem.Runtime.Tags
 
         public bool HasTag(GameplayTag gameplayTag)
         {
-            return Tags.Contains(gameplayTag) || EffectTags.ContainsKey(gameplayTag);
+            return Tags.Contains(gameplayTag) || EffectTags.ContainsKey(gameplayTag) ||
+                   AbilityTags.ContainsKey(gameplayTag);
         }
 
         public bool HasPartialTag(GameplayTag gameplayTag)
         {
             return Tags.Any(tag => gameplayTag.IsAncestorOf(tag)) ||
-                   EffectTags.Keys.Any(tag => gameplayTag.IsAncestorOf(tag));
+                   EffectTags.Keys.Any(tag => gameplayTag.IsAncestorOf(tag)) ||
+                   AbilityTags.Keys.Any(tag => gameplayTag.IsAncestorOf(tag));;
         }
 
         public bool HasAllTags(GameplayTagSet gameplayTags)
         {
             return gameplayTags.Tags.All(HasTag);
         }
-        
+
         public bool HasAllTags(GameplayTag[] gameplayTags)
         {
             return gameplayTags.All(HasTag);
@@ -107,29 +142,7 @@ namespace AbilitySystem.Runtime.Tags
         {
             return gameplayTags.Any(HasTag) || gameplayTags.Any(HasPartialTag);
         }
-
-        public void ApplyAbilityTags(Ability ability)
-        {
-            Debug.Log("Applying tags");
-            foreach (var tag in ability.Definition.ActivationOwnedTags)
-            {
-                Debug.Log(tag.GetName());
-                AddTag(tag);
-            }
-
-            OnTagsChanged?.Invoke();
-        }
-
-        public void RemoveAbilityTags(Ability ability)
-        {
-            foreach (var tag in ability.Definition.ActivationOwnedTags)
-            {
-                RemoveTag(tag);
-            }
-
-            OnTagsChanged?.Invoke();
-        }
-
+        
         public string DebugString()
         {
             var inherentTags = Tags.Aggregate("Inherent Tags\n", (current, tag) => current + (tag.GetName() + "\n"));
@@ -141,8 +154,15 @@ namespace AbilitySystem.Runtime.Tags
                     (current, effect) => current + (effect.Definition.name + " "));
                 effectTags += ")\n";
             }
-
-            return inherentTags + "\n" + effectTags;
+            var abilityTags = "Ability Tags\n";
+            foreach (var tag in AbilityTags)
+            {
+                abilityTags += tag.Key.GetName() + " (";
+                abilityTags = tag.Value.Aggregate(abilityTags,
+                    (current, ability) => current + (ability.Definition.name + " "));
+                abilityTags += ")\n";
+            }
+            return inherentTags + "\n" + effectTags + "\n" + abilityTags + "\n";
         }
     }
 }
