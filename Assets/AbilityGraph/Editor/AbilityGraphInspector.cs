@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace AbilityGraph.Editor
 {
-    [UnityEditor.CustomEditor(typeof(Runtime.AbilityGraph), true)]
+    [CustomEditor(typeof(Runtime.AbilityGraph), true)]
     public class AbilityGraphInspector : GraphInspector
     {
         protected override void CreateInspector()

@@ -11,7 +11,7 @@ namespace AbilityGraph.Editor
         [MenuItem("Window/01_DefaultGraph")]
         public static AbilityGraphWindow Open()
         {
-            var graphWindow = EditorWindow.CreateWindow<AbilityGraphWindow>();
+            var graphWindow = CreateWindow<AbilityGraphWindow>();
             graphWindow._tmpGraph = CreateInstance<Runtime.AbilityGraph>();
             graphWindow._tmpGraph.hideFlags = HideFlags.HideAndDontSave;
             graphWindow.InitializeGraph(graphWindow._tmpGraph);

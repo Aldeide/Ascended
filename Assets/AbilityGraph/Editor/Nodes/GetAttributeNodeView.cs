@@ -17,12 +17,16 @@ namespace AbilityGraph.Editor.Nodes
                 choices = attributeChoices.ToList()
             };
 
-            node.onProcessed += () => dropdown.value = node.attributeFullName;
+            if (node != null)
+            {
+                node.onProcessed += () => dropdown.value = node.attributeFullName;
 
-            dropdown.RegisterValueChangedCallback(v => {
-                owner.RegisterCompleteObjectUndo("Updated dropdown input");
-                node.attributeFullName = v.newValue;
-            });
+                dropdown.RegisterValueChangedCallback(v =>
+                {
+                    owner.RegisterCompleteObjectUndo("Updated dropdown input");
+                    node.attributeFullName = v.newValue;
+                });
+            }
 
             controlsContainer.Add(dropdown);
         }

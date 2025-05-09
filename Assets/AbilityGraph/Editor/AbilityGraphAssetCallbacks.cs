@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AbilityGraph.Editor
 {
-    public class AbilityGraphAssetCallbacks
+    public static class AbilityGraphAssetCallbacks
     {
         [MenuItem("Assets/Create/AbilityGraph", false, 10)]
         public static void CreateAbilityGraph()
