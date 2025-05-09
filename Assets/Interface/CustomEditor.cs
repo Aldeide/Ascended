@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CustomEditor : EditorWindow
+public class CustomEditorExample : EditorWindow
 {
     [SerializeField]
     private VisualTreeAsset m_VisualTreeAsset = default;
@@ -10,7 +10,7 @@ public class CustomEditor : EditorWindow
     [MenuItem("Window/UI Toolkit/CustomEditor")]
     public static void ShowExample()
     {
-        CustomEditor wnd = GetWindow<CustomEditor>();
+        CustomEditorExample wnd = GetWindow<CustomEditorExample>();
         wnd.titleContent = new GUIContent("CustomEditor");
     }
 
