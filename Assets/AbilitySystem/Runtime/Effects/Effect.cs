@@ -14,7 +14,6 @@ namespace AbilitySystem.Runtime.Effects
         public float Duration { get; private set; }
         public bool IsActive { get; set; }
         public float ActivationTime { get; set; }
-        
         public int NumStacks { get; set; }
         
         public IAbilitySystem Owner { get; private set; }
@@ -22,12 +21,10 @@ namespace AbilitySystem.Runtime.Effects
 
         public Dictionary<string, AttributeValue> OwnerAttributeSnapshot { get; private set; }
         public Dictionary<string, AttributeValue> SourceAttributeSnapshot { get; private set; }
-        
-        private EffectTicker _effectTicker = null;
         public Effect PeriodicEffect { get; private set; }
-        
         public PredictionKey PredictionKey { get; set; }
         
+        private readonly EffectTicker _effectTicker;
         public Effect(EffectDefinition definition)
         {
             Definition = definition;

@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void Tick()
         {
+            // Only the server ticks effects.
             if (!_owner.IsServer()) return;
             _effectSnapshot.AddRange(Effects);
             _effectSnapshot.ForEach(e=>e.Tick());
@@ -74,6 +75,7 @@ namespace AbilitySystem.Runtime.Effects
                     OnEffectAdded?.Invoke(effect);
                     return EffectApplicationResult.Success;
                 }
+                // TODO: aggregate by source.
             }
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);
@@ -116,11 +118,9 @@ namespace AbilitySystem.Runtime.Effects
         
         public void ReconcilePredictedEffect(PredictionKey predictionKey)
         {
-            if (PredictedEffects.TryGetValue(predictionKey.currentKey, out var confirmedEffects))
-            {
-                Effects.AddRange(confirmedEffects);
-                PredictedEffects.Remove(predictionKey.currentKey);
-            }
+            if (!PredictedEffects.TryGetValue(predictionKey.currentKey, out var confirmedEffects)) return;
+            Effects.AddRange(confirmedEffects);
+            PredictedEffects.Remove(predictionKey.currentKey);
         }
 
         public void RetractPredictedEffect(PredictionKey predictionKey)
