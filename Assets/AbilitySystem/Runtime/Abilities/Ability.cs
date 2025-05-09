@@ -188,5 +188,16 @@ namespace AbilitySystem.Runtime.Abilities
                 Owner.TagManager.RemoveTag(tag);
             }
         }
+
+        private bool HasActivationAuthority()
+        {
+            if (Definition.networkSecurityPolicy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
+            if (Owner.IsServer())
+            {
+                return true;
+            }
+            return Definition.networkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnlyTermination &&
+                   Owner.IsLocalClient();
+        }
     }
 }

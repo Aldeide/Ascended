@@ -54,7 +54,12 @@ namespace AbilitySystem.Runtime.Abilities
 
         [Space] [Title("Granted Effects")] public EffectDefinition[] grantedEffects;
 
-        [Space] [Title("Prediction")] public AbilityNetworkPolicy networkPolicy;
+        [Space] [Title("Network")]
+        public AbilityNetworkPolicy networkPolicy;
+
+        public AbilityNetworkSecurityPolicy networkSecurityPolicy;
+        
+        [HideInInspector]
         public AbilityTags AbilityTags;
 
         [Space] [Title("Cues")] public CueDefinition[] activationCues;
