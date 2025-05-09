@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
 using AbilitySystem.Runtime.Attributes;
@@ -23,6 +24,7 @@ namespace AbilitySystem.Runtime.Effects
         public Dictionary<string, AttributeValue> SourceAttributeSnapshot { get; private set; }
         public Effect PeriodicEffect { get; private set; }
         public PredictionKey PredictionKey { get; set; }
+        public Guid Guid;
         
         private readonly EffectTicker _effectTicker;
         public Effect(EffectDefinition definition)
