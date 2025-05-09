@@ -17,7 +17,7 @@ namespace AbilitySystem.Runtime.Abilities
         private PredictionKey _predictionKey;
 
         public Action OnAbilityGranted;
-        
+
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -50,7 +50,7 @@ namespace AbilitySystem.Runtime.Abilities
                 Debug.LogError("Failed to add ability: " + abilityDefinition.GetType().FullName + " / " + e.Message);
             }
         }
-        
+
         public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
         {
             Abilities.TryGetValue(name, out Ability ability);
@@ -75,8 +75,10 @@ namespace AbilitySystem.Runtime.Abilities
                     _owner.Component.ServerTryActivateAbilityRpc(name, key, data);
                     return true;
                 }
+
                 return false;
             }
+
             return false;
         }
 
@@ -118,7 +120,8 @@ namespace AbilitySystem.Runtime.Abilities
 
         public string DebugString()
         {
-            return Abilities.Keys.Aggregate("Abilities\n", (current, ability) => current + (ability + "\n"));
+            return Abilities.Keys.Aggregate("Abilities\n",
+                (current, ability) => current + (ability + " (" + Abilities[ability].IsActive + ")\n"));
         }
     }
 }

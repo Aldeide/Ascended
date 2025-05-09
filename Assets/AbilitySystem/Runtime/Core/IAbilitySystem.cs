@@ -1,4 +1,5 @@
-﻿using AbilitySystem.Runtime.Abilities;
+﻿using System;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
@@ -14,7 +15,7 @@ namespace AbilitySystem.Runtime.Core
         public EffectManager EffectManager { get; set; }
         public AbilityManager AbilityManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
-
+        
         public void Initialise(AbilitySystemComponent component);
         
         public void Tick();
