@@ -1,5 +1,4 @@
-﻿using AbilityGraph.Runtime.Nodes;
-using AbilityGraph.Runtime.Nodes.Primitives;
+﻿using AbilityGraph.Runtime.Nodes.Primitives;
 using GraphProcessor;
 using UnityEngine.UIElements;
 
@@ -8,20 +7,22 @@ namespace AbilityGraph.Editor.Nodes
     [NodeCustomEditor(typeof(FloatNode))]
     public class FloatNodeView : BaseNodeView {
         public override void Enable() {
-            var floatNode = nodeTarget as FloatNode;
+            if (nodeTarget is FloatNode floatNode)
+            {
+                var floatField = new DoubleField {
+                    value = floatNode.input
+                };
 
-            var floatField = new DoubleField {
-                value = floatNode.input
-            };
+                floatNode.onProcessed += () => floatField.value = floatNode.input;
 
-            floatNode.onProcessed += () => floatField.value = floatNode.input;
+                floatField.RegisterValueChangedCallback(v => {
+                    owner.RegisterCompleteObjectUndo("Updated floatNode input");
+                    floatNode.input = (float)v.newValue;
+                });
 
-            floatField.RegisterValueChangedCallback(v => {
-                owner.RegisterCompleteObjectUndo("Updated floatNode input");
-                floatNode.input = (float)v.newValue;
-            });
+                controlsContainer.Add(floatField);
+            }
 
-            controlsContainer.Add(floatField);
             DrawDefaultInspector();
         }
     }
