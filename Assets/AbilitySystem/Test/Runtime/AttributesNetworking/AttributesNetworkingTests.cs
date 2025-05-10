@@ -28,5 +28,19 @@ namespace AbilitySystem.Test.Runtime.AttributesNetworking
                     x.NotifyClientsAttributeBaseValueChanged(attribute, 100f, 400f),
                 Times.Once);
         }
+
+        [Test]
+        public void AttributesNetworkingTests_ClientChangesBaseAttribute_NoUpdatesSent()
+        {
+            var owner = CreateMockClientAbilitySystem();
+            var attribute = owner.Object.AttributeSetManager.GetAttribute("Health");
+
+            attribute.SetBaseValue(400f);
+
+            owner.Verify(x =>
+                    x.ReplicationManager.NotifyClientsAttributeBaseValueChanged(It.IsAny<AbilitySystem.Runtime.Attributes.Attribute>(),
+                        It.IsAny<float>(), It.IsAny<float>()),
+                Times.Never);
+        }
     }
 }
