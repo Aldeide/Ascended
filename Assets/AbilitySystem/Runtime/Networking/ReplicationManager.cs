@@ -9,6 +9,7 @@ namespace AbilitySystem.Runtime.Networking
     {
         private readonly IAbilitySystem _owner;
         private readonly AbilitySystemComponent _networkBehaviour;
+
         public ReplicationManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -16,6 +17,8 @@ namespace AbilitySystem.Runtime.Networking
             if (_owner.IsServer())
             {
                 _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
+                _owner.AttributeSetManager.OnAnyAttributeCurrentValueChanged +=
+                    NotifyClientsAttributeCurrentValueChanged;
             }
         }
 
@@ -27,6 +30,16 @@ namespace AbilitySystem.Runtime.Networking
         public void OnAttributeBaseValueChanged(string attributeName, float newValue)
         {
             _owner.AttributeSetManager.GetAttribute(attributeName)?.SetBaseValue(newValue);
+        }
+
+        public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            _networkBehaviour.NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
+        }
+
+        public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
+        {
+            _owner.AttributeSetManager.GetAttribute(attributeName)?.SetCurrentValue(newValue);
         }
     }
 }

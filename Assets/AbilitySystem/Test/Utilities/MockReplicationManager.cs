@@ -29,5 +29,15 @@ namespace AbilitySystem.Test.Utilities
         {
             
         }
+
+        public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
