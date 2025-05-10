@@ -3,6 +3,7 @@ using System.Linq;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Attributes
 {

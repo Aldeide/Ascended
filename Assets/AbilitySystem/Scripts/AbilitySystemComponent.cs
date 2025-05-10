@@ -62,7 +62,7 @@ namespace AbilitySystem.Scripts
         {
             if (IsServer && ! IsHost)
             {
-                NotifyClientsBaseValueChangedRpc(attribute.GetName(), oldValue, newValue);
+                NotifyClientsBaseValueChangedRpc(attribute.GetName(), newValue);
             }
         }
         
@@ -75,9 +75,9 @@ namespace AbilitySystem.Scripts
         }
 
         [Rpc(SendTo.NotServer)]
-        public void NotifyClientsBaseValueChangedRpc(string attributeName, float oldValue, float newValue)
+        public void NotifyClientsBaseValueChangedRpc(string attributeName, float newValue)
         {
-            AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetBaseValue(newValue);
+            AbilitySystem.ReplicationManager.OnAttributeBaseValueChanged(attributeName, newValue);
         }
         
         [Rpc(SendTo.NotServer)]

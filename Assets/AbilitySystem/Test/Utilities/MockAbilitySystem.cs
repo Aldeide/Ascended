@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
 
@@ -15,6 +16,7 @@ namespace AbilitySystem.Test.Utilities
         EffectManager IAbilitySystem.EffectManager { get; set; }
         AbilityManager IAbilitySystem.AbilityManager { get; set; }
         AttributeSetManager IAbilitySystem.AttributeSetManager { get; set; }
+        public IReplicationManager ReplicationManager { get; set; }
         public void Initialise(AbilitySystemComponent component)
         {
             throw new System.NotImplementedException();
