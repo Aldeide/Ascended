@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
 using Unity.Netcode;
@@ -16,13 +17,14 @@ namespace AbilitySystem.Runtime.Core
         public AbilityManager AbilityManager { get; set; }
         public GameplayTagManager TagManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
-
+        public IReplicationManager ReplicationManager { get; set; }
         public AbilitySystemManager()
         {
             AttributeSetManager = new AttributeSetManager(this);
             EffectManager = new EffectManager(this);
             AbilityManager = new AbilityManager(this);
             TagManager = new GameplayTagManager(this);
+            ReplicationManager = new ReplicationManager(this);
         }
 
         public void Initialise(AbilitySystemComponent component)
