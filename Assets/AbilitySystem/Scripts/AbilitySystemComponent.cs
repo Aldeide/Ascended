@@ -33,8 +33,7 @@ namespace AbilitySystem.Scripts
             _effectLibrary = GameObject.Find("DataManager").GetComponent<EffectDefinitionLibrary>();
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
-            AbilitySystem = new AbilitySystemManager();
-            AbilitySystem.Initialise(this);
+            AbilitySystem = new AbilitySystemManager(this);
             foreach (var attributeSet in definition.attributeSets)
             {
                 Type type = ReflectionUtil.GetAttributeSetType(attributeSet);

@@ -17,8 +17,6 @@ namespace AbilitySystem.Runtime.Core
         public AbilityManager AbilityManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
-        public void Initialise(AbilitySystemComponent component);
-        
         public void Tick();
 
         public float GetTime();

@@ -13,9 +13,9 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         public MetaAttributeSet(IAbilitySystem owner) : base(owner)
         {
             Name = nameof(MetaAttributeSet);
-            AbilityCooldown = new Attribute("AbilityCooldown", owner, this,0);
-            AbilityCost = new Attribute("AbilityCost", owner, this,0);
-            EffectDuration = new Attribute("EffectDuration", owner, this,0);
+            AbilityCooldown = new Attribute("AbilityCooldown", this,0);
+            AbilityCost = new Attribute("AbilityCost", this,0);
+            EffectDuration = new Attribute("EffectDuration", this,0);
             
             AddAttribute(AbilityCooldown);
             AddAttribute(AbilityCost);

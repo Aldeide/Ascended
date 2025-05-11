@@ -14,12 +14,10 @@ namespace AbilitySystem.Runtime.Networking
         {
             _owner = owner;
             _networkBehaviour = owner.Component;
-            if (_owner.IsServer())
-            {
-                _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
-                _owner.AttributeSetManager.OnAnyAttributeCurrentValueChanged +=
-                    NotifyClientsAttributeCurrentValueChanged;
-            }
+
+            _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
+            _owner.AttributeSetManager.OnAnyAttributeCurrentValueChanged +=
+                NotifyClientsAttributeCurrentValueChanged;
         }
 
         public void NotifyClientsAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)

@@ -17,10 +17,6 @@ namespace AbilitySystem.Test.Utilities
         AbilityManager IAbilitySystem.AbilityManager { get; set; }
         AttributeSetManager IAbilitySystem.AttributeSetManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
-        public void Initialise(AbilitySystemComponent component)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public void Tick()
         {

@@ -17,12 +17,12 @@ namespace AbilitySystem.Test.Utilities
         public TestAttributeSet(IAbilitySystem owner) : base(owner)
         {
             Name = nameof(TestAttributeSet);
-            Health = new Attribute("Health", owner, this,100);
-            MaxHealth = new Attribute("MaxHealth", owner, this,150);
-            Energy = new Attribute("Energy", owner, this,200);
-            MaxEnergy = new Attribute("MaxEnergy", owner, this,300);
-            MovementSpeed = new Attribute("MovementSpeed", owner, this,4);
-            AbilityCost = new Attribute("AbilityCost", owner, this, 0);
+            Health = new Attribute("Health", this,100);
+            MaxHealth = new Attribute("MaxHealth", this,150);
+            Energy = new Attribute("Energy", this,200);
+            MaxEnergy = new Attribute("MaxEnergy", this,300);
+            MovementSpeed = new Attribute("MovementSpeed", this,4);
+            AbilityCost = new Attribute("AbilityCost", this, 0);
             
             AddAttribute(Health);
             AddAttribute(MaxHealth);
