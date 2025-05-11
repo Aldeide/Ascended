@@ -66,6 +66,7 @@ public class AbilitySystemDebugWindow : EditorWindow
     
     private string DisplayData()
     {
+        if (_inspectedAsc == null) return "";
         var output = _inspectedAsc.AttributeSetManager.DebugString() + "\n\n";
         output += _inspectedAsc.EffectManager.DebugString() + "\n\n";
         output += _inspectedAsc.AbilityManager.DebugString() + "\n\n";
