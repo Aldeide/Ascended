@@ -9,7 +9,6 @@ namespace AbilitySystem.Runtime.Attributes
 {
     public class Attribute : INetworkSerializable
     {
-        private IAbilitySystem _owner;
         private AttributeSet _attributeSet;
         private AttributeValue _value;
         private string _name;
@@ -22,11 +21,10 @@ namespace AbilitySystem.Runtime.Attributes
         public Func<Attribute, float, float> OnAttributeCurrentValuePreChange;
         public Action<Attribute, float, float> OnAttributeCurrentValueChanged;
 
-        public Attribute(string name, IAbilitySystem owner, AttributeSet attributeSet, float baseValue,
+        public Attribute(string name, AttributeSet attributeSet, float baseValue,
             float minValue = float.MinValue, float maxValue = float.MaxValue)
         {
             _name = name;
-            _owner = owner;
             _attributeSet = attributeSet;
             _value = new AttributeValue(baseValue, minValue, maxValue);
         }

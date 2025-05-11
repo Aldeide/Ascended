@@ -18,18 +18,14 @@ namespace AbilitySystem.Runtime.Core
         public GameplayTagManager TagManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
-        public AbilitySystemManager()
+        public AbilitySystemManager(AbilitySystemComponent component)
         {
+            Component = component;
             AttributeSetManager = new AttributeSetManager(this);
             EffectManager = new EffectManager(this);
             AbilityManager = new AbilityManager(this);
             TagManager = new GameplayTagManager(this);
             ReplicationManager = new ReplicationManager(this);
-        }
-
-        public void Initialise(AbilitySystemComponent component)
-        {
-            Component = component;
         }
 
         public void Tick()
