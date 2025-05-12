@@ -15,6 +15,7 @@ namespace AbilitySystem.Test.Utilities
         GameplayTagManager IAbilitySystem.TagManager { get; set; }
         EffectManager IAbilitySystem.EffectManager { get; set; }
         AbilityManager IAbilitySystem.AbilityManager { get; set; }
+        CueManager IAbilitySystem.CueManager { get; set; }
         AttributeSetManager IAbilitySystem.AttributeSetManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
 
