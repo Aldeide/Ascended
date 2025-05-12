@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Common;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
@@ -9,7 +8,6 @@ namespace AbilitySystem.Runtime.Cues
     public class CueManager
     {
         private readonly IAbilitySystem _owner;
-        private CueDefinitionLibrary _cueLibrary;
 
         public Action<CueDefinition, CueData> OnCueAdd;
         public Action<CueDefinition, CueData> OnCueRemove;
@@ -20,17 +18,12 @@ namespace AbilitySystem.Runtime.Cues
             _owner = owner;
         }
 
-        public void Initialise(CueDefinitionLibrary cueLibrary)
-        {
-            _cueLibrary = cueLibrary;
-        }
-
         public void OnCueReceived(GameplayTag cueTag, CueAction cueAction, CueData cueData)
         {
-            // Don't execute cues on the server.
+            // Don't play cues on the server.
             if (_owner.IsServer() && !_owner.IsHost()) return;
             
-            var cueDefinition = _cueLibrary.GetCueByTag(cueTag);
+            var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
             switch(cueAction)
             {
                 case CueAction.Add:

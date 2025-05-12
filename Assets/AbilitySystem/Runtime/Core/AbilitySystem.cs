@@ -17,6 +17,7 @@ namespace AbilitySystem.Runtime.Core
         public AbilityManager AbilityManager { get; set; }
         public GameplayTagManager TagManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
+        public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
         public AbilitySystemManager(AbilitySystemComponent component)
         {
@@ -25,6 +26,7 @@ namespace AbilitySystem.Runtime.Core
             EffectManager = new EffectManager(this);
             AbilityManager = new AbilityManager(this);
             TagManager = new GameplayTagManager(this);
+            CueManager = new CueManager(this);
             ReplicationManager = new ReplicationManager(this);
         }
 
