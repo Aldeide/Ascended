@@ -756,6 +756,7 @@ GameObject:
   - component: {fileID: 252805271}
   - component: {fileID: 252805272}
   - component: {fileID: 252805273}
+  - component: {fileID: 252805274}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -800,6 +801,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd82c0fe55e3455e87277029d48f867a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &252805274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252805269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f95e27a7b504f96a0be208fea85664f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &266857299
@@ -1970,50 +1983,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046469885}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1070285926
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1070285928}
-  - component: {fileID: 1070285927}
-  m_Layer: 0
-  m_Name: ClientServerManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1070285927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070285926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c6cf1d71a69425390b6c227d82bb3b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1070285928
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070285926}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -3559,6 +3528,7 @@ GameObject:
   - component: {fileID: 1657296707}
   - component: {fileID: 1657296706}
   - component: {fileID: 1657296705}
+  - component: {fileID: 1657296708}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -3656,6 +3626,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657296703}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1657296708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657296703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 1
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 1
+  m_TileSize: 16
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: ff19bedce1fbe4a4695a0d78a306b870, type: 2}
+  m_BuildHeightMesh: 1
 --- !u!1 &1714869489
 GameObject:
   m_ObjectHideFlags: 0
@@ -5496,23 +5498,22 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 252805271}
   - {fileID: 313761475}
   - {fileID: 1046469887}
   - {fileID: 1868660238}
+  - {fileID: 1714869491}
+  - {fileID: 511018119}
+  - {fileID: 450305593}
   - {fileID: 1294071011}
   - {fileID: 655547736}
   - {fileID: 55868338}
-  - {fileID: 1070285928}
   - {fileID: 1078961100}
-  - {fileID: 1714869491}
   - {fileID: 1531216913}
-  - {fileID: 511018119}
   - {fileID: 1836180781}
   - {fileID: 1159289527}
   - {fileID: 1650948189}
   - {fileID: 1785110510}
-  - {fileID: 450305593}
-  - {fileID: 252805271}
   - {fileID: 1185348885}
   - {fileID: 2026079181}
   - {fileID: 2233086887728033647}
