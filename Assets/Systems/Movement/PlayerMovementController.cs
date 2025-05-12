@@ -25,7 +25,7 @@ namespace Systems.Movement
         private float _movementSpeed;
         
         public float turnSmoothTime = 0.1f;   
-        private float _turnSmoothVelocity = 2.0f;
+        private float _turnSmoothVelocity = 0.2f;
         private bool _isAiming;
         private UnityEngine.Camera _camera;
 
@@ -98,8 +98,8 @@ namespace Systems.Movement
                 _animator.SetBool("IsMoving", true);
                 if (_isAiming)
                 {
-                    _animator.SetFloat("MovementX", _movementInput.x);
-                    _animator.SetFloat("MovementY", _movementInput.z);
+                    _animator.SetFloat("MovementX", _movementInput.x, 0.2f, Time.deltaTime);
+                    _animator.SetFloat("MovementY", _movementInput.z,0.2f, Time.deltaTime);
                 }
                 else
                 {
