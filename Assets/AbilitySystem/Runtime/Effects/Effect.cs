@@ -127,6 +127,11 @@ namespace AbilitySystem.Runtime.Effects
             return Definition.durationType != EffectDurationType.Instant;
         }
 
+        public bool IsPredicted()
+        {
+            return PredictionKey.IsValidKey();
+        }
+
         public string DebugString()
         {
             var typeDuration = "";
