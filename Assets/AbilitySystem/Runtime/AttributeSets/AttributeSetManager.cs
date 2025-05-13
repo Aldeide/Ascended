@@ -10,6 +10,10 @@ using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Runtime.AttributeSets
 {
+    /// <summary>
+    /// Manages the lifecycle and operations of attribute sets and their values within an ability system.
+    /// Provides functionality to add, retrieve, and manipulate attribute sets and their associated attributes.
+    /// </summary>
     public class AttributeSetManager
     {
         public Action<Attribute, float, float> OnAnyAttributeBaseValueChanged;
