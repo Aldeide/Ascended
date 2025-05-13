@@ -40,7 +40,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             var activeEffects = Effects.Where(effect => effect.IsActive).ToList();
     
-            foreach (List<Effect> effectList in PredictedEffects.Values)
+            foreach (var effectList in PredictedEffects.Values)
             {
                 activeEffects.AddRange(effectList.Where(effect => effect.IsActive));
             }
