@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Cues
 {
@@ -29,6 +30,7 @@ namespace AbilitySystem.Runtime.Cues
         /// <param name="cueData">The data associated with the cue, including positional and normal information.</param>
         public void OnCueReceived(GameplayTag cueTag, CueAction cueAction, CueData cueData)
         {
+            Debug.Log("Received Cue: " + cueTag + " / " + cueAction + " / " + cueData + " /");
             // Don't play cues on the server.
             if (_owner.IsServer() && !_owner.IsHost()) return;
             

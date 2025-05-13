@@ -6,6 +6,7 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Runtime.Utilities;
 using Unity.Netcode;
 using UnityEditor.Presets;
@@ -182,8 +183,10 @@ namespace AbilitySystem.Scripts
 
         // TODO: only send to observers if cue is predicted.
         [Rpc(SendTo.Everyone)]
-        public void ObserversPlayCueRpc(string cueTag)
+        public void ObserversPlayCueRpc(string cueTag, CueData data)
         {
+            var gameplayTag = new GameplayTag(cueTag);
+            AbilitySystem.CueManager.OnCueReceived(gameplayTag, CueAction.Execute, data);
             _cueManagerComponent.PlayCue(cueTag);
         }
         
