@@ -5,6 +5,9 @@ using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Runtime.Cues
 {
+    /// <summary>
+    /// Manages the lifecycle of gameplay cues, handling their addition, removal, and execution.
+    /// </summary>
     public class CueManager
     {
         private readonly IAbilitySystem _owner;
@@ -18,6 +21,12 @@ namespace AbilitySystem.Runtime.Cues
             _owner = owner;
         }
 
+        /// <summary>
+        /// Processes a gameplay cue based on its tag, action, and data, and invokes the appropriate operation for the cue.
+        /// </summary>
+        /// <param name="cueTag">The tag that identifies the specific cue.</param>
+        /// <param name="cueAction">The action to perform on the cue (Add, Remove, or Execute).</param>
+        /// <param name="cueData">The data associated with the cue, including positional and normal information.</param>
         public void OnCueReceived(GameplayTag cueTag, CueAction cueAction, CueData cueData)
         {
             // Don't play cues on the server.
