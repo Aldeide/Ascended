@@ -8,6 +8,12 @@ using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Runtime.Abilities
 {
+    /// <summary>
+    /// Represents a base class for defining abilities in the ability system.
+    /// This class provides core functionality for managing ability lifecycle,
+    /// activation, cancellation, cooldowns, and interaction with the owning
+    /// system or entity.
+    /// </summary>
     public abstract class Ability
     {
         protected AbilityData AbilityArguments;

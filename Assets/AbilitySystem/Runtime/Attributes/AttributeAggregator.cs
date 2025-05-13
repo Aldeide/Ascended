@@ -8,6 +8,11 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Attributes
 {
+    /// <summary>
+    /// The AttributeAggregator class serves as a mechanism for aggregating and managing attribute modifiers.
+    /// It is responsible for tracking and updating the values of specified attributes based on effects and modifiers
+    /// applied to an entity within an ability system.
+    /// </summary>
     public class AttributeAggregator
     {
         private readonly Attribute _attribute;

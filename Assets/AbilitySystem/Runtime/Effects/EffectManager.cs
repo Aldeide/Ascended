@@ -131,7 +131,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public Effect GetEffect(GameplayTag assetTag)
         {
-            return Effects.Find(e=>e.Definition.assetTags.Contains(assetTag));
+            return Effects.FirstOrDefault(e=>e.Definition.assetTags.Contains(assetTag));
         }
 
         public string DebugString()
