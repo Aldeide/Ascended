@@ -63,7 +63,9 @@ namespace AbilitySystem.Runtime.Core
 
         public void PlayCue(CueDefinition cue)
         {
-            Component.ObserversPlayCueRpc(cue.cueTag.GetName());
+            var test = new CueData();
+            test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
+            Component.ObserversPlayCueRpc(cue.cueTag.GetName(), test);
         }
 
         public void PlayCue(CueDefinition cue, CueData data)

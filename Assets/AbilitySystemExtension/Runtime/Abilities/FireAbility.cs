@@ -21,7 +21,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             if (impact)
             {
                 CueData data = new CueData();
-                data.position = target;
+                data.VectorData = new[] {target, muzzle};
                 Owner.PlayCue(impact, data);
             }
 

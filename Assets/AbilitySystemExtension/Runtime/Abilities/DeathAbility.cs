@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Abilities
@@ -18,7 +19,9 @@ namespace AbilitySystemExtension.Runtime.Abilities
             Debug.Log("Death ability activated");
             if (Owner.IsServer())
             {
-                Owner.Component.ObserversPlayCueRpc("Cue.Animation.State.Player.Death");
+                var test = new CueData();
+                test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
+                Owner.Component.ObserversPlayCueRpc("Cue.Animation.State.Player.Death", test);
             }
         }
 
