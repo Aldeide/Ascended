@@ -1,13 +1,19 @@
 ﻿using System;
 using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Scripts
 {
     [RequireComponent(typeof(Animator))]
-    public class AnimatorCuePlayer : MonoBehaviour
+    public class AnimatorCuePlayer : MonoBehaviour, ICueListener
     {
+        public GameplayTag[] TagFilter { get; set; }
+        [ShowInInspector]
+        public GameplayTagQuery TagQuery { get; set; }
+        
         private Animator _animator;
         private CueManagerComponent _cueManager;
         
@@ -26,5 +32,7 @@ namespace AbilitySystemExtension.Scripts
             Debug.Log("Player layer: " + stateName);
             _animator.Play(stateName);
         }
+
+
     }
 }

@@ -5,5 +5,7 @@ namespace AbilitySystem.Runtime.Cues
     public interface ICueListener
     {
         public GameplayTag[] TagFilter { get; set; }
+        
+        public GameplayTagQuery TagQuery { get; set; }
     }
 }
