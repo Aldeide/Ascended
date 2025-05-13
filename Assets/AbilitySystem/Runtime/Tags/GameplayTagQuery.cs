@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Sirenix.OdinInspector;
 
 namespace AbilitySystem.Runtime.Tags
 {
@@ -17,12 +18,18 @@ namespace AbilitySystem.Runtime.Tags
         {
             return Condition.All(condition => condition.MatchesTag(tag));
         }
+        
+        public bool MatchesTags(GameplayTag[] tags)
+        {
+            return Condition.All(condition => condition.MatchesTags(tags));
+        }
     }
 
     [Serializable]
     public struct GameplayTagCondition
     {
         public GameplayTagMatchType MatchType;
+        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] Tags;
 
         public GameplayTagCondition(GameplayTagMatchType matchType, params GameplayTag[] tags)
@@ -39,6 +46,17 @@ namespace AbilitySystem.Runtime.Tags
             if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => t.HasTag(tag))) return true;
             if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => t.HasTag(tag))) return true;
             if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => t.HasTag(tag))) return true;
+            return false;
+        }
+
+        public bool MatchesTags(GameplayTag[] tags)
+        {
+            if (MatchType == GameplayTagMatchType.AnyOfExact && Tags.Any(t => tags.Any(tag => tag.Equals(t)))) return true;
+            if (MatchType == GameplayTagMatchType.AllOfExact && Tags.All(t => tags.Any(tag => tag.Equals(t)))) return true;
+            if (MatchType == GameplayTagMatchType.NoneOfExact && !Tags.Any(t => tags.Any(tag => tag.Equals(t)))) return true;
+            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => tags.Any(tag => t.HasTag(tag)))) return true;
+            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => tags.Any(tag => t.HasTag(tag)))) return true;
+            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => tags.Any(tag => t.HasTag(tag)))) return true;
             return false;
         }
     }
