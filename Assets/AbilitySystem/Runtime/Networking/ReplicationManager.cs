@@ -1,7 +1,10 @@
 ﻿using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Networking
 {
@@ -38,6 +41,16 @@ namespace AbilitySystem.Runtime.Networking
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
         {
             _owner.AttributeSetManager.GetAttribute(attributeName)?.SetCurrentValue(newValue);
+        }
+
+        public void NotifyClientsPlayCue(GameplayTag cueTag, CueAction cueAction, CueData cueData)
+        {
+            _networkBehaviour.NotifyClientsPlayCueRpc(cueTag, cueAction, cueData);
+        }
+
+        public void ReceivedPlayCue(GameplayTag cueTag, CueAction cueAction, CueData cueData)
+        {
+            Debug.Log("Received Cue: " + cueTag + " / " + cueAction + " / " + cueData + " /");
         }
     }
 }
