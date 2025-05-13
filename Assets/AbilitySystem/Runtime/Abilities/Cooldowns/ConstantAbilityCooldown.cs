@@ -1,4 +1,5 @@
 ﻿using System;
+using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities.Cooldowns
@@ -6,21 +7,9 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
     [Serializable]
     public class ConstantAbilityCooldown : AbilityCooldown
     {
-        public override float Calculate()
+        public override float Calculate(IAbilitySystem owner)
         {
             return BaseDuration;
-        }
-
-        public override float RemainingCooldown()
-        {
-            return _currentCooldown;
-        }
-
-        public override void Tick()
-        {
-            if (_currentCooldown == 0) return;
-            _currentCooldown -= Time.deltaTime;
-            if (_currentCooldown < 0) _currentCooldown = 0;
         }
     }
 }

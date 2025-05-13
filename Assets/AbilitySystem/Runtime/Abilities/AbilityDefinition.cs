@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
@@ -28,7 +29,11 @@ namespace AbilitySystem.Runtime.Abilities
         [ShowInInspector] public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
         public string uniqueName;
 
-        public EffectDefinition cost;
+        [Space]
+        [Title("Cost and Cooldown")]
+        public EffectDefinition Cost;
+        [SerializeReference]
+        public AbilityCooldown Cooldown;
 
         [SerializeReference]
         public AbilityActivation.AbilityActivation abilityActivation;
