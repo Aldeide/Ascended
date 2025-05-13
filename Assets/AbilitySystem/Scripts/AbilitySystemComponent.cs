@@ -196,5 +196,11 @@ namespace AbilitySystem.Scripts
         {
             _cueManagerComponent.PlayCue(cueTag, data);
         }
+        
+        [Rpc(SendTo.ClientsAndHost)]
+        public void NotifyClientsPlayCueRpc(GameplayTag cueTag, CueAction cueAction, CueData cueData)
+        {
+            AbilitySystem.ReplicationManager.ReceivedPlayCue(cueTag, cueAction, cueData);
+        }
     }
 }

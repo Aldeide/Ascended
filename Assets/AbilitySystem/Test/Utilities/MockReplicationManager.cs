@@ -1,6 +1,8 @@
 ﻿using System;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Runtime.Tags;
 using UnityEngine;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
@@ -36,6 +38,16 @@ namespace AbilitySystem.Test.Utilities
         }
 
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyClientsPlayCue(GameplayTag cueTag, CueAction action, CueData data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReceivedPlayCue(GameplayTag cueTag, CueAction action, CueData data)
         {
             throw new NotImplementedException();
         }
