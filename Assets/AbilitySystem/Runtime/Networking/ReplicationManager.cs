@@ -54,6 +54,7 @@ namespace AbilitySystem.Runtime.Networking
         public void ReceivedPlayCue(GameplayTag cueTag, CueAction cueAction, CueData cueData)
         {
             Debug.Log("Received Cue: " + cueTag + " / " + cueAction + " / " + cueData + " /");
+            _owner.CueManager.OnCueReceived(cueTag, cueAction, cueData);
         }
     }
 }
