@@ -16,7 +16,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
     {
         public override float Calculate(IAbilitySystem owner)
         {
-            return BaseDuration;
+            return CooldownEffect.durationSeconds;
         }
     }
 }
