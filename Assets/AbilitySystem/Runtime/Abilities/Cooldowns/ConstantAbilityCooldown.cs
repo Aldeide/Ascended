@@ -1,6 +1,5 @@
 ﻿using System;
 using AbilitySystem.Runtime.Core;
-using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities.Cooldowns
 {
@@ -9,7 +8,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
     /// </summary>
     /// <remarks>
     /// This class inherits from <see cref="AbilityCooldown"/> and overrides the cooldown calculation
-    /// behavior to return a fixed duration specified by <c>BaseDuration</c>.
+    /// behavior to return a fixed duration specified by the cooldown effect's duration.
     /// </remarks>
     [Serializable]
     public class ConstantAbilityCooldown : AbilityCooldown

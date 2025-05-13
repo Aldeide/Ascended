@@ -17,7 +17,7 @@ MonoBehaviour:
   uniqueName: TestAbilityGraph
   Cost: {fileID: 0}
   Cooldown:
-    rid: 1400474609048879411
+    rid: 1400474609048879418
   abilityActivation:
     rid: -2
   AssetTags: []
@@ -36,14 +36,18 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1400474609048879411
-      type: {class: ConstantAbilityCooldown, ns: AbilitySystem.Runtime.Abilities.Cooldowns, asm: AbilitySystem}
+    - rid: 1400474609048879418
+      type: {class: AttributeDrivenAbilityCooldown, ns: AbilitySystem.Runtime.Abilities.Cooldowns, asm: AbilitySystem}
       data:
-        BaseDuration: 5
-        CooldownTag:
-          name: Cooldown.Ability.Test
-          hashCode: -352825783
-          ancestorsNames:
-          - Cooldown
-          - Cooldown.Ability
-          ancestorsHashCodes: 1d66983da9a35ca7
+        CooldownEffect: {fileID: 11400000, guid: b23a936049bb4324488c46ec2cbb3c6f, type: 2}
+        CooldownAttribute: MetaAttributeSet.AbilityCooldown
+        TagQuery:
+          Condition:
+          - MatchType: 0
+            Tags:
+            - name: Cooldown.Ability.Test
+              hashCode: -352825783
+              ancestorsNames:
+              - Cooldown
+              - Cooldown.Ability
+              ancestorsHashCodes: 1d66983da9a35ca7

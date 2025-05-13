@@ -12,7 +12,7 @@ namespace AbilitySystem.Runtime.Effects
     public class Effect
     {
         public EffectDefinition Definition { get; private set; }
-        public float Duration { get; private set; }
+        public float Duration { get; set; }
         public bool IsActive { get; set; }
         public float ActivationTime { get; set; }
         public int NumStacks { get; set; }
