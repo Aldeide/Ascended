@@ -101,6 +101,7 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 if (effectSpec.IsActive)
                 {
+                    if (effectSpec.Definition.modifiers == null) continue;
                     foreach (var modifier in effectSpec.Definition.modifiers)
                     {
                         if (modifier.attributeName == _attribute.GetFullName())

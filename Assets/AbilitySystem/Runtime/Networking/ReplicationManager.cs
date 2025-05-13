@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Networking
 {
+    /// <summary>
+    /// Manages the replication of attribute and gameplay cue updates in a networked environment.
+    /// </summary>
     public class ReplicationManager : IReplicationManager
     {
         private readonly IAbilitySystem _owner;

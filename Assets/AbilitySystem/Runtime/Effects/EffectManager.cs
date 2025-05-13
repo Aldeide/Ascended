@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Runtime.Tags;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
@@ -49,12 +50,12 @@ namespace AbilitySystem.Runtime.Effects
 
         public EffectApplicationResult AddEffect(Effect effect)
         {
-            if (_owner.TagManager.HasAnyTags(effect.Definition.applicationImmunityTags))
+            if (effect.Definition.applicationImmunityTags != null && _owner.TagManager.HasAnyTags(effect.Definition.applicationImmunityTags))
             {
                 return EffectApplicationResult.Immune;
             }
 
-            if (!_owner.TagManager.HasAllTags(effect.Definition.applicationRequiredTags))
+            if (effect.Definition.applicationRequiredTags != null && !_owner.TagManager.HasAllTags(effect.Definition.applicationRequiredTags))
             {
                 return EffectApplicationResult.ApplicationRequiredTagsFailure;
             }
@@ -126,6 +127,11 @@ namespace AbilitySystem.Runtime.Effects
         public void RetractPredictedEffect(PredictionKey predictionKey)
         {
             PredictedEffects.Remove(predictionKey.currentKey);
+        }
+
+        public Effect GetEffect(GameplayTag assetTag)
+        {
+            return Effects.Find(e=>e.Definition.assetTags.Contains(assetTag));
         }
 
         public string DebugString()
