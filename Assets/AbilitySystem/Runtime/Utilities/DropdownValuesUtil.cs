@@ -30,6 +30,19 @@ namespace AbilitySystem.Runtime.Utilities
             }
         }
         
+        private static ValueDropdownItem[] _allTags;
+        public static IEnumerable<ValueDropdownItem> AllTags
+        {
+            get
+            {
+                _allTags ??= ReflectionUtil.CueTags
+                    .Concat(ReflectionUtil.GameplayTags)
+                    .Select(gameplayTag => new ValueDropdownItem(gameplayTag.Name, gameplayTag))
+                    .ToArray();
+                return _allTags;
+            }
+        }
+        
         public static IEnumerable<string> AttributeChoices => ReflectionUtil.AttributeNames;
         
         public static IEnumerable<string> AttributeSetsChoices => ReflectionUtil.AttributeSetsNames;

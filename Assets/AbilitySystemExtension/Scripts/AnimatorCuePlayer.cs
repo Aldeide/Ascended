@@ -8,31 +8,32 @@ using UnityEngine;
 namespace AbilitySystemExtension.Scripts
 {
     [RequireComponent(typeof(Animator))]
-    public class AnimatorCuePlayer : MonoBehaviour, ICueListener
+    public class AnimatorCueListener : MonoBehaviour, ICueListener
     {
         public GameplayTag[] TagFilter { get; set; }
-        [ShowInInspector]
-        public GameplayTagQuery TagQuery { get; set; }
+        [SerializeField] public GameplayTagQuery TagQuery;
         
         private Animator _animator;
-        private CueManagerComponent _cueManager;
+        private CueManager _cueManager;
         
         private void Start()
         {
             _animator = GetComponent<Animator>();
-            _cueManager = GetComponent<CueManagerComponent>();
-            _cueManager.OnCueAdded += OnCueAdded;
+            _cueManager = GetComponent<AbilitySystemComponent>().AbilitySystem.CueManager;
+            _cueManager.OnCueExecute += OnCueExecute;
         }
 
-        private void OnCueAdded(string cueTag, CueDefinition definition)
+        private void OnCueExecute(CueDefinition definition, CueData cueData)
         {
-            Debug.Log("Cue added with tag:" + cueTag);
-            if (!cueTag.StartsWith("Cue.Animation")) return;
+            Debug.Log("Cue added with tag:" + definition.cueTag.Name);
+            if (!TagQuery.MatchesTag(definition.cueTag)) return;
             var stateName = (definition as CueAnimationStateDefinition)?.animationLayerName;
             Debug.Log("Player layer: " + stateName);
             _animator.Play(stateName);
+            
+            var rb = GetComponent<Rigidbody>();
+            rb.AddForce(0, 10, 0, ForceMode.VelocityChange);
+            
         }
-
-
     }
 }

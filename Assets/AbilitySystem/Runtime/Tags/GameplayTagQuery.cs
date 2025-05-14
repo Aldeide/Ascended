@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Tags
 {
     [Serializable]
     public struct GameplayTagQuery
     {
+        [SerializeField]
         public GameplayTagCondition[] Condition;
 
         public GameplayTagQuery(params GameplayTagCondition[] condition)
@@ -28,8 +30,10 @@ namespace AbilitySystem.Runtime.Tags
     [Serializable]
     public struct GameplayTagCondition
     {
+        [SerializeField]
         public GameplayTagMatchType MatchType;
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [SerializeField]
+        [ValueDropdown("@DropdownValuesUtil.AllTags", IsUniqueList = true, HideChildProperties = true)]
         public GameplayTag[] Tags;
 
         public GameplayTagCondition(GameplayTagMatchType matchType, params GameplayTag[] tags)
