@@ -56,8 +56,11 @@ namespace Systems.Movement
 
             if (_isAiming)
             {
-                Vector3 target = transform.position + _camera.transform.forward;
-                transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
+                var target = transform.position + _camera.transform.forward;
+                var actualTarget = new Vector3(target.x, transform.position.y, target.z);
+                var lookRotation = Quaternion.LookRotation(actualTarget - transform.position);
+                _rigidbody.MoveRotation(lookRotation);
+                //transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
             }
             
             if (_movementInput.magnitude <= 0.01f)
@@ -71,8 +74,12 @@ namespace Systems.Movement
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
             if (_isAiming)
             {
-                Vector3 target = transform.position + _camera.transform.forward;
-                transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
+                var target = transform.position + _camera.transform.forward;
+                var actualTarget = new Vector3(target.x, transform.position.y, target.z);
+                var lookRotation = Quaternion.LookRotation(actualTarget - transform.position);
+                _rigidbody.MoveRotation(lookRotation);
+                //Vector3 target = transform.position + _camera.transform.forward;
+                //transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
             }
             else
             {

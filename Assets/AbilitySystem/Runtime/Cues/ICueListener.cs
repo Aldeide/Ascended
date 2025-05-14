@@ -6,6 +6,5 @@ namespace AbilitySystem.Runtime.Cues
     {
         public GameplayTag[] TagFilter { get; set; }
         
-        public GameplayTagQuery TagQuery { get; set; }
     }
 }

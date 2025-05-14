@@ -2102,7 +2102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2654817523
+  GlobalObjectIdHash: 4140274085
   InScenePlacedSourceGlobalObjectIdHash: 4140274085
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2286,7 +2286,19 @@ MonoBehaviour:
     m_ActionId: 4353d761-b734-41f5-90ae-e63c00617e48
     m_ActionName: 'Player/Dash[/Keyboard/leftShift]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5387229077635824681}
+        m_TargetAssemblyTypeName: Systems.Controllers.AbilityController, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f6040634-aea9-45c8-9c67-544096d00c53
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
@@ -2447,7 +2459,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1236164847
+    DestinationState: -1093443077
+    TransitionDuration: 0.25
+    TriggerNameHash: 862969536
+    TransitionIndex: 0
   m_Animator: {fileID: 7084800712604266126}
 --- !u!114 &8900661253937673168
 MonoBehaviour:
@@ -3014,6 +3033,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282f51eb683441fa8bf8836de776d002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TagQuery:
+    Condition:
+    - MatchType: 0
+      Tags:
+      - name: Cue.Animation.State.Jump.Start
+        hashCode: 554262990
+        ancestorsNames:
+        - Cue
+        - Cue.Animation
+        - Cue.Animation.State
+        - Cue.Animation.State.Jump
+        ancestorsHashCodes: d31da3892b86fc39e2536f838cfabc71
 --- !u!114 &5186085326376519157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3030,7 +3061,7 @@ MonoBehaviour:
   GroundedParameter: 
   MovingParameter: IsMoving
   User_IsMovingMecanim_NotMovingFloat_Threshold: 0.1
-  Rigidbody: {fileID: 0}
+  Rigidbody: {fileID: 2622810129250006931}
   UseRigidbodyVelocityForIsMoving: 0
   UseRaycastsForIsGrounded: 0
   SlidingParameter: 

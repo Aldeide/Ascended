@@ -59,5 +59,14 @@ namespace Systems.Controllers
                 _asc.TryActivateAbility("DashAbility");
             }
         }
+
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (!IsLocalPlayer) return;
+            if (context.phase == InputActionPhase.Performed)
+            {
+                _asc.TryActivateAbility("JumpAbility");
+            }
+        }
     }
 }
