@@ -113,6 +113,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
                 {
                     isInvoked = true;
                 };
+            
             attribute.SetBaseValueNoEvent(200);
             
             Assert.AreEqual(200f, attribute.BaseValue);
@@ -130,6 +131,7 @@ namespace AbilitySystem.Test.Runtime.Attribute
                 {
                     isInvoked = true;
                 };
+            
             attribute.SetCurrentValueNoEvent(200);
             
             Assert.AreEqual(200f, attribute.CurrentValue);
