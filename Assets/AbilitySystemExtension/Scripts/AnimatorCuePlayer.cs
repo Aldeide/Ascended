@@ -32,7 +32,7 @@ namespace AbilitySystemExtension.Scripts
             _animator.Play(stateName);
             
             var rb = GetComponent<Rigidbody>();
-            rb.AddForce(0, 10, 0, ForceMode.VelocityChange);
+            rb.AddForce(0, 5, 0, ForceMode.VelocityChange);
             
         }
     }

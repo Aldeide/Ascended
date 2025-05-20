@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 1400474609048879421
   - rid: 1400474609048879422
   - rid: 1400474609048879423
+  - rid: 1400474609048879424
   edges:
   - GUID: 6bf10313-e064-4fb5-ad5e-07eb91a41f54
     owner: {fileID: 11400000}
@@ -27,12 +28,20 @@ MonoBehaviour:
     outputFieldName: Executes
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 11f8123b-21e8-4ce7-8056-018d242ed5bc
+  - GUID: 1eca02c9-6a4c-4776-9c95-f43b1b5d8574
     owner: {fileID: 11400000}
-    inputNodeGUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
+    inputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
     outputNodeGUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
     inputFieldName: Executed
     outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: cad29488-18ea-462a-b605-67372eb544d5
+    owner: {fileID: 11400000}
+    inputNodeGUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
+    outputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
+    inputFieldName: Executed
+    outputFieldName: executeAfter
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -108,13 +117,28 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
-        computeOrder: 3
+        computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1042
+          x: 1283
           y: 312
           width: 170
           height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 1400474609048879424
+      type: {class: WaitForGroundedEvent, ns: AbilitySystemExtension.Runtime.Nodes.Character, asm: AbilitySystemExtension}
+      data:
+        nodeCustomName: 
+        GUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 1006
+          y: 189
+          width: 193
+          height: 99
         expanded: 0
         debug: 0
         nodeLock: 0

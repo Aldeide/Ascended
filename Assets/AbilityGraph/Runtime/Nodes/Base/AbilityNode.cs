@@ -10,7 +10,7 @@ namespace AbilityGraph.Runtime.Nodes.Base
         protected Ability Ability;
         protected IAbilitySystem Owner;
 
-        public void Initialise(Ability ability)
+        public virtual void Initialise(Ability ability)
         {
             Ability = ability;
             Owner = Ability.Owner;
