@@ -102,5 +102,38 @@ namespace AbilitySystem.Test.Runtime.Attribute
             Assert.AreEqual(200f, attribute.CurrentValue);
         }
         
+        [Test]
+        public void AttributeTest_ChangingBaseValueNoEvent_DoesNotInvokeEvent()
+        {
+            var owner = CreateMockAbilitySystem();
+            var attribute = owner.Object.AttributeSetManager.GetAttribute("Health");
+            bool isInvoked = false;
+            owner.Object.AttributeSetManager.GetAttribute("Health").OnAttributeBaseValueChanged +=
+                (_, _, _) =>
+                {
+                    isInvoked = true;
+                };
+            attribute.SetBaseValueNoEvent(200);
+            
+            Assert.AreEqual(200f, attribute.BaseValue);
+            Assert.IsFalse(isInvoked);
+        }
+        
+        [Test]
+        public void AttributeTest_ChangingCurrentValueNoEvent_DoesNotInvokeEvent()
+        {
+            var owner = CreateMockAbilitySystem();
+            var attribute = owner.Object.AttributeSetManager.GetAttribute("Health");
+            bool isInvoked = false;
+            owner.Object.AttributeSetManager.GetAttribute("Health").OnAttributeCurrentValueChanged +=
+                (_, _, _) =>
+                {
+                    isInvoked = true;
+                };
+            attribute.SetCurrentValueNoEvent(200);
+            
+            Assert.AreEqual(200f, attribute.CurrentValue);
+            Assert.IsFalse(isInvoked);
+        }
     }
 }
