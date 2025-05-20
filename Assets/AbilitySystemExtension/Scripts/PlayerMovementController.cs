@@ -1,15 +1,17 @@
 ﻿
-using AbilitySystem.Runtime.Attributes;
+using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
 using AbilitySystemExtension.Runtime.Tags;
 using NUnit.Framework;
+using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace Systems.Movement
 {
@@ -23,12 +25,16 @@ namespace Systems.Movement
         private Rigidbody _rigidbody;
         private IAbilitySystem _abilitySystem;
         private float _movementSpeed;
-        
+        [ShowInInspector]
+        [SerializeField]
+        private bool _isGrounded = true;
         public float turnSmoothTime = 0.1f;   
         private float _turnSmoothVelocity = 0.2f;
         private bool _isAiming;
         private UnityEngine.Camera _camera;
 
+        public Action<bool> OnGroundedChanged;
+        
         public override void OnNetworkSpawn()
         {
             
@@ -49,6 +55,10 @@ namespace Systems.Movement
         {
             if (!IsLocalPlayer) return;
 
+            var previousGroundedState = _isGrounded;
+            _isGrounded = IsGrounded();
+            if (previousGroundedState != _isGrounded) OnGroundedChanged?.Invoke(_isGrounded);
+            
             if (!CanMove()) return;
 
             //_isAiming = _abilitySystem.TagManager.HasTag(TagLibrary.StatusAiming);
@@ -91,10 +101,27 @@ namespace Systems.Movement
             UpdateAnimator();
         }
         
+        public void LateUpdate()
+        {
+            if (!IsLocalPlayer) return;
+            
+        }
+
+        public bool IsGrounded()
+        {
+            if (_rigidbody.linearVelocity.y == 0)
+            {
+                return Physics.Raycast(transform.position, Vector3.down, 1f);
+            }
+
+            return false;
+
+        }
+        
         private void Rotate(Vector3 newPosition)
         {
             Vector3 lookAtTarget = new Vector3(newPosition.x, this.transform.position.y, newPosition.z);
-            Quaternion rotation = quaternion.LookRotation(lookAtTarget, Vector3.up);
+            Quaternion rotation = Quaternion.LookRotation(lookAtTarget, Vector3.up);
             transform.LookAt(lookAtTarget);
         }
 
