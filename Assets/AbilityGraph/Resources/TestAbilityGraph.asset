@@ -15,7 +15,9 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: TestAbilityGraph
-  cost: {fileID: 0}
+  Cost: {fileID: 0}
+  Cooldown:
+    rid: 1400474609048879418
   abilityActivation:
     rid: -2
   AssetTags: []
@@ -26,6 +28,7 @@ MonoBehaviour:
   ActivationBlockedTags: []
   grantedEffects: []
   networkPolicy: 2
+  networkSecurityPolicy: 0
   activationCues: []
   graph: {fileID: 11400000, guid: c779d86f6dcbae04b874ca78707eeaac, type: 2}
   references:
@@ -33,3 +36,18 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1400474609048879418
+      type: {class: AttributeDrivenAbilityCooldown, ns: AbilitySystem.Runtime.Abilities.Cooldowns, asm: AbilitySystem}
+      data:
+        CooldownEffect: {fileID: 11400000, guid: b23a936049bb4324488c46ec2cbb3c6f, type: 2}
+        CooldownAttribute: MetaAttributeSet.AbilityCooldown
+        TagQuery:
+          Condition:
+          - MatchType: 0
+            Tags:
+            - name: Cooldown.Ability.Test
+              hashCode: -352825783
+              ancestorsNames:
+              - Cooldown
+              - Cooldown.Ability
+              ancestorsHashCodes: 1d66983da9a35ca7

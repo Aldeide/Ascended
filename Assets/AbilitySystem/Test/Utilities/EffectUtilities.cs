@@ -13,6 +13,7 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.durationType = EffectDurationType.FixedDuration;
+            asset.assetTags = Array.Empty<GameplayTag>();
             asset.applicationImmunityTags = Array.Empty<GameplayTag>();
             asset.grantedTags = Array.Empty<GameplayTag>();
             asset.applicationRequiredTags = Array.Empty<GameplayTag>();
@@ -24,6 +25,7 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.durationType = EffectDurationType.Instant;
+            asset.assetTags = Array.Empty<GameplayTag>();
             asset.applicationImmunityTags = Array.Empty<GameplayTag>();
             asset.grantedTags = Array.Empty<GameplayTag>();
             asset.applicationRequiredTags = Array.Empty<GameplayTag>();
@@ -35,6 +37,7 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.durationType = EffectDurationType.Infinite;
+            asset.assetTags = Array.Empty<GameplayTag>();
             asset.applicationImmunityTags = Array.Empty<GameplayTag>();
             asset.grantedTags = Array.Empty<GameplayTag>();
             asset.applicationRequiredTags = Array.Empty<GameplayTag>();
@@ -45,6 +48,7 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.durationType = EffectDurationType.Infinite;
+            asset.assetTags = Array.Empty<GameplayTag>();
             asset.applicationImmunityTags = Array.Empty<GameplayTag>();
             asset.grantedTags = Array.Empty<GameplayTag>();
             asset.applicationRequiredTags = Array.Empty<GameplayTag>();

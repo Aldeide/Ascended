@@ -17,6 +17,7 @@ namespace AbilitySystem.Runtime.Core
         public EffectManager EffectManager { get; set; }
         public AbilityManager AbilityManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
+        public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
         public EventManager EventManager { get; set; }
         public void Initialise(AbilitySystemComponent component);

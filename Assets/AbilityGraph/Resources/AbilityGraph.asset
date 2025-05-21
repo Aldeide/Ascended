@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 4336599336265449740
   - rid: 4336599336265449741
   - rid: 4336599336265449742
+  - rid: 1400474609048879405
   edges:
   - GUID: 80434dd8-5e12-4c2b-962b-28649daf7f0c
     owner: {fileID: 11400000}
@@ -63,6 +64,22 @@ MonoBehaviour:
     outputFieldName: executeAfter
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: c319a912-c0b1-4da0-baa0-a7c9deae2576
+    owner: {fileID: 11400000}
+    inputNodeGUID: 57bc5f09-72d9-44e9-b3a0-7c80a28ff592
+    outputNodeGUID: ddcb68d3-155b-4574-893b-aec7d615e9a5
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: c9f4a61a-8ba8-4f38-b80f-485399ffe3b5
+    owner: {fileID: 11400000}
+    inputNodeGUID: a0ad39c8-7545-4296-a336-a858e33f3e52
+    outputNodeGUID: f9392d46-4f6b-453f-993b-01626d525c4a
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -80,8 +97,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 3, y: 143, z: 0}
-  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  position: {x: 237, y: 330, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
@@ -93,8 +110,8 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 763
-          y: 244
+          x: 706
+          y: 244.00002
           width: 441
           height: 95
         expanded: 0
@@ -125,10 +142,10 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1124
+          x: 1306
           y: 106
-          width: 325
-          height: 118
+          width: 143
+          height: 116
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -143,13 +160,30 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 501
-          y: 244
+          x: 462.5
+          y: 244.00002
           width: 243
           height: 75
         expanded: 0
         debug: 0
         nodeLock: 0
+    - rid: 1400474609048879405
+      type: {class: DebugNode, ns: AbilityGraph.Runtime.Nodes.Utilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: a0ad39c8-7545-4296-a336-a858e33f3e52
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 752
+          y: 523
+          width: 193
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: Ability Ended
+        logType: 3
     - rid: 4336599336265449739
       type: {class: ActivateAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
       data:
@@ -158,10 +192,10 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 350.90002
-          y: 238.15
+          x: 331.34027
+          y: 244.00002
           width: 127
-          height: 75.00003
+          height: 75
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -173,14 +207,14 @@ MonoBehaviour:
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 650.9
-          y: 52.899998
-          width: 100
-          height: 100
+          x: 1142.0001
+          y: -24.228737
+          width: 307
+          height: 95
         expanded: 0
         debug: 0
         nodeLock: 0
-        CueDefinition: {fileID: 0}
+        CueDefinition: {fileID: 11400000, guid: 5ff599d715651c34c982d2d69c0a227f, type: 2}
     - rid: 4336599336265449741
       type: {class: EndAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
       data:

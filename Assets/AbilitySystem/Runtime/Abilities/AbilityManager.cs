@@ -9,6 +9,11 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities
 {
+    /// <summary>
+    /// Responsible for managing abilities within an ability system. Handles the storage,
+    /// granting, activation, deactivation, and lifecycle of abilities, while integrating
+    /// with the associated <see cref="IAbilitySystem"/> owner.
+    /// </summary>
     public class AbilityManager
     {
         private IAbilitySystem _owner;
@@ -49,6 +54,17 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 Debug.LogError("Failed to add ability: " + abilityDefinition.GetType().FullName + " / " + e.Message);
             }
+        }
+
+        public void RemoveAbility(AbilityDefinition abilityDefinition)
+        {
+            if (!abilityDefinition) return;
+            RemoveAbility(abilityDefinition.uniqueName);
+        }
+
+        public void RemoveAbility(string abilityName)
+        {
+            if (!Abilities.Remove(abilityName)) return;
         }
 
         public bool TryActivateAbility(string name, AbilityData data = new AbilityData())

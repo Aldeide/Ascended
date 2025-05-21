@@ -23,7 +23,7 @@ namespace AbilitySystem.Test.Runtime.AttributeSets
             var owner = new Mock<IAbilitySystem>();
             var attributeSet = new TestAttributeSet(owner.Object);
             var attribute = new AbilitySystem.Runtime.Attributes.Attribute(
-                "TestAttribute", owner.Object, attributeSet, 50);
+                "TestAttribute", attributeSet, 50);
             
             attributeSet.AddAttribute(attribute);
             

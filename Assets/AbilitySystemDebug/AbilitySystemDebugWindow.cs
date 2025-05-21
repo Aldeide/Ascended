@@ -41,7 +41,7 @@ public class AbilitySystemDebugWindow : EditorWindow
 
     private void OnSelectionChange()
     {
-        if (Selection.objects.Length == 1)
+        if (Selection.objects.Length == 1 && Selection.objects[0] is GameObject)
         {
             _inspectedObject = (GameObject)Selection.objects[0];
             _label = new Label(_inspectedObject.gameObject.name);
@@ -66,6 +66,7 @@ public class AbilitySystemDebugWindow : EditorWindow
     
     private string DisplayData()
     {
+        if (_inspectedAsc == null) return "";
         var output = _inspectedAsc.AttributeSetManager.DebugString() + "\n\n";
         output += _inspectedAsc.EffectManager.DebugString() + "\n\n";
         output += _inspectedAsc.AbilityManager.DebugString() + "\n\n";

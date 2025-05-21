@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a12d35abe94a98be47b61c7b78c028, type: 3}
+  m_Name: JumpAbilityGraph
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 1400474609048879419
+  - rid: 1400474609048879421
+  - rid: 1400474609048879422
+  - rid: 1400474609048879423
+  - rid: 1400474609048879424
+  edges:
+  - GUID: 6bf10313-e064-4fb5-ad5e-07eb91a41f54
+    owner: {fileID: 11400000}
+    inputNodeGUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
+    outputNodeGUID: 9389b4d9-5232-4c9c-bd0e-7abb783fbe3e
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 1eca02c9-6a4c-4776-9c95-f43b1b5d8574
+    owner: {fileID: 11400000}
+    inputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
+    outputNodeGUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: cad29488-18ea-462a-b605-67372eb544d5
+    owner: {fileID: 11400000}
+    inputNodeGUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
+    outputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
+    inputFieldName: Executed
+    outputFieldName: executeAfter
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1400474609048879419
+      type: {class: ActivateAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 9389b4d9-5232-4c9c-bd0e-7abb783fbe3e
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 211
+          y: 312
+          width: 127
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 1400474609048879421
+      type: {class: SendCue, ns: AbilityGraph.Runtime.Nodes.Cues, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 441
+          y: 312
+          width: 275
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        CueDefinition: {fileID: 11400000, guid: f23a580a52e82644b825880b531a8bf7, type: 2}
+    - rid: 1400474609048879422
+      type: {class: EndAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: d090f15d-cc83-4e22-9dd3-61beb0fc0319
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 211
+          y: 479
+          width: 102
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 1400474609048879423
+      type: {class: CallEndAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1283
+          y: 312
+          width: 170
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 1400474609048879424
+      type: {class: WaitForGroundedEvent, ns: AbilitySystemExtension.Runtime.Nodes.Character, asm: AbilitySystemExtension}
+      data:
+        nodeCustomName: 
+        GUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 1006
+          y: 189
+          width: 193
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0

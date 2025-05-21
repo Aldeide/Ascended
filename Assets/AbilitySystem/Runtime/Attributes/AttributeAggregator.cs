@@ -8,12 +8,17 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Attributes
 {
+    /// <summary>
+    /// The AttributeAggregator class serves as a mechanism for aggregating and managing attribute modifiers.
+    /// It is responsible for tracking and updating the values of specified attributes based on effects and modifiers
+    /// applied to an entity within an ability system.
+    /// </summary>
     public class AttributeAggregator
     {
         private readonly Attribute _attribute;
         private readonly IAbilitySystem _owner;
         
-        private List<Tuple<Effect, Modifier>> _modifierCache = new();
+        private readonly List<Tuple<Effect, Modifier>> _modifierCache = new();
 
         public AttributeAggregator(Attribute attribute, IAbilitySystem owner)
         {
@@ -42,21 +47,17 @@ namespace AbilitySystem.Runtime.Attributes
 
         private float CalculateCurrentValue()
         {
-            float newValue = _attribute.BaseValue;
+            var newValue = _attribute.BaseValue;
 
             float additiveModifiers = 0;
             float multiplicativeModifiers = 1;
             float overrideModifiers = 0;
-            bool hasOverride = false;
+            var hasOverride = false;
             
-            foreach (var tuple in _modifierCache)
+            foreach (var (effect, modifier) in _modifierCache)
             {
-                var effect = tuple.Item1;
-                var modifier = tuple.Item2;
-                
-                for (int i = 0; i < effect.NumStacks; i++)
+                for (var i = 0; i < effect.NumStacks; i++)
                 {
-                    Debug.Log("Stacks: " + effect.NumStacks);
                     var magnitude = modifier.Calculate(effect);
                     switch (modifier.operation)
                     {
@@ -86,11 +87,6 @@ namespace AbilitySystem.Runtime.Attributes
             //_owner.NotifyAttributeBaseChanged(_attribute.attributeSetName, _attribute.attributeName, newValue);
             return hasOverride ? overrideModifiers : (newValue + additiveModifiers) * multiplicativeModifiers;
         }
-
-        private void OnEffectRemoved()
-        {
-            RefreshModifierCache(null);
-        }
         
         private void RefreshModifierCache(Effect effect)
         {
@@ -99,14 +95,13 @@ namespace AbilitySystem.Runtime.Attributes
             var effects = _owner.EffectManager.GetActiveEffects();
             foreach (var effectSpec in effects)
             {
-                if (effectSpec.IsActive)
+                if (!effectSpec.IsActive) continue;
+                if (effectSpec.Definition.modifiers == null) continue;
+                foreach (var modifier in effectSpec.Definition.modifiers)
                 {
-                    foreach (var modifier in effectSpec.Definition.modifiers)
+                    if (modifier.attributeName == _attribute.GetFullName())
                     {
-                        if (modifier.attributeName == _attribute.GetFullName())
-                        {
-                            _modifierCache.Add(new Tuple<Effect, Modifier>(effectSpec, modifier));
-                        }
+                        _modifierCache.Add(new Tuple<Effect, Modifier>(effectSpec, modifier));
                     }
                 }
             }
@@ -124,7 +119,7 @@ namespace AbilitySystem.Runtime.Attributes
         {
             if (Mathf.Approximately(oldBaseValue, newBaseValue)) return;
 
-            float newValue = CalculateCurrentValue();
+            var newValue = CalculateCurrentValue();
             _attribute.SetCurrentValue(newValue);
         }
     }

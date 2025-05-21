@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
-using UnityEngine;
 
 namespace AbilitySystem.Runtime.Tags
 {
     public class GameplayTagManager
     {
+        // Inherent tags (e.g. Unit.Player)
         public List<GameplayTag> Tags = new();
+        // Tags granted while effects are active.
         public Dictionary<GameplayTag, List<Effect>> EffectTags = new();
+        // Tags granted while abilities are active.
         public Dictionary<GameplayTag, List<Ability>> AbilityTags = new();
         private IAbilitySystem _owner;
 
@@ -37,6 +38,7 @@ namespace AbilitySystem.Runtime.Tags
 
         public void AddEffectTags(Effect effect)
         {
+            if (effect.Definition.grantedTags == null) return;
             foreach (var tag in effect.Definition.grantedTags)
             {
                 if (EffectTags.ContainsKey(tag))
@@ -51,6 +53,7 @@ namespace AbilitySystem.Runtime.Tags
 
         public void AddAbilityTags(Ability ability)
         {
+            if (ability.Definition.ActivationOwnedTags == null) return;
             foreach (var tag in ability.Definition.ActivationOwnedTags)
             {
                 if (AbilityTags.ContainsKey(tag))
@@ -66,6 +69,7 @@ namespace AbilitySystem.Runtime.Tags
 
         public void RemoveEffectTags(Effect effect)
         {
+            if (effect.Definition.grantedTags == null) return;
             foreach (var tag in effect.Definition.grantedTags)
             {
                 if (EffectTags.ContainsKey(tag))
@@ -82,6 +86,7 @@ namespace AbilitySystem.Runtime.Tags
 
         public void RemoveAbilityTags(Ability ability)
         {
+            if (ability.Definition.ActivationOwnedTags == null) return;
             foreach (var tag in ability.Definition.ActivationOwnedTags)
             {
                 if (AbilityTags.ContainsKey(tag))

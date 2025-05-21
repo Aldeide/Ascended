@@ -16,6 +16,7 @@ namespace AbilitySystemExtension.Runtime.Tags
         public static GameplayTag CostEnergy { get; } = new GameplayTag("Cost.Energy");
         public static GameplayTag CostAbility { get; } = new GameplayTag("Cost.Ability");
         public static GameplayTag CostAbilityActiveDash { get; } = new GameplayTag("Cost.Ability.Active.Dash");
+        public static GameplayTag CooldownAbilityTest { get; } = new GameplayTag("Cooldown.Ability.Test");
         
         public static Dictionary<string, GameplayTag> TagMap = new Dictionary<string, GameplayTag>
         {
@@ -29,7 +30,8 @@ namespace AbilitySystemExtension.Runtime.Tags
             ["Status.Immune.Stun"] = StatusImmuneStun,
             ["Cost.Energy"] = CostEnergy,
             ["Cost.Ability"] = CostAbility,
-            ["Cost.Ability.Active.Dash"] = CostAbilityActiveDash
+            ["Cost.Ability.Active.Dash"] = CostAbilityActiveDash,
+            ["Cooldown.Ability.Test"] = CooldownAbilityTest,
         };
     }
 }
