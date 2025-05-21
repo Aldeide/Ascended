@@ -15,7 +15,11 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: DeathAbility
-  cost: {fileID: 0}
+  Cost: {fileID: 0}
+  Cooldown:
+    rid: -2
+  AbilityActivation:
+    rid: 4336599696947282121
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
@@ -29,4 +33,15 @@ MonoBehaviour:
   ActivationBlockedTags: []
   grantedEffects: []
   networkPolicy: 2
+  networkSecurityPolicy: 0
   activationCues: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 4336599696947282121
+      type: {class: OnEventActivation, ns: AbilitySystem.Runtime.Abilities.AbilityActivation, asm: AbilitySystem}
+      data:
+        ActivationEvent:
+          rid: -2

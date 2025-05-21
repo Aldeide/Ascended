@@ -20,7 +20,6 @@ namespace AbilitySystem.Runtime.Core
         public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
         public EventManager EventManager { get; set; }
-        public void Initialise(AbilitySystemComponent component);
         
         public void Tick();
 
