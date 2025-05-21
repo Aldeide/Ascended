@@ -2,6 +2,7 @@
 
 namespace AbilitySystem.Runtime.Events
 {
+    [Serializable]
     public abstract class GameplayEvent<T> where T : EventArgs
     {
         public Type Type { get; private set; }

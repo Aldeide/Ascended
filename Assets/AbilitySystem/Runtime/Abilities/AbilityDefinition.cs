@@ -36,7 +36,7 @@ namespace AbilitySystem.Runtime.Abilities
         public AbilityCooldown Cooldown;
 
         [SerializeReference]
-        public AbilityActivation.AbilityActivation abilityActivation;
+        public AbilityActivation.AbilityActivation AbilityActivation;
         
         [Title("Tags")]
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
