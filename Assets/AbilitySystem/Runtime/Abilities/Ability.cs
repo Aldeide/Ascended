@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
@@ -7,11 +8,18 @@ using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Runtime.Abilities
 {
+    /// <summary>
+    /// Represents a base class for defining abilities in the ability system.
+    /// This class provides core functionality for managing ability lifecycle,
+    /// activation, cancellation, cooldowns, and interaction with the owning
+    /// system or entity.
+    /// </summary>
     public abstract class Ability
     {
         protected AbilityData AbilityArguments;
         
         public AbilityDefinition Definition { get; }
+        public AbilityCooldown Cooldown { get; set; }
         public IAbilitySystem Owner { get; protected set; }
         public bool IsActive { get; private set; }
         public int ActiveCount { get; private set; }
@@ -29,6 +37,8 @@ namespace AbilitySystem.Runtime.Abilities
             Definition = ability;
             Owner = owner;
             IsActive = false;
+            // TODO: clone cooldown.
+            Cooldown = Definition.Cooldown;
             _activatedEffects = new List<Effect>();
         }
         
@@ -56,23 +66,28 @@ namespace AbilitySystem.Runtime.Abilities
             if (!CanAffordCost()) return AbilityActivationResult.CostFailed;
             if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
             if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
-            // TODO: cooldown check.
-            return AbilityActivationResult.Success;
+            return IsOnCooldown() ? AbilityActivationResult.CooldownFailed :
+                AbilityActivationResult.Success;
         }
 
         public bool CanAffordCost()
         {
-            if (Definition.cost == null) return true;
-            foreach (var modifier in Definition.cost.modifiers)
+            if (Definition.Cost == null) return true;
+            foreach (var modifier in Definition.Cost.modifiers)
             {
                 var attribute = modifier.attributeName.Split(".")[1];
-                var cost = modifier.Calculate(Definition.cost.ToEffect(Owner, Owner));
+                var cost = modifier.Calculate(Definition.Cost.ToEffect(Owner, Owner));
                 if (Owner.AttributeSetManager.GetAttribute(attribute).CurrentValue < cost)
                 {
                     return false;
                 }
             }
             return true;
+        }
+
+        private bool IsOnCooldown()
+        {
+            return (Definition.Cooldown != null && !Definition.Cooldown.CanActivate(Owner));
         }
 
         public bool OwnerHasRequiredTags()
@@ -103,6 +118,7 @@ namespace AbilitySystem.Runtime.Abilities
                 PredictionKey = key;
                 ApplyEffects();
                 Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags);
+                Cooldown?.Activate(Owner);
                 ActivateAbility(AbilityArguments);
             }
 
@@ -135,8 +151,8 @@ namespace AbilitySystem.Runtime.Abilities
 
         public virtual void CommitCostAndCooldown()
         {
-            if (Definition.cost == null) return;
-            Definition.cost.ToEffect(Owner, Owner).Execute();
+            if (Definition.Cost == null) return;
+            Definition.Cost.ToEffect(Owner, Owner).Execute();
         }
         
         public virtual void Dispose()

@@ -1,26 +1,21 @@
 ﻿using System;
-using UnityEngine;
+using AbilitySystem.Runtime.Core;
 
 namespace AbilitySystem.Runtime.Abilities.Cooldowns
 {
+    /// <summary>
+    /// A cooldown implementation that uses a constant value for its duration.
+    /// </summary>
+    /// <remarks>
+    /// This class inherits from <see cref="AbilityCooldown"/> and overrides the cooldown calculation
+    /// behavior to return a fixed duration specified by the cooldown effect's duration.
+    /// </remarks>
     [Serializable]
     public class ConstantAbilityCooldown : AbilityCooldown
     {
-        public override float Calculate()
+        public override float Calculate(IAbilitySystem owner)
         {
-            return BaseDuration;
-        }
-
-        public override float RemainingCooldown()
-        {
-            return _currentCooldown;
-        }
-
-        public override void Tick()
-        {
-            if (_currentCooldown == 0) return;
-            _currentCooldown -= Time.deltaTime;
-            if (_currentCooldown < 0) _currentCooldown = 0;
+            return CooldownEffect.durationSeconds;
         }
     }
 }

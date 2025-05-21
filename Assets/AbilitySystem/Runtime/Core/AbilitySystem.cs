@@ -18,23 +18,21 @@ namespace AbilitySystem.Runtime.Core
         public AbilityManager AbilityManager { get; set; }
         public GameplayTagManager TagManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
+        public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
         public EventManager EventManager { get; set; }
-        public AbilitySystemManager()
+        public AbilitySystemManager(AbilitySystemComponent component)
         {
+            Component = component;
             EventManager = new EventManager();
             AttributeSetManager = new AttributeSetManager(this);
             EffectManager = new EffectManager(this);
             AbilityManager = new AbilityManager(this);
             TagManager = new GameplayTagManager(this);
+            CueManager = new CueManager(this);
             ReplicationManager = new ReplicationManager(this);
         }
-
-        public void Initialise(AbilitySystemComponent component)
-        {
-            Component = component;
-        }
-
+        
         public void Tick()
         {
             EffectManager.Tick();
@@ -68,7 +66,10 @@ namespace AbilitySystem.Runtime.Core
 
         public void PlayCue(CueDefinition cue)
         {
-            Component.ObserversPlayCueRpc(cue.cueTag.GetName());
+            var test = new CueData();
+            test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
+            Debug.Log("Tag:" + cue.cueTag);
+            Component.ObserversPlayCueRpc(cue.cueTag.GetName(), test);
         }
 
         public void PlayCue(CueDefinition cue, CueData data)

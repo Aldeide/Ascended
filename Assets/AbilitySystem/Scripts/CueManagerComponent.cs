@@ -34,7 +34,7 @@ namespace AbilitySystem.Scripts
             if (cueTag.StartsWith("Cue.Prefab"))
             {
                 var prefab = Instantiate(cue.prefab);
-                prefab.transform.position = data.position;
+                prefab.transform.position = data.GetVector3Data(0);
                 var instanceNetworkObject = prefab.GetComponent<NetworkObject>();
                 instanceNetworkObject.Spawn();
             }

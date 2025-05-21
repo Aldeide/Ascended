@@ -3,6 +3,13 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Attributes
 {
+    /// <summary>
+    /// Represents a value associated with an attribute, including its base, current, minimum, and maximum values.
+    /// </summary>
+    /// <remarks>
+    /// This struct is used for handling and manipulating the attribute values in the system.
+    /// It ensures the values are clamped within the provided minimum and maximum bounds.
+    /// </remarks>
     [Serializable]
     public struct AttributeValue
     {

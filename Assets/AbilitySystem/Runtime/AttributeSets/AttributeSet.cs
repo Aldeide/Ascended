@@ -8,6 +8,11 @@ using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Runtime.AttributeSets
 {
+    /// <summary>
+    /// Abstract base class representing a set of attributes associated with an ability system.
+    /// Attribute sets group related attributes and provide functionalities to manage them.
+    /// Subclasses of this class define specific categories of attributes.
+    /// </summary>
     public abstract class AttributeSet
     {
         protected IAbilitySystem _owner;

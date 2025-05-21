@@ -1,17 +1,22 @@
-﻿using Unity.Netcode;
+﻿using AbilitySystem.Runtime.Networking;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Cues
 {
-    public class CueData : INetworkSerializable
+    /// Represents data used for handling gameplay cues, including manipulation and transmission over the network.
+    public class CueData : INetworkSerializable, IData
     {
-        public Vector3 position;
-        public Vector3 normal;
+        public Vector3[] VectorData;
+
+        public Vector3 GetVector3Data(int index)
+        {
+            return VectorData[index];
+        }
         
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref position);
-            serializer.SerializeValue(ref normal);
+            serializer.SerializeValue(ref VectorData);
         }
     }
 }

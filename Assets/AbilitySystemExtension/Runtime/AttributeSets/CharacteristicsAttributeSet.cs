@@ -17,12 +17,12 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         public CharacteristicsAttributeSet(IAbilitySystem owner) : base(owner)
         {
             Name = nameof(CharacteristicsAttributeSet);
-            Health = new Attribute("Health", owner, this,100);
-            MaxHealth = new Attribute("MaxHealth", owner, this,150);
-            Energy = new Attribute("Energy", owner, this,200);
-            EnergyRegen = new Attribute("EnergyRegen", owner, this,4);
-            MaxEnergy = new Attribute("MaxEnergy", owner, this,1000);
-            MovementSpeed = new Attribute("MovementSpeed", owner, this,4);
+            Health = new Attribute("Health", this,100);
+            MaxHealth = new Attribute("MaxHealth", this,150);
+            Energy = new Attribute("Energy", this,200);
+            EnergyRegen = new Attribute("EnergyRegen", this,4);
+            MaxEnergy = new Attribute("MaxEnergy", this,1000);
+            MovementSpeed = new Attribute("MovementSpeed", this,4);
             
             AddAttribute(Health);
             AddAttribute(MaxHealth);

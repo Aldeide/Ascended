@@ -8,7 +8,11 @@ namespace AbilitySystemExtension.Scripts
 {
     public class AudioCuePlayer : MonoBehaviour, ICueListener
     {
+        [ShowInInspector]
         public GameplayTag[] TagFilter { get; set; }
+        
+        [ShowInInspector]
+        public GameplayTagQuery TagQuery { get; set; }
 
         [ShowInInspector] private AudioSource _audioSource;
         private CueManagerComponent _cueManager;
