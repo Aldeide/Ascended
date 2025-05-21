@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
@@ -17,6 +18,7 @@ namespace AbilitySystem.Runtime.Core
         public AbilityManager AbilityManager { get; set; }
         public AttributeSetManager AttributeSetManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
+        public EventManager EventManager { get; set; }
         public void Initialise(AbilitySystemComponent component);
         
         public void Tick();

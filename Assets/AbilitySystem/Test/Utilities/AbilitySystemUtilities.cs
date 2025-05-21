@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Tags;
 using Moq;
 
@@ -14,6 +15,8 @@ namespace AbilitySystem.Test.Utilities
             var owner = new Mock<IAbilitySystem>();
             var effectManager = new EffectManager(owner.Object);
             owner.Setup(x => x.EffectManager).Returns(effectManager);
+            var eventManager = new EventManager();
+            owner.Setup(x => x.EventManager).Returns(eventManager);
             var tagManager = new GameplayTagManager(owner.Object);
             owner.Setup(x => x.TagManager).Returns(tagManager);
             var attributeSetManager = new AttributeSetManager(owner.Object);
@@ -31,6 +34,8 @@ namespace AbilitySystem.Test.Utilities
             owner.Setup(x => x.IsLocalClient()).Returns(false);
             var effectManager = new EffectManager(owner.Object);
             owner.Setup(x => x.EffectManager).Returns(effectManager);
+            var eventManager = new EventManager();
+            owner.Setup(x => x.EventManager).Returns(eventManager);
             var tagManager = new GameplayTagManager(owner.Object);
             owner.Setup(x => x.TagManager).Returns(tagManager);
             var attributeSetManager = new AttributeSetManager(owner.Object);
@@ -51,6 +56,8 @@ namespace AbilitySystem.Test.Utilities
             owner.Setup(x => x.IsLocalClient()).Returns(true);
             var effectManager = new EffectManager(owner.Object);
             owner.Setup(x => x.EffectManager).Returns(effectManager);
+            var eventManager = new EventManager();
+            owner.Setup(x => x.EventManager).Returns(eventManager);
             var tagManager = new GameplayTagManager(owner.Object);
             owner.Setup(x => x.TagManager).Returns(tagManager);
             var attributeSetManager = new AttributeSetManager(owner.Object);
