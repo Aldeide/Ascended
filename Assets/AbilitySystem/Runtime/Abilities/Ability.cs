@@ -67,7 +67,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         protected virtual void OnActivationEvent(GameplayEvent gameplayEvent)
         {
-            return;
+            TryActivateAbility(new AbilityData());
         }
         
         protected virtual void CancelAbility()
