@@ -3,15 +3,19 @@
 namespace AbilitySystem.Runtime.Events
 {
     [Serializable]
-    public abstract class GameplayEvent<T> where T : EventArgs
+    public abstract class GameplayEvent
     {
-        public Type Type { get; private set; }
-        public T Arguments { get; private set; }
+        public Type EventType { get; private set; }
+        public EventArgs Arguments { get; private set; }
 
-        protected GameplayEvent(Type type, T arguments)
+        protected GameplayEvent(EventArgs arguments)
         {
-            Type = type;
+            EventType = GetType();
             Arguments = arguments;
         }
+    }
+    
+    public abstract class GameplayEventType {
+        public abstract Type EventType { get; }
     }
 }

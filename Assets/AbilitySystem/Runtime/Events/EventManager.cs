@@ -6,29 +6,29 @@ namespace AbilitySystem.Runtime.Events
     public class EventManager
     {
         private readonly Dictionary<Type, Delegate> _typeToHandlers = new();
-        
-        public void Subscribe<T>(Action<GameplayEvent<T>> handler) where T : EventArgs
+
+        public void Subscribe(Type type, Action<GameplayEvent> handler)
         {
-            var type = typeof(T);
             if (!_typeToHandlers.TryAdd(type, handler))
             {
-                _typeToHandlers[type] = Delegate.Combine(_typeToHandlers[type], handler);
+                _typeToHandlers[type] =
+                    Delegate.Combine(_typeToHandlers[type], handler);
             }
         }
 
-        public void Unsubscribe<T>(Action<GameplayEvent<T>> handler) where T : EventArgs
+        public void Unsubscribe(Type type,Action<GameplayEvent> handler)
         {
-            var type = typeof(T);
             if (_typeToHandlers.ContainsKey(type))
             {
-                _typeToHandlers[type] = (Action<GameplayEvent<T>>)_typeToHandlers[type] - handler;
+                _typeToHandlers[type] = (Action<GameplayEvent>)_typeToHandlers[type] - handler;
             }
         }
-        
-        public void TriggerEvent<T>(GameplayEvent<T> gameEvent) where T : EventArgs
+
+        public void TriggerEvent(GameplayEvent gameEvent)
         {
-            if (!_typeToHandlers.TryGetValue(typeof(T), out var d)) return;
-            if (d is Action<GameplayEvent<T>> callback)
+            var actualType = gameEvent.EventType;
+            if (!_typeToHandlers.TryGetValue(actualType, out var d)) return;
+            if (d is Action<GameplayEvent> callback)
             {
                 callback(gameEvent);
             }

@@ -3,8 +3,8 @@ using AbilitySystem.Runtime.Events;
 
 namespace AbilitySystem.Test.Utilities
 {
-    public class TestGameplayEvent : GameplayEvent<TestGameplayEventArgs>   {
-        public TestGameplayEvent(TestGameplayEventArgs arguments) : base(typeof(TestGameplayEvent), arguments)
+    public class TestGameplayEvent : GameplayEvent   {
+        public TestGameplayEvent(TestGameplayEventArgs arguments) : base(arguments)
         {
         }
     }
@@ -12,5 +12,11 @@ namespace AbilitySystem.Test.Utilities
     public class TestGameplayEventArgs : EventArgs
     {
         
+    }
+    
+    [Serializable]
+    public class TestGameplayEventType : GameplayEventType
+    {
+        public override Type EventType => typeof(TestGameplayEvent);
     }
 }
