@@ -47,9 +47,9 @@ namespace AbilitySystem.Runtime.Tags
             if (MatchType == GameplayTagMatchType.AnyOfExact && Tags.Any(t => t.Equals(tag))) return true;
             if (MatchType == GameplayTagMatchType.AllOfExact && Tags.All(t => t.Equals(tag))) return true;
             if (MatchType == GameplayTagMatchType.NoneOfExact && !Tags.Any(t => t.Equals(tag))) return true;
-            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => t.HasTag(tag))) return true;
-            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => t.HasTag(tag))) return true;
-            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => t.HasTag(tag))) return true;
+            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => t.IsAncestorOf(tag))) return true;
+            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => t.IsAncestorOf(tag))) return true;
+            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => t.IsAncestorOf(tag))) return true;
             return false;
         }
 
@@ -58,9 +58,9 @@ namespace AbilitySystem.Runtime.Tags
             if (MatchType == GameplayTagMatchType.AnyOfExact && Tags.Any(t => tags.Any(tag => tag.Equals(t)))) return true;
             if (MatchType == GameplayTagMatchType.AllOfExact && Tags.All(t => tags.Any(tag => tag.Equals(t)))) return true;
             if (MatchType == GameplayTagMatchType.NoneOfExact && !Tags.Any(t => tags.Any(tag => tag.Equals(t)))) return true;
-            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => tags.Any(tag => t.HasTag(tag)))) return true;
-            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => tags.Any(tag => t.HasTag(tag)))) return true;
-            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => tags.Any(tag => t.HasTag(tag)))) return true;
+            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => tags.Any(tag => t.IsAncestorOf(tag)))) return true;
+            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => tags.Any(tag => t.IsAncestorOf(tag)))) return true;
+            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => tags.Any(tag => t.IsAncestorOf(tag)))) return true;
             return false;
         }
     }

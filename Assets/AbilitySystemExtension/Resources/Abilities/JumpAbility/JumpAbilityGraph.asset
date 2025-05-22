@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 1400474609048879422
   - rid: 1400474609048879423
   - rid: 1400474609048879424
+  - rid: 1400474860123848791
   edges:
   - GUID: 6bf10313-e064-4fb5-ad5e-07eb91a41f54
     owner: {fileID: 11400000}
@@ -36,12 +37,20 @@ MonoBehaviour:
     outputFieldName: Executes
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: cad29488-18ea-462a-b605-67372eb544d5
+  - GUID: d4db199e-4dea-4e28-a2a3-1d18cec4c637
     owner: {fileID: 11400000}
-    inputNodeGUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
+    inputNodeGUID: 3b64a3e5-b663-460c-b56c-36b23b125cae
     outputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
     inputFieldName: Executed
     outputFieldName: executeAfter
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 6f15d91b-0dc4-449e-bf1d-f90a5377ea18
+    owner: {fileID: 11400000}
+    inputNodeGUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
+    outputNodeGUID: 3b64a3e5-b663-460c-b56c-36b23b125cae
+    inputFieldName: Executed
+    outputFieldName: Executes
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -117,10 +126,10 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
-        computeOrder: 4
+        computeOrder: 5
         position:
           serializedVersion: 2
-          x: 1283
+          x: 1812
           y: 312
           width: 170
           height: 75
@@ -135,10 +144,26 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1006
-          y: 189
+          x: 1009
+          y: 312
           width: 193
           height: 99
         expanded: 0
         debug: 0
         nodeLock: 0
+    - rid: 1400474860123848791
+      type: {class: SendCue, ns: AbilityGraph.Runtime.Nodes.Cues, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 3b64a3e5-b663-460c-b56c-36b23b125cae
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1245
+          y: 312
+          width: 549
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        CueDefinition: {fileID: 11400000, guid: b06e2a3132f9138418087a89cfc11071, type: 2}

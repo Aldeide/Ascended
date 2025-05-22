@@ -27,13 +27,24 @@ namespace AbilitySystemExtension.Scripts
         {
             Debug.Log("Cue added with tag:" + definition.cueTag.Name);
             if (!TagQuery.MatchesTag(definition.cueTag)) return;
+            if (definition is CueAnimationParameterDefinition parameterDefinition)
+            {
+                TriggerParameter(parameterDefinition.ParameterName);
+                return;
+            }
             var stateName = (definition as CueAnimationStateDefinition)?.animationLayerName;
             Debug.Log("Player layer: " + stateName);
             _animator.Play(stateName);
             
+            // Shouldn't be handled by a cue.
             var rb = GetComponent<Rigidbody>();
             rb.AddForce(0, 5, 0, ForceMode.VelocityChange);
             
+        }
+        
+        private void TriggerParameter(string parameterName)
+        {
+            _animator.SetTrigger(parameterName);
         }
     }
 }

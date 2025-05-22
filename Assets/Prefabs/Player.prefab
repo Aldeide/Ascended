@@ -2102,7 +2102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4140274085
+  GlobalObjectIdHash: 665534105
   InScenePlacedSourceGlobalObjectIdHash: 4140274085
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2320,6 +2320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   cameraTarget: {fileID: 0}
+  _isGrounded: 1
   turnSmoothTime: 0.1
 --- !u!114 &1452835322339888693
 MonoBehaviour:
@@ -3035,16 +3036,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TagQuery:
     Condition:
-    - MatchType: 0
+    - MatchType: 3
       Tags:
-      - name: Cue.Animation.State.Jump.Start
-        hashCode: 554262990
+      - name: Cue.Animation
+        hashCode: 972850731
         ancestorsNames:
         - Cue
-        - Cue.Animation
-        - Cue.Animation.State
-        - Cue.Animation.State.Jump
-        ancestorsHashCodes: d31da3892b86fc39e2536f838cfabc71
+        ancestorsHashCodes: d31da389
 --- !u!114 &5186085326376519157
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
+using AbilitySystemExtension.Scripts;
 using GraphProcessor;
-using Systems.Movement;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Nodes.Character
@@ -12,20 +11,21 @@ namespace AbilitySystemExtension.Runtime.Nodes.Character
     [Serializable, NodeMenuItem("Character/WaitForGroundedEvent")]
     public class WaitForGroundedEvent : WaitableNode
     {
-        private TaskCompletionSource<object> eventReceived;
+        private TaskCompletionSource<object> _eventReceived;
         public override void Initialise(Ability ability)
         {
             base.Initialise(ability);
             var movementController = ability.Owner.Component.gameObject.GetComponent<PlayerMovementController>();
+            if (!movementController) return;
             movementController.OnGroundedChanged += OnGroundedChanged;
         }
 
         public void OnGroundedChanged(bool grounded)
         {
             if (!grounded) return;
-            if (eventReceived != null)
+            if (_eventReceived != null)
             {
-                eventReceived.TrySetResult(null);
+                _eventReceived.TrySetResult(null);
             }
             
         }
@@ -38,8 +38,8 @@ namespace AbilitySystemExtension.Runtime.Nodes.Character
         
         private async Task WaitForEvent()
         {
-            eventReceived = new TaskCompletionSource<object>();
-            await eventReceived.Task;
+            _eventReceived = new TaskCompletionSource<object>();
+            await _eventReceived.Task;
             Debug.Log("FinishedWaitForGroundedEvent");
             ProcessFinished();
         }
