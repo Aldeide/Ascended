@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using AbilitySystem.Runtime.Abilities.AbilityActivation;
 using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 
@@ -40,6 +42,15 @@ namespace AbilitySystem.Runtime.Abilities
             // TODO: clone cooldown.
             Cooldown = Definition.Cooldown;
             _activatedEffects = new List<Effect>();
+
+            if (Definition.AbilityActivation != null)
+            {
+                if (Definition.AbilityActivation is OnEventActivation activation)
+                {
+                    var eventType = activation.ActivationEvent.EventType;
+                    owner.EventManager?.Subscribe(eventType, OnActivationEvent);
+                }
+            }
         }
         
         public void Tick()
@@ -54,6 +65,11 @@ namespace AbilitySystem.Runtime.Abilities
 
         protected abstract void ActivateAbility(AbilityData data);
 
+        protected virtual void OnActivationEvent(GameplayEvent gameplayEvent)
+        {
+            return;
+        }
+        
         protected virtual void CancelAbility()
         {
             EndAbility();

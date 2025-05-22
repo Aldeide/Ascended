@@ -4,10 +4,9 @@ using AbilitySystem.Runtime.Events;
 namespace AbilitySystemExtension.Runtime.Events
 {
     [Serializable]
-    public class PlayerReceivedDamageEvent : GameplayEvent<PlayerReceivedDamageEventArgs>
+    public class PlayerReceivedDamageEvent : GameplayEvent
     {
-        public PlayerReceivedDamageEvent(PlayerReceivedDamageEventArgs arguments) : base(
-            typeof(PlayerReceivedDamageEvent), arguments)
+        public PlayerReceivedDamageEvent(PlayerReceivedDamageEventArgs arguments) : base(arguments)
         {
         }
     }
@@ -21,5 +20,11 @@ namespace AbilitySystemExtension.Runtime.Events
         {
             Amount = amount;
         }
+    }
+
+    [Serializable]
+    public class PlayerReceivedDamageEventType : GameplayEventType
+    {
+        public override Type EventType => typeof(PlayerReceivedDamageEvent);
     }
 }
