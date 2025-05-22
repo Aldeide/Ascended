@@ -20,19 +20,12 @@ MonoBehaviour:
   - rid: 1400474609048879423
   - rid: 1400474609048879424
   - rid: 1400474860123848791
+  - rid: 1400474860123848792
   edges:
   - GUID: 6bf10313-e064-4fb5-ad5e-07eb91a41f54
     owner: {fileID: 11400000}
     inputNodeGUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
     outputNodeGUID: 9389b4d9-5232-4c9c-bd0e-7abb783fbe3e
-    inputFieldName: Executed
-    outputFieldName: Executes
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 1eca02c9-6a4c-4776-9c95-f43b1b5d8574
-    owner: {fileID: 11400000}
-    inputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
-    outputNodeGUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
     inputFieldName: Executed
     outputFieldName: Executes
     inputPortIdentifier: 
@@ -49,6 +42,22 @@ MonoBehaviour:
     owner: {fileID: 11400000}
     inputNodeGUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
     outputNodeGUID: 3b64a3e5-b663-460c-b56c-36b23b125cae
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 55416b6c-c3bc-410d-8958-f248abc83017
+    owner: {fileID: 11400000}
+    inputNodeGUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
+    outputNodeGUID: b34eaba9-103d-46fb-8930-9ab355a116d4
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: d6fe56c9-2cd1-4a39-88e9-3e54da61a072
+    owner: {fileID: 11400000}
+    inputNodeGUID: b34eaba9-103d-46fb-8930-9ab355a116d4
+    outputNodeGUID: 18b733b4-110e-43b8-9ea5-dac05dd5dddb
     inputFieldName: Executed
     outputFieldName: Executes
     inputPortIdentifier: 
@@ -98,9 +107,9 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 441
+          x: 364
           y: 312
-          width: 275
+          width: 498
           height: 95
         expanded: 0
         debug: 0
@@ -126,10 +135,10 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 089b9442-a76f-474f-a3f5-e7b2a1178252
-        computeOrder: 5
+        computeOrder: 6
         position:
           serializedVersion: 2
-          x: 1812
+          x: 1973
           y: 312
           width: 170
           height: 75
@@ -141,10 +150,10 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 3a1699f3-b85a-4eb0-b102-b5010d69afae
-        computeOrder: 3
+        computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1009
+          x: 1177
           y: 312
           width: 193
           height: 99
@@ -156,10 +165,10 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 3b64a3e5-b663-460c-b56c-36b23b125cae
-        computeOrder: 4
+        computeOrder: 5
         position:
           serializedVersion: 2
-          x: 1245
+          x: 1401
           y: 312
           width: 549
           height: 95
@@ -167,3 +176,19 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         CueDefinition: {fileID: 11400000, guid: b06e2a3132f9138418087a89cfc11071, type: 2}
+    - rid: 1400474860123848792
+      type: {class: RigidBodyAddForceNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: b34eaba9-103d-46fb-8930-9ab355a116d4
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 897
+          y: 312
+          width: 240
+          height: 94
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Force: {x: 0, y: 5, z: 0}

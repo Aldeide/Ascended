@@ -37,8 +37,8 @@ namespace AbilitySystemExtension.Scripts
             _animator.Play(stateName);
             
             // Shouldn't be handled by a cue.
-            var rb = GetComponent<Rigidbody>();
-            rb.AddForce(0, 5, 0, ForceMode.VelocityChange);
+            //var rb = GetComponent<Rigidbody>();
+            //rb.AddForce(0, 5, 0, ForceMode.VelocityChange);
             
         }
         
