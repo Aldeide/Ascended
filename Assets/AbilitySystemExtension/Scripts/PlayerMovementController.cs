@@ -1,52 +1,47 @@
-﻿
-using System;
+﻿using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
 using AbilitySystemExtension.Runtime.Tags;
-using NUnit.Framework;
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
-namespace Systems.Movement
+namespace AbilitySystemExtension.Scripts
 {
     public class PlayerMovementController : NetworkBehaviour
     {
+        private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
         private Vector3 _movementInput = new Vector3(0, 0, 0);
 
         [SerializeField] private GameObject cameraTarget;
-        
+        private CharacterController _characterController;
         private Animator _animator;
         private Rigidbody _rigidbody;
         private IAbilitySystem _abilitySystem;
         private float _movementSpeed;
-        [ShowInInspector]
-        [SerializeField]
-        private bool _isGrounded = true;
-        public float turnSmoothTime = 0.1f;   
+        [ShowInInspector] [SerializeField] private bool _isGrounded = true;
+        public float turnSmoothTime = 0.1f;
         private float _turnSmoothVelocity = 0.2f;
         private bool _isAiming;
-        private UnityEngine.Camera _camera;
+        private Camera _camera;
 
         public Action<bool> OnGroundedChanged;
-        
+
         public override void OnNetworkSpawn()
         {
-            
         }
-        
+
         public void Start()
         {
-            _camera = UnityEngine.Camera.main;
+            _camera = Camera.main;
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody>();
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
             _abilitySystem.AttributeSetManager.RegisterOnAttributeChanged("MovementSpeed", OnMovementSpeedChanged);
+            _characterController = GetComponent<CharacterController>();
             _movementSpeed = _abilitySystem.AttributeSetManager.GetAttributeSet<CharacteristicsAttributeSet>()
                 .MovementSpeed.CurrentValue;
         }
@@ -54,11 +49,10 @@ namespace Systems.Movement
         public void Update()
         {
             if (!IsLocalPlayer) return;
-
             var previousGroundedState = _isGrounded;
             _isGrounded = IsGrounded();
             if (previousGroundedState != _isGrounded) OnGroundedChanged?.Invoke(_isGrounded);
-            
+
             if (!CanMove()) return;
 
             //_isAiming = _abilitySystem.TagManager.HasTag(TagLibrary.StatusAiming);
@@ -72,16 +66,17 @@ namespace Systems.Movement
                 _rigidbody.MoveRotation(lookRotation);
                 //transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
             }
-            
+
             if (_movementInput.magnitude <= 0.01f)
             {
                 UpdateAnimator();
                 return;
             }
-            
+
             float targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
                                 _camera.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
+                turnSmoothTime);
             if (_isAiming)
             {
                 var target = transform.position + _camera.transform.forward;
@@ -95,29 +90,28 @@ namespace Systems.Movement
             {
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
             }
-            
+
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             _rigidbody.MovePosition(this.transform.position += moveDirection * (Time.deltaTime * _movementSpeed));
             UpdateAnimator();
         }
-        
+
         public void LateUpdate()
         {
             if (!IsLocalPlayer) return;
-            
         }
 
         public bool IsGrounded()
         {
-            if (_rigidbody.linearVelocity.y == 0)
+            //return _characterController.isGrounded;
+            if (_rigidbody.linearVelocity.y <= 0.01)
             {
-                return Physics.Raycast(transform.position, Vector3.down, 1f);
+                return Physics.Raycast(transform.position + Offset, Vector3.down, 1f, LayerMask.GetMask("Default"));
             }
 
             return false;
-
         }
-        
+
         private void Rotate(Vector3 newPosition)
         {
             Vector3 lookAtTarget = new Vector3(newPosition.x, this.transform.position.y, newPosition.z);
@@ -133,7 +127,7 @@ namespace Systems.Movement
                 if (_isAiming)
                 {
                     _animator.SetFloat("MovementX", _movementInput.x, 0.2f, Time.deltaTime);
-                    _animator.SetFloat("MovementY", _movementInput.z,0.2f, Time.deltaTime);
+                    _animator.SetFloat("MovementY", _movementInput.z, 0.2f, Time.deltaTime);
                 }
                 else
                 {
@@ -155,7 +149,7 @@ namespace Systems.Movement
                 _movementInput = new Vector3(input.x, 0, input.y);
             }
         }
-        
+
         public void OnLookInput(InputAction.CallbackContext context)
         {
             //mousePosition = context.ReadValue<Vector2>();
@@ -168,7 +162,8 @@ namespace Systems.Movement
 
         public bool CanMove()
         {
-            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised) && !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusDead);
+            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised) &&
+                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusDead);
         }
     }
 }
