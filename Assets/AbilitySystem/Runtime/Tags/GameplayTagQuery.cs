@@ -44,24 +44,23 @@ namespace AbilitySystem.Runtime.Tags
         
         public bool MatchesTag(GameplayTag tag)
         {
-            if (MatchType == GameplayTagMatchType.AnyOfExact && Tags.Any(t => t.Equals(tag))) return true;
-            if (MatchType == GameplayTagMatchType.AllOfExact && Tags.All(t => t.Equals(tag))) return true;
-            if (MatchType == GameplayTagMatchType.NoneOfExact && !Tags.Any(t => t.Equals(tag))) return true;
-            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => t.IsAncestorOf(tag))) return true;
-            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => t.IsAncestorOf(tag))) return true;
-            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => t.IsAncestorOf(tag))) return true;
-            return false;
+            return MatchesTags(new[] { tag });
         }
 
         public bool MatchesTags(GameplayTag[] tags)
         {
-            if (MatchType == GameplayTagMatchType.AnyOfExact && Tags.Any(t => tags.Any(tag => tag.Equals(t)))) return true;
-            if (MatchType == GameplayTagMatchType.AllOfExact && Tags.All(t => tags.Any(tag => tag.Equals(t)))) return true;
-            if (MatchType == GameplayTagMatchType.NoneOfExact && !Tags.Any(t => tags.Any(tag => tag.Equals(t)))) return true;
-            if (MatchType == GameplayTagMatchType.AnyOfPartial && Tags.Any(t => tags.Any(tag => t.IsAncestorOf(tag)))) return true;
-            if (MatchType == GameplayTagMatchType.AllOfPartial && Tags.All(t => tags.Any(tag => t.IsAncestorOf(tag)))) return true;
-            if (MatchType == GameplayTagMatchType.NoneOfPartial && !Tags.Any(t => tags.Any(tag => t.IsAncestorOf(tag)))) return true;
-            return false;
+            switch (MatchType)
+            {
+                case GameplayTagMatchType.AnyOfExact when Tags.Any(t => tags.Any(tag => tag.Equals(t))):
+                case GameplayTagMatchType.AllOfExact when Tags.All(t => tags.Any(tag => tag.Equals(t))):
+                case GameplayTagMatchType.NoneOfExact when !Tags.Any(t => tags.Any(tag => tag.Equals(t))):
+                case GameplayTagMatchType.AnyOfPartial when Tags.Any(t => tags.Any(tag => t.IsAncestorOf(tag))):
+                case GameplayTagMatchType.AllOfPartial when Tags.All(t => tags.Any(tag => t.IsAncestorOf(tag))):
+                case GameplayTagMatchType.NoneOfPartial when !Tags.Any(t => tags.Any(tag => t.IsAncestorOf(tag))):
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 
