@@ -9,6 +9,7 @@ namespace AbilityGraph.Runtime.Nodes.Abilities
     [Serializable, NodeMenuItem("Character/RigidbodyAddForce")]
     public class RigidBodyAddForceNode : LinearExecutableNode
     {
+        [Input("Force")]
         public Vector3 Force;
         public override string name => "Rigidbody: Add Force";
         private Rigidbody _rigidbody;
