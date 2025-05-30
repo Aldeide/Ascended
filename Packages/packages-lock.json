@@ -23,6 +23,15 @@
         "com.unity.ugui": "1.0.0"
       }
     },
+    "com.crashkonijn.goap": {
+      "version": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.33",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.collections": "1.2.4"
+      },
+      "hash": "7db11915823c02c0199ab4f92bc7ffae7095e82e"
+    },
     "com.unity.addressables": {
       "version": "2.4.3",
       "depth": 0,
