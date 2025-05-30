@@ -15,9 +15,11 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: TestDurational
-  cost: {fileID: 0}
-  abilityActivation:
+  Cost: {fileID: 0}
+  Cooldown:
     rid: -2
+  AbilityActivation:
+    rid: 1400474860123848795
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
@@ -26,6 +28,7 @@ MonoBehaviour:
   ActivationBlockedTags: []
   grantedEffects: []
   networkPolicy: 1
+  networkSecurityPolicy: 0
   activationCues: []
   ActivationTasks:
   - rid: 4336599336265449556
@@ -41,6 +44,14 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1400474860123848795
+      type: {class: OnEventActivation, ns: AbilitySystem.Runtime.Abilities.AbilityActivation, asm: AbilitySystem}
+      data:
+        ActivationEvent:
+          rid: 1400474860123848796
+    - rid: 1400474860123848796
+      type: {class: PlayerReceivedDamageEventType, ns: AbilitySystemExtension.Runtime.Events, asm: AbilitySystemExtension}
+      data: 
     - rid: 4336599336265449554
       type: {class: WaitTask, ns: AbilitySystem.Runtime.AbilityTasks, asm: AbilitySystem}
       data:
