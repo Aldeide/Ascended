@@ -15,7 +15,7 @@ namespace Systems.Controllers
             Offset = new Vector3(0, 2.2f, 0);
         }
 
-        public void Update()
+        public void LateUpdate()
         {
             if(!RectangleTransform || !Entity) return;
 
