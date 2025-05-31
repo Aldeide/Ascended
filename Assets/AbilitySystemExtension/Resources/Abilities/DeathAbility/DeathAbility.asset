@@ -40,8 +40,11 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1400475046140969171
+      type: {class: PlayerDeathEventType, ns: AbilitySystemExtension.Runtime.Events, asm: AbilitySystemExtension}
+      data: 
     - rid: 4336599696947282121
       type: {class: OnEventActivation, ns: AbilitySystem.Runtime.Abilities.AbilityActivation, asm: AbilitySystem}
       data:
         ActivationEvent:
-          rid: -2
+          rid: 1400475046140969171
