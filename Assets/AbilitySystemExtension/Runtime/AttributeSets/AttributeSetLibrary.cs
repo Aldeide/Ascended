@@ -8,6 +8,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         public static readonly Dictionary<string, Type> AttributeSetTypeDict = new Dictionary<string, Type>()
         {
             { "CharacteristicsAttributeSet", typeof(CharacteristicsAttributeSet) },
+            { "WeaponAttributeSet", typeof(WeaponAttributeSet) },
             { "MetaAttributeSet", typeof(MetaAttributeSet) },
         };
         
@@ -19,6 +20,9 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             "CharacteristicsAttributeSet.EnergyRegen",
             "CharacteristicsAttributeSet.MaxEnergy",
             "CharacteristicsAttributeSet.MovementSpeed",
+            "WeaponAttributeSet.ClipSize",
+            "WeaponAttributeSet.CurrentClip",
+            "WeaponAttributeSet.ReloadTime",
             "MetaAttributeSet.AbilityCooldown",
             "MetaAttributeSet.AbilityCost",
             "MetaAttributeSet.EffectDuration",
