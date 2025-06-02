@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystemExtension.Scripts
@@ -28,6 +29,7 @@ namespace AbilitySystemExtension.Scripts
         private bool _isAiming;
         private Camera _camera;
 
+        public Vector3 MovementDirection { get; set; } = new Vector3(0, 0, 0);
         public Action<bool> OnGroundedChanged;
 
         public override void OnNetworkSpawn()
@@ -70,6 +72,7 @@ namespace AbilitySystemExtension.Scripts
             if (_movementInput.magnitude <= 0.01f)
             {
                 UpdateAnimator();
+                MovementDirection = Vector3.zero;
                 return;
             }
 
@@ -91,8 +94,8 @@ namespace AbilitySystemExtension.Scripts
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
             }
 
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _rigidbody.MovePosition(this.transform.position += moveDirection * (Time.deltaTime * _movementSpeed));
+            MovementDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            _rigidbody.MovePosition(this.transform.position += MovementDirection * (Time.deltaTime * _movementSpeed));
             UpdateAnimator();
         }
 

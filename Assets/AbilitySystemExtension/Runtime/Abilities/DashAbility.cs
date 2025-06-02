@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
+using AbilitySystemExtension.Scripts;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Abilities
@@ -11,14 +12,17 @@ namespace AbilitySystemExtension.Runtime.Abilities
         private Vector3 _startPosition = new Vector3();
         private Vector3 _endPosition = new Vector3();
         private float _startTime = 0;
+        private PlayerMovementController _playerMovementController;
+        
         public DashAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
+            _playerMovementController = Owner.Component.gameObject.GetComponent<PlayerMovementController>();
         }
 
         protected override void ActivateAbility(AbilityData data)
         {
             _startPosition = Owner.Component.transform.position;
-            _endPosition = _startPosition + Owner.Component.transform.forward * _distance;
+            _endPosition = _startPosition + _playerMovementController.MovementDirection * _distance;
             _startTime = Owner.GetTime();
             CommitCostAndCooldown();
         }
