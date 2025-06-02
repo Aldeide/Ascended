@@ -12,7 +12,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
         private Vector3 _startPosition = new Vector3();
         private Vector3 _endPosition = new Vector3();
         private float _startTime = 0;
-        private PlayerMovementController _playerMovementController;
+        private readonly PlayerMovementController _playerMovementController;
         
         public DashAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
@@ -22,7 +22,15 @@ namespace AbilitySystemExtension.Runtime.Abilities
         protected override void ActivateAbility(AbilityData data)
         {
             _startPosition = Owner.Component.transform.position;
-            _endPosition = _startPosition + _playerMovementController.MovementDirection * _distance;
+            if (_playerMovementController.MovementDirection.magnitude > 0.01f)
+            {
+                _endPosition = _startPosition + _playerMovementController.MovementDirection.normalized * _distance;
+            }
+            else
+            {
+                _endPosition = _startPosition + Owner.Component.transform.forward.normalized * _distance;
+            }
+            
             _startTime = Owner.GetTime();
             CommitCostAndCooldown();
         }
