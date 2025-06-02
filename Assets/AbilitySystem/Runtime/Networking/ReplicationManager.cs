@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
+            if (!_owner.IsServer()) return;
             _networkBehaviour.NotifyClientsBaseValueChangedRpc(attribute.GetName(), newValue);
         }
 
@@ -38,6 +39,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
         {
+            if (!_owner.IsServer()) return;
             _networkBehaviour.NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
         }
 
