@@ -107,12 +107,8 @@ namespace AbilitySystemExtension.Scripts
         public bool IsGrounded()
         {
             //return _characterController.isGrounded;
-            if (_rigidbody.linearVelocity.y <= 0.01)
-            {
-                return Physics.Raycast(transform.position + Offset, Vector3.down, 1f, LayerMask.GetMask("Environment"));
-            }
-
-            return false;
+            return _rigidbody.linearVelocity.y <= 0.01 && Physics.Raycast(transform.position + Offset, Vector3.down, 1f,
+                LayerMask.GetMask("Environment"));
         }
 
         private void Rotate(Vector3 newPosition)
