@@ -15,7 +15,11 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: DashAbility
-  cost: {fileID: 11400000, guid: eb99d6a0a26d54f42b1a92ccd35f4c6b, type: 2}
+  Cost: {fileID: 11400000, guid: eb99d6a0a26d54f42b1a92ccd35f4c6b, type: 2}
+  Cooldown:
+    rid: -2
+  AbilityActivation:
+    rid: -2
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
@@ -24,3 +28,10 @@ MonoBehaviour:
   ActivationBlockedTags: []
   grantedEffects: []
   networkPolicy: 1
+  networkSecurityPolicy: 0
+  activationCues: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

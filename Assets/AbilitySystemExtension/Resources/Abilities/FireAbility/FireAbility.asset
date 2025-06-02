@@ -15,8 +15,10 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: FireAbility
-  cost: {fileID: 0}
-  abilityActivation:
+  Cost: {fileID: 0}
+  Cooldown:
+    rid: -2
+  AbilityActivation:
     rid: -2
   AssetTags: []
   CancelAbilityTags: []
@@ -33,7 +35,7 @@ MonoBehaviour:
   damageEffect: {fileID: 11400000, guid: 681c59784de32a64fb4fba43db3f81f9, type: 2}
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   references:
     version: 2
     RefIds:
