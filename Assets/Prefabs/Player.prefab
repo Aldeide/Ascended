@@ -2102,7 +2102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 665534105
+  GlobalObjectIdHash: 2966774584
   InScenePlacedSourceGlobalObjectIdHash: 4140274085
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2337,7 +2337,7 @@ MonoBehaviour:
   target: {fileID: 2195762699826613025}
   layerMask:
     serializedVersion: 2
-    m_Bits: 791
+    m_Bits: 1025
 --- !u!54 &2622810129250006931
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3563,7 +3563,7 @@ MonoBehaviour:
   _Editor_EnsureCount: 0
   _Editor_OnValidateTrigger: 1
   _EditorAllowAutoUpdateFeetParams: 1
-  _EditorCategory: 2
+  _EditorCategory: 0
   _EditorSetupCategory: 1
   _EditorMotionCategory: 3
   _EditorExtraCategory: 2
@@ -3582,7 +3582,7 @@ MonoBehaviour:
   baseTransform: {fileID: 0}
   Hips: {fileID: 7702941184544898057}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.9658484
+  finalScaleReference: 0.9658483
   finalScaleReferenceSqrt: 0.9328631
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -3594,7 +3594,7 @@ MonoBehaviour:
   FadeOffAtDistance: 0
   GroundMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1024
   RaycastHitTrigger: 1
   CastDistance: 1
   RaycastStartHeight: 0
