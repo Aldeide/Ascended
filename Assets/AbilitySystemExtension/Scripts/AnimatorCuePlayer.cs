@@ -10,8 +10,8 @@ namespace AbilitySystemExtension.Scripts
     [RequireComponent(typeof(Animator))]
     public class AnimatorCueListener : MonoBehaviour, ICueListener
     {
-        public GameplayTag[] TagFilter { get; set; }
-        [SerializeField] public GameplayTagQuery TagQuery;
+        [ShowInInspector]
+        public GameplayTagQuery TagQuery { get; set; }
         
         private Animator _animator;
         private CueManager _cueManager;
@@ -35,11 +35,6 @@ namespace AbilitySystemExtension.Scripts
             var stateName = (definition as CueAnimationStateDefinition)?.animationLayerName;
             Debug.Log("Player layer: " + stateName);
             _animator.Play(stateName);
-            
-            // Shouldn't be handled by a cue.
-            //var rb = GetComponent<Rigidbody>();
-            //rb.AddForce(0, 5, 0, ForceMode.VelocityChange);
-            
         }
         
         private void TriggerParameter(string parameterName)
