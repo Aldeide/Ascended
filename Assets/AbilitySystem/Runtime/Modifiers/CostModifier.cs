@@ -35,10 +35,10 @@ namespace AbilitySystem.Runtime.Modifiers
             _relevantModifiers.Clear();
             foreach (var modifier in from modifier in modifiers
                      from tag in modifierTags
-                     where modifier.Item1.Definition.assetTags.Any(e => e.IsAncestorOf(tag) || e.Equals(tag))
+                     where modifier.Effect.Definition.assetTags.Any(e => e.IsAncestorOf(tag) || e.Equals(tag))
                      select modifier)
             {
-                _relevantModifiers.Add(modifier);
+                _relevantModifiers.Add(new Tuple<Effect, Modifier>(modifier.Effect, modifier.Modifier));
             }
 
             return ApplyModifiers();

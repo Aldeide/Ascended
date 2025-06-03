@@ -46,9 +46,9 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
             var modifiers = aggregator.GetModifiers();
             _relevantModifiers.Clear();
             foreach (var modifier in modifiers.Where(modifier =>
-                         TagQuery.MatchesTags(modifier.Item1.Definition.assetTags)))
+                         TagQuery.MatchesTags(modifier.Effect.Definition.assetTags)))
             {
-                _relevantModifiers.Add(modifier);
+                _relevantModifiers.Add(new Tuple<Effect, Modifier>(modifier.Effect, modifier.Modifier));
             }
             return ApplyModifiers();
         }
