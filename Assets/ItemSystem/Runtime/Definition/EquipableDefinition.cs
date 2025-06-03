@@ -11,20 +11,52 @@ namespace Assets.ItemSystem.Runtime.Definition
 {
     public class EquipableDefinition : ItemDefinition, IEquippable
     {
-        public List<EquipableSlot> Mods => throw new NotImplementedException();
+        public EquippableSlotType SlotType { get; set; }
 
-        public Dictionary<ModType, int> MaxModByType => throw new NotImplementedException();
+        public List<EquipableSlot> Mods { get; set; }
 
-        public Ability EquippableAbility => throw new NotImplementedException();
+        public Dictionary<ModType, int> MaxModByType { get; set; }
 
-        public void EquipItem()
+        public AbilityDefinition EquippableAbility { get; set; }
+
+        public void SlotMod(EquippableModDefinition mod)
         {
-            throw new NotImplementedException();
+            if (IsModSlotable(mod))
+            {
+                Mods.First(x => x.ModType == mod.Type).EquipableMods.Add(mod);
+                //le calcule des ability des pieces d'equipement est fait au chargement de la run ?
+                // est-ce qu'on peut changer d'equipement en cours de run ? (sloting, armure ?)
+                // je suppose qu'on a le même système pour l'armure que pour l'arme ? on a
+                // qu'une armure pour chaque emplacement qu'on slot pour upgradé
+            }
         }
 
-        public void UnequipItem()
+        public void UnSlotMod(EquippableModDefinition mod)
         {
-            throw new NotImplementedException();
+            Mods.First(x => x.ModType == mod.Type).EquipableMods.Remove(mod);
+            //pas besoin de remove l'ability in game car le sloting et unsloting sera fait dans le lobby ?
+        }
+
+        public bool IsModSlotable(EquippableModDefinition mod)
+        {
+            EquipableSlot? equippableSlot = Mods.FirstOrDefault(x => x.ModType == mod.Type);
+            if (equippableSlot is null)
+            {
+                equippableSlot = new EquipableSlot()
+                {
+                    ModType = mod.Type,
+                    EquipableMods = new List<IEquippableMod>(),
+                    MaxSlots = MaxModByType[mod.Type]
+                };
+                Mods.Add(equippableSlot.Value);
+            }
+
+            return HasEnoughModSpace(equippableSlot.Value) && mod.IsSlotableInto(equippableSlot.Value);
+        }
+
+        public bool HasEnoughModSpace(EquipableSlot slot)
+        {
+            return slot.MaxSlots > slot.EquipableMods.Count;
         }
     }
 }

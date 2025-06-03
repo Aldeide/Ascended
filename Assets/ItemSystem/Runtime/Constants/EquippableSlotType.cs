@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Assets.ItemSystem.Runtime.Constants
 {
-    public enum ArmorType
+    public enum EquippableSlotType
     {
+        None,
+        Primary,
+        Secondary,
         Head,
         Shoulder,
         Body,
