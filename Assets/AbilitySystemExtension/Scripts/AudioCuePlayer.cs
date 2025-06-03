@@ -27,7 +27,7 @@ namespace AbilitySystemExtension.Scripts
         private void OnCueAdded(string cueTag, CueDefinition definition)
         {
             if (!cueTag.StartsWith("Cue.Audio")) return;
-            _audioSource.clip = (definition as CueAudioDefinition)?.audioClip;
+            _audioSource.clip = (definition as CueAudioDefinition)?.AudioClip;
             Debug.Log("Playing audio");
             _audioSource.Play();
         }
