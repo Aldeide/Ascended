@@ -16,7 +16,7 @@ namespace AbilitySystem.Runtime.Cues
         public Action<CueDefinition, CueData> OnCueAdd;
         public Action<CueDefinition, CueData> OnCueRemove;
         public Action<CueDefinition, CueData> OnCueExecute;
-        
+
         public CueManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -33,9 +33,17 @@ namespace AbilitySystem.Runtime.Cues
             Debug.Log("Received Cue: " + cueTag + " / " + cueAction + " / " + cueData + " /");
             // Don't play cues on the server.
             if (_owner.IsServer() && !_owner.IsHost()) return;
-            
+
             var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
-            switch(cueAction)
+            if (cueDefinition == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning("Cue not found in data library: " + cueTag);
+#endif
+                return;
+            }
+
+            switch (cueAction)
             {
                 case CueAction.Add:
                     AddCue(cueDefinition, cueData);
@@ -60,7 +68,7 @@ namespace AbilitySystem.Runtime.Cues
         {
             OnCueRemove?.Invoke(cue, data);
         }
-        
+
         public void ExecuteCue(CueDefinition cue, CueData data)
         {
             OnCueExecute?.Invoke(cue, data);
