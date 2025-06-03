@@ -12,12 +12,12 @@ namespace AbilityGraph.Runtime
         
         public override Type AbilityType()
         {
-            return typeof(TestAbilityGraph);
+            return typeof(GraphAbility);
         }
 
         public override Ability ToAbility(IAbilitySystem owner)
         {
-            return new TestAbilityGraph(this, owner);
+            return new GraphAbility(this, owner);
         }
     }
 }

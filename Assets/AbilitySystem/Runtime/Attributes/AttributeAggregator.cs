@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
@@ -15,112 +16,196 @@ namespace AbilitySystem.Runtime.Attributes
     /// </summary>
     public class AttributeAggregator
     {
+        private const float DivisionByZeroThreshold = float.Epsilon;
+
         private readonly Attribute _attribute;
         private readonly IAbilitySystem _owner;
-        
-        private readonly List<Tuple<Effect, Modifier>> _modifierCache = new();
+        private readonly List<(Effect Effect, Modifier Modifier)> _modifierCache = new();
 
+
+        /// <summary>
+        /// Creates a new attribute aggregator for the specified attribute.
+        /// </summary>
+        /// <param name="attribute">The attribute to manage.</param>
+        /// <param name="owner">The ability system that owns this attribute.</param>
         public AttributeAggregator(Attribute attribute, IAbilitySystem owner)
         {
             _attribute = attribute;
             _owner = owner;
         }
 
-        public List<Tuple<Effect, Modifier>> GetModifiers()
+        /// <summary>
+        /// Returns a read-only list of all modifiers currently affecting this attribute.
+        /// </summary>
+        public IReadOnlyList<(Effect Effect, Modifier Modifier)> GetModifiers()
         {
-            return _modifierCache;
+            return _modifierCache.AsReadOnly();
         }
 
+        /// <summary>
+        /// Enables the aggregator and starts tracking attribute modifications.
+        /// </summary>
         public void Enable()
         {
-            _owner.EffectManager.OnEffectAdded += RefreshModifierCache;
-            _owner.EffectManager.OnEffectRemoved += RefreshModifierCache;
-            _attribute.OnAttributeBaseValueChanged += UpdateCurrentValueWhenBaseValueChanged;
+            RegisterEventHandlers();
+            InitializeAttributeState();
         }
 
+        /// <summary>
+        /// Disables the aggregator and stops tracking attribute modifications.
+        /// </summary>
         public void Disable()
         {
-            _owner.EffectManager.OnEffectAdded -= RefreshModifierCache;
-            _owner.EffectManager.OnEffectRemoved -= RefreshModifierCache;
-            _attribute.OnAttributeBaseValueChanged -= UpdateCurrentValueWhenBaseValueChanged;
+            UnregisterEventHandlers();
+        }
+
+        private void RegisterEventHandlers()
+        {
+            _owner.EffectManager.OnEffectAdded += ProcessEffectChange;
+            _owner.EffectManager.OnEffectRemoved += ProcessEffectChange;
+            _attribute.OnAttributeBaseValueChanged += HandleBaseValueChanged;
+        }
+
+        private void UnregisterEventHandlers()
+        {
+            _owner.EffectManager.OnEffectAdded -= ProcessEffectChange;
+            _owner.EffectManager.OnEffectRemoved -= ProcessEffectChange;
+            _attribute.OnAttributeBaseValueChanged -= HandleBaseValueChanged;
+        }
+
+        private void HandleBaseValueChanged(Attribute attribute, float oldBaseValue, float newBaseValue)
+        {
+            if (Mathf.Approximately(oldBaseValue, newBaseValue)) return;
+            UpdateCurrentValue();
+        }
+
+        private void ProcessEffectChange(Effect changedEffect)
+        {
+            if (!IsEffectRelevantToAttribute(changedEffect)) return;
+            BuildModifierCache();
+            UpdateCurrentValue();
+        }
+
+        private void InitializeAttributeState()
+        {
+            BuildModifierCache();
+            UpdateCurrentValue();
+        }
+
+        private void BuildModifierCache()
+        {
+            _modifierCache.Clear();
+            var activeEffects = _owner.EffectManager.GetActiveEffects();
+            foreach (var effect in activeEffects)
+            {
+                AddModifiersFromEffectToCache(effect);
+            }
+        }
+
+        private void AddModifiersFromEffectToCache(Effect activeEffect)
+        {
+            if (!activeEffect.IsActive || activeEffect.Definition.modifiers == null) return;
+
+            foreach (var modifier in activeEffect.Definition.modifiers)
+            {
+                if (modifier.attributeName == _attribute.GetFullName())
+                {
+                    _modifierCache.Add((activeEffect, modifier));
+                }
+            }
+        }
+
+        private bool IsEffectRelevantToAttribute(Effect effect)
+        {
+            return effect.Definition.modifiers != null &&
+                   effect.Definition.modifiers.Any(mod => mod.attributeName == _attribute.GetFullName());
+        }
+
+        private void UpdateCurrentValue()
+        {
+            var newValue = CalculateCurrentValue();
+            _attribute.SetCurrentValue(newValue);
         }
 
         private float CalculateCurrentValue()
         {
-            var newValue = _attribute.BaseValue;
+            var totals = CalculateModifierTotals();
 
-            float additiveModifiers = 0;
-            float multiplicativeModifiers = 1;
-            float overrideModifiers = 0;
-            var hasOverride = false;
-            
+            if (totals.HasOverride)
+            {
+                return totals.OverrideValue;
+            }
+
+            return (_attribute.BaseValue + totals.AdditiveValue) * totals.MultiplicativeValue;
+        }
+
+        private ModifierTotals CalculateModifierTotals()
+        {
+            var totals = ModifierTotals.Create();
+
             foreach (var (effect, modifier) in _modifierCache)
             {
                 for (var i = 0; i < effect.NumStacks; i++)
                 {
                     var magnitude = modifier.Calculate(effect);
-                    switch (modifier.operation)
-                    {
-                        case EffectOperation.Additive:
-                            additiveModifiers += magnitude;
-                            break;
-                        case EffectOperation.Subtractive:
-                            additiveModifiers -= magnitude;
-                            break;
-                        case EffectOperation.Multiplicative:
-                            multiplicativeModifiers *= magnitude;
-                            break;
-                        case EffectOperation.Divisive:
-                            multiplicativeModifiers /= magnitude;
-                            break;
-                        case EffectOperation.Override:
-                            // TODO: currently only the latest override is considered. Might want to define a property for 
-                            // attributes as to whether they prefer the smallest or largest override.
-                            hasOverride = true;
-                            overrideModifiers = magnitude;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();   
-                    }
+                    ApplyModifierToTotals(modifier.operation, magnitude, ref totals);
                 }
             }
-            //_owner.NotifyAttributeBaseChanged(_attribute.attributeSetName, _attribute.attributeName, newValue);
-            return hasOverride ? overrideModifiers : (newValue + additiveModifiers) * multiplicativeModifiers;
+
+            return totals;
         }
-        
-        private void RefreshModifierCache(Effect effect)
+
+        private static void ApplyModifierToTotals(EffectOperation operation, float magnitude, ref ModifierTotals totals)
         {
-            // TODO: only do this if the added or removed modifier concerns this attribute.
-            _modifierCache.Clear();
-            var effects = _owner.EffectManager.GetActiveEffects();
-            foreach (var effectSpec in effects)
+            switch (operation)
             {
-                if (!effectSpec.IsActive) continue;
-                if (effectSpec.Definition.modifiers == null) continue;
-                foreach (var modifier in effectSpec.Definition.modifiers)
-                {
-                    if (modifier.attributeName == _attribute.GetFullName())
+                case EffectOperation.Additive:
+                    totals.AdditiveValue += magnitude;
+                    break;
+                case EffectOperation.Subtractive:
+                    totals.AdditiveValue -= magnitude;
+                    break;
+                case EffectOperation.Multiplicative:
+                    totals.MultiplicativeValue *= magnitude;
+                    break;
+                case EffectOperation.Divisive:
+                    if (Math.Abs(magnitude) < DivisionByZeroThreshold)
                     {
-                        _modifierCache.Add(new Tuple<Effect, Modifier>(effectSpec, modifier));
+                        Debug.LogWarning("Divisive modifier has a magnitude of zero. Skipping division.");
+                        break;
                     }
-                }
+                    totals.MultiplicativeValue /= magnitude;
+                    break;
+                case EffectOperation.Override:
+                    totals.HasOverride = true;
+                    totals.OverrideValue = magnitude;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(operation), operation,
+                        "Unsupported effect operation.");
             }
-            UpdateCurrentValue();
         }
 
-        private void UpdateCurrentValue()
-        {
-            float newValue = CalculateCurrentValue();
-            _attribute.SetCurrentValue(newValue);
-            //_owner.NotifyAttributeCurrentChanged(_attribute.a, _attribute.attributeName, newValue);
-        }
 
-        private void UpdateCurrentValueWhenBaseValueChanged(Attribute attribute, float oldBaseValue, float newBaseValue)
+        private struct ModifierTotals
         {
-            if (Mathf.Approximately(oldBaseValue, newBaseValue)) return;
+            // Fields
+            public float AdditiveValue;
+            public float MultiplicativeValue;
+            public float OverrideValue;
+            public bool HasOverride;
 
-            var newValue = CalculateCurrentValue();
-            _attribute.SetCurrentValue(newValue);
+            // Initialize with a static method instead of a constructor
+            public static ModifierTotals Create()
+            {
+                return new ModifierTotals
+                {
+                    AdditiveValue = 0,
+                    MultiplicativeValue = 1,
+                    OverrideValue = 0,
+                    HasOverride = false
+                };
+            }
         }
     }
 }

@@ -11,14 +11,14 @@ using UnityEngine;
 
 namespace AbilityGraph.Runtime
 {
-    public class TestAbilityGraph : Ability
+    public class GraphAbility : Ability
     {
         private readonly AbilityGraphDefinition _graphDefinition;
         private readonly AbilityGraph _graph;
         private readonly ActivateAbilityNode _activateNode;
         private readonly EndAbilityNode _endNode;
         private readonly GraphRunner _activateRunner;
-        public TestAbilityGraph(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
+        public GraphAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
             _graphDefinition = (ability as AbilityGraphDefinition);
             _graph = ScriptableObject.Instantiate(_graphDefinition.graph);
