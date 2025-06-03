@@ -8,6 +8,6 @@ namespace Assets.ItemSystem.Runtime.Interface
 {
     public interface IBaseItem
     {
-        public string Name { get; }
+        //pas sur de quoi en faire, en a-t-on vraiment besoin
     }
 }

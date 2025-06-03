@@ -9,6 +9,5 @@ namespace Assets.ItemSystem.Runtime.Interface
 {
     public interface IArmor : IEquippable
     {
-        protected ArmorType Type { get; }
     }
 }
