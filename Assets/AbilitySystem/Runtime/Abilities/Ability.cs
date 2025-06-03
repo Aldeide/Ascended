@@ -197,7 +197,7 @@ namespace AbilitySystem.Runtime.Abilities
                 {
                     effect.PredictionKey = PredictionKey;
                     Owner.EffectManager.AddPredictedEffect(PredictionKey, effect);
-                    return;
+                    continue;
                 }
 
                 if (PredictionKey.IsValidKey())
