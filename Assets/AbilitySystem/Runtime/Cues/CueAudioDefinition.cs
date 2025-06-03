@@ -7,6 +7,6 @@ namespace AbilitySystem.Runtime.Cues
     [CreateAssetMenu(fileName = "AudioCue", menuName = "AbilitySystem/AudioCue")]
     public class CueAudioDefinition : CueDefinition
     {
-        public AudioClip audioClip;
+        public AudioClip AudioClip;
     }
 }
