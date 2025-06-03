@@ -10,8 +10,9 @@ namespace Assets.ItemSystem.Runtime.Interface
 {
     public interface IEquippableMod : IBaseItem
     {
-        public ModType Type { get; }
-
-        public Ability ModAbility { get; }
+        AbilityDefinition GetAbility();
+        void DisableMod();
+        void EnableMod();
+        bool IsSlotableInto(EquipableSlot slot);
     }
 }
