@@ -11,6 +11,6 @@ namespace Assets.ItemSystem.Runtime.Definition
     [Serializable]
     public class ItemDefinition : ScriptableObject, IBaseItem
     {
-        public string Name => throw new NotImplementedException();
+        public string Name { get; set; }
     }
 }
