@@ -26,10 +26,11 @@ namespace AbilitySystemExtension.Scripts
         [ShowInInspector] [SerializeField] private bool _isGrounded = true;
         public float turnSmoothTime = 0.1f;
         private float _turnSmoothVelocity = 0.2f;
+        [ShowInInspector][SerializeField]
         private bool _isAiming;
         private Camera _camera;
 
-        public Vector3 MovementDirection { get; set; } = new Vector3(0, 0, 0);
+        public Vector3 MovementDirection { get; private set; } = new Vector3(0, 0, 0);
         public Action<bool> OnGroundedChanged;
 
         public override void OnNetworkSpawn()
@@ -50,63 +51,31 @@ namespace AbilitySystemExtension.Scripts
 
         public void Update()
         {
+            // For now, movement is locally authoritative.
             if (!IsLocalPlayer) return;
-            var previousGroundedState = _isGrounded;
-            _isGrounded = IsGrounded();
-            if (previousGroundedState != _isGrounded) OnGroundedChanged?.Invoke(_isGrounded);
-
             if (!CanMove()) return;
+            
+            // Update grounded state.
+            UpdateGrounded();
 
-            //_isAiming = _abilitySystem.TagManager.HasTag(TagLibrary.StatusAiming);
-            _isAiming = true;
-
-            if (_isAiming)
-            {
-                var target = transform.position + _camera.transform.forward;
-                var actualTarget = new Vector3(target.x, transform.position.y, target.z);
-                var lookRotation = Quaternion.LookRotation(actualTarget - transform.position);
-                _rigidbody.MoveRotation(lookRotation);
-                //transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
-            }
-
+            var targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
+                                _camera.transform.eulerAngles.y;
+            var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
+                turnSmoothTime);
+            _rigidbody.MoveRotation(ComputeRotation(angle));
+            ComputeMovementDirection(targetAngle);
             if (_movementInput.magnitude <= 0.01f)
             {
                 UpdateAnimator();
                 MovementDirection = Vector3.zero;
                 return;
             }
-
-            float targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
-                                _camera.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
-                turnSmoothTime);
-            if (_isAiming)
-            {
-                var target = transform.position + _camera.transform.forward;
-                var actualTarget = new Vector3(target.x, transform.position.y, target.z);
-                var lookRotation = Quaternion.LookRotation(actualTarget - transform.position);
-                _rigidbody.MoveRotation(lookRotation);
-                //Vector3 target = transform.position + _camera.transform.forward;
-                //transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            }
-
-            MovementDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _rigidbody.MovePosition(this.transform.position += MovementDirection * (Time.deltaTime * _movementSpeed));
+            _rigidbody.MovePosition(transform.position += MovementDirection * (Time.deltaTime * _movementSpeed));
             UpdateAnimator();
-        }
-
-        public void LateUpdate()
-        {
-            if (!IsLocalPlayer) return;
         }
 
         public bool IsGrounded()
         {
-            //return _characterController.isGrounded;
             return _rigidbody.linearVelocity.y <= 0.01 && Physics.Raycast(transform.position + Offset, Vector3.down, 1f,
                 LayerMask.GetMask("Environment"));
         }
@@ -163,6 +132,33 @@ namespace AbilitySystemExtension.Scripts
         {
             return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised) &&
                    !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusDead);
+        }
+
+        private void ComputeMovementDirection(float targetAngle)
+        {
+            if (_movementInput.magnitude <= 0.01f)
+            {
+                UpdateAnimator();
+                MovementDirection = Vector3.zero;
+                return;
+            }
+            
+            MovementDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+        }
+
+        private Quaternion ComputeRotation(float angle)
+        {
+            if (!_isAiming) return Quaternion.Euler(0f, angle, 0f);
+            var target = transform.position + _camera.transform.forward;
+            var actualTarget = new Vector3(target.x, transform.position.y, target.z);
+            return Quaternion.LookRotation(actualTarget - transform.position);
+        }
+
+        private void UpdateGrounded()
+        {
+            var previousGroundedState = _isGrounded;
+            _isGrounded = IsGrounded();
+            if (previousGroundedState != _isGrounded) OnGroundedChanged?.Invoke(_isGrounded);
         }
     }
 }
