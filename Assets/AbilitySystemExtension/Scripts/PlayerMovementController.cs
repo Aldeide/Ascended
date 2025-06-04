@@ -22,6 +22,7 @@ namespace AbilitySystemExtension.Scripts
         private Animator _animator;
         private Rigidbody _rigidbody;
         private IAbilitySystem _abilitySystem;
+        private IKCueListener _ikCueListener;
         private float _movementSpeed;
         [ShowInInspector] [SerializeField] private bool _isGrounded = true;
         public float turnSmoothTime = 0.1f;
@@ -45,6 +46,7 @@ namespace AbilitySystemExtension.Scripts
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
             _abilitySystem.AttributeSetManager.RegisterOnAttributeChanged("MovementSpeed", OnMovementSpeedChanged);
             _characterController = GetComponent<CharacterController>();
+            _ikCueListener = GetComponent<IKCueListener>();
             _movementSpeed = _abilitySystem.AttributeSetManager.GetAttributeSet<CharacteristicsAttributeSet>()
                 .MovementSpeed.CurrentValue;
         }
@@ -58,6 +60,16 @@ namespace AbilitySystemExtension.Scripts
             // Update grounded state.
             UpdateGrounded();
 
+            // Temp
+            if (_isAiming)
+            {
+                _ikCueListener.EnableAimIK();
+            }
+            else
+            {
+                _ikCueListener.DisableAimIK();
+            }
+            
             var targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
                                 _camera.transform.eulerAngles.y;
             var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
