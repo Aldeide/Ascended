@@ -1,12 +1,8 @@
-﻿using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using AbilityGraph.Runtime.Nodes;
+﻿using System.Linq;
 using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
-using GraphProcessor;
 using UnityEngine;
 
 namespace AbilityGraph.Runtime
@@ -21,14 +17,12 @@ namespace AbilityGraph.Runtime
         public GraphAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
             _graphDefinition = (ability as AbilityGraphDefinition);
+            if (!_graphDefinition) return;
             _graph = ScriptableObject.Instantiate(_graphDefinition.graph);
-            if (_graphDefinition != null)
-            {
-                _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
-                _endNode = _graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
-                _graph.nodes.FindAll(n=>n is AbilityNode).ForEach(n=> (n as AbilityNode)?.Initialise(this));
-                _activateRunner = new GraphRunner(_activateNode, this);
-            }
+            _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
+            _endNode = _graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
+            _graph.nodes.FindAll(n=>n is AbilityNode).ForEach(n=> (n as AbilityNode)?.Initialise(this));
+            _activateRunner = new GraphRunner(_activateNode, this);
         }
 
         protected override void ActivateAbility(AbilityData data)
@@ -47,7 +41,5 @@ namespace AbilityGraph.Runtime
                 n.OnProcess();
             }
         }
-        
-
     }
 }
