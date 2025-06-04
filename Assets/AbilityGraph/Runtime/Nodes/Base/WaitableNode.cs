@@ -6,14 +6,15 @@ using UnityEngine;
 
 namespace AbilityGraph.Runtime.Nodes.Base
 {
-    [System.Serializable]
+    
     /// <summary>
-    /// This class represent a waitable node which invokes another node after a time/frame
+    /// This class represents a waitable node which invokes another node after a time/frame
     /// </summary>
+    [Serializable]
     public abstract class WaitableNode : LinearExecutableNode
     {
         [Output(name = "Execute After")]
-        public ExecutableLink executeAfter;
+        public ExecutableLink ExecuteAfter;
 
         protected void ProcessFinished()
         {
@@ -25,7 +26,7 @@ namespace AbilityGraph.Runtime.Nodes.Base
 
         public IEnumerable< ExecutableNode > GetExecuteAfterNodes()
         {
-            return outputPorts.FirstOrDefault(n => n.fieldName == nameof(executeAfter))
+            return outputPorts.FirstOrDefault(n => n.fieldName == nameof(ExecuteAfter))
                 .GetEdges().Select(e => e.inputNode as ExecutableNode);
         }
     }
