@@ -10,7 +10,7 @@ namespace AbilitySystemExtension.Scripts
     [RequireComponent(typeof(Animator))]
     public class AnimatorCueListener : MonoBehaviour, ICueListener
     {
-        [ShowInInspector]
+        [field: SerializeField]
         public GameplayTagQuery TagQuery { get; set; }
         
         private Animator _animator;
