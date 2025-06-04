@@ -17,7 +17,7 @@ namespace Assets.ItemSystem.Runtime.Interface
         bool IsModSlotable(EquippableModDefinition mod);
     }
 
-    public struct EquipableSlot
+    public struct EquippableSlot
     {
         public EquippableSlotType Type;
         public ModType ModType { get; set;}
