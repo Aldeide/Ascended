@@ -16,13 +16,13 @@ namespace ItemSystem.Runtime.Manager
     {
         private IAbilitySystem _owner;
         
-        private Dictionary<string, EquipableDefinition> _equipment = new();
+        private Dictionary<string, EquippableDefinition> _equipment = new();
         
         public EquipmentManager(IAbilitySystem owner)
         {
             _owner = owner;
         }
-        public void Equip(string slotName, EquipableDefinition item)
+        public void Equip(string slotName, EquippableDefinition item)
         {
             if (_equipment.ContainsKey(slotName))
             {
@@ -37,12 +37,10 @@ namespace ItemSystem.Runtime.Manager
             _equipment.Remove(slotName);
         }
 
-        public List<AbilityDefinition> GetAbilities(EquipableDefinition equippable)
+        public List<AbilityDefinition> GetAbilities(EquippableDefinition equippable)
         {
-            var results = new List<AbilityDefinition>()
-            {
-                equippable.EquippableAbility
-            };
+            var results = new List<AbilityDefinition>();
+            results.AddRange(equippable.EquippableAbilities);
 
             if (equippable.Mods is not null && equippable.Mods.Count() > 0)
             {

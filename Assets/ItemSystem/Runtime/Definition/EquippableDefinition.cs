@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Assets.ItemSystem.Runtime.Definition
 {
-    public class EquipableDefinition : ItemDefinition, IEquippable
+    public class EquippableDefinition : ItemDefinition, IEquippable
     {
         public EquippableSlotType SlotType { get; set; }
 
-        public List<EquipableSlot> Mods { get; set; }
+        public List<EquippableSlot> Mods { get; set; }
 
         public Dictionary<ModType, int> MaxModByType { get; set; }
 
-        public AbilityDefinition EquippableAbility { get; set; }
+        public AbilityDefinition[] EquippableAbilities { get; set; }
 
         public void SlotMod(EquippableModDefinition mod)
         {
@@ -39,10 +39,10 @@ namespace Assets.ItemSystem.Runtime.Definition
 
         public bool IsModSlotable(EquippableModDefinition mod)
         {
-            EquipableSlot? equippableSlot = Mods.FirstOrDefault(x => x.ModType == mod.Type);
+            EquippableSlot? equippableSlot = Mods.FirstOrDefault(x => x.ModType == mod.Type);
             if (equippableSlot is null)
             {
-                equippableSlot = new EquipableSlot()
+                equippableSlot = new EquippableSlot()
                 {
                     ModType = mod.Type,
                     EquipableMods = new List<IEquippableMod>(),
@@ -54,7 +54,7 @@ namespace Assets.ItemSystem.Runtime.Definition
             return HasEnoughModSpace(equippableSlot.Value) && mod.IsSlotableInto(equippableSlot.Value);
         }
 
-        public bool HasEnoughModSpace(EquipableSlot slot)
+        public bool HasEnoughModSpace(EquippableSlot slot)
         {
             return slot.MaxSlots > slot.EquipableMods.Count;
         }
