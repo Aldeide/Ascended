@@ -13,6 +13,6 @@ namespace Assets.ItemSystem.Runtime.Interface
         AbilityDefinition GetAbility();
         void DisableMod();
         void EnableMod();
-        bool IsSlotableInto(EquipableSlot slot);
+        bool IsSlotableInto(EquippableSlot slot);
     }
 }

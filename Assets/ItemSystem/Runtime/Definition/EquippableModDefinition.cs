@@ -30,7 +30,7 @@ namespace Assets.ItemSystem.Runtime.Definition
             IsModEnabled = true;
         }
 
-        public bool IsSlotableInto(EquipableSlot slot)
+        public bool IsSlotableInto(EquippableSlot slot)
         {
             return slot.ModType == Type
                 && (RestrictedSlot is null || RestrictedSlot.Count == 0 || RestrictedSlot.Contains(slot.Type));
