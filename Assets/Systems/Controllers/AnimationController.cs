@@ -23,8 +23,15 @@ namespace Systems.Controllers
 
         public void SetMovement(float x, float y)
         {
+            SetIsMoving(x + y >= 0.001);
             _animator.SetFloat(MovementX, x);
             _animator.SetFloat(MovementY, y);
+        }
+
+        public void StopMovement()
+        {
+            SetMovement(0, 0);
+            SetIsMoving(false);
         }
     }
 }
