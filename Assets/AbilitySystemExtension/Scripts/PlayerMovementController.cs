@@ -4,6 +4,7 @@ using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
 using AbilitySystemExtension.Runtime.Tags;
 using Sirenix.OdinInspector;
+using Systems.Controllers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,17 +13,15 @@ using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystemExtension.Scripts
 {
+    [RequireComponent(typeof(AnimationController))]
     public class PlayerMovementController : NetworkBehaviour
     {
+        // Offset for grounded checks.
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
-        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
-        private static readonly int MovementX = Animator.StringToHash("MovementX");
-        private static readonly int MovementY = Animator.StringToHash("MovementY");
         private Vector3 _movementInput = new Vector3(0, 0, 0);
 
-        [SerializeField] private GameObject cameraTarget;
-        private CharacterController _characterController;
-        private Animator _animator;
+        [FormerlySerializedAs("cameraTarget")] [SerializeField] private GameObject CameraTarget;
+        private AnimationController _animationController;
         private Rigidbody _rigidbody;
         private IAbilitySystem _abilitySystem;
         private IKCueListener _ikCueListener;
@@ -44,11 +43,10 @@ namespace AbilitySystemExtension.Scripts
         public void Start()
         {
             _camera = Camera.main;
-            _animator = GetComponent<Animator>();
+            _animationController = GetComponent<AnimationController>();
             _rigidbody = GetComponent<Rigidbody>();
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
             _abilitySystem.AttributeSetManager.RegisterOnAttributeChanged("MovementSpeed", OnMovementSpeedChanged);
-            _characterController = GetComponent<CharacterController>();
             _ikCueListener = GetComponent<IKCueListener>();
             _movementSpeed = _abilitySystem.AttributeSetManager.GetAttributeSet<CharacteristicsAttributeSet>()
                 .MovementSpeed.CurrentValue;
@@ -106,21 +104,22 @@ namespace AbilitySystemExtension.Scripts
         {
             if (_movementInput.magnitude > 0.01f)
             {
-                _animator.SetBool(IsMoving, true);
+                _animationController.SetIsMoving(true);
                 if (_isAiming)
                 {
-                    _animator.SetFloat(MovementX, _movementInput.x, 0.2f, Time.deltaTime);
-                    _animator.SetFloat(MovementY, _movementInput.z, 0.2f, Time.deltaTime);
+                    // TODO: add animation transition smotthing.
+                    _animationController.SetMovement(_movementInput.x, _movementInput.z);
+                    //_animator.SetFloat(MovementX, _movementInput.x, 0.2f, Time.deltaTime);
+                    //_animator.SetFloat(MovementY, _movementInput.z, 0.2f, Time.deltaTime);
                 }
                 else
                 {
-                    _animator.SetFloat("MovementX", 0.0f);
-                    _animator.SetFloat("MovementY", 1.0f);
+                    _animationController.SetMovement(0, 1);
                 }
             }
             else
             {
-                _animator.SetBool("IsMoving", false);
+                _animationController.SetIsMoving(false);
             }
         }
 
