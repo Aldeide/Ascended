@@ -1,82 +1,92 @@
 ﻿using CrashKonijn.Agent.Core;
 using CrashKonijn.Agent.Runtime;
+using Systems.Controllers;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace AISystem.Runtime.Behaviours
 {
+    [RequireComponent(typeof(AnimationController))]
     public class AgentMoveBehaviour : NetworkBehaviour
     {
         private AgentBehaviour agent;
         private ITarget currentTarget;
         private bool shouldMove;
 
+        private AnimationController _animationController;
+        
         private void Awake()
         {
-            this.agent = this.GetComponent<AgentBehaviour>();
+            agent = GetComponent<AgentBehaviour>();
+            _animationController = GetComponent<AnimationController>();
         }
 
         private void OnEnable()
         {
-            this.agent.Events.OnTargetInRange += this.OnTargetInRange;
-            this.agent.Events.OnTargetChanged += this.OnTargetChanged;
-            this.agent.Events.OnTargetNotInRange += this.TargetNotInRange;
-            this.agent.Events.OnTargetLost += this.TargetLost;
+            agent.Events.OnTargetInRange += OnTargetInRange;
+            agent.Events.OnTargetChanged += OnTargetChanged;
+            agent.Events.OnTargetNotInRange += TargetNotInRange;
+            agent.Events.OnTargetLost += TargetLost;
         }
 
         private void OnDisable()
         {
-            this.agent.Events.OnTargetInRange -= this.OnTargetInRange;
-            this.agent.Events.OnTargetChanged -= this.OnTargetChanged;
-            this.agent.Events.OnTargetNotInRange -= this.TargetNotInRange;
-            this.agent.Events.OnTargetLost -= this.TargetLost;
+            agent.Events.OnTargetInRange -= OnTargetInRange;
+            agent.Events.OnTargetChanged -= OnTargetChanged;
+            agent.Events.OnTargetNotInRange -= TargetNotInRange;
+            agent.Events.OnTargetLost -= TargetLost;
         }
 
         private void TargetLost()
         {
-            this.currentTarget = null;
-            this.shouldMove = false;
+            currentTarget = null;
+            shouldMove = false;
         }
 
         private void OnTargetInRange(ITarget target)
         {
-            this.shouldMove = false;
+            shouldMove = false;
         }
 
         private void OnTargetChanged(ITarget target, bool inRange)
         {
-            this.currentTarget = target;
-            this.shouldMove = !inRange;
+            currentTarget = target;
+            shouldMove = !inRange;
         }
 
         private void TargetNotInRange(ITarget target)
         {
-            this.shouldMove = true;
+            shouldMove = true;
         }
 
         public void Update()
         {
             if (!IsServer) return;
-            if (this.agent.IsPaused)
+            if (agent.IsPaused)
                 return;
 
-            if (!this.shouldMove)
+            if (!shouldMove)
+            {
+                _animationController.StopMovement();
+                return;
+            }
+            
+            if (currentTarget == null)
                 return;
 
-            if (this.currentTarget == null)
-                return;
-
-            this.transform.position = Vector3.MoveTowards(this.transform.position,
-                new Vector3(this.currentTarget.Position.x, this.transform.position.y, this.currentTarget.Position.z),
+            transform.position = Vector3.MoveTowards(transform.position,
+                new Vector3(currentTarget.Position.x, transform.position.y, currentTarget.Position.z),
                 Time.deltaTime);
+            _animationController.SetMovement(1, 0);
+            
         }
 
         private void OnDrawGizmos()
         {
-            if (this.currentTarget == null)
+            if (currentTarget == null)
                 return;
 
-            Gizmos.DrawLine(this.transform.position, this.currentTarget.Position);
+            Gizmos.DrawLine(transform.position, currentTarget.Position);
         }
     }
 }
