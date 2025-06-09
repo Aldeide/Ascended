@@ -15,6 +15,9 @@ namespace AbilitySystemExtension.Scripts
     public class PlayerMovementController : NetworkBehaviour
     {
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
+        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int MovementX = Animator.StringToHash("MovementX");
+        private static readonly int MovementY = Animator.StringToHash("MovementY");
         private Vector3 _movementInput = new Vector3(0, 0, 0);
 
         [SerializeField] private GameObject cameraTarget;
@@ -103,11 +106,11 @@ namespace AbilitySystemExtension.Scripts
         {
             if (_movementInput.magnitude > 0.01f)
             {
-                _animator.SetBool("IsMoving", true);
+                _animator.SetBool(IsMoving, true);
                 if (_isAiming)
                 {
-                    _animator.SetFloat("MovementX", _movementInput.x, 0.2f, Time.deltaTime);
-                    _animator.SetFloat("MovementY", _movementInput.z, 0.2f, Time.deltaTime);
+                    _animator.SetFloat(MovementX, _movementInput.x, 0.2f, Time.deltaTime);
+                    _animator.SetFloat(MovementY, _movementInput.z, 0.2f, Time.deltaTime);
                 }
                 else
                 {

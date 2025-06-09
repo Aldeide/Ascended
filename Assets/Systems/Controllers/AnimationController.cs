@@ -1,0 +1,30 @@
+﻿using UnityEngine;
+
+namespace Systems.Controllers
+{
+    [RequireComponent(typeof(Animator))]
+    public class AnimationController : MonoBehaviour
+    {
+        private Animator _animator;
+        
+        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int MovementX = Animator.StringToHash("MovementX");
+        private static readonly int MovementY = Animator.StringToHash("MovementY");
+        
+        private void Start()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
+        public void SetIsMoving(bool isMoving)
+        {
+            _animator.SetBool(IsMoving, isMoving);
+        }
+
+        public void SetMovement(float x, float y)
+        {
+            _animator.SetFloat(MovementX, x);
+            _animator.SetFloat(MovementY, y);
+        }
+    }
+}
