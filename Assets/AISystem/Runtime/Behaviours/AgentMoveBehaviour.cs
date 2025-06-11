@@ -77,8 +77,8 @@ namespace AISystem.Runtime.Behaviours
             transform.position = Vector3.MoveTowards(transform.position,
                 new Vector3(currentTarget.Position.x, transform.position.y, currentTarget.Position.z),
                 Time.deltaTime);
-            _animationController.SetMovement(1, 0);
-            
+            _animationController.SetMoveForward();
+
         }
 
         private void OnDrawGizmos()
