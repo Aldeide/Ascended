@@ -40,5 +40,14 @@ namespace Interface
             Debug.Log("SettingsButtonClicked");
             //_document.rootVisualElement.visible = false;
         }
+
+        private void OnQuiteButtonClicked()
+        {
+            Debug.Log("QuitButtonClicked");
+            Application.Quit();
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        }
     }
 }
