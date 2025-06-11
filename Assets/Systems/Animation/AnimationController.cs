@@ -21,6 +21,13 @@ namespace Systems.Controllers
             _animator.SetBool(IsMoving, isMoving);
         }
 
+        public void SetMoveForward()
+        {
+            SetIsMoving(true);
+            _animator.SetFloat(MovementX, 0);
+            _animator.SetFloat(MovementY, 1);
+        }
+
         public void SetMovement(float x, float y)
         {
             SetIsMoving(x + y >= 0.001);
