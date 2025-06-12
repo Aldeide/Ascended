@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/ascendant.uss?fileID=7433441132597879392&amp;guid=d6e915947cd499941ba79f9a7c85e7ca&amp;type=3#ascendant" />
+    <ui:VisualElement style="flex-grow: 1; width: 450px; flex-direction: column; align-self: center; align-content: auto; justify-content: center;">
+        <ui:TextField label="Player Name&#10;" name="PlayerName" style="color: rgb(229, 229, 229);" />
+        <ui:Button text="HOST&#10;" name="HostButton" style="background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); align-content: center; align-self: auto;" />
+        <ui:TextField label="IP Address&#10;" name="IpAddress" style="color: rgb(229, 229, 229); top: 200px;" />
+        <ui:Button text="JOIN&#10;" name="JoinButton" style="background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); align-content: center; align-self: auto; top: 200px;" />
+    </ui:VisualElement>
+</ui:UXML>
