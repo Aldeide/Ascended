@@ -5,4 +5,5 @@
         <ui:TabView />
         <ui:DropdownField label="Dropdown" />
     </ui:VisualElement>
+    <TabbedView />
 </ui:UXML>
