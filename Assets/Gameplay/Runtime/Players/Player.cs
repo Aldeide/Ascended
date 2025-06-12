@@ -1,15 +1,27 @@
-﻿using Steamworks;
+﻿using Gameplay.Runtime.Interfaces;
+using Steamworks;
+using UnityEngine.Playables;
 
 namespace Gameplay.Runtime.Players
 {
-    public class Player
+    public class SteamPlayer : IPlayer
     {
-        public string Name;
-        public SteamId SteamId;
-        public Player(string name, SteamId playerId)
+        private readonly string _name;
+        private SteamId _steamId;
+        public SteamPlayer(string name, SteamId playerId)
         {
-            Name = name;
-            SteamId = playerId;
+            _name = name;
+            _steamId = playerId;
+        }
+        
+        public string GetPlayerName()
+        {
+            return _name;
+        }
+
+        public int GetPlayerId()
+        {
+            return (int)_steamId.AccountId;
         }
     }
 }
