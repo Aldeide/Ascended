@@ -1,9 +1,19 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 1; opacity: 1; position: absolute; width: 100%; height: 100%;">
-        <ui:Tab label="Graphics" name="GraphicsTab" />
-        <ui:Tab label="Tab" />
-        <ui:TabView />
-        <ui:DropdownField label="Dropdown" />
-    </ui:VisualElement>
-    <TabbedView />
+    <ui:TabView view-data-key="TabbedMenu">
+        <ui:Tab label="Graphics&#10;" name="Graphics" view-data-key="GraphicsTab" style="color: rgb(255, 255, 255);">
+            <ui:Label text="Label" />
+        </ui:Tab>
+        <ui:Tab label="Audio&#10;" view-data-key="AudioTab" name="Audio" />
+        <ui:Tab label="Keybindings" name="Keybindings" view-data-key="KeybindingsTab">
+            <ui:MultiColumnListView sorting-mode="Default">
+                <ui:Columns stretch-mode="GrowAndFill">
+                    <ui:Column title="Test" name="Hi" min-width="200px" width="50%" visible="true" sortable="true" optional="false" resizable="false" />
+                    <ui:Column name="Setting" width="50%" title="Setting" stretchable="false" sortable="false" optional="false" resizable="false" />
+                </ui:Columns>
+                <ui:SortColumnDescriptions>
+                    <ui:SortColumnDescription column-name="Hi" />
+                </ui:SortColumnDescriptions>
+            </ui:MultiColumnListView>
+        </ui:Tab>
+    </ui:TabView>
 </ui:UXML>
