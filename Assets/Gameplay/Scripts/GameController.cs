@@ -1,4 +1,5 @@
-﻿using Gameplay.Runtime.Players;
+﻿using Gameplay.Runtime.Interfaces;
+using Gameplay.Runtime.Players;
 using UnityEngine;
 using Steamworks;
 
@@ -6,7 +7,7 @@ namespace Gameplay.Scripts
 {
     public class GameController : MonoBehaviour
     {
-        public Player Player;
+        public IPlayer Player;
         public static GameController Instance
         {
             get
@@ -45,7 +46,7 @@ namespace Gameplay.Scripts
                 playerName = SteamClient.Name;
                 playerId = SteamClient.SteamId.AccountId;
             }
-            Player = new Player(playerName, SteamClient.SteamId);
+            Player = new SteamPlayer(playerName, SteamClient.SteamId);
         }
 
         private void OnDisable()
