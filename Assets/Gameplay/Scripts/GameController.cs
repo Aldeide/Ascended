@@ -45,7 +45,7 @@ namespace Gameplay.Scripts
                 playerName = SteamClient.Name;
                 playerId = SteamClient.SteamId.AccountId;
             }
-            Player = new Player(playerName, (int)playerId);
+            Player = new Player(playerName, SteamClient.SteamId);
         }
 
         private void OnDisable()

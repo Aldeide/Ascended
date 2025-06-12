@@ -1,13 +1,15 @@
-﻿namespace Gameplay.Runtime.Players
+﻿using Steamworks;
+
+namespace Gameplay.Runtime.Players
 {
     public class Player
     {
         public string Name;
-        public int PlayerId;
-        public Player(string name, int playerId)
+        public SteamId SteamId;
+        public Player(string name, SteamId playerId)
         {
             Name = name;
-            PlayerId = playerId;
+            SteamId = playerId;
         }
     }
 }
