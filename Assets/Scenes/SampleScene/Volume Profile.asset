@@ -14,48 +14,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   enable:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   layerMask:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
   maximumSamples:
-    m_OverrideState: 0
-    m_Value: 256
+    m_OverrideState: 1
+    m_Value: 16
   minimumDepth:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   maximumDepth:
-    m_OverrideState: 0
-    m_Value: 4
+    m_OverrideState: 1
+    m_Value: 2
   maximumIntensity:
-    m_OverrideState: 0
-    m_Value: 10
+    m_OverrideState: 1
+    m_Value: 5
   denoising:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   useAOVs:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   temporal:
     m_OverrideState: 0
     m_Value: 0
   separateVolumetrics:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   asyncDenoising:
     m_OverrideState: 0
     m_Value: 1
   skyImportanceSampling:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 2
   tilingParameters:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
   seedMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   customSeed:
     m_OverrideState: 0
@@ -112,10 +112,10 @@ MonoBehaviour:
     m_Value: 1
   colorMode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   color:
-    m_OverrideState: 0
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   tint:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -136,10 +136,10 @@ MonoBehaviour:
     m_Value: 0
   maximumHeight:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 49.71
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 400
+    m_Value: 20
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
@@ -154,7 +154,7 @@ MonoBehaviour:
     m_Value: 64
   denoisingMode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 3
   anisotropy:
     m_OverrideState: 0
     m_Value: 0
@@ -218,13 +218,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
   m_Name: GlobalIllumination
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 0
     m_Value: 1
   enable:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   tracing:
     m_OverrideState: 0
     m_Value: 1
@@ -322,7 +322,7 @@ MonoBehaviour:
   active: 1
   enable:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   cloudTiling:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
@@ -762,7 +762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ddcec8a8eb2d684d833ac8f5d26aebd, type: 3}
   m_Name: HDShadowSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   interCascadeBorders: 1
   maxShadowDistance:
     m_OverrideState: 1
@@ -809,10 +809,10 @@ MonoBehaviour:
   active: 1
   skyType:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   cloudType:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   skyAmbientMode:
     m_OverrideState: 1
     m_Value: 1
@@ -1013,7 +1013,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 13.1967535
+    m_Value: 1.9680208
   compensation:
     m_OverrideState: 0
     m_Value: 0
