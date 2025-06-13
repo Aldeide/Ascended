@@ -26,15 +26,7 @@ namespace Gameplay.Scripts
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            try
-            {
-                // TODO(antho): Uncomment once we have a steam app id.
-                // Steamworks.SteamClient.Init( 252490, true );
-            }
-            catch ( System.Exception e )
-            {
-                // Something went wrong! Steam is closed?
-            }
+
         }
         
         private void Start()
@@ -47,11 +39,6 @@ namespace Gameplay.Scripts
                 playerId = SteamClient.SteamId.AccountId;
             }
             Player = new SteamPlayer(playerName, SteamClient.SteamId);
-        }
-
-        private void OnDisable()
-        {
-            SteamClient.Shutdown();
         }
     }
 }
