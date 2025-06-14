@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Steamworks;
+using UnityEngine;
 
 namespace Gameplay.Scripts
 {
@@ -19,7 +20,7 @@ namespace Gameplay.Scripts
 
         private void Update()
         {
-            Steamworks.SteamClient.RunCallbacks();
+            SteamClient.RunCallbacks();
         }
         
         private void OnDisable()
