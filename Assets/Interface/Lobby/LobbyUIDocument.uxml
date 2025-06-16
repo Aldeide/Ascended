@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="Lobby" style="flex-grow: 1; background-color: rgb(21, 21, 26);">
+    <ui:VisualElement name="Lobby" style="flex-grow: 1; background-color: rgb(21, 21, 26); background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); background-repeat: repeat repeat; background-size: 100% 100%; -unity-background-image-tint-color: rgb(29, 27, 38);">
         <ui:VisualElement name="Players" style="flex-grow: 1; width: 400px;">
             <ui:ListView name="ListView" item-template="project://database/Assets/Interface/Lobby/LobbyPlayerListItem.uxml?fileID=9197481963319205126&amp;guid=9fc40fa935d12db4a94a0bab8c7f5d99&amp;type=3#LobbyPlayerListItem" show-foldout-header="false" selection-type="None" />
         </ui:VisualElement>

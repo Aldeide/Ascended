@@ -552,8 +552,8 @@ GameObject:
   m_Component:
   - component: {fileID: 799070345}
   - component: {fileID: 799070344}
-  - component: {fileID: 799070347}
   - component: {fileID: 799070346}
+  - component: {fileID: 799070347}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -626,7 +626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  availableModifiers: []
+  AvailableModifiers: []
 --- !u!1 &949762629
 GameObject:
   m_ObjectHideFlags: 0
