@@ -20,5 +20,15 @@ namespace Gameplay.Runtime.Lobbies
         {
             Players.Remove(player);
         }
+
+        public void SetPlayerReady(IPlayer player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartGame()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
