@@ -10,10 +10,10 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Primitives
         {
             var node = new FloatNode
             {
-                input = 10
+                Input = 10
             };
             node.OnProcess();
-            Assert.AreEqual(node.input, node.output);
+            Assert.AreEqual(node.Input, node.Output);
         }
         
         [Test]
