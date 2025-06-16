@@ -29,7 +29,10 @@ MonoBehaviour:
         m_SharedGroupName: Localization-Locales
         m_SharedGroup: {fileID: 0}
         m_LocaleGroupNamePattern: Localization-Locales
-        m_LocaleGroups: []
+        m_LocaleGroups:
+        - localeIdentifier:
+            m_Code: en
+          group: {fileID: 0}
         m_MarkEntriesReadOnly: 1
     - rid: 7807399352967889004
       type: {class: GroupResolver, ns: UnityEditor.Localization.Addressables, asm: Unity.Localization.Editor}
