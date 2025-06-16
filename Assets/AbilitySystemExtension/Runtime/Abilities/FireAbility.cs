@@ -20,20 +20,19 @@ namespace AbilitySystemExtension.Runtime.Abilities
             PlayActivationCues();
             if (impact)
             {
-                CueData data = new CueData();
-                data.VectorData = new[] {target, muzzle};
+                var data = new CueData
+                {
+                    VectorData = new[] {target, muzzle}
+                };
                 Owner.PlayCue(impact, data);
             }
 
-            Ray ray = new Ray(muzzle, target - muzzle);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100f, ((FireAbilityDefinition)Definition).layerMask))
-            {
-                Debug.DrawLine(muzzle, hit.point, Color.red, 1.0f);
-                var asc = hit.collider.GetComponent<AbilitySystemComponent>();
-                if (!asc) return;
-                asc.ExecuteEffect(((FireAbilityDefinition)Definition).damageEffect, Owner);
-            }
+            var ray = new Ray(muzzle, target - muzzle);
+            if (!Physics.Raycast(ray, out var hit, 100f, ((FireAbilityDefinition)Definition).layerMask)) return;
+            Debug.DrawLine(muzzle, hit.point, Color.red, 1.0f);
+            var asc = hit.collider.GetComponent<AbilitySystemComponent>();
+            if (!asc) return;
+            asc.ExecuteEffect(((FireAbilityDefinition)Definition).damageEffect, Owner);
         }
 
         protected override void CancelAbility()
