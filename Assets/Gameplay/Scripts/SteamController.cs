@@ -1,21 +1,27 @@
-﻿using Steamworks;
+﻿using System;
+using Steamworks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Gameplay.Scripts
 {
     public class SteamController : MonoBehaviour
     {
+        private const int AppId = 3824900;
+        
         private void Awake()
         {
+            DontDestroyOnLoad(gameObject);
             try
             {
-                // TODO(antho): Uncomment once we have a steam app id.
-                // Steamworks.SteamClient.Init( 252490, true );
+                SteamClient.Init( AppId, true );
             }
             catch ( System.Exception e )
             {
-                // Something went wrong! Steam is closed?
+                Debug.Log(e.Message);
+                return;
             }
+            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         }
 
         private void Update()
