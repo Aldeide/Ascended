@@ -14,7 +14,7 @@ namespace Systems.GameplayModifier.Scripts
             var modifiers = Resources.LoadAll<GameplayModifierDefinition>("");
             foreach (var modifier in modifiers)
             {
-                availableModifiers.Add(modifier);
+                AvailableModifiers.Add(modifier);
             }
         }
     }
