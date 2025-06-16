@@ -1,5 +1,6 @@
 ﻿using System;
 using GraphProcessor;
+using UnityEngine.Serialization;
 
 namespace AbilityGraph.Runtime.Nodes.Primitives
 {
@@ -7,13 +8,13 @@ namespace AbilityGraph.Runtime.Nodes.Primitives
     [NodeMenuItem("Primitives/String")]
     public class StringNode : BaseNode
     {
-        public string value;
+        public string Value;
 
-        [Output("String")] public string output;
+        [Output("String")] public string Output;
 
         protected override void Process()
         {
-            output = value;
+            Output = Value;
         }
     }
 }

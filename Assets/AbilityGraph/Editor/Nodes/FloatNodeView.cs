@@ -10,14 +10,14 @@ namespace AbilityGraph.Editor.Nodes
             if (nodeTarget is FloatNode floatNode)
             {
                 var floatField = new DoubleField {
-                    value = floatNode.input
+                    value = floatNode.Input
                 };
 
-                floatNode.onProcessed += () => floatField.value = floatNode.input;
+                floatNode.onProcessed += () => floatField.value = floatNode.Input;
 
                 floatField.RegisterValueChangedCallback(v => {
                     owner.RegisterCompleteObjectUndo("Updated floatNode input");
-                    floatNode.input = (float)v.newValue;
+                    floatNode.Input = (float)v.newValue;
                 });
 
                 controlsContainer.Add(floatField);
