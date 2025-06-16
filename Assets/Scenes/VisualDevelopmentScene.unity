@@ -682,10 +682,10 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 0
-  m_InnerSpotPercent: 0
+  m_InnerSpotPercent: 1.247168
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 13.14
+  m_VolumetricDimmer: 10
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
   m_AffectDiffuse: 1
@@ -762,7 +762,7 @@ MonoBehaviour:
     m_UseOverride: 1
     m_Level: 0
   m_ShadowDimmer: 1
-  m_VolumetricShadowDimmer: 1
+  m_VolumetricShadowDimmer: 0.932
   m_ShadowFadeDistance: 10000
   m_UseContactShadow:
     m_Override: 0
@@ -816,10 +816,10 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 0, g: 0.8079624, b: 1, a: 1}
-  m_Intensity: 1675.1385
+  m_Intensity: 2796.8018
   m_Range: 19.76944
-  m_SpotAngle: 65.347466
-  m_InnerSpotAngle: 21.80208
+  m_SpotAngle: 80.18166
+  m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -865,7 +865,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShadowRadius: 0.025
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -1176,7 +1176,7 @@ Transform:
   m_GameObject: {fileID: 511018118}
   serializedVersion: 2
   m_LocalRotation: {x: -0.042932857, y: -0.9810534, z: 0.00770857, w: 0.18876311}
-  m_LocalPosition: {x: -2.16, y: 1.486, z: -5.967}
+  m_LocalPosition: {x: -1.99, y: 2.28, z: 2.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2101,7 +2101,7 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 0
-  m_InnerSpotPercent: 0
+  m_InnerSpotPercent: 42.09998
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
   m_VolumetricDimmer: 15.78
@@ -2235,10 +2235,10 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 355.40744
-  m_Range: 10.401328
-  m_SpotAngle: 119.01718
-  m_InnerSpotAngle: 21.80208
+  m_Intensity: 16763.37
+  m_Range: 19
+  m_SpotAngle: 60.02591
+  m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -2284,7 +2284,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShadowRadius: 0.025
   m_ShadowAngle: 0
   m_LightUnit: 0
   m_LuxAtDistance: 1
@@ -2297,13 +2297,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197395463}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.66742754, y: 0.23353904, z: 0.23353909, w: 0.6674276}
-  m_LocalPosition: {x: -7.6, y: 3.902, z: -9.654}
+  m_LocalRotation: {x: 0.39898875, y: 0.61804026, z: 0.2775262, w: 0.61791056}
+  m_LocalPosition: {x: -13.02, y: 2.15, z: -10.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 51.429, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 8.629, y: 94.777, z: 57.75}
 --- !u!1 &1294071009
 GameObject:
   m_ObjectHideFlags: 0
@@ -2447,7 +2447,7 @@ MonoBehaviour:
   lowestSubdivLevelOverride: 0
   highestSubdivLevelOverride: 7
   overridesSubdivLevels: 0
-  mightNeedRebaking: 0
+  mightNeedRebaking: 1
   cachedTransform:
     e00: 1
     e01: 0
@@ -2748,7 +2748,7 @@ MonoBehaviour:
   m_InnerSpotPercent: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 16
+  m_VolumetricDimmer: 2
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
   m_AffectDiffuse: 1
@@ -2879,7 +2879,7 @@ Light:
   serializedVersion: 11
   m_Type: 3
   m_Color: {r: 0.7924528, g: 0.39130443, b: 0.03364185, a: 1}
-  m_Intensity: 4226.6094
+  m_Intensity: 391.2796
   m_Range: 10.401328
   m_SpotAngle: 119.01718
   m_InnerSpotAngle: 21.80208
@@ -3092,7 +3092,7 @@ Transform:
   m_GameObject: {fileID: 1714869489}
   serializedVersion: 2
   m_LocalRotation: {x: 0.119026765, y: 0.10213805, z: 0.06936581, w: 0.9851847}
-  m_LocalPosition: {x: -2.0252008, y: 1.2639526, z: -3.98558}
+  m_LocalPosition: {x: -1.8552008, y: 2.0579526, z: 4.49142}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3328,7 +3328,7 @@ Transform:
   m_GameObject: {fileID: 1868660234}
   serializedVersion: 2
   m_LocalRotation: {x: -0.042932857, y: -0.9810534, z: 0.00770857, w: 0.18876311}
-  m_LocalPosition: {x: -2.0252008, y: 1.2639526, z: -3.98558}
+  m_LocalPosition: {x: -1.8552008, y: 2.0579526, z: 4.49142}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
