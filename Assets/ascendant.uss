@@ -16,6 +16,7 @@
     flex-direction: column-reverse;
     flex-wrap: wrap;
     position: relative;
+    color: rgb(255, 255, 255);
 }
 
 .ascendant-main-button:hover {
