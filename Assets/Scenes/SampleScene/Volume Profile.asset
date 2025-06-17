@@ -75,10 +75,10 @@ MonoBehaviour:
   active: 1
   rayBias:
     m_OverrideState: 1
-    m_Value: 0.0167
+    m_Value: 0.0357
   distantRayBias:
     m_OverrideState: 1
-    m_Value: 0.0788
+    m_Value: 0.0989
   extendShadowCulling:
     m_OverrideState: 1
     m_Value: 1
@@ -420,7 +420,7 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 2
   enable:
     m_OverrideState: 1
     m_Value: 1
@@ -475,13 +475,13 @@ MonoBehaviour:
     m_Value: 50
   m_ClampValue:
     m_OverrideState: 1
-    m_Value: 100
+    m_Value: 3.4
   mode:
     m_OverrideState: 1
     m_Value: 2
   m_FullResolution:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   sampleCount:
     m_OverrideState: 1
     m_Value: 2
@@ -501,8 +501,8 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   m_MaxMixedRaySteps:
-    m_OverrideState: 0
-    m_Value: 48
+    m_OverrideState: 1
+    m_Value: 64
   receiverMotionRejection:
     m_OverrideState: 0
     m_Value: 1
