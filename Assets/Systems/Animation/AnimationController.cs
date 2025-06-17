@@ -30,7 +30,7 @@ namespace Systems.Controllers
 
         public void SetMovement(float x, float y)
         {
-            SetIsMoving(x + y >= 0.001);
+            SetIsMoving(Mathf.Abs(x) + Mathf.Abs(y) >= 0.001);
             _animator.SetFloat(MovementX, x);
             _animator.SetFloat(MovementY, y);
         }
