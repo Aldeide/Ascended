@@ -816,7 +816,7 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 0, g: 0.8079624, b: 1, a: 1}
-  m_Intensity: 2796.8018
+  m_Intensity: 1015.8701
   m_Range: 19.76944
   m_SpotAngle: 80.18166
   m_InnerSpotAngle: 1
@@ -1107,9 +1107,17 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_Name
       value: development_corridor_vents (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1175,13 +1183,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511018118}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.042932857, y: -0.9810534, z: 0.00770857, w: 0.18876311}
+  m_LocalRotation: {x: -0.000102199505, y: -0.98199296, z: -0.00053123396, w: 0.18891712}
   m_LocalPosition: {x: -1.99, y: 2.28, z: 2.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -0.062, y: -1598.221, z: 5}
+  m_LocalEulerAnglesHint: {x: -0.062, y: -1598.221, z: 0}
 --- !u!114 &511018120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1447,9 +1455,17 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_Name
       value: development_corridor_vents (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1763,9 +1779,9 @@ Light:
   m_GameObject: {fileID: 1005377853}
   m_Enabled: 1
   serializedVersion: 11
-  m_Type: 3
-  m_Color: {r: 0.2953008, g: 0.6631383, b: 0.7924528, a: 1}
-  m_Intensity: 2468.8079
+  m_Type: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 91.86233
   m_Range: 7
   m_SpotAngle: 64.12008
   m_InnerSpotAngle: 21.80208
@@ -1811,7 +1827,7 @@ Light:
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 7.51081}
-  m_UseBoundingSphereOverride: 1
+  m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
   m_ShadowRadius: 0.65
@@ -1827,13 +1843,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005377853}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.50008106, y: -0.499919, z: -0.499919, w: 0.50008106}
-  m_LocalPosition: {x: 4.967, y: 2.174, z: 5.16}
+  m_LocalRotation: {x: 0.68302476, y: -0.18296771, z: -0.18296771, w: 0.68302476}
+  m_LocalPosition: {x: 4.957, y: 3.713, z: 5.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0.019, y: -90, z: -90}
+  m_LocalEulerAnglesHint: {x: 60.008, y: -90, z: -90}
 --- !u!1 &1046469885
 GameObject:
   m_ObjectHideFlags: 19
@@ -2104,7 +2120,7 @@ MonoBehaviour:
   m_InnerSpotPercent: 42.09998
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 15.78
+  m_VolumetricDimmer: 16
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
   m_AffectDiffuse: 1
@@ -2235,7 +2251,7 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 16763.37
+  m_Intensity: 808.7999
   m_Range: 19
   m_SpotAngle: 60.02591
   m_InnerSpotAngle: 1
@@ -2425,7 +2441,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1322539258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2776,9 +2792,17 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_Name
       value: development_corridor_vents (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -3119,7 +3143,7 @@ Light:
   serializedVersion: 11
   m_Type: 3
   m_Color: {r: 0.7924528, g: 0.39130443, b: 0.03364185, a: 1}
-  m_Intensity: 49.106525
+  m_Intensity: 146.51933
   m_Range: 10.401328
   m_SpotAngle: 119.01718
   m_InnerSpotAngle: 21.80208
@@ -3567,7 +3591,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1868660234}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.042932857, y: -0.9810534, z: 0.00770857, w: 0.18876311}
+  m_LocalRotation: {x: -0.000102199505, y: -0.98199296, z: -0.00053123396, w: 0.18891712}
   m_LocalPosition: {x: -1.8552008, y: 2.0579526, z: 4.49142}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3748,9 +3772,17 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_Name
       value: development_corridor_vents
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fd33a32c62dd6c3418f97e5c66f7da6b, type: 3}
       propertyPath: m_StaticEditorFlags

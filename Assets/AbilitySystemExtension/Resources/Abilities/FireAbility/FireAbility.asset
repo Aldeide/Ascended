@@ -35,7 +35,7 @@ MonoBehaviour:
   damageEffect: {fileID: 11400000, guid: 681c59784de32a64fb4fba43db3f81f9, type: 2}
   layerMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 1089
   references:
     version: 2
     RefIds:
