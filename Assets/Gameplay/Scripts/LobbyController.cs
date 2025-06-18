@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Steamworks;
 using Steamworks.Data;
 using Unity.Netcode;
 using UnityEngine.UIElements;
@@ -20,12 +21,16 @@ namespace Gameplay.Scripts
             _lobbyListController.InitialiseList(_lobbyUI.rootVisualElement, _lobbyListView.itemTemplate);
             _updateLobbyListButton = _lobbyUI.rootVisualElement.Q<Button>("UpdateButton");
             _updateLobbyListButton.clicked+= UpdateLobbyList;
-            
-            var lobby = CreateLobby().Result;
-            lobby.Value.SetData("LobbyName", "TestLobby");
-            
+            Steamworks.SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
+            Steamworks.SteamMatchmaking.CreateLobbyAsync(4);
+
         }
 
+        public void OnLobbyCreated(Result result, Lobby lobby)
+        {
+            lobby.SetData("LobbyName", "TestLobby");
+        }
+        
         public async Task<Lobby?> CreateLobby()
         {
             var result = await Steamworks.SteamMatchmaking.CreateLobbyAsync(4);
