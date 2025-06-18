@@ -1,6 +1,5 @@
 ﻿using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
-using AbilitySystemExtension.Scripts;
 using Systems.Camera;
 using Unity.Netcode;
 using UnityEngine;
@@ -23,12 +22,6 @@ namespace Systems.Controllers
             {
                 SetupInterface();
             }
-
-            if (IsLocalPlayer || IsServer)
-            {
-                SetupDebug();
-            }
-
         }
 
         private void SetupCamera()
@@ -47,11 +40,6 @@ namespace Systems.Controllers
             _interfaceController = GameObject.Find("Interface").GetComponent<InterfaceController>();
             _interfaceController.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
         }
-
-        private void SetupDebug()
-        {
-            var debug = GameObject.Find("Debug/Text").GetComponent<AbilitySystemDebugComponent>();
-            debug.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
-        }
+        
     }
 }
