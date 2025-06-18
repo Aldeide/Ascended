@@ -14,7 +14,7 @@ namespace Gameplay.Scripts
 
         public void SetLobbyEntryData(string lobbyName)
         {
-            _lobbyLabel.name = lobbyName;
+            _lobbyLabel.text = lobbyName;
         }
     }
 }

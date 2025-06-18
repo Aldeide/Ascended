@@ -15,6 +15,7 @@ namespace Gameplay.Scripts
             try
             {
                 SteamClient.Init( AppId, true );
+                Debug.Log("Steam Init");
             }
             catch ( System.Exception e )
             {
