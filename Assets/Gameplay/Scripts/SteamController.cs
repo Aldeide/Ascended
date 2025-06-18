@@ -22,6 +22,7 @@ namespace Gameplay.Scripts
                 return;
             }
             SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            SetRichPresence();
         }
 
         private void Update()
@@ -32,6 +33,12 @@ namespace Gameplay.Scripts
         private void OnDisable()
         {
             SteamClient.Shutdown();
+        }
+
+        public void SetRichPresence()
+        {
+            SteamFriends.SetRichPresence("#Status_AtMainMenu", "In Main Menu");
+            Debug.Log("Rich Presence: " + SteamFriends.GetRichPresence("#Status_AtMainMenu"));
         }
     }
 }
