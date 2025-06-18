@@ -7,8 +7,8 @@ namespace AbilitySystemExtension.Runtime.Abilities
 {
     public class DashAbility : Ability
     {
-        private readonly float _duration = 0.3f;
-        private readonly float _distance = 4;
+        private const float Duration = 0.3f;
+        private const float Distance = 4;
         private Vector3 _startPosition = new Vector3();
         private Vector3 _endPosition = new Vector3();
         private float _startTime = 0;
@@ -24,11 +24,11 @@ namespace AbilitySystemExtension.Runtime.Abilities
             _startPosition = Owner.Component.transform.position;
             if (_playerMovementController.MovementDirection.magnitude > 0.01f)
             {
-                _endPosition = _startPosition + _playerMovementController.MovementDirection.normalized * _distance;
+                _endPosition = _startPosition + _playerMovementController.MovementDirection.normalized * Distance;
             }
             else
             {
-                _endPosition = _startPosition + Owner.Component.transform.forward.normalized * _distance;
+                _endPosition = _startPosition + Owner.Component.transform.forward.normalized * Distance;
             }
             
             _startTime = Owner.GetTime();
@@ -37,19 +37,14 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
         protected override void AbilityTick()
         {
-            if (Owner.GetTime() - _startTime >= _duration)
+            if (Owner.GetTime() - _startTime >= Duration)
             {
                 TryEndAbility();
                 return;
             }
 
             Owner.Component.transform.position =
-                Vector3.Lerp(_startPosition, _endPosition, (Owner.GetTime() - _startTime) / _duration);
-        }
-
-        protected override void CancelAbility()
-        {
-            base.CancelAbility();
+                Vector3.Lerp(_startPosition, _endPosition, (Owner.GetTime() - _startTime) / Duration);
         }
 
         public override void EndAbility()
