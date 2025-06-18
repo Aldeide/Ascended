@@ -40,6 +40,5 @@ namespace Systems.Controllers
             _interfaceController = GameObject.Find("Interface").GetComponent<InterfaceController>();
             _interfaceController.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
         }
-        
     }
 }
