@@ -1,9 +1,22 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/ascendant.uss?fileID=7433441132597879392&amp;guid=d6e915947cd499941ba79f9a7c85e7ca&amp;type=3#ascendant" />
-    <ui:VisualElement style="flex-grow: 1; width: 450px; flex-direction: column; align-self: center; align-content: auto; justify-content: center;">
-        <ui:TextField label="Player Name&#10;" name="PlayerName" style="color: rgb(229, 229, 229);" />
-        <ui:Button text="HOST&#10;" name="HostButton" style="background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); align-content: center; align-self: auto;" />
-        <ui:TextField label="IP Address&#10;" name="IpAddress" style="color: rgb(229, 229, 229); top: 200px;" />
-        <ui:Button text="JOIN&#10;" name="JoinButton" style="background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); align-content: center; align-self: auto; top: 200px;" />
-    </ui:VisualElement>
+    <Interface.Elements.AspectRatioElement height="1440" width="2160" name="Root" style="height: 1010px; width: 2085px; background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); -unity-background-image-tint-color: rgb(21, 21, 26); max-width: 100%; max-height: 100%; min-width: 100%; min-height: 100%;">
+        <ui:VisualElement name="Header" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); height: 100px; max-height: 100px; min-height: 100px; -unity-background-image-tint-color: rgb(37, 37, 51);">
+            <ui:Label text="BROWSE LOBBIES" enable-rich-text="false" style="color: rgb(255, 255, 255); font-size: 17px; min-height: 100%; max-height: 100%; -unity-text-align: middle-left; padding-left: 10px; background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;); -unity-background-image-tint-color: rgb(42, 115, 85); background-size: 100% 40px; margin-left: 20px; width: 400px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Content" style="flex-grow: 1; flex-direction: row; -unity-background-image-tint-color: rgb(37, 37, 51); background-image: url(&quot;project://database/Assets/Art/Textures/WhiteSquare.png?fileID=2800000&amp;guid=27c0f83eda9823e4bb5b8f336359b6ea&amp;type=3#WhiteSquare&quot;);">
+            <ui:VisualElement name="Controls" style="flex-grow: 1; width: 400px; max-width: 400px; min-width: 400px; flex-direction: column-reverse;">
+                <ui:Button text="REFRESH LOBBIES" name="RefreshLobbiesButton" style="flex-direction: column-reverse;" />
+                <ui:Label text="TODO: Add Search Filters" name="Label" style="background-color: rgba(255, 255, 255, 0); color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+            <ui:VisualElement name="LobbyList" style="flex-grow: 1;">
+                <ui:ListView name="LobbyListView" item-template="project://database/Assets/Interface/Lobby/LobbyListEntry.uxml?fileID=9197481963319205126&amp;guid=76ccb47225930fd41bc869794b73000b&amp;type=3#LobbyListEntry" style="min-height: 100%; max-height: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Footer" style="flex-grow: 1; height: 100px; min-height: 100px; max-height: 100px; flex-direction: row-reverse; align-items: flex-start; justify-content: space-between;">
+            <ui:Button text="Join Lobby" name="JoinLobbyButton" style="flex-direction: row; width: 200px; height: 70px;" />
+            <ui:Label name="SelectedLobbyLabel" style="min-width: 400px; color: rgb(255, 255, 255); height: 53px; width: 592px;" />
+            <ui:Button text="MAIN MENU&#10;" name="ExitButton" style="align-items: flex-start; align-self: flex-start; height: 67px; width: 199px;" />
+        </ui:VisualElement>
+    </Interface.Elements.AspectRatioElement>
 </ui:UXML>

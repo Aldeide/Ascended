@@ -17,8 +17,9 @@ namespace Gameplay.Scripts
         
         public void InitialiseList(VisualElement root, VisualTreeAsset listEntryTemplate)
         {
+            Debug.Log("Init LobbyListController");
             _listEntryTemplate = listEntryTemplate;
-            _lobbyListView = root.Q<ListView>("LobbyList");
+            _lobbyListView = root.Q<ListView>("LobbyListView");
             OnLobbiesFetched += LobbiesFetched;
         }
 
@@ -63,7 +64,7 @@ namespace Gameplay.Scripts
             };
             
             _lobbyListView.itemsSource = _lobbyList;
-            _lobbyListView.Refresh();
+            _lobbyListView.Rebuild();
         }
     }
 }
