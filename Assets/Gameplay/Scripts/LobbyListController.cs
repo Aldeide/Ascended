@@ -26,7 +26,7 @@ namespace Gameplay.Scripts
         {
             _lobbyList = new List<string>();
             var lobbyQuery = Steamworks.SteamMatchmaking.LobbyList;
-            lobbyQuery.RequestAsync().ContinueWith(OnLobbiesFetched);
+            lobbyQuery.RequestAsync().ContinueWith(OnLobbiesFetched, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         public void LobbiesFetched(Task<Lobby[]> lobbies)
