@@ -38,8 +38,8 @@ namespace AbilitySystem.Runtime.Tags
 
         public void AddEffectTags(Effect effect)
         {
-            if (effect.Definition.grantedTags == null) return;
-            foreach (var tag in effect.Definition.grantedTags)
+            if (effect.Definition.GrantedTags == null) return;
+            foreach (var tag in effect.Definition.GrantedTags)
             {
                 if (EffectTags.ContainsKey(tag))
                 {
@@ -69,8 +69,8 @@ namespace AbilitySystem.Runtime.Tags
 
         public void RemoveEffectTags(Effect effect)
         {
-            if (effect.Definition.grantedTags == null) return;
-            foreach (var tag in effect.Definition.grantedTags)
+            if (effect.Definition.GrantedTags == null) return;
+            foreach (var tag in effect.Definition.GrantedTags)
             {
                 if (EffectTags.ContainsKey(tag))
                 {

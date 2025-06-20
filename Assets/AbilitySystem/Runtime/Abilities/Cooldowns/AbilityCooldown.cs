@@ -22,7 +22,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
 
         public virtual bool CanActivate(IAbilitySystem owner)
         {
-            return !owner.TagManager.HasAnyTags(CooldownEffect.grantedTags);
+            return !owner.TagManager.HasAnyTags(CooldownEffect.GrantedTags);
         }
 
         public virtual bool Activate(IAbilitySystem owner)
