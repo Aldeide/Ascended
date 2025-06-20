@@ -5,6 +5,8 @@ using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Runtime.Tags;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Serialization;
 
 namespace AbilitySystem.Runtime.Effects
 {
@@ -12,47 +14,59 @@ namespace AbilitySystem.Runtime.Effects
     [CreateAssetMenu(fileName = "Effect", menuName = "AbilitySystem/Effect")]
     public class EffectDefinition : ScriptableObject
     {
-        [Title("General Information")]
-        public string description;
+        [Title("Display")]
+        public LocalizedString EffectName;
+        [FormerlySerializedAs("description")] 
+        public LocalizedString Description;
 
-        public EffectDurationType durationType = EffectDurationType.Instant;
+        public bool IsHidden;
         
-        [ShowIf("@durationType == EffectDurationType.FixedDuration")]
+        public Texture2D Icon;
+        
+        [Title("General Information")]
+        [FormerlySerializedAs("durationType")]
+        public EffectDurationType DurationType = EffectDurationType.Instant;
+        
+        [FormerlySerializedAs("durationSeconds")]
+        [ShowIf("@DurationType == EffectDurationType.FixedDuration")]
         [Unit(Units.Second)]
-        public float durationSeconds = 0;
+        public float DurationSeconds = 0;
 
         [Unit(Units.Second)]
-        [ShowIf("@durationType != EffectDurationType.FixedDuration")]
+        [ShowIf("@DurationType != EffectDurationType.FixedDuration")]
         [EnableIf("IsDurationalPolicy")]
         public float Period = 0;
         
+        [FormerlySerializedAs("periodicEffect")]
         [EnableIf("IsPeriodic")]
         [AssetSelector]
-        public EffectDefinition periodicEffect;
+        public EffectDefinition PeriodicEffect;
         
+        [FormerlySerializedAs("assetTags")]
         [Title("Effect Tags")]
         [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] assetTags;
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] grantedTags;
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] applicationRequiredTags;
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] ongoingRequiredTags;
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] removeGameplayEffectsWithTags;
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] applicationImmunityTags;
+        public GameplayTag[] AssetTags;
+        [FormerlySerializedAs("grantedTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public GameplayTag[] GrantedTags;
+        [FormerlySerializedAs("applicationRequiredTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public GameplayTag[] ApplicationRequiredTags;
+        [FormerlySerializedAs("ongoingRequiredTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public GameplayTag[] OngoingRequiredTags;
+        [FormerlySerializedAs("removeGameplayEffectsWithTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public GameplayTag[] RemoveGameplayEffectsWithTags;
+        [FormerlySerializedAs("applicationImmunityTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public GameplayTag[] ApplicationImmunityTags;
         
+        [FormerlySerializedAs("modifiers")]
         [Space]
         [ShowInInspector]
         [Title("Modifiers")]
         [SerializeReference]
-        public Modifier[] modifiers;
+        public Modifier[] Modifiers;
 
 
-        [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
-        public CueDefinition[] cues;
+        [FormerlySerializedAs("cues")] [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
+        public CueDefinition[] Cues;
         bool IsPeriodic()
         {
             return IsDurationalPolicy() && Period > 0;
@@ -60,7 +74,7 @@ namespace AbilitySystem.Runtime.Effects
 
         bool IsDurationalPolicy()
         {
-            return durationType is EffectDurationType.FixedDuration or EffectDurationType.Infinite;
+            return DurationType is EffectDurationType.FixedDuration or EffectDurationType.Infinite;
         }
 
         [Space]
@@ -76,22 +90,22 @@ namespace AbilitySystem.Runtime.Effects
 
         public EffectDefinition GetPeriodicEffectDefinition()
         {
-            return periodicEffect;
+            return PeriodicEffect;
         }
 
         public bool IsInstant()
         {
-            return durationType == EffectDurationType.Instant;
+            return DurationType == EffectDurationType.Instant;
         }
 
         public bool IsFixedDuration()
         {
-            return durationType == EffectDurationType.FixedDuration;
+            return DurationType == EffectDurationType.FixedDuration;
         }
 
         public bool IsInfinite()
         {
-            return durationType == EffectDurationType.Infinite;
+            return DurationType == EffectDurationType.Infinite;
         }
 
         public float GetPeriod()

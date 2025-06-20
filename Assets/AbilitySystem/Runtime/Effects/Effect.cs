@@ -30,7 +30,7 @@ namespace AbilitySystem.Runtime.Effects
         public Effect(EffectDefinition definition)
         {
             Definition = definition;
-            Duration = Definition.durationSeconds;
+            Duration = Definition.DurationSeconds;
             if (!Definition.IsInstant()) _effectTicker = new EffectTicker(this);
         }
 
@@ -39,7 +39,7 @@ namespace AbilitySystem.Runtime.Effects
             Owner = target;
             Source = source;
             NumStacks = 1;
-            if (Definition.periodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
+            if (Definition.PeriodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
             {
                 PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target);
             }
@@ -57,8 +57,8 @@ namespace AbilitySystem.Runtime.Effects
 
         public void PlayApplicationCues()
         {
-            if (Definition.cues == null) return;
-            foreach (var cue in Definition.cues)
+            if (Definition.Cues == null) return;
+            foreach (var cue in Definition.Cues)
             {
                 Owner.PlayCue(cue);
             }
@@ -124,7 +124,7 @@ namespace AbilitySystem.Runtime.Effects
         
         public bool IsPredictable() 
         {
-            return Definition.durationType != EffectDurationType.Instant;
+            return Definition.DurationType != EffectDurationType.Instant;
         }
 
         public bool IsPredicted()
