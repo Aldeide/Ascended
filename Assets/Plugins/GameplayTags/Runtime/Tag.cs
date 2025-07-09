@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace GameplayTags.Runtime
 {
+    [Serializable]
     public struct Tag : INetworkSerializable, IEquatable<Tag>
     {
         public string Name { get; set; }
