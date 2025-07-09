@@ -7,6 +7,7 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Runtime.Utilities;
 using AbilitySystem.Scripts;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace AbilitySystem.Runtime.Abilities
     [Serializable]
     public abstract class AbilityDefinition : ScriptableObject
     {
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag testTag;
         public abstract Type AbilityType();
 
         public string description;
