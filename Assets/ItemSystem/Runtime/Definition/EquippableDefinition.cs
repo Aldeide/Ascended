@@ -1,13 +1,10 @@
-﻿using AbilitySystem.Runtime.Abilities;
-using Assets.ItemSystem.Runtime.Constants;
-using Assets.ItemSystem.Runtime.Interface;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AbilitySystem.Runtime.Abilities;
+using ItemSystem.Runtime.Constants;
+using ItemSystem.Runtime.Interface;
 
-namespace Assets.ItemSystem.Runtime.Definition
+namespace ItemSystem.Runtime.Definition
 {
     public class EquippableDefinition : ItemDefinition, IEquippable
     {

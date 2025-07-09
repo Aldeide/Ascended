@@ -1,5 +1,4 @@
-﻿
-namespace Assets.ItemSystem.Runtime.Interface
+﻿namespace ItemSystem.Runtime.Interface
 {
     public interface IWeapon : IEquippable
     {

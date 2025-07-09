@@ -1,9 +1,9 @@
-﻿using AbilitySystem.Runtime.Abilities;
-using Assets.ItemSystem.Runtime.Constants;
-using Assets.ItemSystem.Runtime.Interface;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AbilitySystem.Runtime.Abilities;
+using ItemSystem.Runtime.Constants;
+using ItemSystem.Runtime.Interface;
 
-namespace Assets.ItemSystem.Runtime.Definition
+namespace ItemSystem.Runtime.Definition
 {
     public class EquippableModDefinition : ItemDefinition, IEquippableMod
     {
