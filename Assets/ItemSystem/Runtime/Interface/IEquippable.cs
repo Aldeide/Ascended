@@ -1,14 +1,8 @@
-﻿using AbilitySystem.Runtime.Abilities;
-using Assets.ItemSystem.Runtime.Constants;
-using Assets.ItemSystem.Runtime.Definition;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor.Graphs;
+﻿using System.Collections.Generic;
+using ItemSystem.Runtime.Constants;
+using ItemSystem.Runtime.Definition;
 
-namespace Assets.ItemSystem.Runtime.Interface
+namespace ItemSystem.Runtime.Interface
 {
     public interface IEquippable : IBaseItem
     {

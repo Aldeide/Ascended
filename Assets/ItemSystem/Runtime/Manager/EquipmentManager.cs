@@ -2,8 +2,7 @@
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
-using Assets.ItemSystem.Runtime.Definition;
-using Assets.ItemSystem.Runtime.Interface;
+using ItemSystem.Runtime.Definition;
 
 namespace ItemSystem.Runtime.Manager
 {
