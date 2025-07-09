@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EffectDescriptions Shared Data
   m_EditorClassIdentifier: 
   m_TableCollectionName: EffectDescriptions
-  m_TableCollectionNameGuidString: 00000000000000000000000000000000
+  m_TableCollectionNameGuidString: 6c8163b55e0863044bf98eeba46e4f49
   m_Entries: []
   m_Metadata:
     m_Items: []
