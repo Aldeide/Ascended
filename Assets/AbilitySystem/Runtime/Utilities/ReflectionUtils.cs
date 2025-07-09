@@ -9,81 +9,8 @@ namespace AbilitySystem.Runtime.Utilities
 {
     public static class ReflectionUtil
     {
-        private static GameplayTag[] _tags;
-        private static GameplayTag[] _cueTags;
         private static string[] _attributeNames;
         private static string[] _attributeSetNames;
-        public static IEnumerable<GameplayTag> GameplayTags
-        {
-            get
-            {
-                _tags ??= LoadTags();
-                return _tags;
-            }
-        }
-
-        private static GameplayTag[] LoadTags()
-        {
-            var tagLibType = TypeUtil.FindTypeInAllAssemblies("AbilitySystemExtension.Runtime.Tags.TagLibrary");
-            if (tagLibType == null)
-            {
-                Debug.LogError("TagLibrary not found!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            const string fieldName = "TagMap";
-            var field = tagLibType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
-            if (field == null)
-            {
-                Debug.LogError($"Field \"{fieldName}\" not found in TagLibrary!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            var value = field.GetValue(null);
-            if (value is not Dictionary<string, GameplayTag> tagMap)
-            {
-                Debug.LogError($"Field \"{fieldName}\" is not a Dictionary<string, GameplayTag> in TagLibrary!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            return tagMap.Values.ToArray();
-        }
-        
-        public static IEnumerable<GameplayTag> CueTags
-        {
-            get
-            {
-                _cueTags ??= LoadCueTags();
-                return _cueTags;
-            }
-        }
-
-        private static GameplayTag[] LoadCueTags()
-        {
-            var tagLibType = TypeUtil.FindTypeInAllAssemblies("AbilitySystemExtension.Runtime.Tags.CueTagLibrary");
-            if (tagLibType == null)
-            {
-                Debug.LogError("CueTagLibrary not found!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            const string fieldName = "TagMap";
-            var field = tagLibType.GetField("TagMap", BindingFlags.Public | BindingFlags.Static);
-            if (field == null)
-            {
-                Debug.LogError($"Field \"{fieldName}\" not found in CueTagLibrary!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            var value = field.GetValue(null);
-            if (value is not Dictionary<string, GameplayTag> tagMap)
-            {
-                Debug.LogError($"Field \"{fieldName}\" is not a Dictionary<string, GameplayTag> in CueTagLibrary!");
-                return Array.Empty<GameplayTag>();
-            }
-
-            return tagMap.Values.ToArray();
-        }
         
         public static IEnumerable<string> AttributeNames
         {

@@ -1,6 +1,6 @@
 ﻿using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using GameplayTags.Runtime;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Scripts
@@ -15,7 +15,7 @@ namespace AbilitySystemExtension.Scripts
     [RequireComponent(typeof(CueManagerComponent))]
     public class FullscreenEffectCueListener : MonoBehaviour, ICueListener
     {
-        public GameplayTagQuery TagQuery { get; set; }
+        public TagQuery TagQuery { get; set; }
 
         private CueManagerComponent _cueManager;
 

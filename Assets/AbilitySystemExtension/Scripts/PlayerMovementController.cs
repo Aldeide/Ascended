@@ -2,7 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
-using AbilitySystemExtension.Runtime.Tags;
+using GameplayTags.Generated;
 using Sirenix.OdinInspector;
 using Systems.Animation;
 using Unity.Netcode;

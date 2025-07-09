@@ -25,7 +25,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             
             eventManager.TriggerEvent(new TestGameplayEvent(eventArgs));
             
-            Assert.IsTrue(abilitySystem.AbilityManager.Abilities[abilityDefinition.uniqueName].IsActive);
+            Assert.IsTrue(abilitySystem.AbilityManager.Abilities[abilityDefinition.UniqueName].IsActive);
         }
     }
 }

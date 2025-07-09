@@ -1,10 +1,9 @@
-﻿using AbilitySystem.Runtime.Tags;
-using UnityEngine;
+﻿using GameplayTags.Runtime;
 
 namespace AbilitySystem.Runtime.Cues
 {
     public interface ICueListener
     {
-        public GameplayTagQuery TagQuery { get; set; }
+        public TagQuery TagQuery { get; set; }
     }
 }

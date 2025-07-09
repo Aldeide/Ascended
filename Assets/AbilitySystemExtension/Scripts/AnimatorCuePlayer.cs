@@ -2,6 +2,7 @@
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace AbilitySystemExtension.Scripts
     public class AnimatorCueListener : MonoBehaviour, ICueListener
     {
         [field: SerializeField]
-        public GameplayTagQuery TagQuery { get; set; }
+        public TagQuery TagQuery { get; set; }
         
         private Animator _animator;
         private CueManager _cueManager;

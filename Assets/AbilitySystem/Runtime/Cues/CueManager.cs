@@ -1,7 +1,7 @@
 ﻿using System;
 using AbilitySystem.Runtime.Core;
-using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using GameplayTags.Runtime;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Cues
@@ -28,7 +28,7 @@ namespace AbilitySystem.Runtime.Cues
         /// <param name="cueTag">The tag that identifies the specific cue.</param>
         /// <param name="cueAction">The action to perform on the cue (Add, Remove, or Execute).</param>
         /// <param name="cueData">The data associated with the cue, including positional and normal information.</param>
-        public void OnCueReceived(GameplayTag cueTag, CueAction cueAction, CueData cueData)
+        public void OnCueReceived(Tag cueTag, CueAction cueAction, CueData cueData)
         {
             Debug.Log("Received Cue: " + cueTag + " / " + cueAction + " / " + cueData + " /");
             // Don't play cues on the server.

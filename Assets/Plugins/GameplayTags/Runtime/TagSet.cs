@@ -1,27 +1,27 @@
 ﻿using System;
 
-namespace AbilitySystem.Runtime.Tags
+namespace GameplayTags.Runtime
 {
-    public readonly struct GameplayTagSet
+    public readonly struct TagSet
     {
-        public readonly GameplayTag[] Tags;
+        public readonly Tag[] Tags;
         public bool IsEmpty => Tags.Length == 0;
         
-        public GameplayTagSet(string[] tagNames)
+        public TagSet(string[] tagNames)
         {
-            Tags = new GameplayTag[tagNames.Length];
+            Tags = new Tag[tagNames.Length];
             for (var i = 0; i < tagNames.Length; i++)
             {
-                Tags[i] = new GameplayTag(tagNames[i]);
+                Tags[i] = new Tag(tagNames[i]);
             }
         }
         
-        public GameplayTagSet(params GameplayTag[] tags)
+        public TagSet(params Tag[] tags)
         {
-            Tags = tags?? Array.Empty<GameplayTag>();
+            Tags = tags?? Array.Empty<Tag>();
         }
         
-        public bool HasTag(GameplayTag tag)
+        public bool HasTag(Tag tag)
         {
             foreach (var t in Tags)
             {
@@ -30,12 +30,12 @@ namespace AbilitySystem.Runtime.Tags
             return false;
         }
         
-        public bool HasAllTags(GameplayTagSet other)
+        public bool HasAllTags(TagSet other)
         {
             return HasAllTags(other.Tags);
         }
         
-        public bool HasAllTags(params GameplayTag[] tags)
+        public bool HasAllTags(params Tag[] tags)
         {
             foreach (var tag in tags)
             {
@@ -45,12 +45,12 @@ namespace AbilitySystem.Runtime.Tags
             return true;
         }
         
-        public bool HasAnyTags(GameplayTagSet other)
+        public bool HasAnyTags(TagSet other)
         {
             return HasAnyTags(other.Tags);
         }
 
-        public bool HasAnyTags(params GameplayTag[] tags)
+        public bool HasAnyTags(params Tag[] tags)
         {
             foreach (var tag in tags)
             {
@@ -60,12 +60,12 @@ namespace AbilitySystem.Runtime.Tags
             return false;
         }
         
-        public bool HasNoneTags(GameplayTagSet other)
+        public bool HasNoneTags(TagSet other)
         {
             return HasNoneTags(other.Tags);
         }
         
-        public bool HasNoneTags(params GameplayTag[] tags)
+        public bool HasNoneTags(params Tag[] tags)
         {
             foreach (var tag in tags)
             {

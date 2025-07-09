@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,11 +10,11 @@ namespace AbilitySystem.Scripts
     public class AbilitySystemDefinition : ScriptableObject
     {
         [ValueDropdown("@DropdownValuesUtil.AttributeSetsChoices", IsUniqueList = true)]
-        public string[] attributeSets;
+        public string[] AttributeSets;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] inherentTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] InherentTags;
         
-        public AbilityDefinition[] baseAbilities;
+        public AbilityDefinition[] BaseAbilities;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace AbilitySystemExtension.Scripts
     public class AudioCuePlayer : MonoBehaviour, ICueListener
     {
         [field: SerializeField]
-        public GameplayTagQuery TagQuery { get; set; }
+        public TagQuery TagQuery { get; set; }
 
         [ShowInInspector] private AudioSource _audioSource;
         private CueManagerComponent _cueManager;

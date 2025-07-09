@@ -11,7 +11,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var abilityDefinition = CreatePassiveAbilityDefinition();
 
-            Assert.AreEqual("TestAbility", abilityDefinition.uniqueName);
+            Assert.AreEqual("TestAbility", abilityDefinition.UniqueName);
             Assert.AreEqual("PassiveAbilityDefinition", abilityDefinition.TypeName);
             Assert.AreEqual(typeof(PassiveAbility), abilityDefinition.AbilityType());
             Assert.AreEqual("AbilitySystem.Runtime.Abilities.PassiveAbility.PassiveAbilityDefinition",

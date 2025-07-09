@@ -69,12 +69,12 @@ namespace AbilitySystem.Runtime.Core
             var test = new CueData();
             test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
             Debug.Log("Tag:" + cue.cueTag);
-            Component.ObserversPlayCueRpc(cue.cueTag.GetName(), test);
+            Component.ObserversPlayCueRpc(cue.cueTag.Name, test);
         }
 
         public void PlayCue(CueDefinition cue, CueData data)
         {
-            Component.ObserversPlayCueWithDataRpc(cue.cueTag.GetName(), data);
+            Component.ObserversPlayCueWithDataRpc(cue.cueTag.Name, data);
         }
 
         public void Reset()

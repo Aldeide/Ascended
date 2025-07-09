@@ -180,7 +180,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public virtual void PlayActivationCues()
         {
-            foreach (var cue in Definition.activationCues)
+            foreach (var cue in Definition.ActivationCues)
             {
                 Owner.PlayCue(cue);
             }
@@ -188,7 +188,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public void ApplyEffects()
         {
-            foreach (var grantedEffect in Definition.grantedEffects)
+            foreach (var grantedEffect in Definition.GrantedEffects)
             {
                 var effect = grantedEffect.ToEffect(Owner, Owner);
                 effect.Activate();
@@ -223,12 +223,12 @@ namespace AbilitySystem.Runtime.Abilities
 
         private bool HasActivationAuthority()
         {
-            if (Definition.networkSecurityPolicy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
+            if (Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
             if (Owner.IsServer())
             {
                 return true;
             }
-            return Definition.networkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnlyTermination &&
+            return Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnlyTermination &&
                    Owner.IsLocalClient();
         }
     }
