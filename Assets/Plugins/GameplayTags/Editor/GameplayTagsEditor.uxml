@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label text="Gameplay Tag Editor" style="font-size: 20px; -unity-text-align: middle-center; margin-bottom: 10px;" />
+    <ui:VisualElement style="flex-direction: row; margin-bottom: 5px;">
+        <ui:TextField name="new-tag-textfield" label="New Tag:" style="flex-grow: 1;" />
+        <ui:Button name="add-tag-button" text="Add Tag" />
+    </ui:VisualElement>
+    <ui:ListView name="tag-list-view" style="flex-grow: 1;" />
+    <ui:Button name="delete-tag-button" text="Delete Selected Tag" style="margin-top: 5px;" />
+    <ui:Button name="save-and-generate-button" text="Save and Generate Code" style="margin-top: 10px; height: 30px;" />
+</ui:UXML>
