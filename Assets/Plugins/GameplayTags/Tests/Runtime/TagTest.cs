@@ -8,7 +8,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
     public class TagTest
     {
         [Test]
-        public void GameplayTagTests_CreateGameplayTag_HasCorrectValues()
+        public void TagTest_CreateGameplayTag_HasCorrectValues()
         {
             var tag = new Tag("Testing.Tag.TagA");
 
@@ -32,7 +32,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_GetName_ReturnsTagName()
+        public void TagTest_GetName_ReturnsTagName()
         {
             var tag = new Tag("Testing.Tag.TagA");
             
@@ -40,7 +40,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_GetHashCode_ReturnsTagHashCode()
+        public void TagTest_GetHashCode_ReturnsTagHashCode()
         {
             var tag = new Tag("Testing.Tag.TagA");
             
@@ -48,7 +48,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_HasTag_ReturnsTrueWhenContainsOtherTag()
+        public void TagTest_HasTag_ReturnsTrueWhenContainsOtherTag()
         {
             var tag = new Tag("Testing.Tag.TagA");
             var otherTag = new Tag("Testing");
@@ -57,7 +57,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_HasTag_ReturnsFalseWhenDoesNotContainOtherTag()
+        public void TagTest_HasTag_ReturnsFalseWhenDoesNotContainOtherTag()
         {
             var tag = new Tag("Testing.Tag.TagA");
             var otherTag = new Tag("TestingButDifferent");
@@ -66,7 +66,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_IsAncestorOf_ReturnsTrueWhenIsAncestor()
+        public void TagTest_IsAncestorOf_ReturnsTrueWhenIsAncestor()
         {
             var tag = new Tag("Testing");
             var otherTag = new Tag("Testing.Tag.TagA");
@@ -75,7 +75,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_IsAncestorOf_ReturnsFalseWhenIsNotAncestor()
+        public void TagTest_IsAncestorOf_ReturnsFalseWhenIsNotAncestor()
         {
             var tag = new Tag("Testing");
             var otherTag = new Tag("TestingButDifferent.Tag");
@@ -84,7 +84,7 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
-        public void GameplayTagTests_Operators_AreFunctional()
+        public void TagTest_Operators_AreFunctional()
         {
             var tag = new Tag("Testing.Tag.TagA");
             var sameTag = new Tag("Testing.Tag.TagA");
