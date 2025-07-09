@@ -50,12 +50,12 @@ namespace AbilitySystem.Runtime.Effects
 
         public EffectApplicationResult AddEffect(Effect effect)
         {
-            if (effect.Definition.applicationImmunityTags != null && _owner.TagManager.HasAnyTags(effect.Definition.applicationImmunityTags))
+            if (effect.Definition.ApplicationImmunityTags != null && _owner.TagManager.HasAnyTags(effect.Definition.ApplicationImmunityTags))
             {
                 return EffectApplicationResult.Immune;
             }
 
-            if (effect.Definition.applicationRequiredTags != null && !_owner.TagManager.HasAllTags(effect.Definition.applicationRequiredTags))
+            if (effect.Definition.ApplicationRequiredTags != null && !_owner.TagManager.HasAllTags(effect.Definition.ApplicationRequiredTags))
             {
                 return EffectApplicationResult.ApplicationRequiredTagsFailure;
             }
@@ -131,7 +131,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public Effect GetEffect(GameplayTag assetTag)
         {
-            return Effects.FirstOrDefault(e=>e.Definition.assetTags.Contains(assetTag));
+            return Effects.FirstOrDefault(e=>e.Definition.AssetTags.Contains(assetTag));
         }
 
         public string DebugString()

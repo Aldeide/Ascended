@@ -46,7 +46,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
             var modifiers = aggregator.GetModifiers();
             _relevantModifiers.Clear();
             foreach (var modifier in modifiers.Where(modifier =>
-                         TagQuery.MatchesTags(modifier.Effect.Definition.assetTags)))
+                         TagQuery.MatchesTags(modifier.Effect.Definition.AssetTags)))
             {
                 _relevantModifiers.Add(new Tuple<Effect, Modifier>(modifier.Effect, modifier.Modifier));
             }
@@ -55,7 +55,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
         
         private float ApplyModifiers()
         {
-            var value = CooldownEffect.durationSeconds;
+            var value = CooldownEffect.DurationSeconds;
             var additive = 0f;
             var multiplicative = 1f;
             var overrideValue = 0f;
