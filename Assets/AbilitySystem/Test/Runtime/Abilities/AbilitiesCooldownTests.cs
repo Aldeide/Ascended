@@ -47,8 +47,8 @@ namespace AbilitySystem.Test.Runtime.Abilities
             abilityDefinition.Cooldown = new ConstantAbilityCooldown();
             var cooldownEffect = EffectUtilities.CreateDurationEffectDefinition();
             var cooldownTag = new GameplayTag("CooldownTag");
-            cooldownEffect.assetTags = new[] { cooldownTag };
-            cooldownEffect.grantedTags = new[] { cooldownTag };
+            cooldownEffect.AssetTags = new[] { cooldownTag };
+            cooldownEffect.GrantedTags = new[] { cooldownTag };
             abilityDefinition.Cooldown.CooldownEffect = cooldownEffect;
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);

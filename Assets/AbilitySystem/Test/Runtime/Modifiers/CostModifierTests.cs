@@ -63,9 +63,9 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 ModifierMagnitude = 2f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.modifiers = new Modifier[]
+            modifyCostEffect.Definition.Modifiers = new Modifier[]
                 { additiveModifier, multiplicativeModifier, divisiveModifier, subtractiveModifier };
-            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Cost.Ability.TestAbility") };
+            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Cost.Ability.TestAbility") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
@@ -98,8 +98,8 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 ModifierMagnitude = 1.5f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
-            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Cost.Ability") };
+            modifyCostEffect.Definition.Modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
+            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Cost.Ability") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
@@ -132,8 +132,8 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 ModifierMagnitude = 1.5f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
-            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Irrelevant.Tag") };
+            modifyCostEffect.Definition.Modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
+            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Irrelevant.Tag") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
@@ -160,8 +160,8 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 ModifierMagnitude = 100f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.modifiers = new Modifier[] { overrideModifier };
-            modifyCostEffect.Definition.assetTags = new[] { new GameplayTag("Cost.Ability") };
+            modifyCostEffect.Definition.Modifiers = new Modifier[] { overrideModifier };
+            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Cost.Ability") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);

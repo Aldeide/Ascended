@@ -126,7 +126,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public void ApplyInstantEffectModifiers(Effect instantEffect)
         {
-            foreach (var modifier in instantEffect.Definition.modifiers)
+            foreach (var modifier in instantEffect.Definition.Modifiers)
             {
                 var splits = modifier.attributeName.Split(".");
                 var attributeSet = splits[0];

@@ -104,9 +104,9 @@ namespace AbilitySystem.Runtime.Attributes
 
         private void AddModifiersFromEffectToCache(Effect activeEffect)
         {
-            if (!activeEffect.IsActive || activeEffect.Definition.modifiers == null) return;
+            if (!activeEffect.IsActive || activeEffect.Definition.Modifiers == null) return;
 
-            foreach (var modifier in activeEffect.Definition.modifiers)
+            foreach (var modifier in activeEffect.Definition.Modifiers)
             {
                 if (modifier.attributeName == _attribute.GetFullName())
                 {
@@ -117,8 +117,8 @@ namespace AbilitySystem.Runtime.Attributes
 
         private bool IsEffectRelevantToAttribute(Effect effect)
         {
-            return effect.Definition.modifiers != null &&
-                   effect.Definition.modifiers.Any(mod => mod.attributeName == _attribute.GetFullName());
+            return effect.Definition.Modifiers != null &&
+                   effect.Definition.Modifiers.Any(mod => mod.attributeName == _attribute.GetFullName());
         }
 
         private void UpdateCurrentValue()
