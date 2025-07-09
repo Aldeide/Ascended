@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Test.Utilities;
+using GameplayTags.Runtime;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -34,8 +33,8 @@ namespace AbilitySystem.Test.Runtime.Effects
             owner.Setup(mock => mock.TagManager).Returns(tagManager);
             
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
-            effectAsset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            effectAsset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
+            effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);
@@ -53,8 +52,8 @@ namespace AbilitySystem.Test.Runtime.Effects
             var tagManager = new GameplayTagManager(owner.Object);
             owner.Setup(mock => mock.TagManager).Returns(tagManager);
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
-            effectAsset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            effectAsset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
+            effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);

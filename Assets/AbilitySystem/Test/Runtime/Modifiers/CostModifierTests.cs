@@ -1,9 +1,10 @@
 ﻿using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
+using NUnit.Framework;
+
 using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 using static AbilitySystem.Test.Utilities.EffectUtilities;
-using NUnit.Framework;
 
 namespace AbilitySystem.Test.Runtime.Modifiers
 {
@@ -17,7 +18,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             {
                 costMetaAttribute = "TestAttributeSet.AbilityCost",
                 baseCost = 10,
-                modifierTags = new GameplayTag[] { new GameplayTag("Cost.Ability.TestAbility") }
+                modifierTags = new Tag[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -34,7 +35,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             {
                 costMetaAttribute = "TestAttributeSet.AbilityCost",
                 baseCost = 10,
-                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -65,7 +66,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             modifyCostEffect.Definition.Modifiers = new Modifier[]
                 { additiveModifier, multiplicativeModifier, divisiveModifier, subtractiveModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Cost.Ability.TestAbility") };
+            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Cost.Ability.TestAbility") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
@@ -81,7 +82,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             {
                 costMetaAttribute = "TestAttributeSet.AbilityCost",
                 baseCost = 10,
-                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -99,7 +100,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             modifyCostEffect.Definition.Modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Cost.Ability") };
+            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Cost.Ability") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
@@ -115,7 +116,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             {
                 costMetaAttribute = "TestAttributeSet.AbilityCost",
                 baseCost = 10,
-                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -133,7 +134,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             modifyCostEffect.Definition.Modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Irrelevant.Tag") };
+            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Irrelevant.Tag") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
@@ -149,7 +150,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             {
                 costMetaAttribute = "TestAttributeSet.AbilityCost",
                 baseCost = 10,
-                modifierTags = new[] { new GameplayTag("Cost.Ability.TestAbility") }
+                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -161,7 +162,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             modifyCostEffect.Definition.Modifiers = new Modifier[] { overrideModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new GameplayTag("Cost.Ability") };
+            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Cost.Ability") };
             modifyCostEffect.Activate();
             abilitySystem.Object.EffectManager.AddEffect(effect);
             abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);

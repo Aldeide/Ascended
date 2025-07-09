@@ -1,20 +1,21 @@
 ﻿using System;
 using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 
 namespace AbilitySystem.Runtime.Abilities
 {
     [Serializable]
     public struct AbilityTags
     {
-        public GameplayTagSet AssetTag;
+        public TagSet AssetTag;
 
-        public GameplayTagSet CancelAbilitiesWithTags;
-        public GameplayTagSet BlockAbilitiesWithTags;
+        public TagSet CancelAbilitiesWithTags;
+        public TagSet BlockAbilitiesWithTags;
 
-        public GameplayTagSet ActivationOwnedTag;
+        public TagSet ActivationOwnedTag;
 
-        public GameplayTagSet ActivationRequiredTags;
-        public GameplayTagSet ActivationBlockedTags;
+        public TagSet ActivationRequiredTags;
+        public TagSet ActivationBlockedTags;
 
         // // TODO
         // public GameplayTagSet SourceRequiredTags;
@@ -25,19 +26,19 @@ namespace AbilitySystem.Runtime.Abilities
         // public GameplayTagSet TargetBlockedTags;
 
         public AbilityTags(
-            GameplayTag[] assetTags,
-            GameplayTag[] cancelAbilityTags,
-            GameplayTag[] blockAbilityTags,
-            GameplayTag[] activationOwnedTag,
-            GameplayTag[] activationRequiredTags,
-            GameplayTag[] activationBlockedTags)
+            Tag[] assetTags,
+            Tag[] cancelAbilityTags,
+            Tag[] blockAbilityTags,
+            Tag[] activationOwnedTag,
+            Tag[] activationRequiredTags,
+            Tag[] activationBlockedTags)
         {
-            AssetTag = new GameplayTagSet(assetTags);
-            CancelAbilitiesWithTags = new GameplayTagSet(cancelAbilityTags);
-            BlockAbilitiesWithTags = new GameplayTagSet(blockAbilityTags);
-            ActivationOwnedTag = new GameplayTagSet(activationOwnedTag);
-            ActivationRequiredTags = new GameplayTagSet(activationRequiredTags);
-            ActivationBlockedTags = new GameplayTagSet(activationBlockedTags);
+            AssetTag = new TagSet(assetTags);
+            CancelAbilitiesWithTags = new TagSet(cancelAbilityTags);
+            BlockAbilitiesWithTags = new TagSet(blockAbilityTags);
+            ActivationOwnedTag = new TagSet(activationOwnedTag);
+            ActivationRequiredTags = new TagSet(activationRequiredTags);
+            ActivationBlockedTags = new TagSet(activationBlockedTags);
             // SourceRequiredTags = new GameplayTagSet(sourceRequiredTags);
             // SourceBlockedTags = new GameplayTagSet(sourceBlockedTags);
             // TargetRequiredTags = new GameplayTagSet(targetRequiredTags);
@@ -47,8 +48,8 @@ namespace AbilitySystem.Runtime.Abilities
         public static AbilityTags CreateEmpty()
         {
             return new AbilityTags
-            (Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>(),
-                Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>(), Array.Empty<GameplayTag>()
+            (Array.Empty<Tag>(), Array.Empty<Tag>(), Array.Empty<Tag>(),
+                Array.Empty<Tag>(), Array.Empty<Tag>(), Array.Empty<Tag>()
             );
         }
     }

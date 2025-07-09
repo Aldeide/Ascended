@@ -1,15 +1,13 @@
 ﻿using System;
 using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
-using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Runtime.Utilities;
+using GameplayTags.Runtime;
 using Unity.Netcode;
-using UnityEditor.Presets;
 using UnityEngine;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
@@ -35,14 +33,14 @@ namespace AbilitySystem.Scripts
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
             AbilitySystem = new AbilitySystemManager(this);
-            foreach (var attributeSet in definition.attributeSets)
+            foreach (var attributeSet in definition.AttributeSets)
             {
                 Type type = ReflectionUtil.GetAttributeSetType(attributeSet);
                 var set = Activator.CreateInstance(type, AbilitySystem) as AttributeSet;
                 AbilitySystem.AttributeSetManager.AddAttributeSet(type, set);
             }
 
-            foreach (var ability in definition.baseAbilities)
+            foreach (var ability in definition.BaseAbilities)
             {
                 AbilitySystem.AbilityManager.GrantAbility(ability);
             }
@@ -185,7 +183,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Everyone)]
         public void ObserversPlayCueRpc(string cueTag, CueData data)
         {
-            var gameplayTag = new GameplayTag(cueTag);
+            var gameplayTag = new Tag(cueTag);
             AbilitySystem.CueManager.OnCueReceived(gameplayTag, CueAction.Execute, data);
             _cueManagerComponent.PlayCue(cueTag);
         }
@@ -198,7 +196,7 @@ namespace AbilitySystem.Scripts
         }
         
         [Rpc(SendTo.ClientsAndHost)]
-        public void NotifyClientsPlayCueRpc(GameplayTag cueTag, CueAction cueAction, CueData cueData)
+        public void NotifyClientsPlayCueRpc(Tag cueTag, CueAction cueAction, CueData cueData)
         {
             AbilitySystem.ReplicationManager.ReceivedPlayCue(cueTag, cueAction, cueData);
         }

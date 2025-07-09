@@ -15,7 +15,11 @@ MonoBehaviour:
   description: 
   icon: {fileID: 0}
   uniqueName: AimCameraAbility
-  cost: {fileID: 0}
+  Cost: {fileID: 0}
+  Cooldown:
+    rid: -2
+  AbilityActivation:
+    rid: -2
   AssetTags: []
   CancelAbilityTags: []
   BlockAbilityTags: []
@@ -30,3 +34,10 @@ MonoBehaviour:
   grantedEffects:
   - {fileID: 11400000, guid: 146f7bbdcb0f052418efc8d52752665c, type: 2}
   networkPolicy: 1
+  networkSecurityPolicy: 0
+  activationCues: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

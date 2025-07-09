@@ -2,7 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using UnityEngine;
 
 namespace AbilitySystem.Test.Utilities
@@ -13,10 +13,10 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.DurationType = EffectDurationType.FixedDuration;
-            asset.AssetTags = Array.Empty<GameplayTag>();
-            asset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            asset.GrantedTags = Array.Empty<GameplayTag>();
-            asset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            asset.AssetTags = Array.Empty<Tag>();
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.GrantedTags = Array.Empty<Tag>();
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
             asset.DurationSeconds = 100;
             return asset.ToEffect(source, target);
         }
@@ -25,10 +25,10 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.DurationType = EffectDurationType.Instant;
-            asset.AssetTags = Array.Empty<GameplayTag>();
-            asset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            asset.GrantedTags = Array.Empty<GameplayTag>();
-            asset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            asset.AssetTags = Array.Empty<Tag>();
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.GrantedTags = Array.Empty<Tag>();
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
             asset.DurationSeconds = 100;
             return asset.ToEffect(source, target);
         }
@@ -37,10 +37,10 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.DurationType = EffectDurationType.Infinite;
-            asset.AssetTags = Array.Empty<GameplayTag>();
-            asset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            asset.GrantedTags = Array.Empty<GameplayTag>();
-            asset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            asset.AssetTags = Array.Empty<Tag>();
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.GrantedTags = Array.Empty<Tag>();
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
             return asset.ToEffect(source, target);
         }
         
@@ -48,10 +48,10 @@ namespace AbilitySystem.Test.Utilities
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.DurationType = EffectDurationType.Infinite;
-            asset.AssetTags = Array.Empty<GameplayTag>();
-            asset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            asset.GrantedTags = Array.Empty<GameplayTag>();
-            asset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            asset.AssetTags = Array.Empty<Tag>();
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.GrantedTags = Array.Empty<Tag>();
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
             asset.Modifiers = new Modifier[]
                 { new FloatModifier { attributeName = "TestAttributeSet.Health", ModifierMagnitude = 10, operation = EffectOperation.Multiplicative } };
             return asset;
@@ -62,8 +62,8 @@ namespace AbilitySystem.Test.Utilities
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
             asset.DurationType = EffectDurationType.FixedDuration;
             asset.DurationSeconds = 100;
-            asset.ApplicationImmunityTags = Array.Empty<GameplayTag>();
-            asset.ApplicationRequiredTags = Array.Empty<GameplayTag>();
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
             return asset;
         }
     }

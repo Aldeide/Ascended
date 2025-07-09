@@ -1,6 +1,6 @@
 ﻿using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 
 namespace AbilitySystem.Runtime.Networking
 {
@@ -10,8 +10,7 @@ namespace AbilitySystem.Runtime.Networking
         public void OnAttributeBaseValueChanged(string attributeName, float newValue);
         public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue);
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue);
-        public void NotifyClientsPlayCue(GameplayTag cueTag, CueAction action, CueData data);
-        
-        public void ReceivedPlayCue(GameplayTag cueTag, CueAction action, CueData data);
+        public void NotifyClientsPlayCue(Tag cueTag, CueAction action, CueData data);
+        public void ReceivedPlayCue(Tag cueTag, CueAction action, CueData data);
     }
 }

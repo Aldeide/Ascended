@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
-using AbilitySystem.Runtime.Tags;
-using UnityEngine;
+using GameplayTags.Runtime;
 
 namespace AbilitySystem.Runtime.Effects
 {
@@ -129,7 +128,7 @@ namespace AbilitySystem.Runtime.Effects
             PredictedEffects.Remove(predictionKey.currentKey);
         }
 
-        public Effect GetEffect(GameplayTag assetTag)
+        public Effect GetEffect(Tag assetTag)
         {
             return Effects.FirstOrDefault(e=>e.Definition.AssetTags.Contains(assetTag));
         }

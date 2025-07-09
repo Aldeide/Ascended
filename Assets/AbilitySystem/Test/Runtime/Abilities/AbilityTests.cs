@@ -1,5 +1,5 @@
 ﻿using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using static AbilitySystem.Test.Utilities.AbilityUtilities;
 using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 using NUnit.Framework;
@@ -15,7 +15,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             var abilityDefinition = CreateInstantAbilityDefinition();
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            Assert.True(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.True(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
             var healthAttribute = owner.Object.AttributeSetManager.GetAttribute("Health");
             
             Assert.AreEqual(1000, healthAttribute.CurrentValue);
@@ -27,11 +27,11 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.ActivationRequiredTags = new GameplayTag[] { new("Tag.That.Is.Missing") };
+            abilityDefinition.ActivationRequiredTags = new Tag[] { new("Tag.That.Is.Missing") };
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
             
-            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
@@ -39,12 +39,12 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.ActivationRequiredTags = new GameplayTag[] { new("Tag.That.Is.Required") };
+            abilityDefinition.ActivationRequiredTags = new Tag[] { new("Tag.That.Is.Required") };
             owner.Setup(m => m.IsServer()).Returns(true);
-            owner.Object.TagManager.AddTag(new GameplayTag("Tag.That.Is.Required"));
+            owner.Object.TagManager.AddTag(new Tag("Tag.That.Is.Required"));
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
             
-            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
@@ -52,12 +52,12 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.ActivationBlockedTags = new[] { new GameplayTag("Blocking.Tag") };
+            abilityDefinition.ActivationBlockedTags = new[] { new Tag("Blocking.Tag") };
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            owner.Object.TagManager.AddTag(new GameplayTag("Blocking.Tag"));
+            owner.Object.TagManager.AddTag(new Tag("Blocking.Tag"));
             
-            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
@@ -65,11 +65,11 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.ActivationBlockedTags = new[] { new GameplayTag("Blocking.Tag") };
+            abilityDefinition.ActivationBlockedTags = new[] { new Tag("Blocking.Tag") };
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
             
-            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
@@ -77,15 +77,15 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.CancelAbilityTags = new[] { new GameplayTag("Ability.Test") };
+            abilityDefinition.CancelAbilityTags = new[] { new Tag("Ability.Test") };
             var abilityDefinitionToCancel = CreateInstantAbilityDefinition();
-            abilityDefinition.uniqueName = "AbilityToCancel";
-            abilityDefinition.AssetTags = new[] { new GameplayTag("Ability.Test") };
+            abilityDefinition.UniqueName = "AbilityToCancel";
+            abilityDefinition.AssetTags = new[] { new Tag("Ability.Test") };
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinitionToCancel);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            owner.Object.AbilityManager.TryActivateAbility(abilityDefinitionToCancel.uniqueName);
-            owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName);
+            owner.Object.AbilityManager.TryActivateAbility(abilityDefinitionToCancel.UniqueName);
+            owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
             
             Assert.IsFalse(owner.Object.AbilityManager.Abilities["AbilityToCancel"].IsActive);
         }
@@ -95,12 +95,12 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.ActivationOwnedTags = new[] { new GameplayTag("Ability.Grants.Tag") };
+            abilityDefinition.ActivationOwnedTags = new[] { new Tag("Ability.Grants.Tag") };
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName);
+            owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
             
-            Assert.IsTrue(owner.Object.TagManager.HasTag(new GameplayTag("Ability.Grants.Tag")));
+            Assert.IsTrue(owner.Object.TagManager.HasTag(new Tag("Ability.Grants.Tag")));
         }
         
         [Test]
@@ -108,11 +108,11 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.networkPolicy = AbilityNetworkPolicy.ClientOnly;
+            abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientOnly;
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
             
-            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
@@ -120,13 +120,13 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             var owner = CreateMockAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.networkPolicy = AbilityNetworkPolicy.ClientOnly;
+            abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientOnly;
             owner.Setup(m => m.IsServer()).Returns(false);
             owner.Setup(m => m.IsHost()).Returns(false);
             owner.Setup(m => m.IsLocalClient()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
             
-            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
+            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
@@ -136,12 +136,12 @@ namespace AbilitySystem.Test.Runtime.Abilities
             var abilityDefinition = CreateInstantAbilityDefinition();
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.uniqueName));
-            Assert.IsTrue(owner.Object.AbilityManager.Abilities[abilityDefinition.uniqueName].IsActive);
+            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
+            Assert.IsTrue(owner.Object.AbilityManager.Abilities[abilityDefinition.UniqueName].IsActive);
             
-            owner.Object.AbilityManager.EndAbility(abilityDefinition.uniqueName);
+            owner.Object.AbilityManager.EndAbility(abilityDefinition.UniqueName);
             
-            Assert.IsFalse(owner.Object.AbilityManager.Abilities[abilityDefinition.uniqueName].IsActive);
+            Assert.IsFalse(owner.Object.AbilityManager.Abilities[abilityDefinition.UniqueName].IsActive);
         }
     }
 }

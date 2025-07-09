@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Effects;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace AbilitySystem.Runtime.Modifiers
 {
@@ -16,8 +15,8 @@ namespace AbilitySystem.Runtime.Modifiers
 
         public float baseCost;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] modifierTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] modifierTags;
 
         private string _attributeSet;
         private string _attributeName;

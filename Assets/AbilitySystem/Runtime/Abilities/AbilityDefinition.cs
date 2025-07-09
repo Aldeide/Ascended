@@ -11,18 +11,19 @@ using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Serialization;
 
 namespace AbilitySystem.Runtime.Abilities
 {
     [Serializable]
     public abstract class AbilityDefinition : ScriptableObject
     {
-        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag testTag;
         public abstract Type AbilityType();
 
-        public string description;
-        public Sprite icon;
+        public LocalizedString Description;
+        public LocalizedString DisplayName;
+        public Sprite Icon;
 
         [ShowInInspector]
         public string InstanceAbilityClassFullName => AbilityType() != null ? AbilityType().FullName : null;
@@ -30,7 +31,7 @@ namespace AbilitySystem.Runtime.Abilities
         [ShowInInspector] public string TypeName => GetType().Name;
         [ShowInInspector] public string TypeFullName => GetType().FullName;
         [ShowInInspector] public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
-        public string uniqueName;
+        public string UniqueName;
 
         [Space]
         [Title("Cost and Cooldown")]
@@ -42,35 +43,35 @@ namespace AbilitySystem.Runtime.Abilities
         public AbilityActivation.AbilityActivation AbilityActivation;
         
         [Title("Tags")]
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] AssetTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] AssetTags;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] CancelAbilityTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] CancelAbilityTags;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] BlockAbilityTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] BlockAbilityTags;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] ActivationOwnedTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] ActivationOwnedTags;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] ActivationRequiredTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] ActivationRequiredTags;
 
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] ActivationBlockedTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] ActivationBlockedTags;
 
-        [Space] [Title("Granted Effects")] public EffectDefinition[] grantedEffects;
+        [Space] [Title("Granted Effects")] public EffectDefinition[] GrantedEffects;
 
         [Space] [Title("Network")]
-        public AbilityNetworkPolicy networkPolicy;
+        public AbilityNetworkPolicy NetworkPolicy;
 
-        public AbilityNetworkSecurityPolicy networkSecurityPolicy;
+        public AbilityNetworkSecurityPolicy NetworkSecurityPolicy;
         
         [HideInInspector]
         public AbilityTags AbilityTags;
 
-        [Space] [Title("Cues")] public CueDefinition[] activationCues;
+        [Space] [Title("Cues")] public CueDefinition[] ActivationCues;
         
         public AbilityDefinition()
         {
@@ -84,12 +85,12 @@ namespace AbilitySystem.Runtime.Abilities
 
         public bool HasLocalPrediction()
         {
-            return networkPolicy == AbilityNetworkPolicy.ClientPredicted;
+            return NetworkPolicy == AbilityNetworkPolicy.ClientPredicted;
         }
 
         public bool IsLocalAbility()
         {
-            return networkPolicy == AbilityNetworkPolicy.ClientOnly;
+            return NetworkPolicy == AbilityNetworkPolicy.ClientOnly;
         }
     }
 }

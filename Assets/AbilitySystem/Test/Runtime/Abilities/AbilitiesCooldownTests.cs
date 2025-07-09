@@ -1,7 +1,7 @@
 ﻿using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Core;
-using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Test.Utilities;
+using GameplayTags.Runtime;
 using Moq;
 using NUnit.Framework;
 using static AbilitySystem.Test.Utilities.AbilityUtilities;
@@ -17,7 +17,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             var owner = SetupAbilitySystemWithAbilityCooldown();
             owner.Object.AbilityManager.TryActivateAbility("TestAbility");
             
-            Assert.AreEqual(100f, owner.Object.EffectManager.GetEffect(new GameplayTag("CooldownTag")).Duration);
+            Assert.AreEqual(100f, owner.Object.EffectManager.GetEffect(new Tag("CooldownTag")).Duration);
         }
         
         [Test]
@@ -46,7 +46,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.Cooldown = new ConstantAbilityCooldown();
             var cooldownEffect = EffectUtilities.CreateDurationEffectDefinition();
-            var cooldownTag = new GameplayTag("CooldownTag");
+            var cooldownTag = new Tag("CooldownTag");
             cooldownEffect.AssetTags = new[] { cooldownTag };
             cooldownEffect.GrantedTags = new[] { cooldownTag };
             abilityDefinition.Cooldown.CooldownEffect = cooldownEffect;

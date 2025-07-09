@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using Sirenix.Utilities;
 using UnityEngine;
 
@@ -46,9 +46,9 @@ namespace AbilitySystem.Runtime.Abilities
             if (!abilityDefinition) return;
             try
             {
-                if (Abilities.ContainsKey(abilityDefinition.uniqueName)) return;
+                if (Abilities.ContainsKey(abilityDefinition.UniqueName)) return;
                 var ability = abilityDefinition.ToAbility(_owner);
-                Abilities.Add(ability.Definition.uniqueName, ability);
+                Abilities.Add(ability.Definition.UniqueName, ability);
             }
             catch (MissingMethodException e)
             {
@@ -59,7 +59,7 @@ namespace AbilitySystem.Runtime.Abilities
         public void RemoveAbility(AbilityDefinition abilityDefinition)
         {
             if (!abilityDefinition) return;
-            RemoveAbility(abilityDefinition.uniqueName);
+            RemoveAbility(abilityDefinition.UniqueName);
         }
 
         public void RemoveAbility(string abilityName)
@@ -125,7 +125,7 @@ namespace AbilitySystem.Runtime.Abilities
                 .ForEach(a => a.Value.EndAbility());
         }
 
-        public void CancelAbilitiesWithTags(GameplayTag[] tags)
+        public void CancelAbilitiesWithTags(Tag[] tags)
         {
             foreach (var ability in Abilities.Values.Where(ability =>
                          ability.Definition.AssetTags.Any(tags.Contains)))

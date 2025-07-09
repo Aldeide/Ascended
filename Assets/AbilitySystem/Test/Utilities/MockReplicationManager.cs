@@ -2,8 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Networking;
-using AbilitySystem.Runtime.Tags;
-using UnityEngine;
+using GameplayTags.Runtime;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Test.Utilities
@@ -42,12 +41,12 @@ namespace AbilitySystem.Test.Utilities
             throw new NotImplementedException();
         }
 
-        public void NotifyClientsPlayCue(GameplayTag cueTag, CueAction action, CueData data)
+        public void NotifyClientsPlayCue(Tag cueTag, CueAction action, CueData data)
         {
             throw new NotImplementedException();
         }
 
-        public void ReceivedPlayCue(GameplayTag cueTag, CueAction action, CueData data)
+        public void ReceivedPlayCue(Tag cueTag, CueAction action, CueData data)
         {
             throw new NotImplementedException();
         }

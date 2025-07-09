@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -16,7 +17,6 @@ namespace AbilitySystem.Runtime.Effects
     {
         [Title("Display")]
         public LocalizedString EffectName;
-        [FormerlySerializedAs("description")] 
         public LocalizedString Description;
 
         public bool IsHidden;
@@ -44,28 +44,26 @@ namespace AbilitySystem.Runtime.Effects
         
         [FormerlySerializedAs("assetTags")]
         [Title("Effect Tags")]
-        [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] AssetTags;
-        [FormerlySerializedAs("grantedTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] GrantedTags;
-        [FormerlySerializedAs("applicationRequiredTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] ApplicationRequiredTags;
-        [FormerlySerializedAs("ongoingRequiredTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] OngoingRequiredTags;
-        [FormerlySerializedAs("removeGameplayEffectsWithTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] RemoveGameplayEffectsWithTags;
-        [FormerlySerializedAs("applicationImmunityTags")] [ValueDropdown("@DropdownValuesUtil.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public GameplayTag[] ApplicationImmunityTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] AssetTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] GrantedTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] ApplicationRequiredTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] OngoingRequiredTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] RemoveGameplayEffectsWithTags;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] ApplicationImmunityTags;
         
-        [FormerlySerializedAs("modifiers")]
         [Space]
         [ShowInInspector]
         [Title("Modifiers")]
         [SerializeReference]
         public Modifier[] Modifiers;
-
-
-        [FormerlySerializedAs("cues")] [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
+        
+        [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
         public CueDefinition[] Cues;
         bool IsPeriodic()
         {

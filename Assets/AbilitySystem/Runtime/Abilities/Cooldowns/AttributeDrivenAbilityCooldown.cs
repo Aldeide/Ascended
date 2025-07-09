@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
-using AbilitySystem.Runtime.Tags;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 
 namespace AbilitySystem.Runtime.Abilities.Cooldowns
@@ -23,7 +22,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
         [ValueDropdown("@DropdownValuesUtil.AttributeChoices")]
         public string CooldownAttribute = "";
 
-        public GameplayTagQuery TagQuery;
+        public TagQuery TagQuery;
         
         private readonly List<Tuple<Effect, Modifier>> _relevantModifiers = new();
 
