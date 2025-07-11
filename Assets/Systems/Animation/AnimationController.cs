@@ -68,5 +68,21 @@ namespace Systems.Animation
             SetMovement(0, 0);
             SetIsMoving(false);
         }
+
+        /// <summary>
+        /// Sets the playback speed of the Animator component.
+        /// </summary>
+        /// <param name="speed">A float value representing the desired playback speed for animations. Values should be non-negative.</param>
+        public void SetSpeed(float speed)
+        {
+            if (speed < 0)
+            {
+                speed = 0;
+                #if UNITY_EDITOR
+                    Debug.LogWarning("[AnimatorController] Speed cannot be negative. Setting speed to 0.");
+                #endif
+            }
+            _animator.speed = speed;
+        }
     }
 }
