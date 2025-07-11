@@ -4,6 +4,11 @@ using UnityEngine.InputSystem;
 
 namespace Systems.Controllers
 {
+    /// <summary>
+    /// PlayerTargetController manages the primary target used by a player's abilities
+    /// and interactions. It ensures the local player's target is tracked and updated
+    /// dynamically based on input and environmental interaction.
+    /// </summary>
     public class PlayerTargetController : NetworkBehaviour
     {
         [Header("Configuration")] public GameObject Target;
