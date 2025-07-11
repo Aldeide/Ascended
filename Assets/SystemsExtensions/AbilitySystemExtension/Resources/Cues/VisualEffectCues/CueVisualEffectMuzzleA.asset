@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65dbca287904b6c8126a3ec8883c85e, type: 3}
+  m_Name: CueVisualEffectMuzzleA
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 0}
+  visualEffectAsset: {fileID: 8926484042661614526, guid: 0669e554c49c3eb4584733e1684a2cfb, type: 3}
+  cueTag:
+    name: Cue.VisualEffect.Muzzle.A
+    hashCode: -290881826
+    ancestorsNames:
+    - Cue
+    - Cue.VisualEffect
+    - Cue.VisualEffect.Muzzle
+    ancestorsHashCodes: d31da389248c2339ed42da42
