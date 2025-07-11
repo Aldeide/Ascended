@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e71cc2528764403a1e6975de75704fe, type: 3}
+  m_Name: TestAbilityGraph
+  m_EditorClassIdentifier: 
+  description: 
+  icon: {fileID: 0}
+  uniqueName: TestAbilityGraph
+  Cost: {fileID: 0}
+  Cooldown:
+    rid: 1400474609048879418
+  abilityActivation:
+    rid: -2
+  AssetTags: []
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTags: []
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  grantedEffects: []
+  networkPolicy: 2
+  networkSecurityPolicy: 0
+  activationCues: []
+  graph: {fileID: 11400000, guid: c779d86f6dcbae04b874ca78707eeaac, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1400474609048879418
+      type: {class: AttributeDrivenAbilityCooldown, ns: AbilitySystem.Runtime.Abilities.Cooldowns, asm: AbilitySystem}
+      data:
+        CooldownEffect: {fileID: 11400000, guid: b23a936049bb4324488c46ec2cbb3c6f, type: 2}
+        CooldownAttribute: MetaAttributeSet.AbilityCooldown
+        TagQuery:
+          Condition:
+          - MatchType: 0
+            Tags:
+            - name: Cooldown.Ability.Test
+              hashCode: -352825783
+              ancestorsNames:
+              - Cooldown
+              - Cooldown.Ability
+              ancestorsHashCodes: 1d66983da9a35ca7
