@@ -14,12 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffectAsset: {fileID: 0}
   prefab: {fileID: 0}
-  cueTag:
-    name: Cue.Animation.Parameter.Grounded
-    hashCode: -1224948724
-    ancestorsNames:
-    - Cue
-    - Cue.Animation
-    - Cue.Animation.Parameter
-    ancestorsHashCodes: d31da3892b86fc39ec9f70a4
   ParameterName: Grounded

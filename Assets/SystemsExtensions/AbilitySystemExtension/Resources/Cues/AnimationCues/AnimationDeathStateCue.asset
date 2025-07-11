@@ -14,13 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffectAsset: {fileID: 0}
   prefab: {fileID: 0}
-  cueTag:
-    name: Cue.Animation.State.Player.Death
-    hashCode: 567171181
-    ancestorsNames:
-    - Cue
-    - Cue.Animation
-    - Cue.Animation.State
-    - Cue.Animation.State.Player
-    ancestorsHashCodes: d31da3892b86fc39e2536f83d383f797
   animationLayerName: Death

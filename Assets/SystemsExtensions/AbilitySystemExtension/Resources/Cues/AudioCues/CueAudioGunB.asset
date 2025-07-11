@@ -14,12 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffectAsset: {fileID: 0}
   prefab: {fileID: 0}
-  cueTag:
-    name: Cue.Audio.Gun.A
-    hashCode: 983547252
-    ancestorsNames:
-    - Cue
-    - Cue.Audio
-    - Cue.Audio.Gun
-    ancestorsHashCodes: d31da389f38dd10f7d116014
-  audioClip: {fileID: 8300000, guid: 986c58b23e00205498dd443ddcae9296, type: 3}
+  AudioClip: {fileID: 0}
