@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using GameplayTags.Runtime;
 using ItemSystem.Runtime.Definition;
@@ -14,44 +12,46 @@ namespace ItemSystem.Runtime.Manager
     /// </summary>
     public class EquipmentManager
     {
-        private IAbilitySystem _owner;
+        private readonly IAbilitySystem _owner;
+        private EquipmentManagerDefinition _definition;
         
-        private Dictionary<Tag, EquippableDefinition> _equipment = new();
+        private readonly Dictionary<Tag, Equipment> _equipment = new();
         
-        public EquipmentManager(IAbilitySystem owner)
+        public EquipmentManager(IAbilitySystem owner, EquipmentManagerDefinition definition)
         {
             _owner = owner;
-        }
-        public void Equip(Tag slotName, EquippableDefinition item)
-        {
-            if (_equipment.ContainsKey(slotName))
+            _definition = definition;
+            foreach (var slot in _definition.EquipmentSlots)
             {
-                _equipment[slotName] = item;
-                return;
+                _equipment.TryAdd(slot, null);
             }
-            _equipment.TryAdd(slotName, item);
+
+            foreach (var equipmentDefinition in _definition.Equipment)
+            {
+                var slot = equipmentDefinition.EquipmentSlot;
+                if (_equipment.ContainsKey(slot))
+                {
+                    var equipment = new Equipment(equipmentDefinition, this);
+                    _equipment[slot] = equipment;
+                    _equipment[slot].Equip();
+                }
+            }
+        }
+        public void Equip(Tag slotName, EquipmentDefinition item)
+        {
+            if (!_equipment.ContainsKey(slotName)) return;
+            _equipment[slotName] = new Equipment(item, this);;
         }
 
         public void Unequip(Tag slotName)
         {
-            _equipment.Remove(slotName);
+            _equipment[slotName].Unequip();
+            _equipment[slotName] = null;
         }
-
-        public List<AbilityDefinition> GetAbilities(EquippableDefinition equippable)
+        
+        public IAbilitySystem GetOwner()
         {
-            var results = new List<AbilityDefinition>();
-            results.AddRange(equippable.EquippableAbilities);
-
-            if (equippable.Mods is not null && equippable.Mods.Count() > 0)
-            {
-                foreach (var mod in equippable.Mods)
-                {
-                    if (mod.EquipableMods is not null && mod.EquipableMods.Count() > 0)
-                        results.AddRange(mod.EquipableMods.Select(x => x.GetAbility()));
-                }
-            }
-
-            return results;
+            return _owner;
         }
     }
 }
