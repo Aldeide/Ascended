@@ -19,6 +19,7 @@ MonoBehaviour:
   - Cue.Animation.State.Death
   - Cue.Animation.State.Jump.Start
   - Cue.Audio.Gun.B
+  - Cue.Light.Burst.Muzzle
   - Cue.Prefab.Impact.A
   - Cue.VisualEffect.Muzzle.A
   - EquipmentSlot.Core
