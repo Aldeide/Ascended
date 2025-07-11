@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f9da2cd20b844d98091193c6eaa6292, type: 3}
+  m_Name: EnergyCoreEquipment
+  m_EditorClassIdentifier: 
+  Name: EnergyCore
+  DisplayName:
+    m_TableReference:
+      m_TableCollectionName: GUID:c4eb29c878f6183498c14f256a5724a1
+    m_TableEntryReference:
+      m_KeyId: 20043014144
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Icon: {fileID: 0}
+  GrantedAbilities:
+  - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
+  references:
+    version: 2
+    RefIds: []
