@@ -29,18 +29,24 @@ namespace ItemSystem.Runtime.Manager
             foreach (var equipmentDefinition in _definition.Equipment)
             {
                 var slot = equipmentDefinition.EquipmentSlot;
-                if (_equipment.ContainsKey(slot))
-                {
-                    var equipment = new Equipment(equipmentDefinition, this);
-                    _equipment[slot] = equipment;
-                    _equipment[slot].Equip();
-                }
+                if (!_equipment.ContainsKey(slot)) continue;
+                var equipment = new Equipment(equipmentDefinition, this);
+                _equipment[slot] = equipment;
+                _equipment[slot].Equip();
             }
         }
         public void Equip(Tag slotName, EquipmentDefinition item)
         {
             if (!_equipment.ContainsKey(slotName)) return;
-            _equipment[slotName] = new Equipment(item, this);;
+            _equipment[slotName] = new Equipment(item, this);
+
+            if (!_owner.IsServer())
+            {
+                // TODO: Send request to server to equip item.
+            } else
+            {
+                _equipment[slotName].Equip();
+            }
         }
 
         public void Unequip(Tag slotName)
