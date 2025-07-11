@@ -14,6 +14,9 @@ namespace GameplayTags.Generated
         public static readonly Tag CueAudioGunB = new Tag("Cue.Audio.Gun.B");
         public static readonly Tag CuePrefabImpactA = new Tag("Cue.Prefab.Impact.A");
         public static readonly Tag CueVisualEffectMuzzleA = new Tag("Cue.VisualEffect.Muzzle.A");
+        public static readonly Tag EquipmentSlotCore = new Tag("EquipmentSlot.Core");
+        public static readonly Tag EquipmentSlotUtilityOne = new Tag("EquipmentSlot.Utility.One");
+        public static readonly Tag EquipmentSlotUtilityTwo = new Tag("EquipmentSlot.Utility.Two");
         public static readonly Tag StatusAiming = new Tag("Status.Aiming");
         public static readonly Tag StatusDead = new Tag("Status.Dead");
         public static readonly Tag StatusImmobilised = new Tag("Status.Immobilised");
@@ -29,6 +32,9 @@ namespace GameplayTags.Generated
             CueAudioGunB,
             CuePrefabImpactA,
             CueVisualEffectMuzzleA,
+            EquipmentSlotCore,
+            EquipmentSlotUtilityOne,
+            EquipmentSlotUtilityTwo,
             StatusAiming,
             StatusDead,
             StatusImmobilised,

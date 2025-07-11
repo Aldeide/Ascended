@@ -17,7 +17,8 @@ namespace AbilitySystem.Scripts
     {
         public AbilitySystemDefinition definition;
         public IAbilitySystem AbilitySystem { get; private set; }
-
+        public Action OnAbilitySystemInitialised;
+        public bool IsInitialized => AbilitySystem != null;
         private EffectDefinitionLibrary _effectLibrary;
         private CueManagerComponent _cueManagerComponent;
         
@@ -49,6 +50,8 @@ namespace AbilitySystem.Scripts
             AbilitySystem.AttributeSetManager.OnAnyAttributeCurrentValueChanged += OnAttributeBaseCurrentChanged;
             AbilitySystem.EffectManager.OnEffectAdded += OnEffectAdded;
             AbilitySystem.EffectManager.OnEffectRemoved += OnEffectRemoved;
+            
+            OnAbilitySystemInitialised?.Invoke();
         }
 
         public void Update()

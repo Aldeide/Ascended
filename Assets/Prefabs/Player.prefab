@@ -3446,6 +3446,7 @@ GameObject:
   - component: {fileID: 6820344770040351280}
   - component: {fileID: 1959719244226503362}
   - component: {fileID: 7532433191488090239}
+  - component: {fileID: 3922097258888804137}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -5019,6 +5020,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a488b23c424de3bd9ffdf00e4cbb96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3922097258888804137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7fc932aa4634e90aa1e26243c8eace6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  EquipmentManagerDefinition: {fileID: 11400000, guid: 9e8ed9753be065149960dd56dd047e8d, type: 2}
 --- !u!1 &6911334762277334251
 GameObject:
   m_ObjectHideFlags: 0
@@ -6274,6 +6289,10 @@ PrefabInstance:
     - target: {fileID: 4800256432220104587, guid: bf9f9d5b87bdc7d40bc753c3f99e2ec7, type: 3}
       propertyPath: m_Name
       value: Pistol
+      objectReference: {fileID: 0}
+    - target: {fileID: 8201779088424878736, guid: bf9f9d5b87bdc7d40bc753c3f99e2ec7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
