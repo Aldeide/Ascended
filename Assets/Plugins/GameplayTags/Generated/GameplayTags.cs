@@ -8,6 +8,12 @@ namespace GameplayTags.Generated
     {
         public static readonly Tag AbilityActive = new Tag("Ability.Active");
         public static readonly Tag AbilityPassive = new Tag("Ability.Passive");
+        public static readonly Tag CueAnimationParameterGrounded = new Tag("Cue.Animation.Parameter.Grounded");
+        public static readonly Tag CueAnimationStateDeath = new Tag("Cue.Animation.State.Death");
+        public static readonly Tag CueAnimationStateJumpStart = new Tag("Cue.Animation.State.Jump.Start");
+        public static readonly Tag CueAudioGunB = new Tag("Cue.Audio.Gun.B");
+        public static readonly Tag CuePrefabImpactA = new Tag("Cue.Prefab.Impact.A");
+        public static readonly Tag CueVisualEffectMuzzleA = new Tag("Cue.VisualEffect.Muzzle.A");
         public static readonly Tag StatusAiming = new Tag("Status.Aiming");
         public static readonly Tag StatusDead = new Tag("Status.Dead");
         public static readonly Tag StatusImmobilised = new Tag("Status.Immobilised");
@@ -17,6 +23,12 @@ namespace GameplayTags.Generated
         {
             AbilityActive,
             AbilityPassive,
+            CueAnimationParameterGrounded,
+            CueAnimationStateDeath,
+            CueAnimationStateJumpStart,
+            CueAudioGunB,
+            CuePrefabImpactA,
+            CueVisualEffectMuzzleA,
             StatusAiming,
             StatusDead,
             StatusImmobilised,

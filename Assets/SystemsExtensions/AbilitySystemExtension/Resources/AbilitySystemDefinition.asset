@@ -12,21 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9b71c1cc1cc409188a1303df09d649c, type: 3}
   m_Name: AbilitySystemDefinition
   m_EditorClassIdentifier: 
-  attributeSets:
+  AttributeSets:
   - CharacteristicsAttributeSet
   - MetaAttributeSet
-  inherentTags:
-  - name: Unit.Player
-    hashCode: 744092167
-    ancestorsNames:
-    - Unit
-    ancestorsHashCodes: 14f9c27e
-  baseAbilities:
+  InherentTags: []
+  BaseAbilities:
   - {fileID: 11400000, guid: 945f8440da1e9444abc4f9d9039e6eda, type: 2}
-  - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
-  - {fileID: 11400000, guid: b9dd22f7d4439514ab4ebca326c79f53, type: 2}
   - {fileID: 11400000, guid: 9fba7d67899937441ab012e75b214707, type: 2}
   - {fileID: 11400000, guid: 95f02e62072e1754b8a65c0d07606e97, type: 2}
   - {fileID: 11400000, guid: 657d2ce5e4caae949af51346922c0bf1, type: 2}
-  - {fileID: 11400000, guid: 1bf485b6cdc2cb54cbb577a0e42c9113, type: 2}
+  - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
+  - {fileID: 11400000, guid: b9dd22f7d4439514ab4ebca326c79f53, type: 2}
   - {fileID: 11400000, guid: 5868aa434a9303841b8e48110aa8a3d7, type: 2}
+  - {fileID: 11400000, guid: 1bf485b6cdc2cb54cbb577a0e42c9113, type: 2}

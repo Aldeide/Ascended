@@ -12,9 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be7f54f99f04a6f9a25fe4d7449b2ae, type: 3}
   m_Name: FireAbility
   m_EditorClassIdentifier: 
-  description: 
-  icon: {fileID: 0}
-  uniqueName: FireAbility
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  DisplayName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Icon: {fileID: 0}
+  UniqueName: FireAbility
   Cost: {fileID: 0}
   Cooldown:
     rid: -2
@@ -26,11 +43,10 @@ MonoBehaviour:
   ActivationOwnedTags: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  grantedEffects: []
-  networkPolicy: 1
-  networkSecurityPolicy: 0
-  activationCues:
-  - {fileID: 11400000, guid: 08663847233e8da44827a54d286ad089, type: 2}
+  GrantedEffects: []
+  NetworkPolicy: 0
+  NetworkSecurityPolicy: 0
+  ActivationCues: []
   impactVisualEffect: {fileID: 11400000, guid: 606f9323f1538bf4e9ecdbd0908e1535, type: 2}
   damageEffect: {fileID: 11400000, guid: 681c59784de32a64fb4fba43db3f81f9, type: 2}
   layerMask:

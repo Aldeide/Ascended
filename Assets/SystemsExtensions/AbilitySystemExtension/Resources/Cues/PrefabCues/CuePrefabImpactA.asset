@@ -12,14 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65dbca287904b6c8126a3ec8883c85e, type: 3}
   m_Name: CuePrefabImpactA
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
   visualEffectAsset: {fileID: 0}
   prefab: {fileID: 5559326878027834079, guid: 3975cb8ec828697478d456f2427cf35d, type: 3}
-  cueTag:
-    name: Cue.Prefab.Impact.A
-    hashCode: 1934248172
-    ancestorsNames:
-    - Cue
-    - Cue.Prefab
-    - Cue.Prefab.Impact
-    ancestorsHashCodes: d31da3893fd128efbb12a14e
