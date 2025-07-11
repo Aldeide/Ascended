@@ -18,8 +18,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             var muzzle = abilityData.MuzzlePosition;
             var impact = ((FireAbilityDefinition)Definition).impactVisualEffect;
             PlayActivationCues();
-
-
+            
             var ray = new Ray(muzzle, target - muzzle);
             if (!Physics.Raycast(ray, out var hit, 100f, ((FireAbilityDefinition)Definition).layerMask)) return;
             Debug.DrawLine(muzzle, hit.point, Color.red, 1.0f);
