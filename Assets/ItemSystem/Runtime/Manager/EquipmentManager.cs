@@ -2,6 +2,7 @@
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
+using GameplayTags.Runtime;
 using ItemSystem.Runtime.Definition;
 
 namespace ItemSystem.Runtime.Manager
@@ -15,13 +16,13 @@ namespace ItemSystem.Runtime.Manager
     {
         private IAbilitySystem _owner;
         
-        private Dictionary<string, EquippableDefinition> _equipment = new();
+        private Dictionary<Tag, EquippableDefinition> _equipment = new();
         
         public EquipmentManager(IAbilitySystem owner)
         {
             _owner = owner;
         }
-        public void Equip(string slotName, EquippableDefinition item)
+        public void Equip(Tag slotName, EquippableDefinition item)
         {
             if (_equipment.ContainsKey(slotName))
             {
@@ -31,7 +32,7 @@ namespace ItemSystem.Runtime.Manager
             _equipment.TryAdd(slotName, item);
         }
 
-        public void Unequip(string slotName)
+        public void Unequip(Tag slotName)
         {
             _equipment.Remove(slotName);
         }
