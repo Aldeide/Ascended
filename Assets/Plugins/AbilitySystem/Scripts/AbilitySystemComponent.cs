@@ -27,6 +27,34 @@ namespace AbilitySystem.Scripts
         {
             base.OnNetworkSpawn();
             Initialise();
+            if (IsServer)
+            {
+                NetworkManager.OnClientConnectedCallback += OnClientConnected;
+            }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            if (IsServer)
+            {
+                NetworkManager.OnClientConnectedCallback -= OnClientConnected;
+            }
+
+        }
+
+        private void OnClientConnected(ulong clientId)
+        {
+            // Prepare an RPC parameter to target only the newly connected client.
+            var clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams { TargetClientIds = new[] { clientId } }
+            };
+            // Send all currently active durational cues to the new client.
+            foreach (var cue in AbilitySystem.CueManager.GetActiveCues())
+            {
+                AddCuesClientRpc(cue.Key, cue.Value, clientRpcParams);
+            }
         }
 
         public void Initialise()
@@ -203,6 +231,13 @@ namespace AbilitySystem.Scripts
         public void NotifyClientsPlayCueRpc(Tag cueTag, CueAction cueAction, CueData cueData)
         {
             AbilitySystem.ReplicationManager.ReceivedPlayCue(cueTag, cueAction, cueData);
+        }
+
+        [ClientRpc]
+        public void AddCuesClientRpc(Tag cueTag, CueData cueData = default, ClientRpcParams clientRpcParams = default)
+        {
+            var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
+            AbilitySystem.CueManager.AddCue(cueDefinition, cueData);
         }
     }
 }

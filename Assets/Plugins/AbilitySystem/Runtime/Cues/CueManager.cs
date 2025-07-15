@@ -18,7 +18,7 @@ namespace AbilitySystem.Runtime.Cues
         public Action<CueDefinition, CueData> OnCueRemove;
         public Action<CueDefinition, CueData> OnCueExecute;
 
-        public List<ICue> ActiveCues = new();
+        private readonly Dictionary<Tag, CueData> _activeCues = new();
         
         public CueManager(IAbilitySystem owner)
         {
@@ -38,7 +38,7 @@ namespace AbilitySystem.Runtime.Cues
             if (_owner.IsServer() && !_owner.IsHost()) return;
 
             var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
-            if (cueDefinition == null)
+            if (!cueDefinition)
             {
 #if UNITY_EDITOR
                 Debug.LogWarning("Cue not found in data library: " + cueTag);
@@ -64,17 +64,26 @@ namespace AbilitySystem.Runtime.Cues
 
         public void AddCue(CueDefinition cue, CueData data)
         {
+            if (!_activeCues.TryAdd(cue.CueTag, data)) return;
             OnCueAdd?.Invoke(cue, data);
         }
 
         public void RemoveCue(CueDefinition cue, CueData data)
         {
-            OnCueRemove?.Invoke(cue, data);
+            if (_activeCues.Remove(cue.CueTag, out _))
+            {
+                OnCueRemove?.Invoke(cue, data);
+            }
         }
 
         public void ExecuteCue(CueDefinition cue, CueData data)
         {
             OnCueExecute?.Invoke(cue, data);
+        }
+
+        public Dictionary<Tag, CueData> GetActiveCues()
+        {
+            return _activeCues;
         }
     }
 }
