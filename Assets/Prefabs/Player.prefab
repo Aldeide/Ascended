@@ -3126,7 +3126,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <TagQuery>k__BackingField:
-    Condition: []
+    Condition:
+    - MatchType: 0
+      Tags:
+      - <Name>k__BackingField: Cue.Audio.Gun.B
+        <HashCode>k__BackingField: 983547253
+        <AncestorsNames>k__BackingField:
+        - Cue
+        - Cue.Audio
+        - Cue.Audio.Gun
+        <AncestorsHashCodes>k__BackingField: d31da389f38dd10f7d116014
 --- !u!1 &6127460654349743310
 GameObject:
   m_ObjectHideFlags: 0
@@ -3726,7 +3735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1198471492
+  GlobalObjectIdHash: 2027218909
   InScenePlacedSourceGlobalObjectIdHash: 1198471492
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3752,7 +3761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  definition: {fileID: 11400000, guid: 49f1935a5628de24098cf3778c66e82e, type: 2}
+  Definition: {fileID: 11400000, guid: 49f1935a5628de24098cf3778c66e82e, type: 2}
 --- !u!114 &3724649919264293737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5174,7 +5183,7 @@ MonoBehaviour:
   baseTransform: {fileID: 3431953994317972873}
   Hips: {fileID: 6024721926596410489}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.928916
+  finalScaleReference: 0.92891586
   finalScaleReferenceSqrt: 0.9328631
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -5233,7 +5242,12 @@ MonoBehaviour:
   <TagQuery>k__BackingField:
     Condition:
     - MatchType: 3
-      Tags: []
+      Tags:
+      - <Name>k__BackingField: Cue.Animation
+        <HashCode>k__BackingField: 972850731
+        <AncestorsNames>k__BackingField:
+        - Cue
+        <AncestorsHashCodes>k__BackingField: d31da389
 --- !u!114 &1959719244226503362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5247,7 +5261,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <TagQuery>k__BackingField:
-    Condition: []
+    Condition:
+    - MatchType: 0
+      Tags: []
 --- !u!114 &7532433191488090239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6565,7 +6581,14 @@ MonoBehaviour:
   <TagQuery>k__BackingField:
     Condition:
     - MatchType: 1
-      Tags: []
+      Tags:
+      - <Name>k__BackingField: Cue.Light.Burst.Muzzle
+        <HashCode>k__BackingField: -1522670046
+        <AncestorsNames>k__BackingField:
+        - Cue
+        - Cue.Light
+        - Cue.Light.Burst
+        <AncestorsHashCodes>k__BackingField: d31da389579daaa78bcab1d3
   Light: {fileID: 108077147755814817}
   DurationSeconds: 0.1
 --- !u!4 &8299733799230968535 stripped

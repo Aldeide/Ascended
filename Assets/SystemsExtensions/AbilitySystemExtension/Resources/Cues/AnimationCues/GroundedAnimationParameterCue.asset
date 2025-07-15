@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76fc7d09df7c4c05af9f76aaef7af1b0, type: 3}
   m_Name: GroundedAnimationParameterCue
   m_EditorClassIdentifier: 
-  visualEffectAsset: {fileID: 0}
-  prefab: {fileID: 0}
+  CueTag:
+    <Name>k__BackingField: Cue.Animation.Parameter.Grounded
+    <HashCode>k__BackingField: -1224948724
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.Animation
+    - Cue.Animation.Parameter
+    <AncestorsHashCodes>k__BackingField: d31da3892b86fc39ec9f70a4
   ParameterName: Grounded

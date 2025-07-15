@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bfa8ed859744b79965f8521c399cc7, type: 3}
   m_Name: AnimationDeathStateCue
   m_EditorClassIdentifier: 
-  visualEffectAsset: {fileID: 0}
-  prefab: {fileID: 0}
-  animationLayerName: Death
+  CueTag:
+    <Name>k__BackingField: Cue.Animation.State.Death
+    <HashCode>k__BackingField: 584716970
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.Animation
+    - Cue.Animation.State
+    <AncestorsHashCodes>k__BackingField: d31da3892b86fc39e2536f83
+  AnimationLayerName: Death

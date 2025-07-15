@@ -12,7 +12,7 @@ namespace AbilitySystem.Scripts
     {
         private IAbilitySystem _abilitySystem;
         private CueDefinitionLibrary _cueLibrary;
-
+        
         public Action<string, CueDefinition> OnCueAdded; 
         
         public void Start()
@@ -31,13 +31,6 @@ namespace AbilitySystem.Scripts
         {
             if (!_abilitySystem.IsServer()) return;
             CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
-            if (cueTag.StartsWith("Cue.Prefab"))
-            {
-                var prefab = Instantiate(cue.prefab);
-                prefab.transform.position = data.GetVector3Data(0);
-                var instanceNetworkObject = prefab.GetComponent<NetworkObject>();
-                instanceNetworkObject.Spawn();
-            }
         }
     }
 }

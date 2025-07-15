@@ -9,13 +9,14 @@ using AbilitySystem.Runtime.Utilities;
 using GameplayTags.Runtime;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour
     {
-        public AbilitySystemDefinition definition;
+        [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; private set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
@@ -34,14 +35,14 @@ namespace AbilitySystem.Scripts
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
             AbilitySystem = new AbilitySystemManager(this);
-            foreach (var attributeSet in definition.AttributeSets)
+            foreach (var attributeSet in Definition.AttributeSets)
             {
                 Type type = ReflectionUtil.GetAttributeSetType(attributeSet);
                 var set = Activator.CreateInstance(type, AbilitySystem) as AttributeSet;
                 AbilitySystem.AttributeSetManager.AddAttributeSet(type, set);
             }
 
-            foreach (var ability in definition.BaseAbilities)
+            foreach (var ability in Definition.BaseAbilities)
             {
                 AbilitySystem.AbilityManager.GrantAbility(ability);
             }

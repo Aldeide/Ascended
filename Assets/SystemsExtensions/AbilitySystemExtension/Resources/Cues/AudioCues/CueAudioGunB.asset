@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f904f5ec59734b309ce3dc3360d1b36a, type: 3}
   m_Name: CueAudioGunB
   m_EditorClassIdentifier: 
-  visualEffectAsset: {fileID: 0}
-  prefab: {fileID: 0}
-  AudioClip: {fileID: 0}
+  CueTag:
+    <Name>k__BackingField: Cue.Audio.Gun.B
+    <HashCode>k__BackingField: 983547253
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.Audio
+    - Cue.Audio.Gun
+    <AncestorsHashCodes>k__BackingField: d31da389f38dd10f7d116014
+  AudioClip: {fileID: 8300000, guid: 986c58b23e00205498dd443ddcae9296, type: 3}

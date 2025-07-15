@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
@@ -17,6 +18,8 @@ namespace AbilitySystem.Runtime.Cues
         public Action<CueDefinition, CueData> OnCueRemove;
         public Action<CueDefinition, CueData> OnCueExecute;
 
+        public List<ICue> ActiveCues = new();
+        
         public CueManager(IAbilitySystem owner)
         {
             _owner = owner;
