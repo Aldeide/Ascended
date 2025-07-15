@@ -22,6 +22,7 @@ MonoBehaviour:
   - Cue.Audio.Gun.B
   - Cue.Light.Burst.Muzzle
   - Cue.Prefab.Impact.A
+  - Cue.VisualEffect.Dev.Loop
   - Cue.VisualEffect.Muzzle.A
   - EquipmentSlot.Core
   - EquipmentSlot.Utility.One

@@ -21,17 +21,17 @@ namespace AbilitySystemExtension.Scripts
 
         public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
-            throw new System.NotImplementedException();
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
         }
 
         public override void OnPlayCue(CueDefinition definition, CueData cueData)
         {
-            throw new System.NotImplementedException();
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
         }
 
         public override void OnStopCue(CueDefinition definition, CueData cueData)
         {
-            throw new System.NotImplementedException();
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
         }
     }
 }
