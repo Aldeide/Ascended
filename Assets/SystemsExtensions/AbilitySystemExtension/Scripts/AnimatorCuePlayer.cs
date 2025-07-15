@@ -29,12 +29,12 @@ namespace AbilitySystemExtension.Scripts
 
         public override void OnPlayCue(CueDefinition definition, CueData cueData)
         {
-            throw new NotImplementedException();
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
         }
 
         public override void OnStopCue(CueDefinition definition, CueData cueData)
         {
-            throw new NotImplementedException();
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
         }
         
         private void TriggerParameter(string parameterName)

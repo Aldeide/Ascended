@@ -70,8 +70,35 @@ namespace GameplayTags.Runtime
         {
             var value = Name;
             serializer.SerializeValue(ref value);
+            if (!serializer.IsReader) return;
+            // This logic is essentially a parameter-less constructor that
+            // re-initializes the object based on the Name we just received.
+            Name = value;
+            if (string.IsNullOrEmpty(Name))
+            {
+                HashCode = 0;
+                AncestorsNames = Array.Empty<string>();
+                AncestorsHashCodes = Array.Empty<int>();
+            }
+            else
+            {
+                HashCode = Name.GetHashCode();
+                var tags = Name.Split('.');
+                AncestorsNames = new string[tags.Length - 1];
+                AncestorsHashCodes = new int[tags.Length - 1];
+                var i = 0;
+                var ancestorTag = "";
+                while (i < tags.Length - 1)
+                {
+                    ancestorTag += tags[i];
+                    AncestorsHashCodes[i] = ancestorTag.GetHashCode();
+                    AncestorsNames[i] = ancestorTag;
+                    ancestorTag += ".";
+                    i++;
+                }
+            }
         }
-
+        
         public bool Equals(Tag other)
         {
             return HashCode == other.HashCode;

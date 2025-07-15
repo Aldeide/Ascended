@@ -22,6 +22,8 @@ namespace AbilitySystemExtension.Scripts
         public override void OnPlayCue(CueDefinition definition, CueData cueData)
         {
             if (!TagQuery.MatchesTag(definition.CueTag)) return;
+            var asset = (definition as VisualEffectCueDefinition)?.VisualEffectAsset;
+            VisualEffect.visualEffectAsset = asset;
             VisualEffect.Play();
         }
 

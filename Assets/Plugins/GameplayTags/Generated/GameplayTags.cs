@@ -15,6 +15,7 @@ namespace GameplayTags.Generated
         public static readonly Tag CueAudioGunB = new Tag("Cue.Audio.Gun.B");
         public static readonly Tag CueLightBurstMuzzle = new Tag("Cue.Light.Burst.Muzzle");
         public static readonly Tag CuePrefabImpactA = new Tag("Cue.Prefab.Impact.A");
+        public static readonly Tag CueVisualEffectDevLoop = new Tag("Cue.VisualEffect.Dev.Loop");
         public static readonly Tag CueVisualEffectMuzzleA = new Tag("Cue.VisualEffect.Muzzle.A");
         public static readonly Tag EquipmentSlotCore = new Tag("EquipmentSlot.Core");
         public static readonly Tag EquipmentSlotUtilityOne = new Tag("EquipmentSlot.Utility.One");
@@ -35,6 +36,7 @@ namespace GameplayTags.Generated
             CueAudioGunB,
             CueLightBurstMuzzle,
             CuePrefabImpactA,
+            CueVisualEffectDevLoop,
             CueVisualEffectMuzzleA,
             EquipmentSlotCore,
             EquipmentSlotUtilityOne,
