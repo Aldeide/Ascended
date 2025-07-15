@@ -8,6 +8,7 @@ namespace GameplayTags.Generated
     {
         public static readonly Tag AbilityActive = new Tag("Ability.Active");
         public static readonly Tag AbilityPassive = new Tag("Ability.Passive");
+        public static readonly Tag CueAnimation = new Tag("Cue.Animation");
         public static readonly Tag CueAnimationParameterGrounded = new Tag("Cue.Animation.Parameter.Grounded");
         public static readonly Tag CueAnimationStateDeath = new Tag("Cue.Animation.State.Death");
         public static readonly Tag CueAnimationStateJumpStart = new Tag("Cue.Animation.State.Jump.Start");
@@ -27,6 +28,7 @@ namespace GameplayTags.Generated
         {
             AbilityActive,
             AbilityPassive,
+            CueAnimation,
             CueAnimationParameterGrounded,
             CueAnimationStateDeath,
             CueAnimationStateJumpStart,

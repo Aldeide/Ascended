@@ -1,34 +1,33 @@
 ﻿using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Scripts;
-using GameplayTags.Runtime;
 using RootMotion.FinalIK;
-using UnityEngine;
 
 namespace AbilitySystemExtension.Scripts
 {
-    public class IKCueListener: MonoBehaviour, ICueListener
+    public class IKCueListener: CueListenerComponent
     {
-        [field: SerializeField]
-        public TagQuery TagQuery { get; set; }
-        
-        private CueManagerComponent _cueManager;
         private AimIK _aimIK;
         
-        private void Start()
+        public override void Start()
         {
-            _cueManager = GetComponent<CueManagerComponent>();
-            _cueManager.OnCueAdded += OnCueAdded;
+            base.Start();
             _aimIK = GetComponent<AimIK>();
         }
 
-        private void OnCueAdded(string cueTag, CueDefinition definition)
+        public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
-            if (cueTag == "Cue.IK.Arm.Right.Disable")
-            {
-                
-            }
+            return;
         }
 
+        public override void OnPlayCue(CueDefinition definition, CueData cueData)
+        {
+            return;
+        }
+
+        public override void OnStopCue(CueDefinition definition, CueData cueData)
+        {
+            return;
+        }
+        
         public void DisableAimIK()
         {
             _aimIK.solver.IKPositionWeight = 0;

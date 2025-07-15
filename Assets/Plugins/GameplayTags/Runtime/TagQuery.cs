@@ -32,6 +32,7 @@ namespace GameplayTags.Runtime
         [SerializeField] public TagMatchType MatchType;
 
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        [SerializeField]
         public Tag[] Tags;
 
         public TagCondition(TagMatchType matchType, params Tag[] tags)

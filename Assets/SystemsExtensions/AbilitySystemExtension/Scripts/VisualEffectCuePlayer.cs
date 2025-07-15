@@ -1,30 +1,34 @@
-﻿using System;
-using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Scripts;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using AbilitySystem.Runtime.Cues;
 using UnityEngine.VFX;
 
 namespace AbilitySystemExtension.Scripts
 {
-    public class VisualEffectCuePlayer : MonoBehaviour
+    public class VisualEffectCuePlayer : CueListenerComponent
     {
-        public string cuePrefix;
-        public VisualEffect visualEffect;
-        private CueManagerComponent _cueManager;
+        public VisualEffect VisualEffect;
 
-        public void Start()
+        public override void Start()
         {
-            visualEffect = GetComponent<VisualEffect>();
-            _cueManager = GetComponentInParent<CueManagerComponent>();
-            _cueManager.OnCueAdded += OnCueAdded;
+            base.Start();
+            VisualEffect = GetComponent<VisualEffect>();
         }
 
-        public void OnCueAdded(string cueTag, CueDefinition definition)
+        public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
-            if (!cueTag.StartsWith(cuePrefix)) return;
-            visualEffect.visualEffectAsset = definition.visualEffectAsset;
-            visualEffect.Play();
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
+            VisualEffect.Play();
+        }
+
+        public override void OnPlayCue(CueDefinition definition, CueData cueData)
+        {
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
+            VisualEffect.Play();
+        }
+
+        public override void OnStopCue(CueDefinition definition, CueData cueData)
+        {
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
+            VisualEffect.Stop();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace AbilitySystem.Scripts
             
             foreach (var cue in Resources.LoadAll<CueDefinition>(""))
             {
-                _cues.Add(cue.cueTag, cue);
+                _cues.Add(cue.CueTag, cue);
             }
         }
         

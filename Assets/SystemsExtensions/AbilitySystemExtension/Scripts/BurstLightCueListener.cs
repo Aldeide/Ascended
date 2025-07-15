@@ -1,35 +1,39 @@
 ﻿using System.Collections;
 using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Scripts;
-using GameplayTags.Runtime;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Scripts
 {
-    public class BurstLightCueListener : MonoBehaviour, ICueListener
+    public class BurstLightCueListener : CueListenerComponent
     {
-        [field: SerializeField]
-        public TagQuery TagQuery { get; set; }
         public GameObject Light;
         public float DurationSeconds;
         
-        private CueManagerComponent _cueManager;
-        
-        private void Start()
+        public override void Start()
         {
-            _cueManager = GetComponentInParent<CueManagerComponent>();
-            _cueManager.OnCueAdded += OnCueAdded;
+            base.Start();
             if (!Light) return;
             Light.SetActive(false);
         }
-
-        private void OnCueAdded(string cueTag, CueDefinition definition)
+        
+        public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
             if (!Light) return;
-            if (!TagQuery.MatchesTag(definition.cueTag)) return;
             Light.SetActive(true);
             StartCoroutine(DisableLightAfterDelay());
         }
+
+        public override void OnPlayCue(CueDefinition definition, CueData cueData)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnStopCue(CueDefinition definition, CueData cueData)
+        {
+            throw new System.NotImplementedException();
+        }
+
 
         private IEnumerator DisableLightAfterDelay()
         {

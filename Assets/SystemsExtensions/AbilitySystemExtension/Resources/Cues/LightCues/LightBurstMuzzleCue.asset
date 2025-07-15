@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65dbca287904b6c8126a3ec8883c85e, type: 3}
   m_Name: LightBurstMuzzleCue
   m_EditorClassIdentifier: 
-  visualEffectAsset: {fileID: 0}
-  prefab: {fileID: 0}
+  CueTag:
+    <Name>k__BackingField: Cue.Light.Burst.Muzzle
+    <HashCode>k__BackingField: -1522670046
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.Light
+    - Cue.Light.Burst
+    <AncestorsHashCodes>k__BackingField: d31da389579daaa78bcab1d3

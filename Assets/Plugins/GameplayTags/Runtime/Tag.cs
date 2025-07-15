@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Linq;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace GameplayTags.Runtime
 {
     [Serializable]
     public struct Tag : INetworkSerializable, IEquatable<Tag>
     {
+        [field: SerializeField]
         public string Name { get; set; }
+        [field: SerializeField]
         public int HashCode { get; set; }
+        [field: SerializeField]
         public string[] AncestorsNames { get; set; }
+        [field: SerializeField]
         public int[] AncestorsHashCodes { get; set; }
 
         public Tag(string name)

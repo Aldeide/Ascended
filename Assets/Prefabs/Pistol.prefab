@@ -134,7 +134,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5517823261917056887}
   m_Enabled: 1
-  m_Asset: {fileID: 0}
+  m_Asset: {fileID: 8926484042661614526, guid: 0669e554c49c3eb4584733e1684a2cfb, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -219,5 +219,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca41ea580a64897b7405b1a902ec3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cuePrefix: Cue.VisualEffect.Muzzle
-  visualEffect: {fileID: 0}
+  <TagQuery>k__BackingField:
+    Condition:
+    - MatchType: 0
+      Tags:
+      - <Name>k__BackingField: Cue.VisualEffect.Muzzle.A
+        <HashCode>k__BackingField: -290881826
+        <AncestorsNames>k__BackingField:
+        - Cue
+        - Cue.VisualEffect
+        - Cue.VisualEffect.Muzzle
+        <AncestorsHashCodes>k__BackingField: d31da389248c2339ed42da42
+  VisualEffect: {fileID: 3908871983139537096}

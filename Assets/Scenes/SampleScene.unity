@@ -240,7 +240,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 359.92, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 563, y: 658}
+  m_AnchoredPosition: {x: 677, y: 470}
   m_SizeDelta: {x: 120, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27816427
@@ -7794,6 +7794,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<Name>k__BackingField
+      value: Cue.Light.Burst.Muzzle
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<HashCode>k__BackingField
+      value: -1522670046
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.data[0]'
+      value: Cue
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.data[1]'
+      value: Cue.Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.data[2]'
+      value: Cue.Light.Burst
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.data[0]'
+      value: -1985798701
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.data[1]'
+      value: -1481990825
+      objectReference: {fileID: 0}
+    - target: {fileID: 165877796636549089, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.data[2]'
+      value: -743322997
+      objectReference: {fileID: 0}
     - target: {fileID: 799853768078755484, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -7853,6 +7897,46 @@ PrefabInstance:
     - target: {fileID: 8198681687235754659, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2027218909
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<Name>k__BackingField
+      value: Cue.Audio.Gun.B
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<HashCode>k__BackingField
+      value: 983547253
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.data[0]'
+      value: Cue
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.data[1]'
+      value: Cue.Audio
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsNames>k__BackingField.Array.data[2]'
+      value: Cue.Audio.Gun
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: <TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.data[0]'
+      value: -1985798701
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.data[1]'
+      value: 265391603
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735893729538057515, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: '<TagQuery>k__BackingField.Condition.Array.data[0].Tags.Array.data[0].<AncestorsHashCodes>k__BackingField.Array.data[2]'
+      value: 341840253
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

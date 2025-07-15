@@ -15,6 +15,7 @@ MonoBehaviour:
   Tags:
   - Ability.Active
   - Ability.Passive
+  - Cue.Animation
   - Cue.Animation.Parameter.Grounded
   - Cue.Animation.State.Death
   - Cue.Animation.State.Jump.Start

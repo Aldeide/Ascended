@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65dbca287904b6c8126a3ec8883c85e, type: 3}
   m_Name: CueVisualEffectMuzzleA
   m_EditorClassIdentifier: 
-  visualEffectAsset: {fileID: 8926484042661614526, guid: 0669e554c49c3eb4584733e1684a2cfb, type: 3}
-  prefab: {fileID: 0}
+  CueTag:
+    <Name>k__BackingField: Cue.VisualEffect.Muzzle.A
+    <HashCode>k__BackingField: -290881826
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.VisualEffect
+    - Cue.VisualEffect.Muzzle
+    <AncestorsHashCodes>k__BackingField: d31da389248c2339ed42da42

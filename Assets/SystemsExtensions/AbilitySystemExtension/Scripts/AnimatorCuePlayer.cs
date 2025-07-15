@@ -1,41 +1,40 @@
 ﻿using System;
 using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Runtime.Tags;
-using AbilitySystem.Scripts;
-using GameplayTags.Runtime;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Scripts
 {
     [RequireComponent(typeof(Animator))]
-    public class AnimatorCueListener : MonoBehaviour, ICueListener
+    public class AnimatorCueListener : CueListenerComponent
     {
-        [field: SerializeField]
-        public TagQuery TagQuery { get; set; }
-        
         private Animator _animator;
-        private CueManager _cueManager;
         
-        private void Start()
+        public override void Start()
         {
+            base.Start();
             _animator = GetComponent<Animator>();
-            _cueManager = GetComponent<AbilitySystemComponent>().AbilitySystem.CueManager;
-            _cueManager.OnCueExecute += OnCueExecute;
         }
 
-        private void OnCueExecute(CueDefinition definition, CueData cueData)
+        public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
-            Debug.Log("Cue added with tag:" + definition.cueTag.Name);
-            if (!TagQuery.MatchesTag(definition.cueTag)) return;
+            if (!TagQuery.MatchesTag(definition.CueTag)) return;
             if (definition is CueAnimationParameterDefinition parameterDefinition)
             {
                 TriggerParameter(parameterDefinition.ParameterName);
                 return;
             }
-            var stateName = (definition as CueAnimationStateDefinition)?.animationLayerName;
-            Debug.Log("Player layer: " + stateName);
+            var stateName = (definition as CueAnimationStateDefinition)?.AnimationLayerName;
             _animator.Play(stateName);
+        }
+
+        public override void OnPlayCue(CueDefinition definition, CueData cueData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnStopCue(CueDefinition definition, CueData cueData)
+        {
+            throw new NotImplementedException();
         }
         
         private void TriggerParameter(string parameterName)

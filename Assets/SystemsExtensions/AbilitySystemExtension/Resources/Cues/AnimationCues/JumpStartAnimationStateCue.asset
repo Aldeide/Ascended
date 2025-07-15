@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bfa8ed859744b79965f8521c399cc7, type: 3}
   m_Name: JumpStartAnimationStateCue
   m_EditorClassIdentifier: 
-  visualEffectAsset: {fileID: 0}
-  prefab: {fileID: 0}
-  animationLayerName: Jump Start
+  CueTag:
+    <Name>k__BackingField: Cue.Animation.State.Jump.Start
+    <HashCode>k__BackingField: 554262990
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.Animation
+    - Cue.Animation.State
+    - Cue.Animation.State.Jump
+    <AncestorsHashCodes>k__BackingField: d31da3892b86fc39e2536f838cfabc71
+  AnimationLayerName: Jump Start

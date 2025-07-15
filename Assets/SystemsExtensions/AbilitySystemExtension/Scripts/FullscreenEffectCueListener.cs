@@ -1,6 +1,5 @@
 ﻿using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Scripts;
-using GameplayTags.Runtime;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Scripts
@@ -13,22 +12,26 @@ namespace AbilitySystemExtension.Scripts
     /// This is to be attached to a gameobject that will play fullscreen effects (e.g., camera shake, damage taken
     /// visuals).
     [RequireComponent(typeof(CueManagerComponent))]
-    public class FullscreenEffectCueListener : MonoBehaviour, ICueListener
+    public class FullscreenEffectCueListener : CueListenerComponent
     {
-        public TagQuery TagQuery { get; set; }
-
-        private CueManagerComponent _cueManager;
-
-        private void Start()
+        public override void Start()
         {
-            _cueManager = GetComponent<CueManagerComponent>();
-            _cueManager.OnCueAdded += OnCueAdded;
+
         }
 
-        private void OnCueAdded(string cueTag, CueDefinition definition)
+        public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
-            if (!TagQuery.MatchesTag(definition.cueTag)) return;
-            // TODO: Play fullscreen effect
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnPlayCue(CueDefinition definition, CueData cueData)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnStopCue(CueDefinition definition, CueData cueData)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
