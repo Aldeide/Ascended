@@ -45,6 +45,7 @@ namespace AbilitySystem.Scripts
 
         private void OnClientConnected(ulong clientId)
         {
+            // When a new client connects, we need to catch them up with the current state.
             // Prepare an RPC parameter to target only the newly connected client.
             var clientRpcParams = new ClientRpcParams
             {
@@ -53,8 +54,10 @@ namespace AbilitySystem.Scripts
             // Send all currently active durational cues to the new client.
             foreach (var cue in AbilitySystem.CueManager.GetActiveCues())
             {
+                // TODO: Figure out if we can batch into a single RPC.
                 AddCuesClientRpc(cue.Key, cue.Value, clientRpcParams);
             }
+            // TODO: sync attributes and effects.
         }
 
         public void Initialise()
