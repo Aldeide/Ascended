@@ -27,6 +27,8 @@ MonoBehaviour:
   - EquipmentSlot.Core
   - EquipmentSlot.Utility.One
   - EquipmentSlot.Utility.Two
+  - Slot.Hip.Left
+  - Slot.Hip.Right
   - Status.Aiming
   - Status.Dead
   - Status.Immobilised
