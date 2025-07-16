@@ -20,6 +20,8 @@ namespace GameplayTags.Generated
         public static readonly Tag EquipmentSlotCore = new Tag("EquipmentSlot.Core");
         public static readonly Tag EquipmentSlotUtilityOne = new Tag("EquipmentSlot.Utility.One");
         public static readonly Tag EquipmentSlotUtilityTwo = new Tag("EquipmentSlot.Utility.Two");
+        public static readonly Tag SlotHipLeft = new Tag("Slot.Hip.Left");
+        public static readonly Tag SlotHipRight = new Tag("Slot.Hip.Right");
         public static readonly Tag StatusAiming = new Tag("Status.Aiming");
         public static readonly Tag StatusDead = new Tag("Status.Dead");
         public static readonly Tag StatusImmobilised = new Tag("Status.Immobilised");
@@ -41,6 +43,8 @@ namespace GameplayTags.Generated
             EquipmentSlotCore,
             EquipmentSlotUtilityOne,
             EquipmentSlotUtilityTwo,
+            SlotHipLeft,
+            SlotHipRight,
             StatusAiming,
             StatusDead,
             StatusImmobilised,

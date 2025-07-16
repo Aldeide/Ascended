@@ -5975,6 +5975,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1355193958148072859}
+  - component: {fileID: 5896311740812267572}
   m_Layer: 0
   m_Name: Armature
   m_TagString: Untagged
@@ -5998,6 +5999,37 @@ Transform:
   - {fileID: 6024721926596410489}
   m_Father: {fileID: 3431953994317972873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5896311740812267572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7568144133458899868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb0358494df0488bbd9c4c57c6e611b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  AvatarSlotConfiguration:
+  - SlotTag:
+      <Name>k__BackingField: Slot.Hip.Left
+      <HashCode>k__BackingField: 357516524
+      <AncestorsNames>k__BackingField:
+      - Slot
+      - Slot.Hip
+      <AncestorsHashCodes>k__BackingField: ca57a9c1b73e38d4
+    Transform: {fileID: 8171829494594152557}
+  - SlotTag:
+      <Name>k__BackingField: Slot.Hip.Right
+      <HashCode>k__BackingField: -488828731
+      <AncestorsNames>k__BackingField:
+      - Slot
+      - Slot.Hip
+      <AncestorsHashCodes>k__BackingField: ca57a9c1b73e38d4
+    Transform: {fileID: 350313023956728020}
+  SlotPrefab: {fileID: 4800256432220104587, guid: abebf18f85ba89f4abfe3bfe50d00288, type: 3}
 --- !u!1 &7771809871098783794
 GameObject:
   m_ObjectHideFlags: 0

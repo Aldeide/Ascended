@@ -19,5 +19,10 @@ namespace GameplayTags.Runtime
                 return _gameplayTagChoices;
             }
         }
+        
+        public static IEnumerable<ValueDropdownItem> FilteredGameplayTagChoices(string prefix)
+        {
+            return GameplayTagChoices.Where(v => v.Text.StartsWith(prefix));
+        }
     }
 }
