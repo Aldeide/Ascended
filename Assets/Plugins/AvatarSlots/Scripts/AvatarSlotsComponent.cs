@@ -13,6 +13,7 @@ namespace AvatarSlots.Scripts
     {
         public List<AvatarSlot> AvatarSlotConfiguration = new();
 
+        // Should we make a list for each tag or have multiple tags that have the same transform?
         private readonly Dictionary<Tag, Transform> _avatarSlots = new();
         private readonly Dictionary<Tag, GameObject> _slottedObjects = new();
 
