@@ -2,7 +2,7 @@
 
 using UnityEngine;
 using MxM;
-using Cinemachine;
+using Unity.Cinemachine;
 
 namespace MxMExamples
 {
