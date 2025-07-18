@@ -246,7 +246,8 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.NotServer)]
         public void NotifyClientAbilityGranted(string abilityName)
         {
-            // TODO: add abilities to the Data Manager.
+            var abilityDefinition = DataLibrary.Instance.GetAbilityByName(abilityName);
+            AbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
         }
         
         [Rpc(SendTo.NotServer)]
