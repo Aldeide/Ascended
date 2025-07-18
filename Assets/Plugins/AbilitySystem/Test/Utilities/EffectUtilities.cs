@@ -53,7 +53,7 @@ namespace AbilitySystem.Test.Utilities
             asset.GrantedTags = Array.Empty<Tag>();
             asset.ApplicationRequiredTags = Array.Empty<Tag>();
             asset.Modifiers = new Modifier[]
-                { new FloatModifier { attributeName = "TestAttributeSet.Health", ModifierMagnitude = 10, operation = EffectOperation.Multiplicative } };
+                { new FloatModifier { AttributeName = "TestAttributeSet.Health", ModifierMagnitude = 10, Operation = EffectOperation.Multiplicative } };
             return asset;
         }
 

@@ -93,7 +93,7 @@ namespace AbilitySystem.Runtime.Abilities
             if (Definition.Cost == null) return true;
             foreach (var modifier in Definition.Cost.Modifiers)
             {
-                var attribute = modifier.attributeName.Split(".")[1];
+                var attribute = modifier.AttributeName.Split(".")[1];
                 var cost = modifier.Calculate(Definition.Cost.ToEffect(Owner, Owner));
                 if (Owner.AttributeSetManager.GetAttribute(attribute).CurrentValue < cost)
                 {

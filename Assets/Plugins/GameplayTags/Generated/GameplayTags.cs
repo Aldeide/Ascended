@@ -18,9 +18,12 @@ namespace GameplayTags.Generated
         public static readonly Tag CueVisualEffectDevLoop = new Tag("Cue.VisualEffect.Dev.Loop");
         public static readonly Tag CueVisualEffectMuzzleA = new Tag("Cue.VisualEffect.Muzzle.A");
         public static readonly Tag EffectCostAbilityDash = new Tag("Effect.Cost.Ability.Dash");
+        public static readonly Tag EffectModifierDamage = new Tag("Effect.Modifier.Damage");
+        public static readonly Tag EffectModifierDamageKinetic = new Tag("Effect.Modifier.Damage.Kinetic");
         public static readonly Tag EquipmentSlotCore = new Tag("EquipmentSlot.Core");
         public static readonly Tag EquipmentSlotUtilityOne = new Tag("EquipmentSlot.Utility.One");
         public static readonly Tag EquipmentSlotUtilityTwo = new Tag("EquipmentSlot.Utility.Two");
+        public static readonly Tag ItemEquipmentEnergyCore = new Tag("Item.Equipment.EnergyCore");
         public static readonly Tag SlotHipLeft = new Tag("Slot.Hip.Left");
         public static readonly Tag SlotHipRight = new Tag("Slot.Hip.Right");
         public static readonly Tag StatusAiming = new Tag("Status.Aiming");
@@ -42,9 +45,12 @@ namespace GameplayTags.Generated
             CueVisualEffectDevLoop,
             CueVisualEffectMuzzleA,
             EffectCostAbilityDash,
+            EffectModifierDamage,
+            EffectModifierDamageKinetic,
             EquipmentSlotCore,
             EquipmentSlotUtilityOne,
             EquipmentSlotUtilityTwo,
+            ItemEquipmentEnergyCore,
             SlotHipLeft,
             SlotHipRight,
             StatusAiming,

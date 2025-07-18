@@ -16,9 +16,9 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
-                costMetaAttribute = "TestAttributeSet.AbilityCost",
-                baseCost = 10,
-                modifierTags = new Tag[] { new Tag("Cost.Ability.TestAbility") }
+                CostMetaAttribute = "TestAttributeSet.AbilityCost",
+                BaseCost = 10,
+                ModifierTags = new Tag[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -33,34 +33,34 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
-                costMetaAttribute = "TestAttributeSet.AbilityCost",
-                baseCost = 10,
-                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                CostMetaAttribute = "TestAttributeSet.AbilityCost",
+                BaseCost = 10,
+                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             var additiveModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Additive,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Additive,
                 ModifierMagnitude = 5
             };
             var subtractiveModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Subtractive,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Subtractive,
                 ModifierMagnitude = 1
             };
             var multiplicativeModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Multiplicative,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Multiplicative,
                 ModifierMagnitude = 1.5f
             };
             var divisiveModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Divisive,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Divisive,
                 ModifierMagnitude = 2f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -80,22 +80,22 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
-                costMetaAttribute = "TestAttributeSet.AbilityCost",
-                baseCost = 10,
-                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                CostMetaAttribute = "TestAttributeSet.AbilityCost",
+                BaseCost = 10,
+                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             var additiveModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Additive,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Additive,
                 ModifierMagnitude = 5
             };
             var multiplicativeModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Multiplicative,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Multiplicative,
                 ModifierMagnitude = 1.5f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -114,22 +114,22 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
-                costMetaAttribute = "TestAttributeSet.AbilityCost",
-                baseCost = 10,
-                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                CostMetaAttribute = "TestAttributeSet.AbilityCost",
+                BaseCost = 10,
+                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             var additiveModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Additive,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Additive,
                 ModifierMagnitude = 5
             };
             var multiplicativeModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Multiplicative,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Multiplicative,
                 ModifierMagnitude = 1.5f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
@@ -148,16 +148,16 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
-                costMetaAttribute = "TestAttributeSet.AbilityCost",
-                baseCost = 10,
-                modifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                CostMetaAttribute = "TestAttributeSet.AbilityCost",
+                BaseCost = 10,
+                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
             };
 
             var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
             var overrideModifier = new FloatModifier()
             {
-                attributeName = "TestAttributeSet.AbilityCost",
-                operation = EffectOperation.Override,
+                AttributeName = "TestAttributeSet.AbilityCost",
+                Operation = EffectOperation.Override,
                 ModifierMagnitude = 100f
             };
             var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);

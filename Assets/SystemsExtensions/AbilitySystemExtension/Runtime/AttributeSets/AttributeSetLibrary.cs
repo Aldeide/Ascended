@@ -26,6 +26,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             "MetaAttributeSet.AbilityCooldown",
             "MetaAttributeSet.AbilityCost",
             "MetaAttributeSet.EffectDuration",
+            "MetaAttributeSet.DamageDone",
         };
     }
 }

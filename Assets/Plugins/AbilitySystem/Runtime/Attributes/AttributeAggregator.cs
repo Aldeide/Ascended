@@ -108,7 +108,7 @@ namespace AbilitySystem.Runtime.Attributes
 
             foreach (var modifier in activeEffect.Definition.Modifiers)
             {
-                if (modifier.attributeName == _attribute.GetFullName())
+                if (modifier.AttributeName == _attribute.GetFullName())
                 {
                     _modifierCache.Add((activeEffect, modifier));
                 }
@@ -118,7 +118,7 @@ namespace AbilitySystem.Runtime.Attributes
         private bool IsEffectRelevantToAttribute(Effect effect)
         {
             return effect.Definition.Modifiers != null &&
-                   effect.Definition.Modifiers.Any(mod => mod.attributeName == _attribute.GetFullName());
+                   effect.Definition.Modifiers.Any(mod => mod.AttributeName == _attribute.GetFullName());
         }
 
         private void UpdateCurrentValue()
@@ -148,7 +148,7 @@ namespace AbilitySystem.Runtime.Attributes
                 for (var i = 0; i < effect.NumStacks; i++)
                 {
                     var magnitude = modifier.Calculate(effect);
-                    ApplyModifierToTotals(modifier.operation, magnitude, ref totals);
+                    ApplyModifierToTotals(modifier.Operation, magnitude, ref totals);
                 }
             }
 
