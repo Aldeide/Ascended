@@ -61,7 +61,7 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
             bool hasOverride = false;
             foreach (var modifier in _relevantModifiers)
             {
-                switch (modifier.Item2.operation)
+                switch (modifier.Item2.Operation)
                 {
                     case EffectOperation.Additive:
                         additive += modifier.Item2.Calculate(modifier.Item1);

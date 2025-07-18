@@ -3,28 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
+using Plugins.AbilitySystem.Runtime.ScalableValue;
 using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AbilitySystem.Runtime.Modifiers
 {
     [Serializable]
     public class CostModifier : Modifier
     {
+        [FormerlySerializedAs("costMetaAttribute")]
         [ValueDropdown("@DropdownValuesUtil.AttributeChoices", IsUniqueList = true)]
-        public string costMetaAttribute;
+        public string CostMetaAttribute;
 
-        public float baseCost;
+        [FormerlySerializedAs("baseCost")] public float BaseCost;
 
+        [FormerlySerializedAs("modifierTags")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] modifierTags;
+        public Tag[] ModifierTags;
 
+        [SerializeReference]
+        public ScalableValue Test;
+        
         private string _attributeSet;
         private string _attributeName;
         private List<Tuple<Effect, Modifier>> _relevantModifiers = new();
 
         public override float Calculate(Effect effect)
         {
-            var splits = costMetaAttribute.Split(".");
+            var splits = CostMetaAttribute.Split(".");
             _attributeSet = splits[0];
             _attributeName = splits[1];
             var asc = effect.Owner;
@@ -33,7 +41,7 @@ namespace AbilitySystem.Runtime.Modifiers
 
             _relevantModifiers.Clear();
             foreach (var modifier in from modifier in modifiers
-                     from tag in modifierTags
+                     from tag in ModifierTags
                      where modifier.Effect.Definition.AssetTags.Any(e => e.IsAncestorOf(tag) || e.Equals(tag))
                      select modifier)
             {
@@ -45,14 +53,14 @@ namespace AbilitySystem.Runtime.Modifiers
 
         private float ApplyModifiers()
         {
-            var value = baseCost;
+            var value = BaseCost;
             var additive = 0f;
             var multiplicative = 1f;
             var overrideValue = 0f;
-            bool hasOverride = false;
+            var hasOverride = false;
             foreach (var modifier in _relevantModifiers)
             {
-                switch (modifier.Item2.operation)
+                switch (modifier.Item2.Operation)
                 {
                     case EffectOperation.Additive:
                         additive += modifier.Item2.Calculate(modifier.Item1);

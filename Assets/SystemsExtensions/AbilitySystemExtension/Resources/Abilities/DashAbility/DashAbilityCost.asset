@@ -64,11 +64,11 @@ MonoBehaviour:
     - rid: 5120009358208925789
       type: {class: CostModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
       data:
-        attributeName: CharacteristicsAttributeSet.Energy
-        operation: 1
-        costMetaAttribute: MetaAttributeSet.AbilityCost
-        baseCost: 10
-        modifierTags:
+        AttributeName: CharacteristicsAttributeSet.Energy
+        Operation: 1
+        CostMetaAttribute: MetaAttributeSet.AbilityCost
+        BaseCost: 10
+        ModifierTags:
         - <Name>k__BackingField: Effect.Cost.Ability.Dash
           <HashCode>k__BackingField: 543887796
           <AncestorsNames>k__BackingField:
@@ -76,3 +76,32 @@ MonoBehaviour:
           - Effect.Cost
           - Effect.Cost.Ability
           <AncestorsHashCodes>k__BackingField: 1f682b7c7a99d64eb670dd74
+        Test:
+          rid: 5120009358751564005
+    - rid: 5120009358751564005
+      type: {class: ValuePerLevel, ns: Plugins.AbilitySystem.Runtime.ScalableValue, asm: AbilitySystem}
+      data:
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 2
+            outSlope: 2
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4

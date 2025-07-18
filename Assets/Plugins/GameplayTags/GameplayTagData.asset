@@ -25,9 +25,12 @@ MonoBehaviour:
   - Cue.VisualEffect.Dev.Loop
   - Cue.VisualEffect.Muzzle.A
   - Effect.Cost.Ability.Dash
+  - Effect.Modifier.Damage
+  - Effect.Modifier.Damage.Kinetic
   - EquipmentSlot.Core
   - EquipmentSlot.Utility.One
   - EquipmentSlot.Utility.Two
+  - Item.Equipment.EnergyCore
   - Slot.Hip.Left
   - Slot.Hip.Right
   - Status.Aiming

@@ -128,7 +128,7 @@ namespace AbilitySystem.Runtime.AttributeSets
         {
             foreach (var modifier in instantEffect.Definition.Modifiers)
             {
-                var splits = modifier.attributeName.Split(".");
+                var splits = modifier.AttributeName.Split(".");
                 var attributeSet = splits[0];
                 var attributeName = splits[1];
 
@@ -136,7 +136,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                 if (attribute == null) continue;
                 var magnitude = modifier.Calculate(instantEffect);
                 var baseValue = attribute.BaseValue;
-                switch (modifier.operation)
+                switch (modifier.Operation)
                 {
                     case EffectOperation.Additive:
                         baseValue += magnitude;

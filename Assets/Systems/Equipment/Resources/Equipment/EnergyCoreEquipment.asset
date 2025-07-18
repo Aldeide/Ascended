@@ -22,9 +22,35 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   Icon: {fileID: 0}
+  EquipmentTags:
+  - <Name>k__BackingField: Item.Equipment.EnergyCore
+    <HashCode>k__BackingField: -1794758812
+    <AncestorsNames>k__BackingField:
+    - Item
+    - Item.Equipment
+    <AncestorsHashCodes>k__BackingField: 952fdcbc3da58dd5
+  EquipmentSlot:
+    <Name>k__BackingField: EquipmentSlot.Core
+    <HashCode>k__BackingField: 226769115
+    <AncestorsNames>k__BackingField:
+    - EquipmentSlot
+    <AncestorsHashCodes>k__BackingField: 36e44add
+  MaxActiveModCount: 1
+  MaxPassiveModCount: 4
   GrantedAbilities:
   - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
+  GrantedEffects: []
+  GrantedTags: []
   references:
     version: 2
     RefIds: []

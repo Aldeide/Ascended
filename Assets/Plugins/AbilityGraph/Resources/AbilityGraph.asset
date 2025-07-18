@@ -23,6 +23,7 @@ MonoBehaviour:
   - rid: 4336599336265449741
   - rid: 4336599336265449742
   - rid: 1400474609048879405
+  - rid: 5120009358751564002
   edges:
   - GUID: 80434dd8-5e12-4c2b-962b-28649daf7f0c
     owner: {fileID: 11400000}
@@ -56,14 +57,6 @@ MonoBehaviour:
     outputFieldName: currentValue
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 36079031-ddd7-419b-9783-be56d777d13b
-    owner: {fileID: 11400000}
-    inputNodeGUID: daac0993-f9bb-47d9-8f54-72fe10b607d8
-    outputNodeGUID: e0c5177e-95c8-494b-844e-83be97e8cbbd
-    inputFieldName: Executed
-    outputFieldName: executeAfter
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: c319a912-c0b1-4da0-baa0-a7c9deae2576
     owner: {fileID: 11400000}
     inputNodeGUID: 57bc5f09-72d9-44e9-b3a0-7c80a28ff592
@@ -80,6 +73,14 @@ MonoBehaviour:
     outputFieldName: Executes
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 4e77c353-178b-4350-ba02-d018aaaf3e9e
+    owner: {fileID: 11400000}
+    inputNodeGUID: daac0993-f9bb-47d9-8f54-72fe10b607d8
+    outputNodeGUID: e0c5177e-95c8-494b-844e-83be97e8cbbd
+    inputFieldName: Executed
+    outputFieldName: ExecuteAfter
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -93,12 +94,14 @@ MonoBehaviour:
     editorType:
       serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  exposedParameters: []
+  exposedParameters:
+  - rid: 5120009358751563998
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
   position: {x: 237, y: 330, z: 0}
   scale: {x: 1, y: 1, z: 1}
+  TestName: 
   references:
     version: 2
     RefIds:
@@ -110,8 +113,8 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 706
-          y: 244.00002
+          x: 596
+          y: 185
           width: 441
           height: 95
         expanded: 0
@@ -126,8 +129,8 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1256
-          y: 244
+          x: 1209.5
+          y: 364
           width: 193
           height: 118
         expanded: 0
@@ -142,8 +145,8 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1306
-          y: 106
+          x: 1260
+          y: 202
           width: 143
           height: 116
         expanded: 1
@@ -160,8 +163,8 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 462.5
-          y: 244.00002
+          x: 326
+          y: 185
           width: 243
           height: 75
         expanded: 0
@@ -192,9 +195,9 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 331.34027
-          y: 244.00002
-          width: 127
+          x: 165
+          y: 184.5
+          width: 128
           height: 75
         expanded: 0
         debug: 0
@@ -207,9 +210,9 @@ MonoBehaviour:
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 1142.0001
-          y: -24.228737
-          width: 307
+          x: 1260
+          y: 43
+          width: 371
           height: 95
         expanded: 0
         debug: 0
@@ -238,12 +241,52 @@ MonoBehaviour:
         computeOrder: 7
         position:
           serializedVersion: 2
-          x: 1589.6001
-          y: 221.84999
-          width: 193.00012
-          height: 123.00008
+          x: 1522
+          y: 202
+          width: 193
+          height: 123
         expanded: 0
         debug: 0
         nodeLock: 0
         logText: Log
         logType: 3
+    - rid: 5120009358751563998
+      type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 42eb74b6-3d1e-4663-a6a9-7cab920c1361
+        name: New Int
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 5120009358751563999
+        val: 0
+    - rid: 5120009358751563999
+      type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 42eb74b6-3d1e-4663-a6a9-7cab920c1361
+        mode: 0
+        min: 0
+        max: 10
+    - rid: 5120009358751564002
+      type: {class: ParameterNode, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        nodeCustomName: 
+        GUID: bd582506-2ff5-42e8-bd74-e0d6dea5d8fa
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 125.5
+          y: -89
+          width: 79
+          height: 37
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        parameterGUID: 42eb74b6-3d1e-4663-a6a9-7cab920c1361
+        accessor: 0
