@@ -242,5 +242,17 @@ namespace AbilitySystem.Scripts
             var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
             AbilitySystem.CueManager.AddCue(cueDefinition, cueData);
         }
+
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientAbilityGranted(string abilityName)
+        {
+            // TODO: add abilities to the Data Manager.
+        }
+        
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientAbilityRemoved(string abilityName)
+        {
+            AbilitySystem.AbilityManager.RemoveAbility(abilityName);
+        }
     }
 }

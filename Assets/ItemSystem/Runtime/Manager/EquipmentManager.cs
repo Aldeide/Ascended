@@ -14,9 +14,9 @@ namespace ItemSystem.Runtime.Manager
     {
         private readonly IAbilitySystem _owner;
         private EquipmentManagerDefinition _definition;
-        
+
         private readonly Dictionary<Tag, Equipment> _equipment = new();
-        
+
         public EquipmentManager(IAbilitySystem owner, EquipmentManagerDefinition definition)
         {
             _owner = owner;
@@ -35,18 +35,14 @@ namespace ItemSystem.Runtime.Manager
                 _equipment[slot].Equip();
             }
         }
+
+        // Executed on the server.
         public void Equip(Tag slotName, EquipmentDefinition item)
         {
+            if (!_owner.IsServer()) return;
             if (!_equipment.ContainsKey(slotName)) return;
             _equipment[slotName] = new Equipment(item, this);
-
-            if (!_owner.IsServer())
-            {
-                // TODO: Send request to server to equip item.
-            } else
-            {
-                _equipment[slotName].Equip();
-            }
+            _equipment[slotName].Equip();
         }
 
         public void Unequip(Tag slotName)
@@ -54,7 +50,7 @@ namespace ItemSystem.Runtime.Manager
             _equipment[slotName].Unequip();
             _equipment[slotName] = null;
         }
-        
+
         public IAbilitySystem GetOwner()
         {
             return _owner;

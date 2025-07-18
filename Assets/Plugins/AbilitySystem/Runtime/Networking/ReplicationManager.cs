@@ -1,4 +1,5 @@
-﻿using AbilitySystem.Runtime.Attributes;
+﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Scripts;
@@ -56,6 +57,17 @@ namespace AbilitySystem.Runtime.Networking
         {
             Debug.Log("Received Cue: " + cueTag.Name + " / " + cueAction + " / " + cueData + " /");
             _owner.CueManager.OnCueReceived(cueTag, cueAction, cueData);
+        }
+        
+        // Abilities.
+        public void NotifyClientAbilityGranted(AbilityDefinition abilityDefinition)
+        {
+            _networkBehaviour.NotifyClientAbilityGranted(abilityDefinition.UniqueName);
+        }
+        
+        public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
+        {
+            _networkBehaviour.NotifyClientAbilityRemoved(abilityDefinition.UniqueName);
         }
     }
 }
