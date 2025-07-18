@@ -66,7 +66,7 @@ namespace AbilitySystem.Scripts
             AbilitySystem = new AbilitySystemManager(this);
             foreach (var attributeSet in Definition.AttributeSets)
             {
-                Type type = ReflectionUtil.GetAttributeSetType(attributeSet);
+                var type = ReflectionUtil.GetAttributeSetType(attributeSet);
                 var set = Activator.CreateInstance(type, AbilitySystem) as AttributeSet;
                 AbilitySystem.AttributeSetManager.AddAttributeSet(type, set);
             }
@@ -114,7 +114,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.NotServer)]
         public void NotifyClientsCurrentValueChangedRpc(string attributeName, float oldValue, float newValue)
         {
-            AbilitySystem.AttributeSetManager.GetAttribute(attributeName).SetCurrentValue(newValue);
+            AbilitySystem.AttributeSetManager.GetAttribute(attributeName)?.SetCurrentValue(newValue);
         }
 
         public void TryActivateAbility(string abilityName, AbilityData data = new())
@@ -158,7 +158,6 @@ namespace AbilitySystem.Scripts
 
         public void ExecuteEffect(EffectDefinition effectDefinition, IAbilitySystem source)
         {
-            Debug.Log("Executing effect");
             var effect = effectDefinition.ToEffect(source, AbilitySystem);
             effect.Execute();
         }
