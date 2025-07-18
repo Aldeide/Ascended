@@ -368,7 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configInitializer: {fileID: 0}
   agentTypeConfigFactories:
-  - {fileID: 2109215335}
+  - {fileID: 0}
 --- !u!4 &57096964
 Transform:
   m_ObjectHideFlags: 0

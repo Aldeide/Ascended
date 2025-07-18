@@ -6,7 +6,6 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
-using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Runtime.Abilities
 {
@@ -26,6 +25,8 @@ namespace AbilitySystem.Runtime.Abilities
         public bool IsActive { get; private set; }
         public int ActiveCount { get; private set; }
         
+        public int Level { get; set; }
+        
         public PredictionKey PredictionKey { get; private set; }
 
         private readonly List<Effect> _activatedEffects;
@@ -34,11 +35,12 @@ namespace AbilitySystem.Runtime.Abilities
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
         
-        protected Ability(AbilityDefinition ability, IAbilitySystem owner)
+        protected Ability(AbilityDefinition ability, IAbilitySystem owner, int level = 1)
         {
             Definition = ability;
             Owner = owner;
             IsActive = false;
+            Level = level;
             // TODO: clone cooldown.
             Cooldown = Definition.Cooldown;
             _activatedEffects = new List<Effect>();
@@ -99,6 +101,11 @@ namespace AbilitySystem.Runtime.Abilities
                 }
             }
             return true;
+        }
+
+        public void SetLevel(int level)
+        {
+            Level = level;
         }
 
         private bool IsOnCooldown()

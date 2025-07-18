@@ -1,12 +1,14 @@
 ﻿using GraphProcessor;
+using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace AbilityGraph.Editor
 {
     [CustomEditor(typeof(Runtime.AbilityGraph), true)]
-    public class AbilityGraphInspector : GraphInspector
+    public class AbilityGraphInspector : OdinEditor
     {
+        /*
         protected override void CreateInspector()
         {
             base.CreateInspector();
@@ -16,5 +18,6 @@ namespace AbilityGraph.Editor
                 text = "Open base graph window"
             });
         }
+        */
     }
 }
