@@ -1,4 +1,5 @@
 ﻿using System;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Networking;
@@ -47,6 +48,16 @@ namespace AbilitySystem.Test.Utilities
         }
 
         public void ReceivedPlayCue(Tag cueTag, CueAction action, CueData data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyClientAbilityGranted(AbilityDefinition abilityDefinition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
             throw new NotImplementedException();
         }

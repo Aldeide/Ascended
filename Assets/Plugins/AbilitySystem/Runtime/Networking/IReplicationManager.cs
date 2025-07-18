@@ -1,4 +1,5 @@
-﻿using AbilitySystem.Runtime.Attributes;
+﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Cues;
 using GameplayTags.Runtime;
 
@@ -12,5 +13,9 @@ namespace AbilitySystem.Runtime.Networking
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue);
         public void NotifyClientsPlayCue(Tag cueTag, CueAction action, CueData data);
         public void ReceivedPlayCue(Tag cueTag, CueAction action, CueData data);
+        
+        // Abilities.
+        public void NotifyClientAbilityGranted(AbilityDefinition abilityDefinition);
+        public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition);
     }
 }

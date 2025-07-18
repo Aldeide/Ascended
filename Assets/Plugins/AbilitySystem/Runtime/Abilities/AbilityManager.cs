@@ -56,10 +56,26 @@ namespace AbilitySystem.Runtime.Abilities
             }
         }
 
+        public void GrantAbilityServer(AbilityDefinition abilityDefinition)
+        {
+            if (!abilityDefinition) return;
+            if (!_owner.IsServer()) return;
+            GrantAbility(abilityDefinition);
+            _owner.ReplicationManager.NotifyClientAbilityGranted(abilityDefinition);
+        }
+
         public void RemoveAbility(AbilityDefinition abilityDefinition)
         {
             if (!abilityDefinition) return;
             RemoveAbility(abilityDefinition.UniqueName);
+        }
+        
+        public void RemoveAbilityServer(AbilityDefinition abilityDefinition)
+        {
+            if (!abilityDefinition) return;
+            if (!_owner.IsServer()) return;
+            RemoveAbility(abilityDefinition);
+            _owner.ReplicationManager.NotifyClientAbilityRemoved(abilityDefinition);
         }
 
         public void RemoveAbility(string abilityName)
