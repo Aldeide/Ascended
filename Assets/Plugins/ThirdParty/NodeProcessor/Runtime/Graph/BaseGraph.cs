@@ -47,7 +47,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="JsonElement"></typeparam>
 		/// <returns></returns>
-		[SerializeField, Obsolete("Use BaseGraph.nodes instead")]
+		[SerializeField, Obsolete("Use BaseGraph.nodes instead"), HideInInspector]
 		public List< JsonElement >						serializedNodes = new List< JsonElement >();
 
 		/// <summary>
@@ -55,7 +55,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="BaseNode"></typeparam>
 		/// <returns></returns>
-		[SerializeReference]
+		[SerializeReference, HideInInspector]
 		public List< BaseNode >							nodes = new List< BaseNode >();
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="SerializableEdge"></typeparam>
 		/// <returns></returns>
-		[SerializeField]
+		[SerializeField, HideInInspector]
 		public List< SerializableEdge >					edges = new List< SerializableEdge >();
 		/// <summary>
 		/// Dictionary of edges per GUID, faster than a search in a list
@@ -88,7 +88,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="Group"></typeparam>
 		/// <returns></returns>
-        [SerializeField, FormerlySerializedAs("commentBlocks")]
+        [SerializeField, FormerlySerializedAs("commentBlocks"), HideInInspector]
         public List< Group >                     		groups = new List< Group >();
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="stackNodes"></typeparam>
 		/// <returns></returns>
-		[SerializeField, SerializeReference] // Polymorphic serialization
+		[SerializeField, SerializeReference, HideInInspector] // Polymorphic serialization
 		public List< BaseStackNode >					stackNodes = new List< BaseStackNode >();
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="PinnedElement"></typeparam>
 		/// <returns></returns>
-		[SerializeField]
+		[SerializeField, HideInInspector]
 		public List< PinnedElement >					pinnedElements = new List< PinnedElement >();
 
 		/// <summary>
@@ -112,13 +112,13 @@ namespace GraphProcessor
 		/// </summary>
 		/// <typeparam name="ExposedParameter"></typeparam>
 		/// <returns></returns>
-		[SerializeField, SerializeReference]
+		[SerializeField, SerializeReference, HideInInspector]
 		public List< ExposedParameter >					exposedParameters = new List< ExposedParameter >();
 
-		[SerializeField, FormerlySerializedAs("exposedParameters")] // We keep this for upgrade
+		[SerializeField, FormerlySerializedAs("exposedParameters"), HideInInspector] // We keep this for upgrade
 		List< ExposedParameter >						serializedParameterList = new List<ExposedParameter>();
 
-		[SerializeField]
+		[SerializeField, HideInInspector]
 		public List< StickyNote >						stickyNotes = new List<StickyNote>();
 
 		[System.NonSerialized]
@@ -128,11 +128,13 @@ namespace GraphProcessor
 		Scene							linkedScene;
 
 		// Trick to keep the node inspector alive during the editor session
-		[SerializeField]
+		[SerializeField, HideInInspector]
 		internal UnityEngine.Object		nodeInspectorReference;
 
 		//graph visual properties
+		[SerializeField, HideInInspector]
 		public Vector3					position = Vector3.zero;
+		[SerializeField, HideInInspector]
 		public Vector3					scale = Vector3.one;
 
 		/// <summary>
