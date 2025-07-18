@@ -12,27 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
   m_Name: HealthPlus10DurationalDevEffect
   m_EditorClassIdentifier: 
-  description: 
-  durationType: 3
-  durationSeconds: 15
+  EffectName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  IsHidden: 0
+  Icon: {fileID: 0}
+  DurationType: 3
+  DurationSeconds: 15
   Period: 0
-  periodicEffect: {fileID: 0}
-  assetTags: []
-  grantedTags:
-  - name: Status.Immune.Stun
-    hashCode: 2120846943
-    ancestorsNames:
-    - Status
-    - Status.Immune
-    ancestorsHashCodes: b0c3cf74ddd40c3b
-  applicationRequiredTags: []
-  ongoingRequiredTags: []
-  removeGameplayEffectsWithTags: []
-  applicationImmunityTags: []
-  modifiers:
-  - rid: 1913512553863708749
-  cues:
-  - {fileID: 11400000, guid: 08663847233e8da44827a54d286ad089, type: 2}
+  PeriodicEffect: {fileID: 0}
+  AssetTags: []
+  GrantedTags: []
+  ApplicationRequiredTags: []
+  OngoingRequiredTags: []
+  RemoveGameplayEffectsWithTags: []
+  ApplicationImmunityTags: []
+  Modifiers:
+  - rid: 5120009358208925790
+  Cues: []
   EffectStack:
     EffectStackType: 2
     MaxStacks: 3
@@ -42,7 +54,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1913512553863708749
+    - rid: 5120009358208925790
       type: {class: FloatModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
       data:
         attributeName: CharacteristicsAttributeSet.Health

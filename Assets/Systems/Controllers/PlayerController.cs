@@ -32,7 +32,6 @@ namespace Systems.Controllers
         private void SetupAsc()
         {
             GetComponent<AbilitySystemComponent>().Initialise();
-            GetComponent<AbilitySystemComponent>().AbilitySystem.AbilityManager.TryActivateAbility("EnergyRegenAbility");
         }
 
         private void SetupInterface()

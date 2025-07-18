@@ -17,6 +17,7 @@ namespace GameplayTags.Generated
         public static readonly Tag CuePrefabImpactA = new Tag("Cue.Prefab.Impact.A");
         public static readonly Tag CueVisualEffectDevLoop = new Tag("Cue.VisualEffect.Dev.Loop");
         public static readonly Tag CueVisualEffectMuzzleA = new Tag("Cue.VisualEffect.Muzzle.A");
+        public static readonly Tag EffectCostAbilityDash = new Tag("Effect.Cost.Ability.Dash");
         public static readonly Tag EquipmentSlotCore = new Tag("EquipmentSlot.Core");
         public static readonly Tag EquipmentSlotUtilityOne = new Tag("EquipmentSlot.Utility.One");
         public static readonly Tag EquipmentSlotUtilityTwo = new Tag("EquipmentSlot.Utility.Two");
@@ -40,6 +41,7 @@ namespace GameplayTags.Generated
             CuePrefabImpactA,
             CueVisualEffectDevLoop,
             CueVisualEffectMuzzleA,
+            EffectCostAbilityDash,
             EquipmentSlotCore,
             EquipmentSlotUtilityOne,
             EquipmentSlotUtilityTwo,

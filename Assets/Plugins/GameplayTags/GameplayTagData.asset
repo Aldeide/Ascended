@@ -24,6 +24,7 @@ MonoBehaviour:
   - Cue.Prefab.Impact.A
   - Cue.VisualEffect.Dev.Loop
   - Cue.VisualEffect.Muzzle.A
+  - Effect.Cost.Ability.Dash
   - EquipmentSlot.Core
   - EquipmentSlot.Utility.One
   - EquipmentSlot.Utility.Two
