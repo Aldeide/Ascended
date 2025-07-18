@@ -1,0 +1,1 @@
+﻿Common utility classes for use by Eternity Studios projects.
