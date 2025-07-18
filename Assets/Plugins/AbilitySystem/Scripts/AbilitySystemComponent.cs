@@ -20,7 +20,6 @@ namespace AbilitySystem.Scripts
         public IAbilitySystem AbilitySystem { get; private set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
-        private EffectDefinitionLibrary _effectLibrary;
         private CueManagerComponent _cueManagerComponent;
         
         public override void OnNetworkSpawn()
@@ -62,7 +61,6 @@ namespace AbilitySystem.Scripts
 
         public void Initialise()
         {
-            _effectLibrary = GameObject.Find("DataManager").GetComponent<EffectDefinitionLibrary>();
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
             AbilitySystem = new AbilitySystemManager(this);
@@ -190,7 +188,7 @@ namespace AbilitySystem.Scripts
         public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime)
         {
             if (IsServer) return;
-            var effectDefinition = _effectLibrary.GetEffectByName(effectName);
+            var effectDefinition = DataLibrary.Instance.GetEffectByName(effectName);
             // TODO: find an identifier to identify the abilitysystem and source player.
             var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
             effect.ActivationTime = applicationTime;
@@ -201,7 +199,7 @@ namespace AbilitySystem.Scripts
         public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime)
         {
             if (IsServer) return;
-            var effectDefinition = _effectLibrary.GetEffectByName(effectName);
+            var effectDefinition = DataLibrary.Instance.GetEffectByName(effectName);
             // TODO: find an identifier to identify the abilitysystem and source player.
             var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
             effect.ActivationTime = applicationTime;
