@@ -31,7 +31,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   Icon: {fileID: 0}
-  UniqueName: 
+  UniqueName: AimCameraAbility
   Cost: {fileID: 0}
   Cooldown:
     rid: 5120009157357076583

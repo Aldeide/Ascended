@@ -16,7 +16,7 @@ namespace AbilitySystem.Runtime.Effects
         public bool IsActive { get; set; }
         public float ActivationTime { get; set; }
         public int NumStacks { get; set; }
-        
+        public int Level { get; set; }
         public IAbilitySystem Owner { get; private set; }
         public IAbilitySystem Source { get; private set; }
 
@@ -34,10 +34,11 @@ namespace AbilitySystem.Runtime.Effects
             if (!Definition.IsInstant()) _effectTicker = new EffectTicker(this);
         }
 
-        public void Initialise(IAbilitySystem source, IAbilitySystem target)
+        public void Initialise(IAbilitySystem source, IAbilitySystem target, int level = 1)
         {
             Owner = target;
             Source = source;
+            Level = level;
             NumStacks = 1;
             if (Definition.PeriodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
             {
@@ -69,6 +70,11 @@ namespace AbilitySystem.Runtime.Effects
             if (Definition.IsInstant()) return;
             if (!IsActive) return;
             _effectTicker.Tick();
+        }
+
+        public void SetLevel(int level)
+        {
+            Level = level;
         }
 
         public void RemoveSelf()

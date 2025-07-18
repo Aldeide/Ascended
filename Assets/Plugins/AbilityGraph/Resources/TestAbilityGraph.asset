@@ -12,13 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e71cc2528764403a1e6975de75704fe, type: 3}
   m_Name: TestAbilityGraph
   m_EditorClassIdentifier: 
-  description: 
-  icon: {fileID: 0}
-  uniqueName: TestAbilityGraph
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  DisplayName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Icon: {fileID: 0}
+  UniqueName: TestAbilityGraph
   Cost: {fileID: 0}
   Cooldown:
     rid: 1400474609048879418
-  abilityActivation:
+  AbilityActivation:
     rid: -2
   AssetTags: []
   CancelAbilityTags: []
@@ -26,10 +43,10 @@ MonoBehaviour:
   ActivationOwnedTags: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  grantedEffects: []
-  networkPolicy: 2
-  networkSecurityPolicy: 0
-  activationCues: []
+  GrantedEffects: []
+  NetworkPolicy: 0
+  NetworkSecurityPolicy: 0
+  ActivationCues: []
   graph: {fileID: 11400000, guid: c779d86f6dcbae04b874ca78707eeaac, type: 2}
   references:
     version: 2
@@ -45,9 +62,7 @@ MonoBehaviour:
           Condition:
           - MatchType: 0
             Tags:
-            - name: Cooldown.Ability.Test
-              hashCode: -352825783
-              ancestorsNames:
-              - Cooldown
-              - Cooldown.Ability
-              ancestorsHashCodes: 1d66983da9a35ca7
+            - <Name>k__BackingField: 
+              <HashCode>k__BackingField: 0
+              <AncestorsNames>k__BackingField: []
+              <AncestorsHashCodes>k__BackingField: 
