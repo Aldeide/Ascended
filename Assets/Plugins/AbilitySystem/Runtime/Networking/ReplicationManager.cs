@@ -62,12 +62,12 @@ namespace AbilitySystem.Runtime.Networking
         // Abilities.
         public void NotifyClientAbilityGranted(AbilityDefinition abilityDefinition)
         {
-            _networkBehaviour.NotifyClientAbilityGranted(abilityDefinition.UniqueName);
+            _networkBehaviour.NotifyClientAbilityGrantedRpc(abilityDefinition.UniqueName);
         }
         
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
-            _networkBehaviour.NotifyClientAbilityRemoved(abilityDefinition.UniqueName);
+            _networkBehaviour.NotifyClientAbilityRemovedRpc(abilityDefinition.UniqueName);
         }
     }
 }

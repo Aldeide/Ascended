@@ -241,14 +241,14 @@ namespace AbilitySystem.Scripts
         }
 
         [Rpc(SendTo.NotServer)]
-        public void NotifyClientAbilityGranted(string abilityName)
+        public void NotifyClientAbilityGrantedRpc(string abilityName)
         {
             var abilityDefinition = DataLibrary.Instance.GetAbilityByName(abilityName);
             AbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
         }
         
         [Rpc(SendTo.NotServer)]
-        public void NotifyClientAbilityRemoved(string abilityName)
+        public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
             AbilitySystem.AbilityManager.RemoveAbility(abilityName);
         }

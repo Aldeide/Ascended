@@ -41,12 +41,12 @@ namespace ItemSystem.Scripts
         }
 
         [Rpc(SendTo.Server)]
-        public void EquipItem(Tag slotName, EquipmentDefinition equipmentDefinition)
+        public void EquipItemRpc(Tag slotName /*, EquipmentDefinition equipmentDefinition*/)
         {
             if (!IsClient) return;
             // TODO: EquipmentDefinition probably isn't serialisable. Need to defined a serialised version that also
             // contains mods to send over the network.
-            _equipmentManager.Equip(slotName, equipmentDefinition);
+            //_equipmentManager.Equip(slotName, equipmentDefinition);
         }
     }
 }
