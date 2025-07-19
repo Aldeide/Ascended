@@ -1,20 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GameplayTags.Runtime;
-using Sirenix.OdinInspector;
+﻿using ItemSystem.Runtime.Interface;
+using ItemSystem.Runtime.Interface.Core;
 using UnityEngine;
 
 namespace ItemSystem.Runtime.Definition
 {
     [CreateAssetMenu(fileName = "CurrencyDefinition", menuName = "EquipmentSystem/CurrencyDefinition")]
-    public class CurrencyDefinition : ScriptableObject
+    public class CurrencyDefinition : ItemDefinition
     {
-        [ValueDropdown("GetCurrencyDropdownValues", IsUniqueList = true, HideChildProperties = true)]
-        public Tag CurrencyTag;
-        
-        private IEnumerable<ValueDropdownItem> GetCurrencyDropdownValues()
+        public int StackSize;
+        public override IBaseItem ToItem(IInventoryManager inventoryManager)
         {
-            return TagsDropdown.GameplayTagChoices.Where(tag => tag.Text.StartsWith("Currency."));
+            return new Currency(this);
         }
     }
 }
