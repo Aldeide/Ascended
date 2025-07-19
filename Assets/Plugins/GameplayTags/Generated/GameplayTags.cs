@@ -24,6 +24,12 @@ namespace GameplayTags.Generated
         public static readonly Tag EquipmentSlotUtilityOne = new Tag("EquipmentSlot.Utility.One");
         public static readonly Tag EquipmentSlotUtilityTwo = new Tag("EquipmentSlot.Utility.Two");
         public static readonly Tag ItemEquipmentEnergyCore = new Tag("Item.Equipment.EnergyCore");
+        public static readonly Tag ItemModifierActive = new Tag("Item.Modifier.Active");
+        public static readonly Tag ItemModifierPassive = new Tag("Item.Modifier.Passive");
+        public static readonly Tag ModSlotActive1 = new Tag("Mod.Slot.Active.1");
+        public static readonly Tag ModSlotActive2 = new Tag("Mod.Slot.Active.2");
+        public static readonly Tag ModSlotPassive1 = new Tag("Mod.Slot.Passive.1");
+        public static readonly Tag ModSlotPassive2 = new Tag("Mod.Slot.Passive.2");
         public static readonly Tag SlotHipLeft = new Tag("Slot.Hip.Left");
         public static readonly Tag SlotHipRight = new Tag("Slot.Hip.Right");
         public static readonly Tag StatusAiming = new Tag("Status.Aiming");
@@ -51,6 +57,12 @@ namespace GameplayTags.Generated
             EquipmentSlotUtilityOne,
             EquipmentSlotUtilityTwo,
             ItemEquipmentEnergyCore,
+            ItemModifierActive,
+            ItemModifierPassive,
+            ModSlotActive1,
+            ModSlotActive2,
+            ModSlotPassive1,
+            ModSlotPassive2,
             SlotHipLeft,
             SlotHipRight,
             StatusAiming,

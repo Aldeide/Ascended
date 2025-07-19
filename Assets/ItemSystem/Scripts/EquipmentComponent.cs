@@ -1,7 +1,7 @@
 ﻿using AbilitySystem.Scripts;
-using Assets.ItemSystem.Scripts;
 using GameplayTags.Runtime;
 using ItemSystem.Runtime.Definition;
+using ItemSystem.Runtime.Interface.Core;
 using ItemSystem.Runtime.Manager;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,6 +14,7 @@ namespace ItemSystem.Scripts
         public EquipmentManagerDefinition EquipmentManagerDefinition;
 
         private EquipmentManager _equipmentManager;
+        private IInventoryManager _inventoryManager;
         private AbilitySystemComponent _abilitySystemComponent;
 
         public override void OnNetworkSpawn()
@@ -37,7 +38,8 @@ namespace ItemSystem.Scripts
 
         public void Initialise()
         {
-            _equipmentManager = new EquipmentManager(_abilitySystemComponent.AbilitySystem, EquipmentManagerDefinition);
+            _equipmentManager = new EquipmentManager(_abilitySystemComponent.AbilitySystem, _inventoryManager,
+                EquipmentManagerDefinition);
         }
 
         [Rpc(SendTo.Server)]

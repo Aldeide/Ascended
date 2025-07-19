@@ -1,6 +1,6 @@
 ﻿namespace ItemSystem.Runtime.Interface
 {
-    public interface IWeapon : IEquippable
+    public interface IWeapon : IEquipable
     {
 
     }

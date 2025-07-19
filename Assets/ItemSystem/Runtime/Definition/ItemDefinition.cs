@@ -1,16 +1,19 @@
 ﻿using System;
 using ItemSystem.Runtime.Interface;
+using ItemSystem.Runtime.Interface.Core;
 using UnityEngine;
 using UnityEngine.Localization;
 
 namespace ItemSystem.Runtime.Definition
 {
     [Serializable]
-    public class ItemDefinition : ScriptableObject, IBaseItem
+    public abstract class ItemDefinition : ScriptableObject
     {
-        [field:SerializeField]
-        public LocalizedString DisplayName { get; set; }
-        [field:SerializeField]
-        public LocalizedString Description { get; set; }
+        [Header("Display Information")] public string Name;
+        public LocalizedString DisplayName;
+        public LocalizedString Description;
+        public Sprite Icon;
+
+        public abstract IBaseItem ToItem(IInventoryManager inventoryManager);
     }
 }

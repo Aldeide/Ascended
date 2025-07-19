@@ -31,6 +31,12 @@ MonoBehaviour:
   - EquipmentSlot.Utility.One
   - EquipmentSlot.Utility.Two
   - Item.Equipment.EnergyCore
+  - Item.Modifier.Active
+  - Item.Modifier.Passive
+  - Mod.Slot.Active.1
+  - Mod.Slot.Active.2
+  - Mod.Slot.Passive.1
+  - Mod.Slot.Passive.2
   - Slot.Hip.Left
   - Slot.Hip.Right
   - Status.Aiming

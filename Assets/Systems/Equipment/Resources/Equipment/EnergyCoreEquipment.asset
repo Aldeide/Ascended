@@ -45,12 +45,36 @@ MonoBehaviour:
     <AncestorsNames>k__BackingField:
     - EquipmentSlot
     <AncestorsHashCodes>k__BackingField: 36e44add
-  MaxActiveModCount: 1
-  MaxPassiveModCount: 4
+  ModSlots:
+  - Name: ENERGYCORE_ACTIVE_MOD_1
+    RequiredLevel: 0
+    TagQuery:
+      Condition:
+      - MatchType: 4
+        Tags:
+        - <Name>k__BackingField: Item.Modifier.Active
+          <HashCode>k__BackingField: 1551084684
+          <AncestorsNames>k__BackingField:
+          - Item
+          - Item.Modifier
+          <AncestorsHashCodes>k__BackingField: 952fdcbc08953be7
+  - Name: ENERGYCORE_PASSIVE_MOD_1
+    RequiredLevel: 2
+    TagQuery:
+      Condition:
+      - MatchType: 4
+        Tags:
+        - <Name>k__BackingField: Item.Modifier.Passive
+          <HashCode>k__BackingField: -1913498623
+          <AncestorsNames>k__BackingField:
+          - Item
+          - Item.Modifier
+          <AncestorsHashCodes>k__BackingField: 952fdcbc08953be7
   GrantedAbilities:
   - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
   GrantedEffects: []
   GrantedTags: []
+  MaxLevel: 255
   references:
     version: 2
     RefIds: []
