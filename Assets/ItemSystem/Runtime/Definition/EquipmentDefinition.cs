@@ -28,7 +28,7 @@ namespace ItemSystem.Runtime.Definition
         public Tag EquipmentSlot;
 
         // Maybe a different way to do this? We could have a list of mod slots identified by tags they accept. Also
-        // perhaps add a required level (e.g. if the equipment has been upgrade to level 5, it unlocks a new mod slot).
+        // perhaps add a required level (e.g. if the equipment has been upgraded to level 5, it unlocks a new mod slot).
         [Space] [Header("Modification Info")] public int MaxActiveModCount;
         public int MaxPassiveModCount;
 
