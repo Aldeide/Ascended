@@ -21,6 +21,7 @@ namespace ItemSystem.Runtime.Definition
         
         [Space]
         [Header("Mod Configuration")]
+        // Could be a tag (e.g. Mod.Active)
         public ModType ModType;
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] ModifiableEquipmentTags;
