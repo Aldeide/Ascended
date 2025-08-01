@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91af83b1648d48eca803364c020dffb0, type: 3}
+  m_Name: RightHipAvatarSlot
+  m_EditorClassIdentifier: 
+  AvatarSlotTag:
+    <Name>k__BackingField: Slot.Hip.Right
+    <HashCode>k__BackingField: -488828731
+    <AncestorsNames>k__BackingField:
+    - Slot
+    - Slot.Hip
+    <AncestorsHashCodes>k__BackingField: ca57a9c1b73e38d4
+  AvatarSlotTransform: {fileID: 0}

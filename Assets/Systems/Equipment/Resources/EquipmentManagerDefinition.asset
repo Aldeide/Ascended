@@ -21,6 +21,23 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  EquipmentSlots: []
+  EquipmentSlots:
+  - <Name>k__BackingField: EquipmentSlot.Core
+    <HashCode>k__BackingField: 226769115
+    <AncestorsNames>k__BackingField:
+    - EquipmentSlot
+    <AncestorsHashCodes>k__BackingField: 36e44add
+  - <Name>k__BackingField: EquipmentSlot.Utility.One
+    <HashCode>k__BackingField: 1209799498
+    <AncestorsNames>k__BackingField:
+    - EquipmentSlot
+    - EquipmentSlot.Utility
+    <AncestorsHashCodes>k__BackingField: 36e44add80fd2777
+  - <Name>k__BackingField: EquipmentSlot.Utility.Two
+    <HashCode>k__BackingField: 1707192472
+    <AncestorsNames>k__BackingField:
+    - EquipmentSlot
+    - EquipmentSlot.Utility
+    <AncestorsHashCodes>k__BackingField: 36e44add80fd2777
   Equipment:
   - {fileID: 11400000, guid: 5bb65c2a0a6542f41abd499881be2386, type: 2}
