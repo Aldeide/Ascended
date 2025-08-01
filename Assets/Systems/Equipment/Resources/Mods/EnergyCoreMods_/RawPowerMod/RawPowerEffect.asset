@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
+  m_Name: RawPowerEffect
+  m_EditorClassIdentifier: AbilitySystem::AbilitySystem.Runtime.Effects.EffectDefinition
+  EffectName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  IsHidden: 0
+  Icon: {fileID: 0}
+  DurationType: 2
+  DurationSeconds: 0
+  Period: 0
+  PeriodicEffect: {fileID: 0}
+  AssetTags:
+  - <Name>k__BackingField: Effect.Modifier.Damage
+    <HashCode>k__BackingField: 807600983
+    <AncestorsNames>k__BackingField:
+    - Effect
+    - Effect.Modifier
+    <AncestorsHashCodes>k__BackingField: 1f682b7c4e5ba4f6
+  GrantedTags: []
+  ApplicationRequiredTags: []
+  OngoingRequiredTags: []
+  RemoveGameplayEffectsWithTags: []
+  ApplicationImmunityTags: []
+  Modifiers:
+  - rid: 4750144261753667677
+  Cues: []
+  EffectStack:
+    EffectStackType: 1
+    MaxStacks: 1
+    EffectStackDurationPolicy: 0
+    EffectStackPeriodPolicy: 0
+    EffectStackExpirationPolicy: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4750144261753667677
+      type: {class: AttributeBasedModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
+      data:
+        AttributeName: MetaAttributeSet.DamageDone
+        Operation: 0
+        captureType: 0
+        attributeFromType: 0
+        attributeFromName: CharacteristicsAttributeSet.Energy
+        k: 0.1
+        b: 0

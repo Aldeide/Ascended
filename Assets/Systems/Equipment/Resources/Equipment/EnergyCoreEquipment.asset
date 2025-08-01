@@ -46,7 +46,14 @@ MonoBehaviour:
     - EquipmentSlot
     <AncestorsHashCodes>k__BackingField: 36e44add
   ModSlots:
-  - Name: ENERGYCORE_ACTIVE_MOD_1
+  - ModSlotTag:
+      <Name>k__BackingField: Mod.Slot.Active.1
+      <HashCode>k__BackingField: 1045370293
+      <AncestorsNames>k__BackingField:
+      - Mod
+      - Mod.Slot
+      - Mod.Slot.Active
+      <AncestorsHashCodes>k__BackingField: 3ed98f597c2a300c0c67080d
     RequiredLevel: 0
     TagQuery:
       Condition:
@@ -58,7 +65,14 @@ MonoBehaviour:
           - Item
           - Item.Modifier
           <AncestorsHashCodes>k__BackingField: 952fdcbc08953be7
-  - Name: ENERGYCORE_PASSIVE_MOD_1
+  - ModSlotTag:
+      <Name>k__BackingField: Mod.Slot.Passive.1
+      <HashCode>k__BackingField: 1853370430
+      <AncestorsNames>k__BackingField:
+      - Mod
+      - Mod.Slot
+      - Mod.Slot.Passive
+      <AncestorsHashCodes>k__BackingField: 3ed98f597c2a300c59ba30f0
     RequiredLevel: 2
     TagQuery:
       Condition:

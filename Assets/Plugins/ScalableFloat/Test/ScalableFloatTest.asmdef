@@ -1,0 +1,20 @@
+{
+    "name": "ScalableFloatTest",
+    "rootNamespace": "",
+    "references": [
+        "GUID:73c00d13737fac343bb7eeb74a33b96a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

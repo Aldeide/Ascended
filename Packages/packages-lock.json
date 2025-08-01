@@ -151,7 +151,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.learn.iet-framework": {
-      "version": "4.2.0-pre.3",
+      "version": "5.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -186,7 +186,7 @@
       }
     },
     "com.unity.multiplayer.playmode": {
-      "version": "1.5.0",
+      "version": "1.6.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -372,7 +372,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.transport": {
-      "version": "2.5.1",
+      "version": "2.5.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
