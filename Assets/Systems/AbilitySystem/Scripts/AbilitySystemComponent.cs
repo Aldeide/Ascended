@@ -39,7 +39,6 @@ namespace AbilitySystem.Scripts
             {
                 NetworkManager.OnClientConnectedCallback -= OnClientConnected;
             }
-
         }
 
         private void OnClientConnected(ulong clientId)
