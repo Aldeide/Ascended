@@ -1,7 +1,6 @@
 ﻿using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using GraphProcessor;
-using PlasticGui.WorkspaceWindow;
 
 namespace AbilityGraph.Runtime.Nodes.Base
 {
