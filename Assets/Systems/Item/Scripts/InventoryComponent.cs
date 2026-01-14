@@ -36,10 +36,10 @@ namespace Item.Scripts
         }
 
         [Rpc(SendTo.Owner)]
-        public void NotifyOwnerAddItemRpc(int itemId, int amount)
+        public void NotifyOwnerAddItemRpc(string itemName, int amount)
         {
             if (!IsOwner) return;
-            InventoryManager.AddItem(itemId, amount);
+            InventoryManager.AddItem(itemName, amount);
         }
     }
 }

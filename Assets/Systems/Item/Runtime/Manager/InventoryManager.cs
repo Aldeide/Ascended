@@ -39,9 +39,13 @@ namespace Item.Runtime.Manager
             }
         }
 
-        public void AddItem(int itemId, int amount)
+        public void AddItem(string itemName, int amount)
         {
-            
+            var item = GetItemDefinition(itemName).ToItem(this);
+            for (var i = 0; i < amount; i++)
+            {
+                Items.Add(item);
+            }
         }
 
         public void RemoveItem(IBaseItem item)

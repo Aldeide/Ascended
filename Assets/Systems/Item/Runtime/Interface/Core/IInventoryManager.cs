@@ -11,7 +11,7 @@ namespace Item.Runtime.Interface.Core
         public IAbilitySystem GetOwner();
         
         public void AddItem(IBaseItem item);
-        public void AddItem(int itemId, int amount);
+        public void AddItem(string itemName, int amount);
         public void RemoveItem(IBaseItem item);
         public bool HasItem(IBaseItem item);
         public bool HasItemQuantity(IBaseItem item, int quantity);
