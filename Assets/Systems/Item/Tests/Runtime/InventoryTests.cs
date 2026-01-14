@@ -23,7 +23,7 @@ namespace Systems.Item.Tests
             Assert.AreEqual(1, inventory.Items.Count);
             Assert.AreEqual("BasicItem", inventory.Items[0].Name);
             // TODO: change after implementing item database.
-            mockReplicationManager.Verify(x => x.NotifyClientAddItem(1, 1), Times.Once);
+            mockReplicationManager.Verify(x => x.NotifyClientAddItem("BasicItem", 1), Times.Once);
         }
         
         [Test]
@@ -37,7 +37,7 @@ namespace Systems.Item.Tests
             inventory.AddItem(TestItems.BasicItem());
             
             // TODO: change after implementing item database.
-            mockReplicationManager.Verify(x => x.NotifyClientAddItem(1, 1), Times.Once);
+            mockReplicationManager.Verify(x => x.NotifyClientAddItem("BasicItem", 1), Times.Once);
         }
     }
 }

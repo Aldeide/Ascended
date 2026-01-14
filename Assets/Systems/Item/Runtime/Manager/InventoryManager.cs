@@ -35,7 +35,7 @@ namespace Item.Runtime.Manager
                 // We add the item on the server and notify the owner that an item was added.
                 Items.Add(item);
                 // TODO: Create item database entry so we can have a unique id per item.
-                _replicationManager.NotifyClientAddItem(1, 1);
+                _replicationManager.NotifyClientAddItem(item.Name, 1);
             }
         }
 

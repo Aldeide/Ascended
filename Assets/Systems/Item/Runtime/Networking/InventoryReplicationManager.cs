@@ -21,7 +21,7 @@ namespace Systems.Item.Runtime.Networking
             return _inventoryComponent.IsClient;
         }
 
-        public void NotifyClientAddItem(int itemId, int amount)
+        public void NotifyClientAddItem(string itemName, int amount)
         {
             throw new System.NotImplementedException();
         }
