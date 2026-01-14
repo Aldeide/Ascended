@@ -22,7 +22,6 @@ namespace Systems.Item.Tests
             // Checking the item has been added.
             Assert.AreEqual(1, inventory.Items.Count);
             Assert.AreEqual("BasicItem", inventory.Items[0].Name);
-            // TODO: change after implementing item database.
             mockReplicationManager.Verify(x => x.NotifyClientAddItem("BasicItem", 1), Times.Once);
         }
         
@@ -36,7 +35,6 @@ namespace Systems.Item.Tests
             
             inventory.AddItem(TestItems.BasicItem());
             
-            // TODO: change after implementing item database.
             mockReplicationManager.Verify(x => x.NotifyClientAddItem("BasicItem", 1), Times.Once);
         }
     }

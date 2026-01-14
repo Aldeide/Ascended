@@ -5,7 +5,6 @@ namespace Systems.Item.Runtime.Networking
     public class ReplicationManager : IInventoryReplicationManager
     {
         private readonly InventoryComponent _inventoryComponent;
-
         public ReplicationManager(InventoryComponent inventoryComponent)
         {
             _inventoryComponent = inventoryComponent;
@@ -23,7 +22,7 @@ namespace Systems.Item.Runtime.Networking
 
         public void NotifyClientAddItem(string itemName, int amount)
         {
-            throw new System.NotImplementedException();
+            _inventoryComponent.NotifyOwnerAddItemRpc(itemName, amount);
         }
     }
 }
