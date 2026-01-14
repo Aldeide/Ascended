@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
+using Item.Runtime.Database;
 using Item.Runtime.Definition;
 using Item.Runtime.Interface;
 using Item.Runtime.Interface.Core;
@@ -66,6 +67,11 @@ namespace Item.Runtime.Manager
         public void ConsumeItems(Dictionary<ItemDefinition, int> items)
         {
             throw new System.NotImplementedException();
+        }
+
+        public ItemDefinition GetItemDefinition(string itemName)
+        {
+            return ItemLibrary.Instance.GetItemByName(itemName);
         }
     }
 }
