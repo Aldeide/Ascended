@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d877a03bef431a847adca8ab343db3e1, type: 3}
   m_Name: RayTracingSettings
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   rayBias:
     m_OverrideState: 1
     m_Value: 0.0357
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a79c9cffef5cc469553b1341c2ecdf, type: 3}
   m_Name: RecursiveRendering
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enable:
     m_OverrideState: 1
     m_Value: 1
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953beb541740ddc499d005ee80c9ff29, type: 3}
   m_Name: Fog
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 2
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f077503be6ae942a1e1245dbd53ea9, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
   m_Name: GlobalIllumination
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 2
@@ -1200,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d08ce26990eb1a4a9177b860541e702, type: 3}
   m_Name: Exposure
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   mode:
     m_OverrideState: 1
     m_Value: 0
