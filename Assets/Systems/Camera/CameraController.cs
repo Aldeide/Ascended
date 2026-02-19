@@ -21,7 +21,7 @@ namespace Systems.Camera
         {
             if (context.phase != InputActionPhase.Performed) return;
             //mouseDelta = context.ReadValue<Vector2>();
-            UpdateCamera(context.ReadValue<Vector2>());
+            //UpdateCamera(context.ReadValue<Vector2>());
         }
 
         private void UpdateCamera(Vector2 mouseInput)
