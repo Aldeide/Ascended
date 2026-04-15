@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
@@ -24,6 +24,44 @@ namespace AbilitySystem.Runtime.AttributeSets
         {
             _attributes = new Dictionary<string, Attribute>();
             _owner = owner;
+            Name = GetType().Name;
+        }
+
+        public void InitializeAttributes()
+        {
+            var properties = GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            foreach (var prop in properties)
+            {
+                if (prop.PropertyType == typeof(Attribute))
+                {
+                    // Auto-instantiate the attribute if it is null
+                    var attr = prop.GetValue(this) as Attribute;
+                    if (attr == null)
+                    {
+                        attr = new Attribute(prop.Name, this, 0f);
+                        if (prop.CanWrite)
+                        {
+                            prop.SetValue(this, attr);
+                        }
+                    }
+                    AddAttribute(attr);
+                }
+            }
+            
+            var fields = GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            foreach (var field in fields)
+            {
+                if (field.FieldType == typeof(Attribute))
+                {
+                    var attr = field.GetValue(this) as Attribute;
+                    if (attr == null)
+                    {
+                        attr = new Attribute(field.Name, this, 0f);
+                        field.SetValue(this, attr);
+                    }
+                    AddAttribute(attr);
+                }
+            }
         }
 
         public void AddAttribute(Attribute attribute)

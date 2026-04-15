@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
@@ -61,15 +61,15 @@ namespace AbilitySystem.Runtime.Attributes
 
         private void RegisterEventHandlers()
         {
-            _owner.EffectManager.OnEffectAdded += ProcessEffectChange;
-            _owner.EffectManager.OnEffectRemoved += ProcessEffectChange;
+            _owner.EffectManager.OnEffectAdded += ProcessEffectAdded;
+            _owner.EffectManager.OnEffectRemoved += ProcessEffectRemoved;
             _attribute.OnAttributeBaseValueChanged += HandleBaseValueChanged;
         }
 
         private void UnregisterEventHandlers()
         {
-            _owner.EffectManager.OnEffectAdded -= ProcessEffectChange;
-            _owner.EffectManager.OnEffectRemoved -= ProcessEffectChange;
+            _owner.EffectManager.OnEffectAdded -= ProcessEffectAdded;
+            _owner.EffectManager.OnEffectRemoved -= ProcessEffectRemoved;
             _attribute.OnAttributeBaseValueChanged -= HandleBaseValueChanged;
         }
 
@@ -79,10 +79,17 @@ namespace AbilitySystem.Runtime.Attributes
             UpdateCurrentValue();
         }
 
-        private void ProcessEffectChange(Effect changedEffect)
+        private void ProcessEffectAdded(Effect addedEffect)
         {
-            if (!IsEffectRelevantToAttribute(changedEffect)) return;
-            BuildModifierCache();
+            if (!IsEffectRelevantToAttribute(addedEffect)) return;
+            AddModifiersFromEffectToCache(addedEffect);
+            UpdateCurrentValue();
+        }
+
+        private void ProcessEffectRemoved(Effect removedEffect)
+        {
+            if (!IsEffectRelevantToAttribute(removedEffect)) return;
+            RemoveModifiersFromEffectCache(removedEffect);
             UpdateCurrentValue();
         }
 
@@ -100,6 +107,11 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 AddModifiersFromEffectToCache(effect);
             }
+        }
+        
+        private void RemoveModifiersFromEffectCache(Effect activeEffect)
+        {
+            _modifierCache.RemoveAll(x => x.Effect == activeEffect);
         }
 
         private void AddModifiersFromEffectToCache(Effect activeEffect)
