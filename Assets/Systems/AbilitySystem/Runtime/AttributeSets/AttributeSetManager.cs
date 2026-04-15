@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Attributes;
@@ -22,12 +22,14 @@ namespace AbilitySystem.Runtime.AttributeSets
         private IAbilitySystem _owner;
         private Dictionary<Type, AttributeSet> _attributeSets;
         private Dictionary<string, AttributeAggregator> _attributeAggregators;
+        private Dictionary<string, Attribute> _attributeFullNameCache;
 
         public AttributeSetManager(IAbilitySystem owner)
         {
             _owner = owner;
             _attributeSets = new Dictionary<Type, AttributeSet>();
             _attributeAggregators = new Dictionary<string, AttributeAggregator>();
+            _attributeFullNameCache = new Dictionary<string, Attribute>();
         }
 
         public void Reset()
@@ -52,6 +54,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public void AddAttributeSet(Type type, AttributeSet attributeSet)
         {
+            attributeSet.InitializeAttributes();
             _attributeSets[type] = attributeSet;
             foreach (var attribute in attributeSet.GetAllAttributes())
             {
@@ -60,6 +63,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                 var aggregator = new AttributeAggregator(attribute, _owner);
                 aggregator.Enable();
                 _attributeAggregators.Add(attribute.GetName(), aggregator);
+                _attributeFullNameCache.Add(attribute.GetFullName(), attribute);
             }
         }
 
@@ -126,38 +130,44 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public void ApplyInstantEffectModifiers(Effect instantEffect)
         {
-            foreach (var modifier in instantEffect.Definition.Modifiers)
+            if (instantEffect.Definition.Modifiers != null)
             {
-                var splits = modifier.AttributeName.Split(".");
-                var attributeSet = splits[0];
-                var attributeName = splits[1];
-
-                var attribute = GetAttribute(attributeSet, attributeName);
-                if (attribute == null) continue;
-                var magnitude = modifier.Calculate(instantEffect);
-                var baseValue = attribute.BaseValue;
-                switch (modifier.Operation)
+                foreach (var modifier in instantEffect.Definition.Modifiers)
                 {
-                    case EffectOperation.Additive:
-                        baseValue += magnitude;
-                        break;
-                    case EffectOperation.Subtractive:
-                        baseValue -= magnitude;
-                        break;
-                    case EffectOperation.Multiplicative:
-                        baseValue *= magnitude;
-                        break;
-                    case EffectOperation.Divisive:
-                        baseValue /= magnitude;
-                        break;
-                    case EffectOperation.Override:
-                        baseValue = magnitude;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    if (!_attributeFullNameCache.TryGetValue(modifier.AttributeName, out var attribute)) continue;
+                    
+                    var magnitude = modifier.Calculate(instantEffect);
+                    var baseValue = attribute.BaseValue;
+                    switch (modifier.Operation)
+                    {
+                        case EffectOperation.Additive:
+                            baseValue += magnitude;
+                            break;
+                        case EffectOperation.Subtractive:
+                            baseValue -= magnitude;
+                            break;
+                        case EffectOperation.Multiplicative:
+                            baseValue *= magnitude;
+                            break;
+                        case EffectOperation.Divisive:
+                            baseValue /= magnitude;
+                            break;
+                        case EffectOperation.Override:
+                            baseValue = magnitude;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    attribute.SetBaseValue(baseValue);
                 }
-                Debug.Log("ApplyInstantEffectModifiers");
-                attribute.SetBaseValue(baseValue);
+            }
+
+            if (instantEffect.Definition.Executions != null)
+            {
+                foreach (var execution in instantEffect.Definition.Executions)
+                {
+                    execution?.Execute(instantEffect);
+                }
             }
         }
 

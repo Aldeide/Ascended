@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Modifiers;
@@ -62,6 +62,9 @@ namespace AbilitySystem.Runtime.Effects
         [Title("Modifiers")]
         [SerializeReference]
         public Modifier[] Modifiers;
+        
+        [Space] [ShowInInspector] [Title("Execution Calculations")]
+        public AbilitySystem.Runtime.Calculations.ExecutionCalculation[] Executions;
         
         [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
         public CueDefinition[] Cues;
