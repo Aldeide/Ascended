@@ -63,6 +63,9 @@ namespace AbilitySystem.Runtime.Attributes
         {
             _owner.EffectManager.OnEffectAdded += ProcessEffectAdded;
             _owner.EffectManager.OnEffectRemoved += ProcessEffectRemoved;
+            _owner.EffectManager.OnEffectSuspended += ProcessEffectRemoved;
+            _owner.EffectManager.OnEffectResumed += ProcessEffectAdded;
+            _owner.EffectManager.OnEffectRetracted += ProcessEffectRemoved;
             _attribute.OnAttributeBaseValueChanged += HandleBaseValueChanged;
         }
 
@@ -70,6 +73,9 @@ namespace AbilitySystem.Runtime.Attributes
         {
             _owner.EffectManager.OnEffectAdded -= ProcessEffectAdded;
             _owner.EffectManager.OnEffectRemoved -= ProcessEffectRemoved;
+            _owner.EffectManager.OnEffectSuspended -= ProcessEffectRemoved;
+            _owner.EffectManager.OnEffectResumed -= ProcessEffectAdded;
+            _owner.EffectManager.OnEffectRetracted -= ProcessEffectRemoved;
             _attribute.OnAttributeBaseValueChanged -= HandleBaseValueChanged;
         }
 
@@ -101,6 +107,10 @@ namespace AbilitySystem.Runtime.Attributes
 
         private void BuildModifierCache()
         {
+            foreach (var item in _modifierCache)
+            {
+                UnregisterDynamicDependencies(item.Effect, item.Modifier);
+            }
             _modifierCache.Clear();
             var activeEffects = _owner.EffectManager.GetActiveEffects();
             foreach (var effect in activeEffects)
@@ -111,6 +121,10 @@ namespace AbilitySystem.Runtime.Attributes
         
         private void RemoveModifiersFromEffectCache(Effect activeEffect)
         {
+            foreach (var cacheItem in _modifierCache.Where(x => x.Effect == activeEffect).ToList())
+            {
+                UnregisterDynamicDependencies(cacheItem.Effect, cacheItem.Modifier);
+            }
             _modifierCache.RemoveAll(x => x.Effect == activeEffect);
         }
 
@@ -123,6 +137,7 @@ namespace AbilitySystem.Runtime.Attributes
                 if (modifier.AttributeName == _attribute.GetFullName())
                 {
                     _modifierCache.Add((activeEffect, modifier));
+                    RegisterDynamicDependencies(activeEffect, modifier);
                 }
             }
         }
@@ -137,6 +152,29 @@ namespace AbilitySystem.Runtime.Attributes
         {
             var newValue = CalculateCurrentValue();
             _attribute.SetCurrentValue(newValue);
+        }
+
+        private void OnDependencyChanged(Attribute attribute, float old, float newValue)
+        {
+            UpdateCurrentValue();
+        }
+
+        private void RegisterDynamicDependencies(Effect effect, Modifier modifier)
+        {
+            if (modifier is IDynamicDependency dependencyModifier)
+            {
+                var attr = dependencyModifier.GetDynamicDependency(effect);
+                if (attr != null) attr.OnAttributeCurrentValueChanged += OnDependencyChanged;
+            }
+        }
+        
+        private void UnregisterDynamicDependencies(Effect effect, Modifier modifier)
+        {
+            if (modifier is IDynamicDependency dependencyModifier)
+            {
+                var attr = dependencyModifier.GetDynamicDependency(effect);
+                if (attr != null) attr.OnAttributeCurrentValueChanged -= OnDependencyChanged;
+            }
         }
 
         private float CalculateCurrentValue()

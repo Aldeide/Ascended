@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
@@ -18,13 +18,16 @@ namespace AbilitySystem.Runtime.Tags
         public Dictionary<Tag, List<Ability>> AbilityTags = new();
         private IAbilitySystem _owner;
 
-        private event Action OnTagsChanged;
+        public event Action OnTagsChanged;
 
         public GameplayTagManager(IAbilitySystem owner)
         {
             _owner = owner;
             _owner.EffectManager.OnEffectAdded += RefreshTags;
             _owner.EffectManager.OnEffectRemoved += RefreshTags;
+            _owner.EffectManager.OnEffectSuspended += RefreshTags;
+            _owner.EffectManager.OnEffectResumed += RefreshTags;
+            _owner.EffectManager.OnEffectRetracted += RefreshTags;
         }
 
         public void RefreshTags(Effect e)
