@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities.AbilityActivation;
 using AbilitySystem.Runtime.Abilities.Cooldowns;
@@ -189,7 +189,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var cue in Definition.ActivationCues)
             {
-                Owner.PlayCue(cue);
+                Owner.PlayCue(cue, IsPredicted());
             }
         }
 

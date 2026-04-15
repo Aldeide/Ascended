@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
@@ -64,17 +64,17 @@ namespace AbilitySystem.Runtime.Core
             return Component.HasAuthority;
         }
 
-        public void PlayCue(CueDefinition cue)
+        public void PlayCue(CueDefinition cue, bool isPredicted = false)
         {
             var test = new CueData();
             test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
             Debug.Log("Tag:" + cue.CueTag);
-            Component.ObserversPlayCueRpc(cue.CueTag.Name, test);
+            Component.ObserversPlayCueRpc(cue.CueTag.Name, test, isPredicted);
         }
 
-        public void PlayCue(CueDefinition cue, CueData data)
+        public void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false)
         {
-            Component.ObserversPlayCueWithDataRpc(cue.CueTag.Name, data);
+            Component.ObserversPlayCueWithDataRpc(cue.CueTag.Name, data, isPredicted);
         }
 
         public void AddCue(CueDefinition cue, CueData data)

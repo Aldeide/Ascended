@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
@@ -22,6 +22,34 @@ namespace AbilitySystem.Scripts
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
         
+        public struct AttributeSyncData : INetworkSerializable
+        {
+            public string AttributeName;
+            public float BaseValue;
+            public float CurrentValue;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref AttributeName);
+                serializer.SerializeValue(ref BaseValue);
+                serializer.SerializeValue(ref CurrentValue);
+            }
+        }
+
+        public struct EffectSyncData : INetworkSerializable
+        {
+            public string EffectName;
+            public float ActivationTime;
+            public ulong SourceId;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref EffectName);
+                serializer.SerializeValue(ref ActivationTime);
+                serializer.SerializeValue(ref SourceId);
+            }
+        }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -49,13 +77,66 @@ namespace AbilitySystem.Scripts
             {
                 Send = new ClientRpcSendParams { TargetClientIds = new[] { clientId } }
             };
-            // Send all currently active durational cues to the new client.
-            foreach (var cue in AbilitySystem.CueManager.GetActiveCues())
+
+            // Sync Cues
+            var activeCues = AbilitySystem.CueManager.GetActiveCues();
+            if (activeCues.Count > 0)
             {
-                // TODO: Figure out if we can batch into a single RPC.
-                AddCuesClientRpc(cue.Key, cue.Value, clientRpcParams);
+                var cueTags = new Tag[activeCues.Count];
+                var cueDatas = new CueData[activeCues.Count];
+                int i = 0;
+                foreach (var cue in activeCues)
+                {
+                    cueTags[i] = cue.Key;
+                    cueDatas[i] = cue.Value;
+                    i++;
+                }
+                AddCuesBatchClientRpc(cueTags, cueDatas, clientRpcParams);
             }
-            // TODO: sync attributes and effects.
+
+            // Sync Attributes
+            var snapshot = AbilitySystem.AttributeSetManager.Snapshot();
+            if (snapshot.Count > 0)
+            {
+                var attributeSyncData = new AttributeSyncData[snapshot.Count];
+                int j = 0;
+                foreach (var kvp in snapshot)
+                {
+                    attributeSyncData[j] = new AttributeSyncData
+                    {
+                        AttributeName = kvp.Key,
+                        BaseValue = kvp.Value.BaseValue,
+                        CurrentValue = kvp.Value.CurrentValue
+                    };
+                    j++;
+                }
+                SyncAttributesClientRpc(attributeSyncData, clientRpcParams);
+            }
+
+            // Sync Effects
+            var activeEffects = AbilitySystem.EffectManager.GetActiveEffects();
+            if (activeEffects.Count > 0)
+            {
+                var effectSyncData = new EffectSyncData[activeEffects.Count];
+                for (int k = 0; k < activeEffects.Count; k++)
+                {
+                    var effect = activeEffects[k];
+                    var data = new EffectSyncData
+                    {
+                        EffectName = effect.Definition.name,
+                        ActivationTime = effect.ActivationTime
+                    };
+                    
+                    var sourceAsc = effect.Source as AbilitySystemManager;
+                    if (sourceAsc != null && sourceAsc.Component != null)
+                        data.SourceId = sourceAsc.Component.NetworkObjectId;
+                    else
+                        data.SourceId = NetworkObjectId;
+                        
+                    effectSyncData[k] = data;
+                }
+                SyncEffectsClientRpc(effectSyncData, clientRpcParams);
+            }
         }
 
         public void Initialise()
@@ -165,12 +246,15 @@ namespace AbilitySystem.Scripts
         {
             if (IsServer && !IsHost)
             {
+                var sourceAsc = effect.Source as AbilitySystemManager;
+                ulong sourceId = sourceAsc != null && sourceAsc.Component != null ? sourceAsc.Component.NetworkObjectId : NetworkObjectId;
+
                 if (effect.PredictionKey.IsValidKey())
                 {
-                    NotifyOwnerEffectAddedRpc(effect.PredictionKey, effect.Definition.name, effect.ActivationTime);
+                    NotifyOwnerEffectAddedRpc(effect.PredictionKey, effect.Definition.name, effect.ActivationTime, sourceId);
                     return;
                 }
-                NotifyOwnerEffectAddedRpc(effect.Definition.name, effect.ActivationTime);
+                NotifyOwnerEffectAddedRpc(effect.Definition.name, effect.ActivationTime, sourceId);
             }
         }
         
@@ -183,23 +267,41 @@ namespace AbilitySystem.Scripts
         }
 
         [Rpc(SendTo.Owner)]
-        public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime)
+        public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime, ulong sourceId)
         {
             if (IsServer) return;
             var effectDefinition = DataLibrary.Instance.GetEffectByName(effectName);
-            // TODO: find an identifier to identify the abilitysystem and source player.
-            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            
+            IAbilitySystem source = AbilitySystem;
+            if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(sourceId, out var networkObj))
+            {
+                if (networkObj.TryGetComponent<AbilitySystemComponent>(out var asc))
+                {
+                    source = asc.AbilitySystem;
+                }
+            }
+
+            var effect = effectDefinition.ToEffect(source, AbilitySystem);
             effect.ActivationTime = applicationTime;
             AbilitySystem.EffectManager.AddEffectFromServer(effect);
         }
         
         [Rpc(SendTo.Owner)]
-        public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime)
+        public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime, ulong sourceId)
         {
             if (IsServer) return;
             var effectDefinition = DataLibrary.Instance.GetEffectByName(effectName);
-            // TODO: find an identifier to identify the abilitysystem and source player.
-            var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
+            
+            IAbilitySystem source = AbilitySystem;
+            if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(sourceId, out var networkObj))
+            {
+                if (networkObj.TryGetComponent<AbilitySystemComponent>(out var asc))
+                {
+                    source = asc.AbilitySystem;
+                }
+            }
+            
+            var effect = effectDefinition.ToEffect(source, AbilitySystem);
             effect.ActivationTime = applicationTime;
             AbilitySystem.EffectManager.ReconcilePredictedEffect(key);
         }
@@ -210,19 +312,19 @@ namespace AbilitySystem.Scripts
             AbilitySystem.EffectManager.RemoveEffect(effectName);
         }
 
-        // TODO: only send to observers if cue is predicted.
         [Rpc(SendTo.Everyone)]
-        public void ObserversPlayCueRpc(string cueTag, CueData data)
+        public void ObserversPlayCueRpc(string cueTag, CueData data, bool isPredicted = false)
         {
+            if (isPredicted && IsOwner && !IsServer) return;
             var gameplayTag = new Tag(cueTag);
             AbilitySystem.CueManager.OnCueReceived(gameplayTag, CueAction.Execute, data);
             _cueManagerComponent.PlayCue(cueTag);
         }
         
-        // TODO: only send to observers if cue is predicted.
         [Rpc(SendTo.Everyone)]
-        public void ObserversPlayCueWithDataRpc(string cueTag, CueData data)
+        public void ObserversPlayCueWithDataRpc(string cueTag, CueData data, bool isPredicted = false)
         {
+            if (isPredicted && IsOwner && !IsServer) return;
             _cueManagerComponent.PlayCue(cueTag, data);
         }
         
@@ -237,6 +339,53 @@ namespace AbilitySystem.Scripts
         {
             var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
             AbilitySystem.CueManager.AddCue(cueDefinition, cueData);
+        }
+
+        [ClientRpc]
+        public void AddCuesBatchClientRpc(Tag[] cueTags, CueData[] cueDatas, ClientRpcParams clientRpcParams = default)
+        {
+            for (int i = 0; i < cueTags.Length; i++)
+            {
+                var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTags[i]);
+                AbilitySystem.CueManager.AddCue(cueDefinition, cueDatas[i]);
+            }
+        }
+
+        [ClientRpc]
+        public void SyncAttributesClientRpc(AttributeSyncData[] syncData, ClientRpcParams clientRpcParams = default)
+        {
+            foreach (var data in syncData)
+            {
+                var attribute = AbilitySystem.AttributeSetManager.GetAttribute(data.AttributeName);
+                if (attribute != null)
+                {
+                    attribute.SetBaseValue(data.BaseValue);
+                    attribute.SetCurrentValue(data.CurrentValue);
+                }
+            }
+        }
+
+        [ClientRpc]
+        public void SyncEffectsClientRpc(EffectSyncData[] syncData, ClientRpcParams clientRpcParams = default)
+        {
+            foreach (var data in syncData)
+            {
+                var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
+                if (effectDefinition == null) continue;
+                
+                IAbilitySystem source = AbilitySystem;
+                if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(data.SourceId, out var networkObj))
+                {
+                    if (networkObj.TryGetComponent<AbilitySystemComponent>(out var asc))
+                    {
+                        source = asc.AbilitySystem;
+                    }
+                }
+                
+                var effect = effectDefinition.ToEffect(source, AbilitySystem);
+                effect.ActivationTime = data.ActivationTime;
+                AbilitySystem.EffectManager.AddEffectFromServer(effect);
+            }
         }
 
         [Rpc(SendTo.NotServer)]

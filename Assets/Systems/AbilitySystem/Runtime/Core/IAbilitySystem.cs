@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Cues;
@@ -32,8 +32,8 @@ namespace AbilitySystem.Runtime.Core
         public bool IsHost();
 
         public bool HasAuthority();
-        public void PlayCue(CueDefinition cue);
-        public void PlayCue(CueDefinition cue, CueData data);
+        public void PlayCue(CueDefinition cue, bool isPredicted = false);
+        public void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false);
 
         public void Reset();
     }
