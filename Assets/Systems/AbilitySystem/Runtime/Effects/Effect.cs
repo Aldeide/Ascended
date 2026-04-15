@@ -20,8 +20,8 @@ namespace AbilitySystem.Runtime.Effects
         public IAbilitySystem Owner { get; private set; }
         public IAbilitySystem Source { get; private set; }
 
-        public Dictionary<string, AttributeValue> OwnerAttributeSnapshot { get; private set; }
-        public Dictionary<string, AttributeValue> SourceAttributeSnapshot { get; private set; }
+        public Dictionary<string, float> OwnerCapturedAttributes { get; private set; } = new();
+        public Dictionary<string, float> SourceCapturedAttributes { get; private set; } = new();
         public Effect PeriodicEffect { get; private set; }
         public PredictionKey PredictionKey { get; set; }
         public Guid Guid;
@@ -50,10 +50,37 @@ namespace AbilitySystem.Runtime.Effects
         {
             if (IsActive) return;
             ActivationTime = Owner.GetTime();
-            OwnerAttributeSnapshot = Owner.AttributeSetManager.Snapshot();
-            SourceAttributeSnapshot = Source.AttributeSetManager.Snapshot();
+            if (Definition.Modifiers != null)
+            {
+                foreach (var modifier in Definition.Modifiers)
+                {
+                    modifier.CaptureAttributes(this);
+                }
+            }
             IsActive = true;
+            if (Definition.OngoingRequiredTags != null && Definition.OngoingRequiredTags.Length > 0)
+            {
+                Owner.TagManager.OnTagsChanged += EvaluateOngoingTags;
+                EvaluateOngoingTags();
+            }
             PlayApplicationCues();
+        }
+
+        public void EvaluateOngoingTags()
+        {
+            if (Definition.OngoingRequiredTags == null || Definition.OngoingRequiredTags.Length == 0) return;
+            var hasTags = Owner.TagManager.HasAllTags(Definition.OngoingRequiredTags);
+            if (IsActive == hasTags) return;
+            
+            IsActive = hasTags;
+            if (!IsActive) 
+            {
+               Owner.EffectManager.OnEffectSuspended?.Invoke(this); 
+            }
+            else 
+            {
+               Owner.EffectManager.OnEffectResumed?.Invoke(this); 
+            }
         }
 
         public void PlayApplicationCues()
@@ -79,6 +106,11 @@ namespace AbilitySystem.Runtime.Effects
 
         public void RemoveSelf()
         {
+            if (Definition.OngoingRequiredTags != null && Definition.OngoingRequiredTags.Length > 0)
+            {
+                Owner.TagManager.OnTagsChanged -= EvaluateOngoingTags;
+            }
+
             if (Definition.EffectStack.EffectStackType != EffectStackType.None && NumStacks > 1)
             {
                 if (Definition.EffectStack.EffectStackExpirationPolicy ==

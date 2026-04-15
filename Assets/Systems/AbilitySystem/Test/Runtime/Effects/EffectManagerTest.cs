@@ -181,5 +181,98 @@ namespace AbilitySystem.Test.Runtime.Effects
             
             Assert.IsTrue(eventFired);
         }
+
+        [Test]
+        public void EffectManagerTest_RemoveGameplayEffectsWithTags_RemovesMatchingEffects()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
+
+            // Poison effect
+            var poisonAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            var poisonTag = new Tag("Debuff.Poison");
+            poisonAsset.AssetTags = new Tag[] { poisonTag };
+            var poisonEffect = poisonAsset.ToEffect(owner.Object, owner.Object);
+            effectManager.AddEffect(poisonEffect);
+            
+            Assert.AreEqual(1, effectManager.Effects.Count);
+            
+            // Antidote effect
+            var antidoteAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            antidoteAsset.RemoveGameplayEffectsWithTags = new Tag[] { poisonTag };
+            var antidoteEffect = antidoteAsset.ToEffect(owner.Object, owner.Object);
+            effectManager.AddEffect(antidoteEffect);
+            
+            // Antidote removes poison and adds itself
+            Assert.AreEqual(1, effectManager.Effects.Count);
+            Assert.AreEqual(antidoteEffect, effectManager.Effects[0]);
+        }
+
+        [Test]
+        public void EffectManagerTest_OngoingRequiredTags_SuspendsAndResumesEffect()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            
+            // Initialize dependencies needed for effects
+            var attributeSystem = new Mock<AttributeSetManager>(owner.Object);
+            owner.Setup(mock => mock.AttributeSetManager).Returns(attributeSystem.Object);
+            var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
+
+            var requirementTag = new Tag("State.Stunned");
+            tagManager.AddTag(requirementTag); // Apply the tag manually
+            
+            var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectAsset.OngoingRequiredTags = new Tag[] { requirementTag };
+            var effect = effectAsset.ToEffect(owner.Object, owner.Object);
+            
+            effectManager.AddEffect(effect);
+            effect.Activate();
+            
+            Assert.IsTrue(effect.IsActive);
+            
+            var removalInvoked = false;
+            effectManager.OnEffectSuspended += (e) => removalInvoked = true;
+            
+            tagManager.RemoveTag(requirementTag);
+            
+            Assert.IsFalse(effect.IsActive);
+            Assert.IsTrue(removalInvoked);
+            
+            var addInvoked = false;
+            effectManager.OnEffectResumed += (e) => addInvoked = true;
+            
+            tagManager.AddTag(requirementTag);
+            
+            Assert.IsTrue(effect.IsActive);
+            Assert.IsTrue(addInvoked);
+        }
+
+        [Test]
+        public void EffectManagerTest_RetractPredictedEffect_FiresOnEffectRemoved()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            
+            var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            var effect = effectAsset.ToEffect(owner.Object, owner.Object);
+            var predictionKey = new AbilitySystem.Runtime.Networking.PredictionKey() { currentKey = 1 };
+            
+            effectManager.AddPredictedEffect(predictionKey, effect);
+            
+            var removalInvoked = false;
+            effectManager.OnEffectRetracted += (e) => removalInvoked = true;
+            
+            effectManager.RetractPredictedEffect(predictionKey);
+            
+            Assert.IsTrue(removalInvoked);
+            Assert.AreEqual(0, effectManager.PredictedEffects.Count);
+        }
     }
 }

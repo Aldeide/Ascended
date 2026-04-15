@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
 using Sirenix.OdinInspector;
@@ -20,5 +20,6 @@ namespace AbilitySystem.Runtime.Modifiers
         [FormerlySerializedAs("operation")] public EffectOperation Operation;
         
         public abstract float Calculate(Effect effect);
+        public virtual void CaptureAttributes(Effect effect) {}
     }
 }

@@ -15,6 +15,9 @@ namespace AbilitySystem.Runtime.Effects
 
         public Action<Effect> OnEffectAdded;
         public Action<Effect> OnEffectRemoved;
+        public Action<Effect> OnEffectSuspended;
+        public Action<Effect> OnEffectResumed;
+        public Action<Effect> OnEffectRetracted;
         public Action<Effect, int, int> OnEffectStacksChanged;
         
         private readonly List<Effect> _effectSnapshot;
@@ -59,6 +62,20 @@ namespace AbilitySystem.Runtime.Effects
             {
                 return EffectApplicationResult.ApplicationRequiredTagsFailure;
             }
+
+            if (effect.Definition.RemoveGameplayEffectsWithTags != null && effect.Definition.RemoveGameplayEffectsWithTags.Length > 0)
+            {
+                var effectsToRemove = Effects.Where(e => 
+                    (e.Definition.AssetTags != null && e.Definition.AssetTags.Intersect(effect.Definition.RemoveGameplayEffectsWithTags).Any()) ||
+                    (e.Definition.GrantedTags != null && e.Definition.GrantedTags.Intersect(effect.Definition.RemoveGameplayEffectsWithTags).Any())
+                ).ToList();
+
+                foreach (var e in effectsToRemove)
+                {
+                    RemoveEffect(e);
+                }
+            }
+
             // If that effect is already applied, check stacking behaviour.
             if (Effects.Exists(e => e.Definition.name == effect.Definition.name))
             {
@@ -136,7 +153,14 @@ namespace AbilitySystem.Runtime.Effects
 
         public void RetractPredictedEffect(PredictionKey predictionKey)
         {
-            PredictedEffects.Remove(predictionKey.currentKey);
+            if (PredictedEffects.TryGetValue(predictionKey.currentKey, out var retractedEffects))
+            {
+                foreach (var effect in retractedEffects)
+                {
+                    OnEffectRetracted?.Invoke(effect);
+                }
+                PredictedEffects.Remove(predictionKey.currentKey);
+            }
         }
 
         public Effect GetEffect(Tag assetTag)
