@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities;
 using GameplayTags.Runtime;
 using static AbilitySystem.Test.Utilities.AbilityUtilities;
 using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
@@ -142,6 +142,29 @@ namespace AbilitySystem.Test.Runtime.Abilities
             owner.Object.AbilityManager.EndAbility(abilityDefinition.UniqueName);
             
             Assert.IsFalse(owner.Object.AbilityManager.Abilities[abilityDefinition.UniqueName].IsActive);
+        }
+
+        [Test]
+        public void AbilityTests_ActivatePredictedAbility_PlaysCuesWithPredictionFlag()
+        {
+            var owner = CreateMockAbilitySystem();
+            var abilityDefinition = CreateInstantAbilityDefinition();
+            var cueAsset = UnityEngine.ScriptableObject.CreateInstance<AbilitySystem.Runtime.Cues.CueDefinition>();
+            abilityDefinition.ActivationCues = new[] { cueAsset };
+            abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
+            
+            owner.Setup(m => m.IsServer()).Returns(false);
+            owner.Setup(m => m.IsHost()).Returns(false);
+            owner.Setup(m => m.IsLocalClient()).Returns(true);
+            owner.Object.AbilityManager.GrantAbility(abilityDefinition);
+            
+            var key = new AbilitySystem.Runtime.Networking.PredictionKey { currentKey = 123 };
+            
+            var ability = owner.Object.AbilityManager.Abilities[abilityDefinition.UniqueName];
+            ability.TryActivateAbility(key, new AbilityData());
+            ability.PlayActivationCues();
+            
+            owner.Verify(m => m.PlayCue(cueAsset, true), Moq.Times.Once);
         }
     }
 }

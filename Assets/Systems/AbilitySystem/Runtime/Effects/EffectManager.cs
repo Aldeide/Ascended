@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
@@ -15,6 +15,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public Action<Effect> OnEffectAdded;
         public Action<Effect> OnEffectRemoved;
+        public Action<Effect, int, int> OnEffectStacksChanged;
         
         private readonly List<Effect> _effectSnapshot;
         
@@ -75,7 +76,17 @@ namespace AbilitySystem.Runtime.Effects
                     OnEffectAdded?.Invoke(effect);
                     return EffectApplicationResult.Success;
                 }
-                // TODO: aggregate by source.
+                
+                if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.AggregateBySource)
+                {
+                    var existingEffectFromSource = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name && e.Source == effect.Source);
+                    if (existingEffectFromSource != null)
+                    {
+                        existingEffectFromSource.AddStack();
+                        OnEffectAdded?.Invoke(effect);
+                        return EffectApplicationResult.Success;
+                    }
+                }
             }
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);

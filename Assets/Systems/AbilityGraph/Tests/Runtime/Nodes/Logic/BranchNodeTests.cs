@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AbilityGraph.Runtime.Nodes.Base;
@@ -16,8 +16,6 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
         private BranchNode _branchNode;
         private Mock<ExecutableNode> _truePathNodeMock;
         private Mock<ExecutableNode> _falsePathNodeMock;
-        private Mock<NodePort> _truePortMock;
-        private Mock<NodePort> _falsePortMock;
 
         [SetUp]
         public void Setup()
@@ -28,20 +26,18 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             _falsePathNodeMock = new Mock<ExecutableNode>();
 
             // Mock for the 'true' path
-            var trueEdgeMock = new Mock<SerializableEdge>();
-            trueEdgeMock.Setup(e => e.inputNode).Returns(_truePathNodeMock.Object);
+            var trueEdge = new SerializableEdge() { inputNode = _truePathNodeMock.Object };
 
-            _truePortMock = new Mock<NodePort>();
-            _truePortMock.Setup(p => p.fieldName).Returns(nameof(BranchNode.ExecutesIfTrue));
-            _truePortMock.Setup(p => p.GetEdges()).Returns(new[] { trueEdgeMock.Object }.ToList());
+            var truePort = (NodePort)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(NodePort));
+            truePort.fieldName = nameof(BranchNode.ExecutesIfTrue);
+            typeof(NodePort).GetField("edges", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(truePort, new List<SerializableEdge> { trueEdge });
 
             // Mock for the 'false' path
-            var falseEdgeMock = new Mock<SerializableEdge>();
-            falseEdgeMock.Setup(e => e.inputNode).Returns(_falsePathNodeMock.Object);
+            var falseEdge = new SerializableEdge() { inputNode = _falsePathNodeMock.Object };
             
-            _falsePortMock = new Mock<NodePort>();
-            _falsePortMock.Setup(p => p.fieldName).Returns(nameof(BranchNode.ExecutesIfFalse));
-            _falsePortMock.Setup(p => p.GetEdges()).Returns(new[] { falseEdgeMock.Object }.ToList());;
+            var falsePort = (NodePort)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(NodePort));
+            falsePort.fieldName = nameof(BranchNode.ExecutesIfFalse);
+            typeof(NodePort).GetField("edges", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(falsePort, new List<SerializableEdge> { falseEdge });
             var baseType = typeof(BaseNode);
             var outputPortsField = baseType.GetField("outputPorts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -49,7 +45,9 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             {
                 Assert.Fail("Could not find the 'outputPorts' field on BaseNode.");
             }
-            var portList = new List<NodePort> { _truePortMock.Object, _falsePortMock.Object };
+            var portList = new NodeOutputPortContainer(_branchNode);
+            portList.Add(truePort);
+            portList.Add(falsePort);
             
             outputPortsField.SetValue(_branchNode, portList);
         }

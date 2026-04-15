@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
@@ -106,6 +106,80 @@ namespace AbilitySystem.Test.Runtime.Effects
             effectManager.Tick();
 
             Assert.AreEqual(0, effectManager.Effects.Count);
+        }
+
+        [Test]
+        public void EffectManagerTest_AggregateBySource_StacksCorrectly()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
+            
+            var sourceA = new Mock<IAbilitySystem>();
+            var sourceB = new Mock<IAbilitySystem>();
+            
+            var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectAsset.name = "TestStackingEffect";
+            effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
+            effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
+            effectAsset.EffectStack = new EffectStack
+            {
+                EffectStackType = EffectStackType.AggregateBySource,
+                MaxStacks = 3
+            };
+            
+            var effectA1 = effectAsset.ToEffect(sourceA.Object, owner.Object);
+            var effectA2 = effectAsset.ToEffect(sourceA.Object, owner.Object);
+            var effectB1 = effectAsset.ToEffect(sourceB.Object, owner.Object);
+            
+            effectManager.AddEffect(effectA1);
+            effectManager.AddEffect(effectA2);
+            effectManager.AddEffect(effectB1);
+            
+            // Should be exactly 2 effect entries (one for source A, one for source B)
+            Assert.AreEqual(2, effectManager.Effects.Count);
+            // Effect from SourceA should have 2 stacks
+            Assert.AreEqual(2, effectManager.Effects[0].NumStacks);
+            // Effect from SourceB should have 1 stack
+            Assert.AreEqual(1, effectManager.Effects[1].NumStacks);
+        }
+
+        [Test]
+        public void EffectManagerTest_OnEffectStacksChanged_FiresEvent()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var effectManager = new EffectManager(owner.Object);
+            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
+            
+            bool eventFired = false;
+            effectManager.OnEffectStacksChanged += (eff, oldStacks, newStacks) =>
+            {
+                if (oldStacks == 1 && newStacks == 2)
+                    eventFired = true;
+            };
+
+            var tagManager = new GameplayTagManager(owner.Object);
+            owner.Setup(mock => mock.TagManager).Returns(tagManager);
+            
+            var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectAsset.name = "TestStackingEventEffect";
+            effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
+            effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
+            effectAsset.EffectStack = new EffectStack
+            {
+                EffectStackType = EffectStackType.AggregateByTarget,
+                MaxStacks = 5
+            };
+            
+            var effect1 = effectAsset.ToEffect(owner.Object, owner.Object);
+            var effect2 = effectAsset.ToEffect(owner.Object, owner.Object);
+            
+            effectManager.AddEffect(effect1);
+            effectManager.AddEffect(effect2);
+            
+            Assert.IsTrue(eventFired);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -61,7 +61,7 @@ namespace AbilitySystem.Runtime.Effects
             if (Definition.Cues == null) return;
             foreach (var cue in Definition.Cues)
             {
-                Owner.PlayCue(cue);
+                Owner.PlayCue(cue, IsPredicted());
             }
         }
 
@@ -84,10 +84,10 @@ namespace AbilitySystem.Runtime.Effects
                 if (Definition.EffectStack.EffectStackExpirationPolicy ==
                     EffectStackExpirationPolicy.RemoveSingleStackAndRefreshDuration)
                 {
+                    var oldStacks = NumStacks;
                     NumStacks -= 1;
                     RefreshDuration();
-                    // TODO: make a 'effect stacks changed' event.
-                    Owner.EffectManager.OnEffectRemoved?.Invoke(this);
+                    Owner.EffectManager.OnEffectStacksChanged?.Invoke(this, oldStacks, NumStacks);
                     return;
                 }
             }
@@ -111,6 +111,7 @@ namespace AbilitySystem.Runtime.Effects
         public void AddStack()
         {
             var maxStacks = Definition.EffectStack.MaxStacks;
+            var oldStacks = NumStacks;
             if (NumStacks < maxStacks)
             {
                 NumStacks++;
@@ -120,7 +121,13 @@ namespace AbilitySystem.Runtime.Effects
             {
                 RefreshDuration();
             }
-            // TODO: refresh period for ticking effects.
+            
+            _effectTicker?.ResetPeriod();
+            
+            if (oldStacks != NumStacks)
+            {
+                Owner.EffectManager.OnEffectStacksChanged?.Invoke(this, oldStacks, NumStacks);
+            }
         }
 
         public void RefreshDuration()
