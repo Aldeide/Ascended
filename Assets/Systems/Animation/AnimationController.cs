@@ -61,6 +61,20 @@ namespace Systems.Animation
         }
 
         /// <summary>
+        /// Updates the movement parameters in the Animator component based on the specified X and Y values with smoothing.
+        /// </summary>
+        /// <param name="x">The horizontal movement input value.</param>
+        /// <param name="y">The vertical movement input value.</param>
+        /// <param name="dampTime">The time allowed to parameter to reach the value.</param>
+        /// <param name="deltaTime">The current frame deltaTime.</param>
+        public void SetMovement(float x, float y, float dampTime, float deltaTime)
+        {
+            SetIsMoving(Mathf.Abs(x) + Mathf.Abs(y) >= 0.001);
+            _animator.SetFloat(MovementX, x, dampTime, deltaTime);
+            _animator.SetFloat(MovementY, y, dampTime, deltaTime);
+        }
+
+        /// <summary>
         /// Stops all movement animations in the Animator component by resetting movement parameters and setting the movement state to stationary.
         /// </summary>
         public void StopMovement()

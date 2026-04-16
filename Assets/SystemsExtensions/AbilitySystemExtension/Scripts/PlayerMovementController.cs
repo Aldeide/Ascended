@@ -121,12 +121,8 @@ namespace AbilitySystemExtension.Scripts
                 _animationController.SetIsMoving(true);
                 if (_isAiming)
                 {
-                    // TODO: add animation transition smotthing.
                     Vector3 localMovementDirection = transform.InverseTransformDirection(MovementDirection);
-                    _animationController.SetMovement(localMovementDirection.x, localMovementDirection.z);
-
-                    //_animator.SetFloat(MovementX, _movementInput.x, 0.2f, Time.deltaTime);
-                    //_animator.SetFloat(MovementY, _movementInput.z, 0.2f, Time.deltaTime);
+                    _animationController.SetMovement(localMovementDirection.x, localMovementDirection.z, 0.2f, Time.deltaTime);
                 }
                 else
                 {
