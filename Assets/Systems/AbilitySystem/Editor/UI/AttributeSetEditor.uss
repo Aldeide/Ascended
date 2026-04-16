@@ -1,0 +1,58 @@
+.main-container {
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.header {
+    font-size: 20px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: 20px;
+}
+
+.content-container {
+    flex-direction: row;
+    flex-grow: 1;
+    margin-bottom: 10px;
+}
+
+.pane {
+    flex-grow: 1;
+    padding: 5px;
+    border-width: 1px;
+    border-color: #333;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+.left-pane {
+}
+
+.right-pane {
+    flex-grow: 1.5;
+}
+
+.pane-header {
+    font-size: 16px;
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+    -unity-text-align: middle-center;
+}
+
+.input-row {
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.list-view {
+    flex-grow: 1;
+    border-width: 1px;
+    border-color: #222;
+}
+
+.generate-button {
+    height: 40px;
+    margin-top: 10px;
+    font-size: 14px;
+    -unity-font-style: bold;
+}
