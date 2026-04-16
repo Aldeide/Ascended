@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement class="main-container">
+        <ui:Label text="Attribute Set Editor" class="header" />
+        
+        <ui:VisualElement class="content-container">
+            <!-- Left Pane: Attribute Sets -->
+            <ui:VisualElement class="pane left-pane">
+                <ui:Label text="Attribute Sets" class="pane-header" />
+                <ui:VisualElement class="input-row">
+                    <ui:TextField name="new-set-textfield" placeholder-text="New Set Name..." style="flex-grow: 1;" />
+                    <ui:Button name="add-set-button" text="+" />
+                </ui:VisualElement>
+                <ui:ListView name="set-list-view" class="list-view" />
+                <ui:Button name="delete-set-button" text="Delete Selected Set" />
+            </ui:VisualElement>
+
+            <!-- Right Pane: Attributes -->
+            <ui:VisualElement class="pane right-pane">
+                <ui:Label name="selected-set-label" text="Select a set..." class="pane-header" />
+                <ui:VisualElement class="input-row">
+                    <ui:TextField name="new-attribute-textfield" placeholder-text="New Attribute Name..." style="flex-grow: 1;" />
+                    <ui:Button name="add-attribute-button" text="+" />
+                </ui:VisualElement>
+                <ui:ListView name="attribute-list-view" class="list-view" />
+                <ui:Button name="delete-attribute-button" text="Delete Selected Attribute" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:Button name="save-and-generate-button" text="Save and Generate Code" class="generate-button" />
+    </ui:VisualElement>
+</ui:UXML>
