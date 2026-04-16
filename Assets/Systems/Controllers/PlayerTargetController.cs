@@ -38,18 +38,6 @@ namespace Systems.Controllers
             UpdateTargetPosition();
         }
 
-        public void OnLook(InputAction.CallbackContext context)
-        {
-            // Since the rotation of the player isn't instantaneous, the target tends to move with the player even when
-            // no input is given. This is a problem when the player is looking at the target.
-            // TODO: Find a way to fix this so when don't have to update the target each frame.
-            /*
-            if (!IsLocalPlayer || context.phase != InputActionPhase.Performed)
-                return;
-            UpdateTargetPosition();
-            */
-        }
-
         private void UpdateTargetPosition()
         {
             if (!_camera || !Target) return;
