@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
@@ -22,7 +22,8 @@ namespace AbilitySystem.Runtime.Abilities
         private PredictionKey _predictionKey;
 
         public Action OnAbilityGranted;
-
+        public Action<string, PredictionKey, AbilityData> OnServerTryActivateAbilityRequested;
+        public Action<string> OnServerTryEndAbilityRequested;
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -104,7 +105,7 @@ namespace AbilitySystem.Runtime.Abilities
                 var success = ability.TryActivateAbility(key, data);
                 if (success)
                 {
-                    _owner.Component.ServerTryActivateAbilityRpc(name, key, data);
+                    OnServerTryActivateAbilityRequested?.Invoke(name, key, data);
                     return true;
                 }
 
@@ -129,7 +130,7 @@ namespace AbilitySystem.Runtime.Abilities
             ability?.TryEndAbility();
             if (_owner.IsLocalClient() && !_owner.IsHost())
             {
-                _owner.Component.ServerTryEndAbilityRpc(abilityName);
+                OnServerTryEndAbilityRequested?.Invoke(abilityName);
             }
         }
 

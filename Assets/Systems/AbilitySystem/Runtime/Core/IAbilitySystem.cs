@@ -12,7 +12,7 @@ namespace AbilitySystem.Runtime.Core
 {
     public interface IAbilitySystem
     {
-        public AbilitySystemComponent Component { get; set; }
+        public INetworkRole NetworkRole { get; set; }
         public GameplayTagManager TagManager { get; set; }
         public EffectManager EffectManager { get; set; }
         public AbilityManager AbilityManager { get; set; }
@@ -34,6 +34,7 @@ namespace AbilitySystem.Runtime.Core
         public bool HasAuthority();
         public void PlayCue(CueDefinition cue, bool isPredicted = false);
         public void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false);
+        public void PlayCue(string cueTag, CueData data, bool isPredicted = false);
 
         public void Reset();
     }

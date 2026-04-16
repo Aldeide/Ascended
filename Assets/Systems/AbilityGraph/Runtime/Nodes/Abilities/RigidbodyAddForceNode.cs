@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
 using GraphProcessor;
@@ -17,7 +17,7 @@ namespace AbilityGraph.Runtime.Nodes.Abilities
         public override void Initialise(Ability ability)
         {
             base.Initialise(ability);
-            _rigidbody = ability.Owner.Component.gameObject.GetComponent<Rigidbody>();
+            _rigidbody = ((Component)ability.Owner.NetworkRole)?.gameObject.GetComponent<Rigidbody>();
         }
     
         protected override void Process()

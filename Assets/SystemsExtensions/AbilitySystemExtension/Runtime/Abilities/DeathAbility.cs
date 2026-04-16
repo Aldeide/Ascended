@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using UnityEngine;
@@ -21,7 +21,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             {
                 var test = new CueData();
                 test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
-                Owner.Component.ObserversPlayCueRpc("Cue.Animation.State.Player.Death", test);
+                Owner.PlayCue("Cue.Animation.State.Player.Death", test, false);
             }
         }
 
@@ -33,7 +33,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
                 return;
             }
 
-            Owner.Component.transform.position = new Vector3(0, 0, 0);
+            if (Owner.NetworkRole != null) ((UnityEngine.Component)Owner.NetworkRole).transform.position = new Vector3(0, 0, 0);
             Owner.Reset();
             TryEndAbility();
         }

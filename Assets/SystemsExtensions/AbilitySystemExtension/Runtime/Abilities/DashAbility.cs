@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystemExtension.Scripts;
 using UnityEngine;
@@ -16,19 +16,19 @@ namespace AbilitySystemExtension.Runtime.Abilities
         
         public DashAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
-            _playerMovementController = Owner.Component.gameObject.GetComponent<PlayerMovementController>();
+            _playerMovementController = ((UnityEngine.Component)Owner.NetworkRole)?.gameObject.GetComponent<PlayerMovementController>();
         }
 
         protected override void ActivateAbility(AbilityData data)
         {
-            _startPosition = Owner.Component.transform.position;
+            _startPosition = ((UnityEngine.Component)Owner.NetworkRole).transform.position;
             if (_playerMovementController.MovementDirection.magnitude > 0.01f)
             {
                 _endPosition = _startPosition + _playerMovementController.MovementDirection.normalized * Distance;
             }
             else
             {
-                _endPosition = _startPosition + Owner.Component.transform.forward.normalized * Distance;
+                _endPosition = _startPosition + ((UnityEngine.Component)Owner.NetworkRole).transform.forward.normalized * Distance;
             }
             
             _startTime = Owner.GetTime();
@@ -43,7 +43,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
                 return;
             }
 
-            Owner.Component.transform.position =
+            ((UnityEngine.Component)Owner.NetworkRole).transform.position =
                 Vector3.Lerp(_startPosition, _endPosition, (Owner.GetTime() - _startTime) / Duration);
         }
 
