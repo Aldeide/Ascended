@@ -50,12 +50,12 @@ namespace Item.Runtime.Manager
 
         public void RemoveItem(IBaseItem item)
         {
-            throw new System.NotImplementedException();
+            Items.Remove(item);
         }
 
         public bool HasItem(IBaseItem item)
         {
-            throw new System.NotImplementedException();
+            return Items.Contains(item);
         }
 
         public bool HasItemQuantity(IBaseItem item, int quantity)

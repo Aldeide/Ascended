@@ -37,5 +37,45 @@ namespace Systems.Item.Tests
             
             mockReplicationManager.Verify(x => x.NotifyClientAddItem("BasicItem", 1), Times.Once);
         }
+
+        [Test]
+        public void InventoryTests_RemoveItem_ItemIsRemoved()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var mockReplicationManager = new Mock<IInventoryReplicationManager>();
+            mockReplicationManager.Setup(m => m.IsServer()).Returns(true);
+            var inventory = new InventoryManager(owner.Object, mockReplicationManager.Object);
+            var item = TestItems.BasicItem();
+
+            inventory.AddItem(item);
+            inventory.RemoveItem(item);
+
+            Assert.IsFalse(inventory.HasItem(item));
+        }
+
+        [Test]
+        public void InventoryTests_HasItem_ReturnsTrueWhenItemExists()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var mockReplicationManager = new Mock<IInventoryReplicationManager>();
+            mockReplicationManager.Setup(m => m.IsServer()).Returns(true);
+            var inventory = new InventoryManager(owner.Object, mockReplicationManager.Object);
+            var item = TestItems.BasicItem();
+
+            inventory.AddItem(item);
+
+            Assert.IsTrue(inventory.HasItem(item));
+        }
+
+        [Test]
+        public void InventoryTests_HasItem_ReturnsFalseWhenItemDoesNotExist()
+        {
+            var owner = new Mock<IAbilitySystem>();
+            var mockReplicationManager = new Mock<IInventoryReplicationManager>();
+            var inventory = new InventoryManager(owner.Object, mockReplicationManager.Object);
+            var item = TestItems.BasicItem();
+
+            Assert.IsFalse(inventory.HasItem(item));
+        }
     }
 }
