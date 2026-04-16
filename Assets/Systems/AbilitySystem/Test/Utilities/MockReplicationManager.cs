@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
@@ -10,6 +10,12 @@ namespace AbilitySystem.Test.Utilities
 {
     public class MockReplicationManager : IReplicationManager
     {
+        public Action<string, float> OnNotifyClientsAttributeBaseValueChanged { get; set; }
+        public Action<string, float, float> OnNotifyClientsAttributeCurrentValueChanged { get; set; }
+        public Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
+        public Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
+        public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
+
         public Action<Attribute, float, float> NotifyClientsAttributeBaseValueChangedCallback { get; set; }
 
         private IAbilitySystem _owner;

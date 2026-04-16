@@ -1,10 +1,11 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using System;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using UnityEngine;
+using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Runtime.Networking
 {
@@ -14,12 +15,16 @@ namespace AbilitySystem.Runtime.Networking
     public class ReplicationManager : IReplicationManager
     {
         private readonly IAbilitySystem _owner;
-        private readonly AbilitySystemComponent _networkBehaviour;
+
+        public Action<string, float> OnNotifyClientsAttributeBaseValueChanged { get; set; }
+        public Action<string, float, float> OnNotifyClientsAttributeCurrentValueChanged { get; set; }
+        public Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
+        public Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
+        public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
 
         public ReplicationManager(IAbilitySystem owner)
         {
             _owner = owner;
-            _networkBehaviour = owner.Component;
 
             _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
             _owner.AttributeSetManager.OnAnyAttributeCurrentValueChanged +=
@@ -29,7 +34,7 @@ namespace AbilitySystem.Runtime.Networking
         public void NotifyClientsAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
             if (!_owner.IsServer()) return;
-            _networkBehaviour.NotifyClientsBaseValueChangedRpc(attribute.GetName(), newValue);
+            OnNotifyClientsAttributeBaseValueChanged?.Invoke(attribute.GetName(), newValue);
         }
 
         public void OnAttributeBaseValueChanged(string attributeName, float newValue)
@@ -40,7 +45,7 @@ namespace AbilitySystem.Runtime.Networking
         public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
         {
             if (!_owner.IsServer()) return;
-            _networkBehaviour.NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
+            OnNotifyClientsAttributeCurrentValueChanged?.Invoke(attribute.GetName(), oldValue, newValue);
         }
 
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
@@ -50,7 +55,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsPlayCue(Tag cueTag, CueAction cueAction, CueData cueData)
         {
-            _networkBehaviour.NotifyClientsPlayCueRpc(cueTag, cueAction, cueData);
+            OnNotifyClientsPlayCue?.Invoke(cueTag, cueAction, cueData);
         }
 
         public void ReceivedPlayCue(Tag cueTag, CueAction cueAction, CueData cueData)
@@ -62,12 +67,12 @@ namespace AbilitySystem.Runtime.Networking
         // Abilities.
         public void NotifyClientAbilityGranted(AbilityDefinition abilityDefinition)
         {
-            _networkBehaviour.NotifyClientAbilityGrantedRpc(abilityDefinition.UniqueName);
+            OnNotifyClientAbilityGranted?.Invoke(abilityDefinition);
         }
         
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
-            _networkBehaviour.NotifyClientAbilityRemovedRpc(abilityDefinition.UniqueName);
+            OnNotifyClientAbilityRemoved?.Invoke(abilityDefinition);
         }
     }
 }

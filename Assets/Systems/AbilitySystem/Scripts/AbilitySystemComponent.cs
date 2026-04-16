@@ -14,13 +14,15 @@ using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Scripts
 {
-    public class AbilitySystemComponent : NetworkBehaviour
+    public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; private set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
+        
+        public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
         
         public struct AttributeSyncData : INetworkSerializable
         {
@@ -128,8 +130,8 @@ namespace AbilitySystem.Scripts
                     };
                     
                     var sourceAsc = effect.Source as AbilitySystemManager;
-                    if (sourceAsc != null && sourceAsc.Component != null)
-                        data.SourceId = sourceAsc.Component.NetworkObjectId;
+                    if (sourceAsc != null && sourceAsc.NetworkRole != null)
+                        data.SourceId = sourceAsc.NetworkRole.NetworkObjectId;
                     else
                         data.SourceId = NetworkObjectId;
                         
@@ -143,7 +145,19 @@ namespace AbilitySystem.Scripts
         {
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
-            AbilitySystem = new AbilitySystemManager(this);
+            var abilitySystemManager = new AbilitySystemManager();
+            abilitySystemManager.NetworkRole = this;
+            AbilitySystem = abilitySystemManager;
+
+            abilitySystemManager.ReplicationManager.OnNotifyClientsAttributeBaseValueChanged += (attr, val) => NotifyClientsBaseValueChangedRpc(attr, val);
+            abilitySystemManager.ReplicationManager.OnNotifyClientsAttributeCurrentValueChanged += (attr, old, val) => NotifyClientsCurrentValueChangedRpc(attr, old, val);
+            abilitySystemManager.ReplicationManager.OnNotifyClientsPlayCue += (tag, act, data) => NotifyClientsPlayCueRpc(tag, act, data);
+            abilitySystemManager.ReplicationManager.OnNotifyClientAbilityGranted += (def) => NotifyClientAbilityGrantedRpc(def.UniqueName);
+            abilitySystemManager.ReplicationManager.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
+            
+            abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
+            abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
+            abilitySystemManager.OnPlayCueRequested += (tag, data, pred) => ObserversPlayCueWithDataRpc(tag, data, pred);
             foreach (var attributeSet in Definition.AttributeSets)
             {
                 var type = ReflectionUtil.GetAttributeSetType(attributeSet);
@@ -247,7 +261,7 @@ namespace AbilitySystem.Scripts
             if (IsServer && !IsHost)
             {
                 var sourceAsc = effect.Source as AbilitySystemManager;
-                ulong sourceId = sourceAsc != null && sourceAsc.Component != null ? sourceAsc.Component.NetworkObjectId : NetworkObjectId;
+                ulong sourceId = sourceAsc != null && sourceAsc.NetworkRole != null ? sourceAsc.NetworkRole.NetworkObjectId : NetworkObjectId;
 
                 if (effect.PredictionKey.IsValidKey())
                 {

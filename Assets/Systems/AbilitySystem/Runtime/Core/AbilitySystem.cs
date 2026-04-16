@@ -1,3 +1,4 @@
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Cues;
@@ -5,15 +6,13 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
-using AbilitySystem.Scripts;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Core
 {
     public class AbilitySystemManager : IAbilitySystem
     {
-        public AbilitySystemComponent Component { get; set; }
+        public INetworkRole NetworkRole { get; set; }
         public EffectManager EffectManager { get; set; }
         public AbilityManager AbilityManager { get; set; }
         public GameplayTagManager TagManager { get; set; }
@@ -21,9 +20,11 @@ namespace AbilitySystem.Runtime.Core
         public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
         public EventManager EventManager { get; set; }
-        public AbilitySystemManager(AbilitySystemComponent component)
+
+        public Action<string, CueData, bool> OnPlayCueRequested;
+
+        public AbilitySystemManager()
         {
-            Component = component;
             EventManager = new EventManager();
             AttributeSetManager = new AttributeSetManager(this);
             EffectManager = new EffectManager(this);
@@ -41,45 +42,55 @@ namespace AbilitySystem.Runtime.Core
 
         public float GetTime()
         {
-            return (float)Component.NetworkManager.ServerTime.Time;
+            if (NetworkRole == null) return Time.time;
+            return (float)NetworkRole.Time;
         }
 
         public bool IsLocalClient()
         {
-            return Component.IsLocalPlayer;
+            if (NetworkRole == null) return true;
+            return NetworkRole.IsLocalPlayer;
         }
 
         public bool IsServer()
         {
-            return Component.IsServer;
+            if (NetworkRole == null) return true;
+            return NetworkRole.IsServer;
         }
 
         public bool IsHost()
         {
-            return Component.IsHost;
+            if (NetworkRole == null) return true;
+            return NetworkRole.IsHost;
         }
 
         public bool HasAuthority()
         {
-            return Component.HasAuthority;
+            if (NetworkRole == null) return true;
+            return NetworkRole.HasAuthority;
         }
 
         public void PlayCue(CueDefinition cue, bool isPredicted = false)
         {
-            var test = new CueData();
-            test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
+            var data = new CueData();
+            data.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
             Debug.Log("Tag:" + cue.CueTag);
-            Component.ObserversPlayCueRpc(cue.CueTag.Name, test, isPredicted);
+            OnPlayCueRequested?.Invoke(cue.CueTag.Name, data, isPredicted);
         }
 
         public void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false)
         {
-            Component.ObserversPlayCueWithDataRpc(cue.CueTag.Name, data, isPredicted);
+            OnPlayCueRequested?.Invoke(cue.CueTag.Name, data, isPredicted);
+        }
+
+        public void PlayCue(string cueTag, CueData data, bool isPredicted = false)
+        {
+            OnPlayCueRequested?.Invoke(cueTag, data, isPredicted);
         }
 
         public void AddCue(CueDefinition cue, CueData data)
         {
-            
+            // Placeholder
         }
 
         public void Reset()

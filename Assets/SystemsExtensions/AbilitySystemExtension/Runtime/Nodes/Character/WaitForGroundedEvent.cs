@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
@@ -15,7 +15,7 @@ namespace AbilitySystemExtension.Runtime.Nodes.Character
         public override void Initialise(Ability ability)
         {
             base.Initialise(ability);
-            var movementController = ability.Owner.Component.gameObject.GetComponent<PlayerMovementController>();
+            var movementController = ((UnityEngine.Component)ability.Owner.NetworkRole)?.gameObject.GetComponent<PlayerMovementController>();
             if (!movementController) return;
             movementController.OnGroundedChanged += OnGroundedChanged;
         }
