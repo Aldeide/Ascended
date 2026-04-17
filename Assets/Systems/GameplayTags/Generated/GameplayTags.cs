@@ -1,171 +1,237 @@
 // -- AUTO-GENERATED FILE --
 using GameplayTags.Runtime;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameplayTags.Generated
 {
     public static class TagLibrary
     {
-        public static class Ability
+        public class __Ability_Group
         {
-            public static readonly Tag Self = new Tag("Ability");
-            public static readonly Tag Active = new Tag("Ability.Active");
-            public static readonly Tag Passive = new Tag("Ability.Passive");
+            public static implicit operator Tag(__Ability_Group _) => new Tag("Ability");
+            public readonly Tag Active = new Tag("Ability.Active");
+            public readonly Tag Passive = new Tag("Ability.Passive");
         }
-        public static class Cue
+        public static readonly __Ability_Group Ability = new __Ability_Group();
+
+        public class __Cue_Group
         {
-            public static readonly Tag Self = new Tag("Cue");
-            public static class Animation
+            public static implicit operator Tag(__Cue_Group _) => new Tag("Cue");
+            
+            public class __Cue_Animation_Group
             {
-                public static readonly Tag Self = new Tag("Cue.Animation");
-                public static class Parameter
+                public static implicit operator Tag(__Cue_Animation_Group _) => new Tag("Cue.Animation");
+                
+                public class __Cue_Animation_Parameter_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.Animation.Parameter");
-                    public static readonly Tag Grounded = new Tag("Cue.Animation.Parameter.Grounded");
+                    public static implicit operator Tag(__Cue_Animation_Parameter_Group _) => new Tag("Cue.Animation.Parameter");
+                    public readonly Tag Grounded = new Tag("Cue.Animation.Parameter.Grounded");
                 }
-                public static class State
+                public readonly __Cue_Animation_Parameter_Group Parameter = new __Cue_Animation_Parameter_Group();
+
+                public class __Cue_Animation_State_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.Animation.State");
-                    public static readonly Tag Death = new Tag("Cue.Animation.State.Death");
-                    public static class Jump
+                    public static implicit operator Tag(__Cue_Animation_State_Group _) => new Tag("Cue.Animation.State");
+                    public readonly Tag Death = new Tag("Cue.Animation.State.Death");
+                    
+                    public class __Cue_Animation_State_Jump_Group
                     {
-                        public static readonly Tag Self = new Tag("Cue.Animation.State.Jump");
-                        public static readonly Tag Start = new Tag("Cue.Animation.State.Jump.Start");
+                        public static implicit operator Tag(__Cue_Animation_State_Jump_Group _) => new Tag("Cue.Animation.State.Jump");
+                        public readonly Tag Start = new Tag("Cue.Animation.State.Jump.Start");
                     }
+                    public readonly __Cue_Animation_State_Jump_Group Jump = new __Cue_Animation_State_Jump_Group();
                 }
+                public readonly __Cue_Animation_State_Group State = new __Cue_Animation_State_Group();
             }
-            public static class Audio
+            public readonly __Cue_Animation_Group Animation = new __Cue_Animation_Group();
+
+            public class __Cue_Audio_Group
             {
-                public static readonly Tag Self = new Tag("Cue.Audio");
-                public static class Gun
+                public static implicit operator Tag(__Cue_Audio_Group _) => new Tag("Cue.Audio");
+                
+                public class __Cue_Audio_Gun_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.Audio.Gun");
-                    public static readonly Tag B = new Tag("Cue.Audio.Gun.B");
+                    public static implicit operator Tag(__Cue_Audio_Gun_Group _) => new Tag("Cue.Audio.Gun");
+                    public readonly Tag B = new Tag("Cue.Audio.Gun.B");
                 }
+                public readonly __Cue_Audio_Gun_Group Gun = new __Cue_Audio_Gun_Group();
             }
-            public static class Light
+            public readonly __Cue_Audio_Group Audio = new __Cue_Audio_Group();
+
+            public class __Cue_Light_Group
             {
-                public static readonly Tag Self = new Tag("Cue.Light");
-                public static class Burst
+                public static implicit operator Tag(__Cue_Light_Group _) => new Tag("Cue.Light");
+                
+                public class __Cue_Light_Burst_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.Light.Burst");
-                    public static readonly Tag Muzzle = new Tag("Cue.Light.Burst.Muzzle");
+                    public static implicit operator Tag(__Cue_Light_Burst_Group _) => new Tag("Cue.Light.Burst");
+                    public readonly Tag Muzzle = new Tag("Cue.Light.Burst.Muzzle");
                 }
+                public readonly __Cue_Light_Burst_Group Burst = new __Cue_Light_Burst_Group();
             }
-            public static class Prefab
+            public readonly __Cue_Light_Group Light = new __Cue_Light_Group();
+
+            public class __Cue_Prefab_Group
             {
-                public static readonly Tag Self = new Tag("Cue.Prefab");
-                public static class Impact
+                public static implicit operator Tag(__Cue_Prefab_Group _) => new Tag("Cue.Prefab");
+                
+                public class __Cue_Prefab_Impact_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.Prefab.Impact");
-                    public static readonly Tag A = new Tag("Cue.Prefab.Impact.A");
+                    public static implicit operator Tag(__Cue_Prefab_Impact_Group _) => new Tag("Cue.Prefab.Impact");
+                    public readonly Tag A = new Tag("Cue.Prefab.Impact.A");
                 }
+                public readonly __Cue_Prefab_Impact_Group Impact = new __Cue_Prefab_Impact_Group();
             }
-            public static class VisualEffect
+            public readonly __Cue_Prefab_Group Prefab = new __Cue_Prefab_Group();
+
+            public class __Cue_VisualEffect_Group
             {
-                public static readonly Tag Self = new Tag("Cue.VisualEffect");
-                public static class Dev
+                public static implicit operator Tag(__Cue_VisualEffect_Group _) => new Tag("Cue.VisualEffect");
+                
+                public class __Cue_VisualEffect_Dev_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.VisualEffect.Dev");
-                    public static readonly Tag Loop = new Tag("Cue.VisualEffect.Dev.Loop");
+                    public static implicit operator Tag(__Cue_VisualEffect_Dev_Group _) => new Tag("Cue.VisualEffect.Dev");
+                    public readonly Tag Loop = new Tag("Cue.VisualEffect.Dev.Loop");
                 }
-                public static class Muzzle
+                public readonly __Cue_VisualEffect_Dev_Group Dev = new __Cue_VisualEffect_Dev_Group();
+
+                public class __Cue_VisualEffect_Muzzle_Group
                 {
-                    public static readonly Tag Self = new Tag("Cue.VisualEffect.Muzzle");
-                    public static readonly Tag A = new Tag("Cue.VisualEffect.Muzzle.A");
+                    public static implicit operator Tag(__Cue_VisualEffect_Muzzle_Group _) => new Tag("Cue.VisualEffect.Muzzle");
+                    public readonly Tag A = new Tag("Cue.VisualEffect.Muzzle.A");
                 }
+                public readonly __Cue_VisualEffect_Muzzle_Group Muzzle = new __Cue_VisualEffect_Muzzle_Group();
             }
+            public readonly __Cue_VisualEffect_Group VisualEffect = new __Cue_VisualEffect_Group();
         }
-        public static class Effect
+        public static readonly __Cue_Group Cue = new __Cue_Group();
+
+        public class __Effect_Group
         {
-            public static readonly Tag Self = new Tag("Effect");
-            public static class Cost
+            public static implicit operator Tag(__Effect_Group _) => new Tag("Effect");
+            
+            public class __Effect_Cost_Group
             {
-                public static readonly Tag Self = new Tag("Effect.Cost");
-                public static class Ability
+                public static implicit operator Tag(__Effect_Cost_Group _) => new Tag("Effect.Cost");
+                
+                public class __Effect_Cost_Ability_Group
                 {
-                    public static readonly Tag Self = new Tag("Effect.Cost.Ability");
-                    public static readonly Tag Dash = new Tag("Effect.Cost.Ability.Dash");
+                    public static implicit operator Tag(__Effect_Cost_Ability_Group _) => new Tag("Effect.Cost.Ability");
+                    public readonly Tag Dash = new Tag("Effect.Cost.Ability.Dash");
                 }
+                public readonly __Effect_Cost_Ability_Group Ability = new __Effect_Cost_Ability_Group();
             }
-            public static class Modifier
+            public readonly __Effect_Cost_Group Cost = new __Effect_Cost_Group();
+
+            public class __Effect_Modifier_Group
             {
-                public static readonly Tag Self = new Tag("Effect.Modifier");
-                public static class Damage
+                public static implicit operator Tag(__Effect_Modifier_Group _) => new Tag("Effect.Modifier");
+                
+                public class __Effect_Modifier_Damage_Group
                 {
-                    public static readonly Tag Self = new Tag("Effect.Modifier.Damage");
-                    public static readonly Tag Kinetic = new Tag("Effect.Modifier.Damage.Kinetic");
+                    public static implicit operator Tag(__Effect_Modifier_Damage_Group _) => new Tag("Effect.Modifier.Damage");
+                    public readonly Tag Kinetic = new Tag("Effect.Modifier.Damage.Kinetic");
                 }
+                public readonly __Effect_Modifier_Damage_Group Damage = new __Effect_Modifier_Damage_Group();
             }
+            public readonly __Effect_Modifier_Group Modifier = new __Effect_Modifier_Group();
         }
-        public static class EquipmentSlot
+        public static readonly __Effect_Group Effect = new __Effect_Group();
+
+        public class __EquipmentSlot_Group
         {
-            public static readonly Tag Self = new Tag("EquipmentSlot");
-            public static readonly Tag Core = new Tag("EquipmentSlot.Core");
-            public static class Utility
+            public static implicit operator Tag(__EquipmentSlot_Group _) => new Tag("EquipmentSlot");
+            public readonly Tag Core = new Tag("EquipmentSlot.Core");
+            
+            public class __EquipmentSlot_Utility_Group
             {
-                public static readonly Tag Self = new Tag("EquipmentSlot.Utility");
-                public static readonly Tag One = new Tag("EquipmentSlot.Utility.One");
-                public static readonly Tag Two = new Tag("EquipmentSlot.Utility.Two");
+                public static implicit operator Tag(__EquipmentSlot_Utility_Group _) => new Tag("EquipmentSlot.Utility");
+                public readonly Tag One = new Tag("EquipmentSlot.Utility.One");
+                public readonly Tag Two = new Tag("EquipmentSlot.Utility.Two");
             }
+            public readonly __EquipmentSlot_Utility_Group Utility = new __EquipmentSlot_Utility_Group();
         }
-        public static class Item
+        public static readonly __EquipmentSlot_Group EquipmentSlot = new __EquipmentSlot_Group();
+
+        public class __Item_Group
         {
-            public static readonly Tag Self = new Tag("Item");
-            public static class Equipment
+            public static implicit operator Tag(__Item_Group _) => new Tag("Item");
+            
+            public class __Item_Equipment_Group
             {
-                public static readonly Tag Self = new Tag("Item.Equipment");
-                public static readonly Tag EnergyCore = new Tag("Item.Equipment.EnergyCore");
+                public static implicit operator Tag(__Item_Equipment_Group _) => new Tag("Item.Equipment");
+                public readonly Tag EnergyCore = new Tag("Item.Equipment.EnergyCore");
             }
-            public static class Modifier
+            public readonly __Item_Equipment_Group Equipment = new __Item_Equipment_Group();
+
+            public class __Item_Modifier_Group
             {
-                public static readonly Tag Self = new Tag("Item.Modifier");
-                public static readonly Tag Active = new Tag("Item.Modifier.Active");
-                public static readonly Tag Passive = new Tag("Item.Modifier.Passive");
+                public static implicit operator Tag(__Item_Modifier_Group _) => new Tag("Item.Modifier");
+                public readonly Tag Active = new Tag("Item.Modifier.Active");
+                public readonly Tag Passive = new Tag("Item.Modifier.Passive");
             }
+            public readonly __Item_Modifier_Group Modifier = new __Item_Modifier_Group();
         }
-        public static class Mod
+        public static readonly __Item_Group Item = new __Item_Group();
+
+        public class __Mod_Group
         {
-            public static readonly Tag Self = new Tag("Mod");
-            public static class Slot
+            public static implicit operator Tag(__Mod_Group _) => new Tag("Mod");
+            
+            public class __Mod_Slot_Group
             {
-                public static readonly Tag Self = new Tag("Mod.Slot");
-                public static class Active
+                public static implicit operator Tag(__Mod_Slot_Group _) => new Tag("Mod.Slot");
+                
+                public class __Mod_Slot_Active_Group
                 {
-                    public static readonly Tag Self = new Tag("Mod.Slot.Active");
-                    public static readonly Tag _1 = new Tag("Mod.Slot.Active.1");
-                    public static readonly Tag _2 = new Tag("Mod.Slot.Active.2");
+                    public static implicit operator Tag(__Mod_Slot_Active_Group _) => new Tag("Mod.Slot.Active");
+                    public readonly Tag _1 = new Tag("Mod.Slot.Active.1");
+                    public readonly Tag _2 = new Tag("Mod.Slot.Active.2");
                 }
-                public static class Passive
+                public readonly __Mod_Slot_Active_Group Active = new __Mod_Slot_Active_Group();
+
+                public class __Mod_Slot_Passive_Group
                 {
-                    public static readonly Tag Self = new Tag("Mod.Slot.Passive");
-                    public static readonly Tag _1 = new Tag("Mod.Slot.Passive.1");
-                    public static readonly Tag _2 = new Tag("Mod.Slot.Passive.2");
+                    public static implicit operator Tag(__Mod_Slot_Passive_Group _) => new Tag("Mod.Slot.Passive");
+                    public readonly Tag _1 = new Tag("Mod.Slot.Passive.1");
+                    public readonly Tag _2 = new Tag("Mod.Slot.Passive.2");
                 }
+                public readonly __Mod_Slot_Passive_Group Passive = new __Mod_Slot_Passive_Group();
             }
+            public readonly __Mod_Slot_Group Slot = new __Mod_Slot_Group();
         }
-        public static class Slot
+        public static readonly __Mod_Group Mod = new __Mod_Group();
+
+        public class __Slot_Group
         {
-            public static readonly Tag Self = new Tag("Slot");
-            public static class Hip
+            public static implicit operator Tag(__Slot_Group _) => new Tag("Slot");
+            
+            public class __Slot_Hip_Group
             {
-                public static readonly Tag Self = new Tag("Slot.Hip");
-                public static readonly Tag Left = new Tag("Slot.Hip.Left");
-                public static readonly Tag Right = new Tag("Slot.Hip.Right");
+                public static implicit operator Tag(__Slot_Hip_Group _) => new Tag("Slot.Hip");
+                public readonly Tag Left = new Tag("Slot.Hip.Left");
+                public readonly Tag Right = new Tag("Slot.Hip.Right");
             }
+            public readonly __Slot_Hip_Group Hip = new __Slot_Hip_Group();
         }
-        public static class Status
+        public static readonly __Slot_Group Slot = new __Slot_Group();
+
+        public class __Status_Group
         {
-            public static readonly Tag Self = new Tag("Status");
-            public static readonly Tag Aiming = new Tag("Status.Aiming");
-            public static readonly Tag Dead = new Tag("Status.Dead");
-            public static readonly Tag Immobilised = new Tag("Status.Immobilised");
+            public static implicit operator Tag(__Status_Group _) => new Tag("Status");
+            public readonly Tag Aiming = new Tag("Status.Aiming");
+            public readonly Tag Dead = new Tag("Status.Dead");
+            public readonly Tag Immobilised = new Tag("Status.Immobilised");
         }
-        public static class Unit
+        public static readonly __Status_Group Status = new __Status_Group();
+
+        public class __Unit_Group
         {
-            public static readonly Tag Self = new Tag("Unit");
-            public static readonly Tag Player = new Tag("Unit.Player");
+            public static implicit operator Tag(__Unit_Group _) => new Tag("Unit");
+            public readonly Tag Player = new Tag("Unit.Player");
         }
+        public static readonly __Unit_Group Unit = new __Unit_Group();
 
         private static readonly List<Tag> AllTags = new List<Tag>
         {

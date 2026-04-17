@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tags:
   - Ability.Active
+  - Ability.Active.Test
   - Ability.Passive
   - Cue.Animation
   - Cue.Animation.Parameter.Grounded
@@ -42,4 +43,5 @@ MonoBehaviour:
   - Status.Aiming
   - Status.Dead
   - Status.Immobilised
+  - Test.Test
   - Unit.Player
