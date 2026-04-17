@@ -20,6 +20,8 @@ namespace AbilitySystem.Runtime.Abilities
         public Dictionary<string, Ability> Abilities;
         private List<Ability> _abilitySnapshot;
         private PredictionKey _predictionKey;
+        
+        private Dictionary<int, Dictionary<string, AbilitySystem.Runtime.Attributes.AttributeValue>> _predictionAttributeSnapshots = new();
 
         public Action OnAbilityGranted;
         public Action<string, PredictionKey, AbilityData> OnServerTryActivateAbilityRequested;
@@ -102,6 +104,10 @@ namespace AbilitySystem.Runtime.Abilities
             if (ability.Definition.HasLocalPrediction() && _owner.IsLocalClient())
             {
                 var key = PredictionKey.CreatePredictionKey();
+                
+                // Snapshot before prediction
+                _predictionAttributeSnapshots[key.currentKey] = _owner.AttributeSetManager.Snapshot();
+                
                 var success = ability.TryActivateAbility(key, data);
                 if (success)
                 {
@@ -109,6 +115,8 @@ namespace AbilitySystem.Runtime.Abilities
                     return true;
                 }
 
+                // If prediction failed locally, cleanup snapshot
+                _predictionAttributeSnapshots.Remove(key.currentKey);
                 return false;
             }
 
@@ -139,7 +147,7 @@ namespace AbilitySystem.Runtime.Abilities
             Abilities.Where(kv =>
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
-                .ForEach(a => a.Value.EndAbility());
+                .ForEach(a => a.Value.TryEndAbility());
         }
 
         public void CancelAbilitiesWithTags(Tag[] tags)
@@ -148,6 +156,32 @@ namespace AbilitySystem.Runtime.Abilities
                          ability.Definition.AssetTags.Any(tags.Contains)))
             {
                 ability.TryCancelAbility();
+            }
+        }
+
+        public void NotifyServerResponse(PredictionKey key, bool success)
+        {
+            if (!_owner.IsLocalClient()) return;
+
+            if (success)
+            {
+                // Prediction confirmed. Cleanup snapshot.
+                _predictionAttributeSnapshots.Remove(key.currentKey);
+            }
+            else
+            {
+                // Prediction denied. Rollback.
+                if (_predictionAttributeSnapshots.TryGetValue(key.currentKey, out var snapshot))
+                {
+                    _owner.AttributeSetManager.Restore(snapshot);
+                    _predictionAttributeSnapshots.Remove(key.currentKey);
+                }
+                
+                // End any abilities that were started with this key
+                EndAbility(key);
+                
+                // Retract any effects that were started with this key
+                _owner.EffectManager.RetractPredictedEffect(key);
             }
         }
 

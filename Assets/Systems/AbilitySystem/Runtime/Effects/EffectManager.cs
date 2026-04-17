@@ -144,11 +144,10 @@ namespace AbilitySystem.Runtime.Effects
             OnEffectAdded?.Invoke(predictedEffect);
         }
         
-        public void ReconcilePredictedEffect(PredictionKey predictionKey)
+        public void ReconcilePredictedEffect(PredictionKey predictionKey, Effect serverEffect)
         {
-            if (!PredictedEffects.TryGetValue(predictionKey.currentKey, out var confirmedEffects)) return;
-            Effects.AddRange(confirmedEffects);
-            PredictedEffects.Remove(predictionKey.currentKey);
+            RetractPredictedEffect(predictionKey);
+            AddEffectFromServer(serverEffect);
         }
 
         public void RetractPredictedEffect(PredictionKey predictionKey)
@@ -157,7 +156,9 @@ namespace AbilitySystem.Runtime.Effects
             {
                 foreach (var effect in retractedEffects)
                 {
+                    effect.IsActive = false;
                     OnEffectRetracted?.Invoke(effect);
+                    OnEffectRemoved?.Invoke(effect);
                 }
                 PredictedEffects.Remove(predictionKey.currentKey);
             }

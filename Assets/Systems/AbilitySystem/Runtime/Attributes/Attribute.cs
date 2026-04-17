@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using AbilitySystem.Runtime.AttributeSets;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Attributes
 {
@@ -84,6 +85,22 @@ namespace AbilitySystem.Runtime.Attributes
         public void SetCurrentValueNoEvent(float value)
         {
             _value.CurrentValue = value;
+        }
+
+        public void Restore(AttributeValue value)
+        {
+            var previousBase = _value.BaseValue;
+            var previousCurrent = _value.CurrentValue;
+            _value = value;
+            _value.Clamp();
+            if (!Mathf.Approximately(previousBase, _value.BaseValue))
+            {
+                OnAttributeBaseValueChanged?.Invoke(this, previousBase, _value.BaseValue);
+            }
+            if (!Mathf.Approximately(previousCurrent, _value.CurrentValue))
+            {
+                OnAttributeCurrentValueChanged?.Invoke(this, previousCurrent, _value.CurrentValue);
+            }
         }
 
         public string DebugString()
