@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace AbilityGraph.Editor
 {
-    [CustomEditor(typeof(Runtime.AbilityGraph), true)]
+    //[CustomEditor(typeof(Runtime.AbilityGraph), true)]
     public class AbilityGraphInspector : OdinEditor
     {
         /*

@@ -7,18 +7,7 @@ namespace AbilityGraph.Editor
     public class AbilityGraphWindow : BaseGraphWindow
     {
         private BaseGraph _tmpGraph;
-        // Add the window in the editor menu
-        [MenuItem("Window/01_DefaultGraph")]
-        public static AbilityGraphWindow Open()
-        {
-            var graphWindow = CreateWindow<AbilityGraphWindow>();
-            graphWindow._tmpGraph = CreateInstance<Runtime.AbilityGraph>();
-            graphWindow._tmpGraph.hideFlags = HideFlags.HideAndDontSave;
-            graphWindow.InitializeGraph(graphWindow._tmpGraph);
-            graphWindow.Show();
-            
-            return graphWindow;
-        }
+        // The window is opened via OnOpenAsset in AbilityGraphAssetCallbacks
 
         protected override void InitializeWindow(BaseGraph baseGraph)
         {

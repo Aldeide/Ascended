@@ -9,16 +9,13 @@ namespace AbilityGraph.Runtime
 {
     public class GraphAbility : Ability
     {
-        private readonly AbilityGraphDefinition _graphDefinition;
-        private readonly AbilityGraph _graph;
+        private readonly AbilityDefinition _graph;
         private readonly ActivateAbilityNode _activateNode;
         private readonly EndAbilityNode _endNode;
         private readonly GraphRunner _activateRunner;
         public GraphAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
-            _graphDefinition = (ability as AbilityGraphDefinition);
-            if (!_graphDefinition) return;
-            _graph = ScriptableObject.Instantiate(_graphDefinition.graph);
+            _graph = ScriptableObject.Instantiate(ability);
             _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
             _endNode = _graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
             _graph.nodes.FindAll(n=>n is AbilityNode).ForEach(n=> (n as AbilityNode)?.Initialise(this));

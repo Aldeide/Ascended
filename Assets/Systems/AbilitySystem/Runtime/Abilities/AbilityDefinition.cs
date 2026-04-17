@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Core;
@@ -7,13 +7,14 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Utilities;
 using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
+using GraphProcessor;
 using UnityEngine;
 using UnityEngine.Localization;
 
 namespace AbilitySystem.Runtime.Abilities
 {
     [Serializable]
-    public abstract class AbilityDefinition : ScriptableObject
+    public abstract class AbilityDefinition : BaseGraph
     {
         public abstract Type AbilityType();
 
@@ -21,12 +22,12 @@ namespace AbilitySystem.Runtime.Abilities
         public LocalizedString DisplayName;
         public Sprite Icon;
 
-        [ShowInInspector]
+        [Sirenix.OdinInspector.ShowInInspector]
         public string InstanceAbilityClassFullName => AbilityType() != null ? AbilityType().FullName : null;
 
-        [ShowInInspector] public string TypeName => GetType().Name;
-        [ShowInInspector] public string TypeFullName => GetType().FullName;
-        [ShowInInspector] public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
+        [Sirenix.OdinInspector.ShowInInspector] public string TypeName => GetType().Name;
+        [Sirenix.OdinInspector.ShowInInspector] public string TypeFullName => GetType().FullName;
+        [Sirenix.OdinInspector.ShowInInspector] public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
         public string UniqueName;
 
         [Space]

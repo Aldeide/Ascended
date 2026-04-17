@@ -1,4 +1,4 @@
-﻿using AbilityGraph.Runtime.Nodes;
+using AbilityGraph.Runtime.Nodes;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -8,21 +8,14 @@ namespace AbilityGraph.Editor
 {
     public static class AbilityGraphAssetCallbacks
     {
-        [MenuItem("Assets/Create/AbilityGraph", false, 10)]
-        public static void CreateAbilityGraph()
-        {
-            var graph = ScriptableObject.CreateInstance<Runtime.AbilityGraph>();
-            ProjectWindowUtil.CreateAsset(graph, "AbilityGraph.asset");
-        }
-
         [OnOpenAsset(0)]
         public static bool OnBaseGraphOpened(int instanceID, int line)
         {
-            var asset = EditorUtility.InstanceIDToObject(instanceID) as BaseGraph;
+            var asset = EditorUtility.InstanceIDToObject(instanceID);
 
-            if (asset != null && AssetDatabase.GetAssetPath(asset).Contains("AbilityGraph"))
+            if (asset is AbilitySystem.Runtime.Abilities.AbilityDefinition abilityDef)
             {
-                EditorWindow.GetWindow<AbilityGraphWindow>().InitializeGraph(asset as BaseGraph);
+                EditorWindow.GetWindow<AbilityGraphWindow>().InitializeGraph(abilityDef);
                 return true;
             }
             return false;
