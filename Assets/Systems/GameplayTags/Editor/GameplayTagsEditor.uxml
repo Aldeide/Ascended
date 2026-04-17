@@ -4,7 +4,7 @@
         <ui:TextField name="new-tag-textfield" label="New Tag:" style="flex-grow: 1;" />
         <ui:Button name="add-tag-button" text="Add Tag" />
     </ui:VisualElement>
-    <ui:ListView name="tag-list-view" style="flex-grow: 1;" />
-    <ui:Button name="delete-tag-button" text="Delete Selected Tag" style="margin-top: 5px;" />
+    <ui:TreeView name="tag-tree-view" style="flex-grow: 1;" />
+    <ui:Button name="delete-checked-button" text="Delete Checked Tags" style="margin-top: 5px;" />
     <ui:Button name="save-and-generate-button" text="Save and Generate Code" style="margin-top: 10px; height: 30px;" />
 </ui:UXML>
