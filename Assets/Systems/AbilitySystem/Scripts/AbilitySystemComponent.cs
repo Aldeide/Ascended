@@ -129,9 +129,8 @@ namespace AbilitySystem.Scripts
                         ActivationTime = effect.ActivationTime
                     };
                     
-                    var sourceAsc = effect.Source as AbilitySystemManager;
-                    if (sourceAsc != null && sourceAsc.NetworkRole != null)
-                        data.SourceId = sourceAsc.NetworkRole.NetworkObjectId;
+                    if (effect.Source != null && effect.Source.NetworkRole != null)
+                        data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
                     else
                         data.SourceId = NetworkObjectId;
                         
@@ -260,8 +259,7 @@ namespace AbilitySystem.Scripts
         {
             if (IsServer && !IsHost)
             {
-                var sourceAsc = effect.Source as AbilitySystemManager;
-                ulong sourceId = sourceAsc != null && sourceAsc.NetworkRole != null ? sourceAsc.NetworkRole.NetworkObjectId : NetworkObjectId;
+                ulong sourceId = effect.Source != null && effect.Source.NetworkRole != null ? effect.Source.NetworkRole.NetworkObjectId : NetworkObjectId;
 
                 if (effect.PredictionKey.IsValidKey())
                 {

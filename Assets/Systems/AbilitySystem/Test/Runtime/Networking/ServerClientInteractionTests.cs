@@ -16,6 +16,7 @@ namespace AbilitySystem.Test.Runtime.Networking
             
             var abilityDef = AbilityUtilities.CreateInstantAbilityDefinition();
             abilityDef.UniqueName = "Test.Ability.Interact";
+            abilityDef.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
             clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
 
             // Variable to capture the event arguments emitted when the client calls TryActivateAbility.
@@ -48,6 +49,7 @@ namespace AbilitySystem.Test.Runtime.Networking
             var abilityDef = AbilityUtilities.CreateInstantAbilityDefinition();
             abilityDef.UniqueName = "Test.Ability.CrossSystem";
             abilityDef.Cost = null; // No cost for simplicity
+            abilityDef.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
             
             clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
             serverSystem.Object.AbilityManager.GrantAbility(abilityDef);
