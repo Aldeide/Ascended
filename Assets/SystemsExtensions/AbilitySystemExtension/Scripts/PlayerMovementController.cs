@@ -18,10 +18,11 @@ namespace AbilitySystemExtension.Scripts
     {
         // Offset for grounded checks.
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
-        [ShowInInspector] [SerializeField]
-        private Vector3 _movementInput = new Vector3(0, 0, 0);
+        [ShowInInspector] [SerializeField] private Vector3 _movementInput = new Vector3(0, 0, 0);
 
-        [FormerlySerializedAs("cameraTarget")] [SerializeField] private GameObject CameraTarget;
+        [FormerlySerializedAs("cameraTarget")] [SerializeField]
+        private GameObject CameraTarget;
+
         private AnimationController _animationController;
         private Rigidbody _rigidbody;
         private IAbilitySystem _abilitySystem;
@@ -30,8 +31,7 @@ namespace AbilitySystemExtension.Scripts
         [ShowInInspector] [SerializeField] private bool _isGrounded = true;
         public float turnSmoothTime = 0.1f;
         private float _turnSmoothVelocity = 0.2f;
-        [ShowInInspector][SerializeField]
-        private bool _isAiming;
+        [ShowInInspector] [SerializeField] private bool _isAiming;
         private Camera _camera;
 
         public Vector3 MovementDirection { get; private set; } = new Vector3(0, 0, 0);
@@ -58,7 +58,7 @@ namespace AbilitySystemExtension.Scripts
             // For now, movement is locally authoritative.
             if (!IsLocalPlayer) return;
             if (!CanMove()) return;
-            
+
             // Update grounded state.
             UpdateGrounded();
 
@@ -71,32 +71,21 @@ namespace AbilitySystemExtension.Scripts
             {
                 _ikCueListener.DisableAimIK();
             }
-            
-            // Check for movement input
-            if (_movementInput.magnitude >= 0.1f)
-            {
-                // 1. Calculate the target angle for rotation
-                // This takes the input direction and offsets it by 45 degrees to match the camera
-                float targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg + 45f;
-                
-                // 2. Smoothly find the new angle for the player
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
-                
-                // 3. Apply the rotation to the rigidbody
-                _rigidbody.MoveRotation(Quaternion.Euler(0f, angle, 0f));
-                
-                // 4. Calculate the movement direction based on the target angle
-                // We use targetAngle for responsive movement; the character's visual rotation will catch up
-                MovementDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                
-                // 5. Apply movement to the rigidbody
-                Vector3 movement = MovementDirection.normalized * (_movementSpeed * Time.deltaTime) * 4;
-                _rigidbody.MovePosition(_rigidbody.position + movement);
-            }
-            else
-            {
-                MovementDirection = Vector3.zero;
-            }
+
+            var targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
+                              _camera.transform.eulerAngles.y;
+            var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
+                turnSmoothTime);
+            _rigidbody.MoveRotation(ComputeRotation(angle));
+            ComputeMovementDirection(targetAngle);
+            if (_movementInput.magnitude <= 0.01f)
+                {
+                    UpdateAnimator();
+                    MovementDirection = Vector3.zero;
+                    return;
+                }
+
+            _rigidbody.MovePosition(transform.position += MovementDirection * (Time.deltaTime * _movementSpeed));
 
             UpdateAnimator();
         }
@@ -121,16 +110,15 @@ namespace AbilitySystemExtension.Scripts
                 _animationController.SetIsMoving(true);
                 if (_isAiming)
                 {
-                    Vector3 localMovementDirection = transform.InverseTransformDirection(MovementDirection);
-                    _animationController.SetMovement(localMovementDirection.x, localMovementDirection.z, 0.2f, Time.deltaTime);
+                    // TODO: add animation transition smotthing.
+                    _animationController.SetMovement(_movementInput.x, _movementInput.z);
+
+                    //_animator.SetFloat(MovementX, _movementInput.x, 0.2f, Time.deltaTime);
+                    //_animator.SetFloat(MovementY, _movementInput.z, 0.2f, Time.deltaTime);
                 }
                 else
                 {
-                    _animationController.SetMovement(0, _movementInput.magnitude);
-
-                    
-                    // 3rd person.
-                    // _animationController.SetMovement(0, 1);
+                    _animationController.SetMovement(0, 1);
                 }
             }
             else
@@ -172,7 +160,7 @@ namespace AbilitySystemExtension.Scripts
                 MovementDirection = Vector3.zero;
                 return;
             }
-            
+
             MovementDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
         }
 
