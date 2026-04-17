@@ -37,7 +37,7 @@ namespace AvatarSlots.Scripts
                 _avatarSlots.Add(slot.SlotTag, slot.Transform);
                 _slottedObjects.Add(slot.SlotTag, null);
             }
-            SlotGameObject(Instantiate(SlotPrefab), TagLibrary.SlotHipRight);
+            SlotGameObject(Instantiate(SlotPrefab), TagLibrary.Slot.Hip.Right);
         }
 
         public void OnClientConnected(ulong clientId)
@@ -105,13 +105,13 @@ namespace AvatarSlots.Scripts
         public void SwitchSides()
         {
             // Just to test the functionality.
-            if (_slottedObjects[TagLibrary.SlotHipRight])
+            if (_slottedObjects[TagLibrary.Slot.Hip.Right])
             {
-                SwitchSlot(TagLibrary.SlotHipRight, TagLibrary.SlotHipLeft);
+                SwitchSlot(TagLibrary.Slot.Hip.Right, TagLibrary.Slot.Hip.Left);
             }
             else
             {
-                SwitchSlot(TagLibrary.SlotHipLeft, TagLibrary.SlotHipRight);
+                SwitchSlot(TagLibrary.Slot.Hip.Left, TagLibrary.Slot.Hip.Right);
             }
         }
     }

@@ -1,11 +1,13 @@
-﻿using System;
+using AbilityGraph.Runtime.Nodes.Base;
+using AbilityGraph.Runtime.Nodes.Base;
+using System;
 using GraphProcessor;
 
 namespace AbilityGraph.Runtime.Nodes.Primitives
 {
     [Serializable]
     [NodeMenuItem("Primitives/Integer")]
-    public class IntNode : BaseNode {
+    public class IntNode : AbilityNode {
         
         [Output("Out")] public int Output;
         [Input("In")] public int Input;

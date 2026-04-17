@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
@@ -164,8 +164,8 @@ namespace AbilitySystemExtension.Scripts
 
         public bool CanMove()
         {
-            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusImmobilised) &&
-                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.StatusDead);
+            return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Immobilised) &&
+                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Dead);
         }
 
         private void ComputeMovementDirection(float targetAngle)

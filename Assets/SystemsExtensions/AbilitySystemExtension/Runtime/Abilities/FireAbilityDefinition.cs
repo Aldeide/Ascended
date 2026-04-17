@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GameplayTags.Runtime;
@@ -23,7 +24,7 @@ namespace GameplayTags.Editor
             // Load the UXML file
             var visualTree =
                 AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Assets/Plugins/GameplayTags/Editor/GameplayTagsEditor.uxml");
+                    "Assets/Systems/GameplayTags/Editor/GameplayTagsEditor.uxml");
             visualTree.CloneTree(rootVisualElement);
 
             // Find the UI elements
@@ -53,7 +54,7 @@ namespace GameplayTags.Editor
             {
                 // If no asset exists, create one
                 _tagData = CreateInstance<GameplayTagData>();
-                AssetDatabase.CreateAsset(_tagData, "Assets/Plugins/GameplayTags/GameplayTagData.asset");
+                AssetDatabase.CreateAsset(_tagData, "Assets/Systems/GameplayTags/GameplayTagData.asset");
                 AssetDatabase.SaveAssets();
             }
 
@@ -102,7 +103,7 @@ namespace GameplayTags.Editor
 
         private void GenerateCode()
         {
-            var path = "Assets/Plugins/GameplayTags/Generated/GameplayTags.cs";
+            var path = "Assets/Systems/GameplayTags/Generated/GameplayTags.cs";
 
             // Ensure the directory exists
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? string.Empty);
@@ -118,36 +119,74 @@ namespace GameplayTags.Editor
                 writer.WriteLine("    public static class TagLibrary");
                 writer.WriteLine("    {");
 
-                var sanitizedTags = _tagData.Tags
-                    .Select(tag => new { Original = tag, Sanitized = tag.Replace(".", "") })
-                    .ToList();
-
-                foreach (var t in sanitizedTags)
+                var root = new TagNode { Children = new Dictionary<string, TagNode>() };
+                foreach (var tag in _tagData.Tags)
                 {
-                    writer.WriteLine($"        public static readonly Tag {t.Sanitized} = new Tag(\"{t.Original}\");");
+                    var parts = tag.Split('.');
+                    var current = root;
+                    for (int i = 0; i < parts.Length; i++)
+                    {
+                        var partName = parts[i];
+                        if (char.IsDigit(partName[0])) partName = "_" + partName;
+
+                        if (!current.Children.ContainsKey(partName))
+                        {
+                            current.Children[partName] = new TagNode 
+                            { 
+                                Name = partName, 
+                                FullPath = string.Join(".", parts.Take(i + 1)),
+                                Children = new Dictionary<string, TagNode>() 
+                            };
+                        }
+                        current = current.Children[partName];
+                    }
                 }
+
+                WriteTagNode(writer, root, 2);
 
                 writer.WriteLine("");
                 writer.WriteLine("        private static readonly List<Tag> AllTags = new List<Tag>");
                 writer.WriteLine("        {");
-
-                foreach (var t in sanitizedTags)
+                foreach (var tag in _tagData.Tags)
                 {
-                    writer.WriteLine($"            {t.Sanitized},");
+                    writer.WriteLine($"            new Tag(\"{tag}\"),");
                 }
-
                 writer.WriteLine("        };");
                 writer.WriteLine("");
-                writer.WriteLine("        public static IReadOnlyList<Tag> GetAllTags()");
-                writer.WriteLine("        {");
-                writer.WriteLine("            return AllTags;");
-                writer.WriteLine("        }");
-
+                writer.WriteLine("        public static IReadOnlyList<Tag> GetAllTags() => AllTags;");
                 writer.WriteLine("    }");
                 writer.WriteLine("}");
             }
 
             AssetDatabase.Refresh();
+        }
+
+        private void WriteTagNode(StreamWriter writer, TagNode node, int indentLevel)
+        {
+            var indent = new string(' ', indentLevel * 4);
+            foreach (var kvp in node.Children.OrderBy(x => x.Key))
+            {
+                var child = kvp.Value;
+                if (child.Children.Count > 0)
+                {
+                    writer.WriteLine($"{indent}public static class {child.Name}");
+                    writer.WriteLine($"{indent}{{");
+                    writer.WriteLine($"{indent}    public static readonly Tag Self = new Tag(\"{child.FullPath}\");");
+                    WriteTagNode(writer, child, indentLevel + 1);
+                    writer.WriteLine($"{indent}}}");
+                }
+                else
+                {
+                    writer.WriteLine($"{indent}public static readonly Tag {child.Name} = new Tag(\"{child.FullPath}\");");
+                }
+            }
+        }
+
+        private class TagNode
+        {
+            public string Name;
+            public string FullPath;
+            public Dictionary<string, TagNode> Children;
         }
     }
 }

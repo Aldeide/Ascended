@@ -1,4 +1,4 @@
-﻿using AbilityGraph.Runtime.Nodes.Base;
+using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Cues;
 using GraphProcessor;
 

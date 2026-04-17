@@ -1,4 +1,4 @@
-﻿namespace AbilityGraph.Runtime.Nodes.Base
+namespace AbilityGraph.Runtime.Nodes.Base
 {
     public struct ExecutableLink
     {

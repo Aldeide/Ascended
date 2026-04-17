@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Cues;
 using RootMotion.FinalIK;
 
 namespace AbilitySystemExtension.Scripts

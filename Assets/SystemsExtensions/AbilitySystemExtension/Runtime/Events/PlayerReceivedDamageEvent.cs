@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Events;
 
 namespace AbilitySystemExtension.Runtime.Events

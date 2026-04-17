@@ -1,4 +1,4 @@
-﻿using AbilityGraph.Runtime.Nodes.Base;
+using AbilityGraph.Runtime.Nodes.Base;
 using GraphProcessor;
 
 namespace AbilityGraph.Runtime.Nodes.Abilities

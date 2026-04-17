@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Abilities;
