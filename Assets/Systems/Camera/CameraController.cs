@@ -16,23 +16,24 @@ namespace Systems.Camera
 
         public GameObject defaultVirtualCamera;
         public GameObject aimVirtualCamera;
-        
+
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;
             //mouseDelta = context.ReadValue<Vector2>();
-            //UpdateCamera(context.ReadValue<Vector2>());
+            UpdateCamera(context.ReadValue<Vector2>());
         }
 
         private void UpdateCamera(Vector2 mouseInput)
         {
             float mouseX = mouseInput.x;
             float mouseY = mouseInput.y;
-            
+
             cinemachineTargetPitch =
                 UpdateRotation(cinemachineTargetPitch, mouseY, bottomAngleClamp, topAngleClamp, true);
             cinemachineTargetYaw = UpdateRotation(cinemachineTargetYaw, mouseX, float.MinValue, float.MaxValue, false);
-            followTarget.rotation = Quaternion.Euler(cinemachineTargetPitch, cinemachineTargetYaw, followTarget.eulerAngles.z);
+            followTarget.rotation =
+                Quaternion.Euler(cinemachineTargetPitch, cinemachineTargetYaw, followTarget.eulerAngles.z);
         }
 
         private float UpdateRotation(float currentRotation, float input, float min, float max, bool isXAxis)
