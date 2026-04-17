@@ -1,0 +1,99 @@
+.screen-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+    visibility: visible;
+}
+
+.glass-panel {
+    width: 900px;
+    height: 600px;
+    background-color: rgba(15, 15, 25, 0.85);
+    border-radius: 20px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.15);
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.panel-title {
+    font-size: 28px;
+    color: #e0e0e0;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    border-bottom-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.horizontal-layout {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.section-container {
+    flex-grow: 1;
+    margin: 10px;
+}
+
+.character-preview-box {
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    position: relative;
+}
+
+.equipment-slot-view {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    background-color: rgba(40, 40, 60, 0.4);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+#slot-head { top: 10%; left: 45%; }
+#slot-chest { top: 30%; left: 45%; }
+#slot-legs { top: 60%; left: 45%; }
+#slot-mainhand { top: 35%; left: 15%; }
+#slot-offhand { top: 35%; right: 15%; }
+
+.inventory-grid-container {
+    flex-grow: 1;
+}
+
+.item-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.details-panel {
+    height: 120px;
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.detail-header {
+    font-size: 18px;
+    color: #ffd700;
+    -unity-font-style: bold;
+}
+
+.detail-body {
+    font-size: 14px;
+    color: #cccccc;
+    white-space: normal;
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="inventory-item-container" class="inventory-item-slot">
+        <ui:VisualElement name="item-rarity-border" class="rarity-border-common" />
+        <ui:VisualElement name="item-icon" class="item-icon-display" />
+        <ui:Label name="item-quantity" text="1" class="item-quantity-label" />
+        <ui:VisualElement name="item-hover-overlay" class="item-hover-effect" />
+    </ui:VisualElement>
+</ui:UXML>

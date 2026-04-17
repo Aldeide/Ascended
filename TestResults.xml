@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="95" result="Failed(Child)" total="95" passed="93" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.2681873">
+  <test-suite type="TestSuite" id="1000" name="Ascended" fullname="Ascended" runstate="Runnable" testcasecount="95" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.268187" total="95" passed="93" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1007" name="AbilityGraphTests.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/AbilityGraphTests.dll" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.109423" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34224" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1008" name="AbilityGraph" fullname="AbilityGraph" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.109108" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1009" name="Tests" fullname="AbilityGraph.Tests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.108990" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1010" name="Runtime" fullname="AbilityGraph.Tests.Runtime" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.108872" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1011" name="Nodes" fullname="AbilityGraph.Tests.Runtime.Nodes" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.108748" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestSuite" id="1013" name="Logic" fullname="AbilityGraph.Tests.Runtime.Nodes.Logic" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.105314" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-suite type="TestFixture" id="1004" name="BranchNodeTests" fullname="AbilityGraph.Tests.Runtime.Nodes.Logic.BranchNodeTests" classname="AbilityGraph.Tests.Runtime.Nodes.Logic.BranchNodeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.104409" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1006" name="GetExecutedNodes_ConditionIsFalse_ReturnsFalsePathNode" fullname="AbilityGraph.Tests.Runtime.Nodes.Logic.BranchNodeTests.GetExecutedNodes_ConditionIsFalse_ReturnsFalsePathNode" methodname="GetExecutedNodes_ConditionIsFalse_ReturnsFalsePathNode" classname="AbilityGraph.Tests.Runtime.Nodes.Logic.BranchNodeTests" runstate="Runnable" seed="1074023625" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.088378" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1005" name="GetExecutedNodes_ConditionIsTrue_ReturnsTruePathNode" fullname="AbilityGraph.Tests.Runtime.Nodes.Logic.BranchNodeTests.GetExecutedNodes_ConditionIsTrue_ReturnsTruePathNode" methodname="GetExecutedNodes_ConditionIsTrue_ReturnsTruePathNode" classname="AbilityGraph.Tests.Runtime.Nodes.Logic.BranchNodeTests" runstate="Runnable" seed="319573071" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001295" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+              </test-suite>
+              <test-suite type="TestSuite" id="1012" name="Primitives" fullname="AbilityGraph.Tests.Runtime.Nodes.Primitives" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003227" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-suite type="TestFixture" id="1001" name="PrimitivesNodesTests" fullname="AbilityGraph.Tests.Runtime.Nodes.Primitives.PrimitivesNodesTests" classname="AbilityGraph.Tests.Runtime.Nodes.Primitives.PrimitivesNodesTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002534" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="1002" name="PrimitiveNodeTest_FloatNode_OutputIsEqualToInput" fullname="AbilityGraph.Tests.Runtime.Nodes.Primitives.PrimitivesNodesTests.PrimitiveNodeTest_FloatNode_OutputIsEqualToInput" methodname="PrimitiveNodeTest_FloatNode_OutputIsEqualToInput" classname="AbilityGraph.Tests.Runtime.Nodes.Primitives.PrimitivesNodesTests" runstate="Runnable" seed="103039870" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001554" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                  <test-case id="1003" name="PrimitiveNodeTest_IntNode_OutputIsEqualToInput" fullname="AbilityGraph.Tests.Runtime.Nodes.Primitives.PrimitivesNodesTests.PrimitiveNodeTest_IntNode_OutputIsEqualToInput" methodname="PrimitiveNodeTest_IntNode_OutputIsEqualToInput" classname="AbilityGraph.Tests.Runtime.Nodes.Primitives.PrimitivesNodesTests" runstate="Runnable" seed="1597374605" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000451" asserts="0">
+                    <properties>
+                      <property name="retryIteration" value="0" />
+                      <property name="repeatIteration" value="0" />
+                    </properties>
+                  </test-case>
+                </test-suite>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1096" name="AbilitySystemTests.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/AbilitySystemTests.dll" runstate="Runnable" testcasecount="66" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.135510" total="66" passed="64" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34224" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1097" name="AbilitySystem" fullname="AbilitySystem" runstate="Runnable" testcasecount="66" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.135396" total="66" passed="64" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1098" name="Test" fullname="AbilitySystem.Test" runstate="Runnable" testcasecount="66" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.135298" total="66" passed="64" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1099" name="Runtime" fullname="AbilitySystem.Test.Runtime" runstate="Runnable" testcasecount="66" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.135154" total="66" passed="64" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestSuite" id="1107" name="Abilities" fullname="AbilitySystem.Test.Runtime.Abilities" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.067495" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1076" name="AbilitiesCooldownTests" fullname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests" classname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.036390" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1079" name="AbilitiesCooldownTests_CooldownElapsed_CanBeActivated" fullname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests.AbilitiesCooldownTests_CooldownElapsed_CanBeActivated" methodname="AbilitiesCooldownTests_CooldownElapsed_CanBeActivated" classname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests" runstate="Runnable" seed="1226655266" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.033111" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1077" name="AbilitiesCooldownTests_HasCooldown_TriggersCooldown" fullname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests.AbilitiesCooldownTests_HasCooldown_TriggersCooldown" methodname="AbilitiesCooldownTests_HasCooldown_TriggersCooldown" classname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests" runstate="Runnable" seed="348117694" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001496" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1078" name="AbilitiesCooldownTests_OnCooldown_CantBeActivated" fullname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests.AbilitiesCooldownTests_OnCooldown_CantBeActivated" methodname="AbilitiesCooldownTests_OnCooldown_CantBeActivated" classname="AbilitySystem.Test.Runtime.Abilities.AbilitiesCooldownTests" runstate="Runnable" seed="856162745" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001049" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1080" name="AbilityActivationTests" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityActivationTests" classname="AbilitySystem.Test.Runtime.Abilities.AbilityActivationTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003269" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1081" name="AbilityActivationTests_EventActivation_ActivatesOnEvent" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityActivationTests.AbilityActivationTests_EventActivation_ActivatesOnEvent" methodname="AbilityActivationTests_EventActivation_ActivatesOnEvent" classname="AbilitySystem.Test.Runtime.Abilities.AbilityActivationTests" runstate="Runnable" seed="268775327" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002540" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1082" name="AbilityDefinitionTests" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityDefinitionTests" classname="AbilitySystem.Test.Runtime.Abilities.AbilityDefinitionTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001216" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1083" name="AbilityDefinitionTests_CreationDefault_HasCorrectValues" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityDefinitionTests.AbilityDefinitionTests_CreationDefault_HasCorrectValues" methodname="AbilityDefinitionTests_CreationDefault_HasCorrectValues" classname="AbilitySystem.Test.Runtime.Abilities.AbilityDefinitionTests" runstate="Runnable" seed="450768160" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000573" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1084" name="AbilityTests" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.026080" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1085" name="AbilityTests_ActivateAbility_AppliesModifiers" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateAbility_AppliesModifiers" methodname="AbilityTests_ActivateAbility_AppliesModifiers" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="234340139" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001876" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1086" name="AbilityTests_ActivateAbilityMissingRequiredTags_ActivationFails" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateAbilityMissingRequiredTags_ActivationFails" methodname="AbilityTests_ActivateAbilityMissingRequiredTags_ActivationFails" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="818320569" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000921" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1088" name="AbilityTests_ActivateAbilityWithBlockedTag_ActivationFails" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateAbilityWithBlockedTag_ActivationFails" methodname="AbilityTests_ActivateAbilityWithBlockedTag_ActivationFails" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="1415852277" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001500" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1090" name="AbilityTests_ActivateAbilityWithCancelTags_CancelsAbilityWithTag" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateAbilityWithCancelTags_CancelsAbilityWithTag" methodname="AbilityTests_ActivateAbilityWithCancelTags_CancelsAbilityWithTag" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="1816681729" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001371" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1089" name="AbilityTests_ActivateAbilityWithoutBlockedTag_ActivationSucceeds" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateAbilityWithoutBlockedTag_ActivationSucceeds" methodname="AbilityTests_ActivateAbilityWithoutBlockedTag_ActivationSucceeds" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="787271813" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000922" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1087" name="AbilityTests_ActivateAbilityWithRequiredTags_ActivationSucceeds" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateAbilityWithRequiredTags_ActivationSucceeds" methodname="AbilityTests_ActivateAbilityWithRequiredTags_ActivationSucceeds" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="1023075112" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000945" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1093" name="AbilityTests_ActivateLocalOnClient_ActivationSuccess" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateLocalOnClient_ActivationSuccess" methodname="AbilityTests_ActivateLocalOnClient_ActivationSuccess" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="1243159440" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001286" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1092" name="AbilityTests_ActivateLocalOnServer_ActivationFails" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateLocalOnServer_ActivationFails" methodname="AbilityTests_ActivateLocalOnServer_ActivationFails" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="771211563" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000835" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1095" name="AbilityTests_ActivatePredictedAbility_PlaysCuesWithPredictionFlag" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivatePredictedAbility_PlaysCuesWithPredictionFlag" methodname="AbilityTests_ActivatePredictedAbility_PlaysCuesWithPredictionFlag" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="1387654823" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.010063" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1091" name="AbilityTests_ActivateWithOwnedTags_GrantsTags" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_ActivateWithOwnedTags_GrantsTags" methodname="AbilityTests_ActivateWithOwnedTags_GrantsTags" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="276083019" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001981" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1094" name="AbilityTests_EndAbility_EndsAbility" fullname="AbilitySystem.Test.Runtime.Abilities.AbilityTests.AbilityTests_EndAbility_EndsAbility" methodname="AbilityTests_EndAbility_EndsAbility" classname="AbilitySystem.Test.Runtime.Abilities.AbilityTests" runstate="Runnable" seed="794078971" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002629" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1106" name="Attribute" fullname="AbilitySystem.Test.Runtime.Attribute" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.007003" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1061" name="AttributeTest" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.005168" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1068" name="AttributeTest_ChangingBaseValue_ChangesCurrentValue" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_ChangingBaseValue_ChangesCurrentValue" methodname="AttributeTest_ChangingBaseValue_ChangesCurrentValue" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="1624147969" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001066" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1069" name="AttributeTest_ChangingBaseValueNoEvent_DoesNotInvokeEvent" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_ChangingBaseValueNoEvent_DoesNotInvokeEvent" methodname="AttributeTest_ChangingBaseValueNoEvent_DoesNotInvokeEvent" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="1913292868" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000776" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1070" name="AttributeTest_ChangingCurrentValueNoEvent_DoesNotInvokeEvent" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_ChangingCurrentValueNoEvent_DoesNotInvokeEvent" methodname="AttributeTest_ChangingCurrentValueNoEvent_DoesNotInvokeEvent" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="173530196" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000806" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1062" name="AttributeTest_CreationDefault_HasCorrectValues" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_CreationDefault_HasCorrectValues" methodname="AttributeTest_CreationDefault_HasCorrectValues" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="1304751490" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000262" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1064" name="AttributeTest_CreationWithMinMax_HasCorrectValuesForMax" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_CreationWithMinMax_HasCorrectValuesForMax" methodname="AttributeTest_CreationWithMinMax_HasCorrectValuesForMax" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="1694995642" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000200" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1063" name="AttributeTest_CreationWithMinMax_HasCorrectValuesForMin" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_CreationWithMinMax_HasCorrectValuesForMin" methodname="AttributeTest_CreationWithMinMax_HasCorrectValuesForMin" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="914781931" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000191" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1065" name="AttributeTest_SettingValues_ChangesValuesCorrectly" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_SettingValues_ChangesValuesCorrectly" methodname="AttributeTest_SettingValues_ChangesValuesCorrectly" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="889457043" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000203" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1066" name="AttributeTest_SettingValuesWithMax_ClampsCorrectly" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_SettingValuesWithMax_ClampsCorrectly" methodname="AttributeTest_SettingValuesWithMax_ClampsCorrectly" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="718507942" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000198" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1067" name="AttributeTest_SettingValuesWithMin_ClampsCorrectly" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeTest.AttributeTest_SettingValuesWithMin_ClampsCorrectly" methodname="AttributeTest_SettingValuesWithMin_ClampsCorrectly" classname="AbilitySystem.Test.Runtime.Attribute.AttributeTest" runstate="Runnable" seed="230104733" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000204" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1071" name="AttributeValueTest" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest" classname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001213" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1074" name="AttributeValueTests_CreateAttributeValue_CurrentValueClampedToMax" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest.AttributeValueTests_CreateAttributeValue_CurrentValueClampedToMax" methodname="AttributeValueTests_CreateAttributeValue_CurrentValueClampedToMax" classname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest" runstate="Runnable" seed="1910729792" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000123" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1075" name="AttributeValueTests_CreateAttributeValue_CurrentValueClampedToMin" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest.AttributeValueTests_CreateAttributeValue_CurrentValueClampedToMin" methodname="AttributeValueTests_CreateAttributeValue_CurrentValueClampedToMin" classname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest" runstate="Runnable" seed="1487050967" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000110" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1072" name="AttributeValueTests_CreateAttributeValue_HasCorrectValues" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest.AttributeValueTests_CreateAttributeValue_HasCorrectValues" methodname="AttributeValueTests_CreateAttributeValue_HasCorrectValues" classname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest" runstate="Runnable" seed="51173019" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000170" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1073" name="AttributeValueTests_CreateAttributeValue_MinAndMaxHaveCorrectDefaults" fullname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest.AttributeValueTests_CreateAttributeValue_MinAndMaxHaveCorrectDefaults" methodname="AttributeValueTests_CreateAttributeValue_MinAndMaxHaveCorrectDefaults" classname="AbilitySystem.Test.Runtime.Attribute.AttributeValueTest" runstate="Runnable" seed="31786544" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000118" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1105" name="AttributeSets" fullname="AbilitySystem.Test.Runtime.AttributeSets" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.005630" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1052" name="AttributeSetManagerTest" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003495" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1053" name="AttributeSetManagerTest_AddAttributeSet_AddsAttributeSet" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest.AttributeSetManagerTest_AddAttributeSet_AddsAttributeSet" methodname="AttributeSetManagerTest_AddAttributeSet_AddsAttributeSet" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest" runstate="Runnable" seed="1225497101" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001648" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1055" name="AttributeSetManagerTest_GetAttribute_GetsAttributeByName" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest.AttributeSetManagerTest_GetAttribute_GetsAttributeByName" methodname="AttributeSetManagerTest_GetAttribute_GetsAttributeByName" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest" runstate="Runnable" seed="640876016" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000614" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1054" name="AttributeSetManagerTest_GetAttributeSet_GetsAttributeSetByName" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest.AttributeSetManagerTest_GetAttributeSet_GetsAttributeSetByName" methodname="AttributeSetManagerTest_GetAttributeSet_GetsAttributeSetByName" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetManagerTest" runstate="Runnable" seed="1019899284" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000704" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1056" name="AttributeSetTest" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001867" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1058" name="AttributeSetTest_AddAttribute_AddsAttribute" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest.AttributeSetTest_AddAttribute_AddsAttribute" methodname="AttributeSetTest_AddAttribute_AddsAttribute" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest" runstate="Runnable" seed="1151235918" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000425" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1060" name="AttributeSetTest_GetAllAttributes_ReturnsAllAttributes" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest.AttributeSetTest_GetAllAttributes_ReturnsAllAttributes" methodname="AttributeSetTest_GetAllAttributes_ReturnsAllAttributes" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest" runstate="Runnable" seed="1323741281" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000281" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1057" name="AttributeSetTest_Instantiate_HasName" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest.AttributeSetTest_Instantiate_HasName" methodname="AttributeSetTest_Instantiate_HasName" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest" runstate="Runnable" seed="2070247425" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000160" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1059" name="AttributeSetTest_RemoveAttribute_RemovesAttribute" fullname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest.AttributeSetTest_RemoveAttribute_RemovesAttribute" methodname="AttributeSetTest_RemoveAttribute_RemovesAttribute" classname="AbilitySystem.Test.Runtime.AttributeSets.AttributeSetTest" runstate="Runnable" seed="1098999742" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000350" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1104" name="AttributesNetworking" fullname="AbilitySystem.Test.Runtime.AttributesNetworking" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.011189" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1049" name="AttributesNetworkingTests" fullname="AbilitySystem.Test.Runtime.AttributesNetworking.AttributesNetworkingTests" classname="AbilitySystem.Test.Runtime.AttributesNetworking.AttributesNetworkingTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.011020" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1051" name="AttributesNetworkingTests_ClientChangesBaseAttribute_NoUpdatesSent" fullname="AbilitySystem.Test.Runtime.AttributesNetworking.AttributesNetworkingTests.AttributesNetworkingTests_ClientChangesBaseAttribute_NoUpdatesSent" methodname="AttributesNetworkingTests_ClientChangesBaseAttribute_NoUpdatesSent" classname="AbilitySystem.Test.Runtime.AttributesNetworking.AttributesNetworkingTests" runstate="Runnable" seed="5130853" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.005315" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1050" name="AttributesNetworkingTests_ServerChangesBaseAttribute_ServerSendsUpdateToClients" fullname="AbilitySystem.Test.Runtime.AttributesNetworking.AttributesNetworkingTests.AttributesNetworkingTests_ServerChangesBaseAttribute_ServerSendsUpdateToClients" methodname="AttributesNetworkingTests_ServerChangesBaseAttribute_ServerSendsUpdateToClients" classname="AbilitySystem.Test.Runtime.AttributesNetworking.AttributesNetworkingTests" runstate="Runnable" seed="2057861541" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.005245" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1103" name="Effects" fullname="AbilitySystem.Test.Runtime.Effects" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.015489" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1035" name="EffectManagerTest" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.012246" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1037" name="EffectManagerTest_AddEffect_HasAddedEffect" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_AddEffect_HasAddedEffect" methodname="EffectManagerTest_AddEffect_HasAddedEffect" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="1474652669" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000737" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1041" name="EffectManagerTest_AggregateBySource_StacksCorrectly" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_AggregateBySource_StacksCorrectly" methodname="EffectManagerTest_AggregateBySource_StacksCorrectly" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="133394690" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001122" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1040" name="EffectManagerTest_DurationalEffect_ExpiresCorrectly" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_DurationalEffect_ExpiresCorrectly" methodname="EffectManagerTest_DurationalEffect_ExpiresCorrectly" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="312844066" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002244" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1036" name="EffectManagerTest_Instantiate_HasDefaultValues" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_Instantiate_HasDefaultValues" methodname="EffectManagerTest_Instantiate_HasDefaultValues" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="665868912" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000237" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1042" name="EffectManagerTest_OnEffectStacksChanged_FiresEvent" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_OnEffectStacksChanged_FiresEvent" methodname="EffectManagerTest_OnEffectStacksChanged_FiresEvent" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="136583908" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000702" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1044" name="EffectManagerTest_OngoingRequiredTags_SuspendsAndResumesEffect" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_OngoingRequiredTags_SuspendsAndResumesEffect" methodname="EffectManagerTest_OngoingRequiredTags_SuspendsAndResumesEffect" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="1329925318" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001314" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1038" name="EffectManagerTest_RemoveEffect_HasRemovedEffect" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_RemoveEffect_HasRemovedEffect" methodname="EffectManagerTest_RemoveEffect_HasRemovedEffect" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="289062519" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000535" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1043" name="EffectManagerTest_RemoveGameplayEffectsWithTags_RemovesMatchingEffects" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_RemoveGameplayEffectsWithTags_RemovesMatchingEffects" methodname="EffectManagerTest_RemoveGameplayEffectsWithTags_RemovesMatchingEffects" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="2030431543" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002044" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1045" name="EffectManagerTest_RetractPredictedEffect_FiresOnEffectRemoved" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_RetractPredictedEffect_FiresOnEffectRemoved" methodname="EffectManagerTest_RetractPredictedEffect_FiresOnEffectRemoved" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="2008750755" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000863" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1039" name="EffectManagerTest_TickAsServer_TicksEffects" fullname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest.EffectManagerTest_TickAsServer_TicksEffects" methodname="EffectManagerTest_TickAsServer_TicksEffects" classname="AbilitySystem.Test.Runtime.Effects.EffectManagerTest" runstate="Runnable" seed="1478456268" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001140" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1046" name="EffectTests" fullname="AbilitySystem.Test.Runtime.Effects.EffectTests" classname="AbilitySystem.Test.Runtime.Effects.EffectTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002837" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1048" name="EffectTests_ApplyPredictedEffect_PlaysCuesWithPredictionFlag" fullname="AbilitySystem.Test.Runtime.Effects.EffectTests.EffectTests_ApplyPredictedEffect_PlaysCuesWithPredictionFlag" methodname="EffectTests_ApplyPredictedEffect_PlaysCuesWithPredictionFlag" classname="AbilitySystem.Test.Runtime.Effects.EffectTests" runstate="Runnable" seed="133257179" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001347" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1047" name="EffectTests_IsPredictableInstantEffect_ReturnsFalse" fullname="AbilitySystem.Test.Runtime.Effects.EffectTests.EffectTests_IsPredictableInstantEffect_ReturnsFalse" methodname="EffectTests_IsPredictableInstantEffect_ReturnsFalse" classname="AbilitySystem.Test.Runtime.Effects.EffectTests" runstate="Runnable" seed="1663212698" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000744" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1102" name="Events" fullname="AbilitySystem.Test.Runtime.Events" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003281" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1031" name="EventManagerTests" fullname="AbilitySystem.Test.Runtime.Events.EventManagerTests" classname="AbilitySystem.Test.Runtime.Events.EventManagerTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003005" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1032" name="EventManagerTests_TriggerEvent_EventReceived" fullname="AbilitySystem.Test.Runtime.Events.EventManagerTests.EventManagerTests_TriggerEvent_EventReceived" methodname="EventManagerTests_TriggerEvent_EventReceived" classname="AbilitySystem.Test.Runtime.Events.EventManagerTests" runstate="Runnable" seed="1671977641" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000830" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1033" name="EventManagerTests_TriggerEventWithAbilitySystem_EventReceived" fullname="AbilitySystem.Test.Runtime.Events.EventManagerTests.EventManagerTests_TriggerEventWithAbilitySystem_EventReceived" methodname="EventManagerTests_TriggerEventWithAbilitySystem_EventReceived" classname="AbilitySystem.Test.Runtime.Events.EventManagerTests" runstate="Runnable" seed="1712700619" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000679" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1034" name="EventManagerTests_Unsubscribe_DoesNotReceiveEvent" fullname="AbilitySystem.Test.Runtime.Events.EventManagerTests.EventManagerTests_Unsubscribe_DoesNotReceiveEvent" methodname="EventManagerTests_Unsubscribe_DoesNotReceiveEvent" classname="AbilitySystem.Test.Runtime.Events.EventManagerTests" runstate="Runnable" seed="114628909" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000780" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1101" name="Modifiers" fullname="AbilitySystem.Test.Runtime.Modifiers" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.011393" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1023" name="CostModifierTests" fullname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" classname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.010092" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1027" name="CostModifierTests_CalculateWithIrrelevantEffect_ReturnsBaseCost" fullname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests.CostModifierTests_CalculateWithIrrelevantEffect_ReturnsBaseCost" methodname="CostModifierTests_CalculateWithIrrelevantEffect_ReturnsBaseCost" classname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" runstate="Runnable" seed="370282238" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.004429" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1024" name="CostModifierTests_CalculateWithNoRelevantEffect_ReturnsBaseCost" fullname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests.CostModifierTests_CalculateWithNoRelevantEffect_ReturnsBaseCost" methodname="CostModifierTests_CalculateWithNoRelevantEffect_ReturnsBaseCost" classname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" runstate="Runnable" seed="161109572" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000785" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1028" name="CostModifierTests_CalculateWithOverride_ReturnsOverridenCost" fullname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests.CostModifierTests_CalculateWithOverride_ReturnsOverridenCost" methodname="CostModifierTests_CalculateWithOverride_ReturnsOverridenCost" classname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" runstate="Runnable" seed="750031178" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001493" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1026" name="CostModifierTests_CalculateWithRelevantAncestorEffect_ReturnsModifierCost" fullname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests.CostModifierTests_CalculateWithRelevantAncestorEffect_ReturnsModifierCost" methodname="CostModifierTests_CalculateWithRelevantAncestorEffect_ReturnsModifierCost" classname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" runstate="Runnable" seed="1213695216" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001304" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1025" name="CostModifierTests_CalculateWithRelevantEffect_ReturnsModifierCost" fullname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests.CostModifierTests_CalculateWithRelevantEffect_ReturnsModifierCost" methodname="CostModifierTests_CalculateWithRelevantEffect_ReturnsModifierCost" classname="AbilitySystem.Test.Runtime.Modifiers.CostModifierTests" runstate="Runnable" seed="1295153627" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001294" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1029" name="FloatModifierTests" fullname="AbilitySystem.Test.Runtime.Modifiers.FloatModifierTests" classname="AbilitySystem.Test.Runtime.Modifiers.FloatModifierTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001020" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1030" name="FloatModifierTests_Calculate_HasCorrectModifier" fullname="AbilitySystem.Test.Runtime.Modifiers.FloatModifierTests.FloatModifierTests_Calculate_HasCorrectModifier" methodname="FloatModifierTests_Calculate_HasCorrectModifier" classname="AbilitySystem.Test.Runtime.Modifiers.FloatModifierTests" runstate="Runnable" seed="802261833" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000171" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestSuite" id="1100" name="Networking" fullname="AbilitySystem.Test.Runtime.Networking" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.013134" total="7" passed="5" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="TestFixture" id="1014" name="PredictionKeyTest" fullname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" classname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001729" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1018" name="PredictionKeyTest_CreateDependentPredictionKey_CreatesCorrectDependency" fullname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest.PredictionKeyTest_CreateDependentPredictionKey_CreatesCorrectDependency" methodname="PredictionKeyTest_CreateDependentPredictionKey_CreatesCorrectDependency" classname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" runstate="Runnable" seed="1471277999" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000304" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1019" name="PredictionKeyTest_CreateInvalidPredictionKey_CreatedKeyIsInvalid" fullname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest.PredictionKeyTest_CreateInvalidPredictionKey_CreatedKeyIsInvalid" methodname="PredictionKeyTest_CreateInvalidPredictionKey_CreatedKeyIsInvalid" classname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" runstate="Runnable" seed="1483785342" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000151" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1015" name="PredictionKeyTest_CreatePredictionKey_CreatesValidPredictionKey" fullname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest.PredictionKeyTest_CreatePredictionKey_CreatesValidPredictionKey" methodname="PredictionKeyTest_CreatePredictionKey_CreatesValidPredictionKey" classname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" runstate="Runnable" seed="1920693048" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000121" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1017" name="PredictionKeyTest_CreatePredictionKey_IncrementsCorrectly" fullname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest.PredictionKeyTest_CreatePredictionKey_IncrementsCorrectly" methodname="PredictionKeyTest_CreatePredictionKey_IncrementsCorrectly" classname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" runstate="Runnable" seed="1424351985" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000123" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1016" name="PredictionKeyTest_Invalidate_InvalidatesPredictionKey" fullname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest.PredictionKeyTest_Invalidate_InvalidatesPredictionKey" methodname="PredictionKeyTest_Invalidate_InvalidatesPredictionKey" classname="AbilitySystem.Test.Runtime.Networking.PredictionKeyTest" runstate="Runnable" seed="579953760" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000129" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="TestFixture" id="1020" name="ServerClientInteractionTests" fullname="AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests" classname="AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.011081" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="1021" name="ServerClientInteraction_ClientTryActivateAbility_RequestsServerActivation" fullname="AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests.ServerClientInteraction_ClientTryActivateAbility_RequestsServerActivation" methodname="ServerClientInteraction_ClientTryActivateAbility_RequestsServerActivation" classname="AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests" runstate="Runnable" seed="872513123" result="Failed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.007725" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Client did not emit the correct ability name to the server request map.
+  Expected: "Test.Ability.Interact"
+  But was:  null
+]]></message>
+                    <stack-trace><![CDATA[at AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests.ServerClientInteraction_ClientTryActivateAbility_RequestsServerActivation () [0x0008a] in C:\Users\Anthony\Desktop\Ascended\Ascended\Assets\Systems\AbilitySystem\Test\Runtime\Networking\ServerClientInteractionTests.cs:37
+]]></stack-trace>
+                  </failure>
+                </test-case>
+                <test-case id="1022" name="ServerClientInteraction_ServerValidatesClientRequest_GrantsAndActivatesAbility" fullname="AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests.ServerClientInteraction_ServerValidatesClientRequest_GrantsAndActivatesAbility" methodname="ServerClientInteraction_ServerValidatesClientRequest_GrantsAndActivatesAbility" classname="AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests" runstate="Runnable" seed="2086454491" result="Failed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002774" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Client failed to initially predict the activation locally.
+  Expected: True
+  But was:  False
+]]></message>
+                    <stack-trace><![CDATA[at AbilitySystem.Test.Runtime.Networking.ServerClientInteractionTests.ServerClientInteraction_ServerValidatesClientRequest_GrantsAndActivatesAbility () [0x000d1] in C:\Users\Anthony\Desktop\Ascended\Ascended\Assets\Systems\AbilitySystem\Test\Runtime\Networking\ServerClientInteractionTests.cs:71
+]]></stack-trace>
+                  </failure>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1125" name="GameplayTagsTests.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/GameplayTagsTests.dll" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.007836" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34224" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1126" name="Plugins" fullname="Plugins" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.007518" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1127" name="GameplayTags" fullname="Plugins.GameplayTags" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003085" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1128" name="Tests" fullname="Plugins.GameplayTags.Tests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002984" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1129" name="Runtime" fullname="Plugins.GameplayTags.Tests.Runtime" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002863" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1108" name="TagTest" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002693" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1109" name="TagTest_CreateGameplayTag_HasCorrectValues" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_CreateGameplayTag_HasCorrectValues" methodname="TagTest_CreateGameplayTag_HasCorrectValues" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="712571683" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000622" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1111" name="TagTest_GetHashCode_ReturnsTagHashCode" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_GetHashCode_ReturnsTagHashCode" methodname="TagTest_GetHashCode_ReturnsTagHashCode" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="53382493" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000137" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1110" name="TagTest_GetName_ReturnsTagName" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_GetName_ReturnsTagName" methodname="TagTest_GetName_ReturnsTagName" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="27439298" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000103" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1113" name="TagTest_HasTag_ReturnsFalseWhenDoesNotContainOtherTag" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_HasTag_ReturnsFalseWhenDoesNotContainOtherTag" methodname="TagTest_HasTag_ReturnsFalseWhenDoesNotContainOtherTag" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="1549764895" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000179" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1112" name="TagTest_HasTag_ReturnsTrueWhenContainsOtherTag" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_HasTag_ReturnsTrueWhenContainsOtherTag" methodname="TagTest_HasTag_ReturnsTrueWhenContainsOtherTag" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="1612291994" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000132" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1115" name="TagTest_IsAncestorOf_ReturnsFalseWhenIsNotAncestor" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_IsAncestorOf_ReturnsFalseWhenIsNotAncestor" methodname="TagTest_IsAncestorOf_ReturnsFalseWhenIsNotAncestor" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="412372530" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000127" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1114" name="TagTest_IsAncestorOf_ReturnsTrueWhenIsAncestor" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_IsAncestorOf_ReturnsTrueWhenIsAncestor" methodname="TagTest_IsAncestorOf_ReturnsTrueWhenIsAncestor" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="545441412" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000119" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1116" name="TagTest_Operators_AreFunctional" fullname="Plugins.GameplayTags.Tests.Runtime.TagTest.TagTest_Operators_AreFunctional" methodname="TagTest_Operators_AreFunctional" classname="Plugins.GameplayTags.Tests.Runtime.TagTest" runstate="Runnable" seed="1837972340" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000229" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+        <test-suite type="TestSuite" id="1130" name="Tags" fullname="Plugins.Tags" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.004308" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1131" name="Tests" fullname="Plugins.Tags.Tests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.004197" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1132" name="Runtime" fullname="Plugins.Tags.Tests.Runtime" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.004073" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1117" name="TagQueryTest" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003907" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1123" name="TagQueryTest_AllOfExactMatching_ReturnsTrue" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AllOfExactMatching_ReturnsTrue" methodname="TagQueryTest_AllOfExactMatching_ReturnsTrue" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="881013010" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.001446" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1122" name="TagQueryTest_AllOfExactNonMatching_ReturnsFalse" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AllOfExactNonMatching_ReturnsFalse" methodname="TagQueryTest_AllOfExactNonMatching_ReturnsFalse" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="132705125" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000202" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1124" name="TagQueryTest_AllOfPartialNonMatching_ReturnsFalse" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AllOfPartialNonMatching_ReturnsFalse" methodname="TagQueryTest_AllOfPartialNonMatching_ReturnsFalse" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="1469511782" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000443" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1119" name="TagQueryTest_AnyOfExactMatching_ReturnsTrue" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AnyOfExactMatching_ReturnsTrue" methodname="TagQueryTest_AnyOfExactMatching_ReturnsTrue" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="324844748" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000285" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1118" name="TagQueryTest_AnyOfExactNonMatching_ReturnsFalse" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AnyOfExactNonMatching_ReturnsFalse" methodname="TagQueryTest_AnyOfExactNonMatching_ReturnsFalse" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="1507324716" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000180" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1121" name="TagQueryTest_AnyOfPartialMatching_ReturnsTrue" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AnyOfPartialMatching_ReturnsTrue" methodname="TagQueryTest_AnyOfPartialMatching_ReturnsTrue" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="1803070620" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000296" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1120" name="TagQueryTest_AnyOfPartialNonMatching_ReturnsFalse" fullname="Plugins.Tags.Tests.Runtime.TagQueryTest.TagQueryTest_AnyOfPartialNonMatching_ReturnsFalse" methodname="TagQueryTest_AnyOfPartialNonMatching_ReturnsFalse" classname="Plugins.Tags.Tests.Runtime.TagQueryTest" runstate="Runnable" seed="451308402" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000179" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1136" name="ItemTests.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/ItemTests.dll" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003921" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34224" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1137" name="Systems" fullname="Systems" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003813" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1138" name="Item" fullname="Systems.Item" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003716" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1139" name="Tests" fullname="Systems.Item.Tests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003598" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1133" name="InventoryTests" fullname="Systems.Item.Tests.InventoryTests" classname="Systems.Item.Tests.InventoryTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.003465" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1134" name="InventoryTests_ServerAddItem_ItemIsAddedOnServer" fullname="Systems.Item.Tests.InventoryTests.InventoryTests_ServerAddItem_ItemIsAddedOnServer" methodname="InventoryTests_ServerAddItem_ItemIsAddedOnServer" classname="Systems.Item.Tests.InventoryTests" runstate="Runnable" seed="761799009" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002431" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1135" name="InventoryTests_ServerAddItem_OwnerIsNotifiedOfItemAddition" fullname="Systems.Item.Tests.InventoryTests.InventoryTests_ServerAddItem_OwnerIsNotifiedOfItemAddition" methodname="InventoryTests_ServerAddItem_OwnerIsNotifiedOfItemAddition" classname="Systems.Item.Tests.InventoryTests" runstate="Runnable" seed="1176964301" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000539" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1148" name="ScalableFloatTest.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/ScalableFloatTest.dll" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002515" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34224" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1149" name="ScalableFloat" fullname="ScalableFloat" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002400" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1150" name="Test" fullname="ScalableFloat.Test" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002280" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1140" name="ScalableFloatTest" fullname="ScalableFloat.Test.ScalableFloatTest" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.002119" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1146" name="Evaluate_WithDifferentBaseValue_ReturnsCorrectlyScaledValue" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithDifferentBaseValue_ReturnsCorrectlyScaledValue" methodname="Evaluate_WithDifferentBaseValue_ReturnsCorrectlyScaledValue" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="335044016" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000327" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1147" name="Evaluate_WithDifferentCurve_ReturnsCorrectValue" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithDifferentCurve_ReturnsCorrectValue" methodname="Evaluate_WithDifferentCurve_ReturnsCorrectValue" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="1050358875" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000170" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1143" name="Evaluate_WithValueBetweenZeroAndOne_ReturnsCorrectValue" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithValueBetweenZeroAndOne_ReturnsCorrectValue" methodname="Evaluate_WithValueBetweenZeroAndOne_ReturnsCorrectValue" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="1354165759" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000125" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1145" name="Evaluate_WithValueGreaterThanOne_ClampsToOne" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithValueGreaterThanOne_ClampsToOne" methodname="Evaluate_WithValueGreaterThanOne_ClampsToOne" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="430798843" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000128" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1144" name="Evaluate_WithValueLessThanZero_ClampsToZero" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithValueLessThanZero_ClampsToZero" methodname="Evaluate_WithValueLessThanZero_ClampsToZero" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="2009176574" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000142" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1142" name="Evaluate_WithValueOne_ReturnsCorrectValue" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithValueOne_ReturnsCorrectValue" methodname="Evaluate_WithValueOne_ReturnsCorrectValue" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="1042726519" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000162" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1141" name="Evaluate_WithValueZero_ReturnsCorrectValue" fullname="ScalableFloat.Test.ScalableFloatTest.Evaluate_WithValueZero_ReturnsCorrectValue" methodname="Evaluate_WithValueZero_ReturnsCorrectValue" classname="ScalableFloat.Test.ScalableFloatTest" runstate="Runnable" seed="105143461" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000113" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1153" name="Unity.Addressables.DocExampleCode.Editor.Tests.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/Unity.Addressables.DocExampleCode.Editor.Tests.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000879" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34224" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1154" name="AddressableAssets" fullname="AddressableAssets" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000729" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1155" name="DocExampleCode" fullname="AddressableAssets.DocExampleCode" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000599" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1151" name="TestStub" fullname="AddressableAssets.DocExampleCode.TestStub" classname="AddressableAssets.DocExampleCode.TestStub" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000467" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1152" name="RequiredTest" fullname="AddressableAssets.DocExampleCode.TestStub.RequiredTest" methodname="RequiredTest" classname="AddressableAssets.DocExampleCode.TestStub" runstate="Runnable" seed="389886910" result="Passed" start-time="2026-04-17 14:46:44Z" end-time="2026-04-17 14:46:44Z" duration="0.000075" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: C:/Users/Anthony/AppData/LocalLow/DefaultCompany/Ascended\TestResults.xml
+Saving results to: C:/Users/Anthony/AppData/LocalLow/DefaultCompany/Ascended\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

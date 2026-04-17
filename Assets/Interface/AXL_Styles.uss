@@ -1,0 +1,78 @@
+/* A.X.L. Inspired Tactical HUD Design System */
+
+:root {
+    --axl-cyan: #00d4ff;
+    --axl-amber: #ff9d00;
+    --axl-bg-dark: rgba(2, 2, 5, 0.95);
+    --axl-line-dim: rgba(0, 212, 255, 0.2);
+    --font-size-data: 10px;
+}
+
+/* Base Frame with Corner Brackets */
+.hud-frame {
+    background-color: var(--axl-bg-dark);
+    border-width: 1px;
+    border-color: var(--axl-line-dim);
+    padding: 20px;
+    position: relative;
+}
+
+/* Corner Decorations */
+.hud-bracket {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    -unity-background-image-tint-color: var(--axl-cyan);
+    background-image: url('project://database/Assets/Art/Textures/hud_brackets.png');
+}
+
+.bracket-nw { top: -2px; left: -2px; rotate: 0deg; }
+.bracket-ne { top: -2px; right: -2px; rotate: 90deg; }
+.bracket-se { bottom: -2px; right: -2px; rotate: 180deg; }
+.bracket-sw { bottom: -2px; left: -2px; rotate: 270deg; }
+
+/* Technical Buttons */
+.hud-btn {
+    background-color: rgba(0, 212, 255, 0.05);
+    border-width: 1px;
+    border-color: var(--axl-line-dim);
+    color: var(--axl-cyan);
+    padding: 12px 20px;
+    font-size: 18px;
+    -unity-text-align: middle-left;
+    letter-spacing: 2px;
+    transition-property: all;
+    transition-duration: 0.1s;
+    margin-bottom: 8px;
+}
+
+.hud-btn:hover {
+    background-color: var(--axl-cyan);
+    color: black;
+    -unity-font-style: bold;
+    border-color: white;
+}
+
+/* Data Readouts */
+.hud-reading {
+    font-size: var(--font-size-data);
+    color: var(--axl-cyan);
+    opacity: 0.6;
+    letter-spacing: 1px;
+    -unity-font-style: bold;
+}
+
+.hud-reading-amber {
+    color: var(--axl-amber);
+}
+
+/* Scanline Effect Overlay */
+.scanline-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    opacity: 0.1;
+}

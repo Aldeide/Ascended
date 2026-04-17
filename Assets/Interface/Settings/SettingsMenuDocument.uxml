@@ -1,19 +1,52 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:TabView view-data-key="TabbedMenu">
-        <ui:Tab label="Graphics&#10;" name="Graphics" view-data-key="GraphicsTab" style="color: rgb(255, 255, 255);">
-            <ui:Label text="Label" />
-        </ui:Tab>
-        <ui:Tab label="Audio&#10;" view-data-key="AudioTab" name="Audio" />
-        <ui:Tab label="Keybindings" name="Keybindings" view-data-key="KeybindingsTab">
-            <ui:MultiColumnListView sorting-mode="Default">
-                <ui:Columns stretch-mode="GrowAndFill">
-                    <ui:Column title="Test" name="Hi" min-width="200px" width="50%" visible="true" sortable="true" optional="false" resizable="false" />
-                    <ui:Column name="Setting" width="50%" title="Setting" stretchable="false" sortable="false" optional="false" resizable="false" />
-                </ui:Columns>
-                <ui:SortColumnDescriptions>
-                    <ui:SortColumnDescription column-name="Hi" />
-                </ui:SortColumnDescriptions>
-            </ui:MultiColumnListView>
-        </ui:Tab>
-    </ui:TabView>
+    <Style src="project://database/Assets/Interface/AXL_Styles.uss" />
+    <Style src="project://database/Assets/Interface/Settings/SettingsMenu.uss" />
+    
+    <ui:VisualElement name="settings-root" class="settings-container hud-frame">
+        <!-- Frame Corners -->
+        <ui:VisualElement class="hud-bracket bracket-nw" />
+        <ui:VisualElement class="hud-bracket bracket-ne" />
+        <ui:VisualElement class="hud-bracket bracket-se" />
+        <ui:VisualElement class="hud-bracket bracket-sw" />
+
+        <ui:Label text="MODULE_CONFIG_v2.0" class="hud-reading" style="margin-bottom: 20px; -unity-font-style: bold;" />
+
+        <ui:TabView view-data-key="TabbedMenu">
+            <ui:Tab label="[ 01_VIDEO ]" name="Graphics" view-data-key="GraphicsTab">
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="RESOLUTION" class="hud-reading" />
+                    <ui:DropdownField name="resolution-dropdown" class="hud-dropdown" />
+                </ui:VisualElement>
+                
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="QUALITY_LEVEL" class="hud-reading" />
+                    <ui:DropdownField name="quality-dropdown" class="hud-dropdown" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="VSYNC_STATUS" class="hud-reading" />
+                    <ui:Toggle name="vsync-toggle" class="hud-toggle" />
+                </ui:VisualElement>
+            </ui:Tab>
+
+            <ui:Tab label="[ 02_AUDIO ]" view-data-key="AudioTab" name="Audio">
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="MASTER_VOLUME" class="hud-reading" />
+                    <ui:Slider name="volume-slider" low-value="0" high-value="1" class="hud-slider" />
+                </ui:VisualElement>
+            </ui:Tab>
+
+            <ui:Tab label="[ 03_SYSTEM ]" name="Gameplay" view-data-key="GameplayTab">
+                <ui:Label text="DIFFICULTY_THROTTLE" class="hud-reading" />
+                <ui:Label text="INPUT_SENSITIVITY" class="hud-reading" />
+            </ui:Tab>
+
+            <ui:Tab label="[ 04_INPUTS ]" name="Keybindings" view-data-key="KeybindingsTab">
+                <ui:ScrollView name="keybindings-list" class="hud-scroll">
+                    <!-- Population via C# -->
+                </ui:ScrollView>
+                <ui:Button name="reset-rebinds-btn" text="RESET_TO_DEFAULTS" class="hud-btn" style="margin-top: 20px; width: 250px;" />
+            </ui:Tab>
+        </ui:TabView>
+    </ui:VisualElement>
 </ui:UXML>
