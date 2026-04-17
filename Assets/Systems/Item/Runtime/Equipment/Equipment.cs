@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using GameplayTags.Runtime;
 using Item.Runtime.Database;
@@ -21,6 +21,7 @@ namespace Item.Runtime
         public Dictionary<ItemDefinition, ScalableFloat.Runtime.ScalableFloat> UpgradeCosts { get; set; }
         public Dictionary<ItemDefinition, int> NextUpgradeCosts { get; set; }
         public Dictionary<Tag, Modifier> Mods { get; }
+        public UnityEngine.Sprite Icon { get; set; }
 
         private readonly EquipmentDefinition _definition;
         private readonly IInventoryManager _manager;
@@ -33,6 +34,7 @@ namespace Item.Runtime
             Mods = new Dictionary<Tag, Modifier>();
             _definition = definition;
             _manager = manager;
+            Icon = definition.Icon;
 
             InitialiseMods();
         }
@@ -47,6 +49,7 @@ namespace Item.Runtime
             Description = _definition.Description;
             Mods = new Dictionary<Tag, Modifier>();
             InitialiseMods();
+            Icon = _definition.Icon;
 
             foreach (var mod in serialisedEquipment.Modifiers)
             {

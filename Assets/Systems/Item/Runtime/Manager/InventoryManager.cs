@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using Item.Runtime.Database;
@@ -12,6 +13,7 @@ namespace Item.Runtime.Manager
     public class InventoryManager : IInventoryManager
     {
         public List<IBaseItem> Items { get; set; }
+        public event Action OnInventoryChanged;
         
         private readonly IAbilitySystem _owner;
         private readonly IInventoryReplicationManager _replicationManager;
@@ -36,6 +38,7 @@ namespace Item.Runtime.Manager
                 Items.Add(item);
                 // TODO: Create item database entry so we can have a unique id per item.
                 _replicationManager.NotifyClientAddItem(item.Name, 1);
+                OnInventoryChanged?.Invoke();
             }
         }
 
@@ -46,6 +49,7 @@ namespace Item.Runtime.Manager
             {
                 Items.Add(item);
             }
+            OnInventoryChanged?.Invoke();
         }
 
         public void RemoveItem(IBaseItem item)

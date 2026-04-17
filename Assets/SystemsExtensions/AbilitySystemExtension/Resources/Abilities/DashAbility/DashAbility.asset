@@ -12,6 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 181ca1fa52524d59afd0951ae5790fba, type: 3}
   m_Name: DashAbility
   m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 2200808162856009823
+  - rid: 2200808162856009824
+  edges:
+  - GUID: d5e3190c-4e31-4ce1-886b-e544fa297645
+    owner: {fileID: 11400000}
+    inputNodeGUID: a88a5cac-56d5-49bb-a635-ee595562340f
+    outputNodeGUID: c5880ed0-8915-4150-911c-a3be5838e1d0
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 302
+      height: 347
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   Description:
     m_TableReference:
       m_TableCollectionName: 
@@ -52,3 +84,34 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 2200808162856009823
+      type: {class: ActivateAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: c5880ed0-8915-4150-911c-a3be5838e1d0
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 352
+          y: 292
+          width: 127
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 2200808162856009824
+      type: {class: RigidBodyAddForceNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: a88a5cac-56d5-49bb-a635-ee595562340f
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 612
+          y: 292
+          width: 170
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Force: {x: 0, y: 0, z: 0}

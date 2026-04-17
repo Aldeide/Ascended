@@ -1,5 +1,6 @@
 ﻿using Item.Runtime.Definition;
 using Item.Runtime.Interface;
+using UnityEngine;
 using UnityEngine.Localization;
 
 namespace Item.Runtime
@@ -9,7 +10,8 @@ namespace Item.Runtime
         public string Name { get; set; }
         public LocalizedString DisplayName { get; set; }
         public LocalizedString Description { get; set; }
-        
+        public Sprite Icon { get; set; }
+
         public int StackSize { get; }
         public int CurrentStackSize { get; private set; }
 

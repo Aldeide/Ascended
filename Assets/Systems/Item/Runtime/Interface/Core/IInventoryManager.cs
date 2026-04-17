@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using Item.Runtime.Definition;
 
@@ -7,6 +8,7 @@ namespace Item.Runtime.Interface.Core
     public interface IInventoryManager
     {
         public List<IBaseItem> Items { get; set; }
+        public event Action OnInventoryChanged;
 
         public IAbilitySystem GetOwner();
         
