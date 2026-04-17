@@ -113,6 +113,20 @@ namespace AbilitySystem.Runtime.AttributeSets
             return output;
         }
 
+        public void Restore(Dictionary<string, AttributeValue> snapshot)
+        {
+            foreach (var attributeSet in _attributeSets.Values)
+            {
+                foreach (var attribute in attributeSet.GetAllAttributes())
+                {
+                    if (snapshot.TryGetValue(attribute.GetName(), out var value))
+                    {
+                        attribute.Restore(value);
+                    }
+                }
+            }
+        }
+
         public void RegisterOnAttributeChanged(string attributeName, Action<Attribute, float, float> action)
         {
             foreach (var attributeSet in _attributeSets.Values)

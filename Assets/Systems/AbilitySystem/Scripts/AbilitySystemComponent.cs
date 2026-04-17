@@ -218,7 +218,11 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Server)]
         public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data)
         {
-            if (!AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key, data))
+            if (AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key, data))
+            {
+                NotifyAbilityActivationSucceededRpc(key);
+            }
+            else
             {
                 NotifyAbilityActivationFailedRpc(abilityName, key);
             }
@@ -231,10 +235,15 @@ namespace AbilitySystem.Scripts
         }
 
         [Rpc(SendTo.Owner)]
+        public void NotifyAbilityActivationSucceededRpc(PredictionKey key)
+        {
+            AbilitySystem.AbilityManager.NotifyServerResponse(key, true);
+        }
+
+        [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationFailedRpc(string abilityName, PredictionKey key)
         {
-            AbilitySystem.AbilityManager.EndAbility(key);
-            AbilitySystem.EffectManager.RetractPredictedEffect(key);
+            AbilitySystem.AbilityManager.NotifyServerResponse(key, false);
         }
 
         public void EndAbility(string abilityName)
@@ -315,7 +324,8 @@ namespace AbilitySystem.Scripts
             
             var effect = effectDefinition.ToEffect(source, AbilitySystem);
             effect.ActivationTime = applicationTime;
-            AbilitySystem.EffectManager.ReconcilePredictedEffect(key);
+            AbilitySystem.AbilityManager.NotifyServerResponse(key, true);
+            AbilitySystem.EffectManager.ReconcilePredictedEffect(key, effect);
         }
         
         [Rpc(SendTo.Owner)]
