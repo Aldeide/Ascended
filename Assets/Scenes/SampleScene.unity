@@ -240,7 +240,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 359.92, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1020, y: 809}
+  m_AnchoredPosition: {x: 862, y: 809}
   m_SizeDelta: {x: 120, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27816427
@@ -2676,6 +2676,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75c6a369eb9e51548aafc6d83690322e, type: 3}
+--- !u!1 &488457237 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6861893469669043747, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+  m_PrefabInstance: {fileID: 7696644124789433046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &488457260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488457237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da305f3722d22254e9b5dfaf9088d9b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Item::Item.Scripts.UI.InventoryUIController
+  uiDocument: {fileID: 0}
+  itemTemplate: {fileID: 0}
 --- !u!1 &511018118
 GameObject:
   m_ObjectHideFlags: 0
@@ -8392,11 +8411,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 195873417232982026, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 799853768078755484, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2720605637121664837, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: finalScaleReference
@@ -8528,7 +8547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6861893469669043747, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8198681687235754659, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: GlobalObjectIdHash
@@ -8541,7 +8560,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6861893469669043747, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 488457260}
   m_SourcePrefab: {fileID: 100100000, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
 --- !u!114 &8900661253288491445
 MonoBehaviour:

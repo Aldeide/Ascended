@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using GameplayTags.Runtime;
 using Item.Runtime.Definition;
@@ -19,6 +20,8 @@ namespace Item.Runtime.Manager
         private EquipmentManagerDefinition _definition;
 
         private readonly Dictionary<Tag, Equipment> _equipment = new();
+
+        public event Action OnEquipmentChanged;
 
         public EquipmentManager(IAbilitySystem owner, IInventoryManager inventoryManager, EquipmentManagerDefinition definition)
         {
@@ -47,17 +50,24 @@ namespace Item.Runtime.Manager
             if (!_equipment.ContainsKey(slotName)) return;
             _equipment[slotName] = new Equipment(_inventoryManager, item);
             _equipment[slotName].Equip();
+            OnEquipmentChanged?.Invoke();
         }
 
         public void Unequip(Tag slotName)
         {
             _equipment[slotName].Unequip();
             _equipment[slotName] = null;
+            OnEquipmentChanged?.Invoke();
         }
 
         public IAbilitySystem GetOwner()
         {
             return _owner;
         }
+
+        public Dictionary<Tag, Equipment> GetEquipment()
+        {
+            return _equipment;
+        }
     }
-}
+}

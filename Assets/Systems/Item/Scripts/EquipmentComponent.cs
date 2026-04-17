@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Scripts;
+using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using Item.Runtime.Definition;
 using Item.Runtime.Interface.Core;
@@ -13,6 +13,8 @@ namespace Item.Scripts
     {
         public EquipmentManagerDefinition EquipmentManagerDefinition;
 
+        public EquipmentManager EquipmentManager => _equipmentManager;
+        
         private EquipmentManager _equipmentManager;
         private IInventoryManager _inventoryManager;
         private AbilitySystemComponent _abilitySystemComponent;
@@ -25,6 +27,13 @@ namespace Item.Scripts
             if (!IsServer && !IsClient) return;
 
             _abilitySystemComponent = GetComponent<AbilitySystemComponent>();
+            
+            var inventoryComp = GetComponent<InventoryComponent>();
+            if (inventoryComp != null)
+            {
+                _inventoryManager = inventoryComp.InventoryManager;
+            }
+
             // TODO: Figure out correct initialisation order (or maybe relying on an event is okay).
             if (_abilitySystemComponent.IsInitialized)
             {
@@ -38,6 +47,12 @@ namespace Item.Scripts
 
         public void Initialise()
         {
+            // Ensure we have an inventory manager if we didn't find it yet
+            if (_inventoryManager == null)
+            {
+                _inventoryManager = GetComponent<InventoryComponent>()?.InventoryManager;
+            }
+
             _equipmentManager = new EquipmentManager(_abilitySystemComponent.AbilitySystem, _inventoryManager,
                 EquipmentManagerDefinition);
         }

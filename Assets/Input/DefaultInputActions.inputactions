@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "DefaultInputActions",
     "maps": [
         {
@@ -63,6 +64,15 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "f6040634-aea9-45c8-9c67-544096d00c53",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "484ff4eb-7df2-453d-baa4-a88a0f45f9bc",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -188,6 +198,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d721313-1084-427b-a510-a09a67105a50",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -13,9 +13,13 @@ namespace AbilitySystem.Runtime.Cues
         public List<DurationalCue> ActiveCues { get; set; }
         public CueManager CueManager { get; set; }
 
+        private AbilitySystemComponent _asc;
+        
         public virtual void Start()
         {
-            CueManager = GetComponentInParent<AbilitySystemComponent>().AbilitySystem.CueManager;
+            _asc = GetComponentInParent<AbilitySystemComponent>();
+            if (_asc == null) return;
+            CueManager = _asc.AbilitySystem.CueManager;
             CueManager.OnCueAdd += OnPlayCue;
             CueManager.OnCueRemove += OnStopCue;
             CueManager.OnCueExecute += OnExecuteCue;
