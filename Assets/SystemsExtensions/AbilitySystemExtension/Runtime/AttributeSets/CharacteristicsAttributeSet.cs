@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Attributes;
+using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using UnityEngine;

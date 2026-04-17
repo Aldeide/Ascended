@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.Effects;

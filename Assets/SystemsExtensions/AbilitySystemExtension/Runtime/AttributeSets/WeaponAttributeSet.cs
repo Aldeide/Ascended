@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;

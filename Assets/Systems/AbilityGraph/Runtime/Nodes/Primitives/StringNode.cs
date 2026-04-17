@@ -1,4 +1,6 @@
-﻿using System;
+using AbilityGraph.Runtime.Nodes.Base;
+using AbilityGraph.Runtime.Nodes.Base;
+using System;
 using GraphProcessor;
 using UnityEngine.Serialization;
 
@@ -6,7 +8,7 @@ namespace AbilityGraph.Runtime.Nodes.Primitives
 {
     [Serializable]
     [NodeMenuItem("Primitives/String")]
-    public class StringNode : BaseNode
+    public class StringNode : AbilityNode
     {
         public string Value;
 

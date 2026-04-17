@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Cues;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

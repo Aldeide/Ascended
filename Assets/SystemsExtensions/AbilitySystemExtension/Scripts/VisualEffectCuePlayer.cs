@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Cues;
 using UnityEngine.VFX;
 
 namespace AbilitySystemExtension.Scripts

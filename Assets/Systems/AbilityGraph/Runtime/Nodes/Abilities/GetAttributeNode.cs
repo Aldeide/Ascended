@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Modifiers;
