@@ -1,0 +1,54 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Interface/AXL_Styles.uss" />
+    <Style src="project://database/Assets/Interface/MainMenu.uss" />
+    
+    <ui:VisualElement name="main-menu-screen" class="screen-root">
+        <!-- BACKGROUND LAYER (Ordered first to be at bottom) -->
+        <ui:VisualElement name="cinematic-bg" class="hud-background-container" />
+        <ui:VisualElement name="bg-reticle" class="hud-reticle-bg" />
+        <ui:VisualElement name="global-scanlines" class="scanline-overlay" />
+        
+        <!-- SIDEBAR PANEL -->
+        <ui:VisualElement name="command-sidebar" class="hud-sidebar hud-frame">
+            <!-- Corners -->
+            <ui:VisualElement class="hud-bracket bracket-nw" />
+            <ui:VisualElement class="hud-bracket bracket-ne" />
+            <ui:VisualElement class="hud-bracket bracket-se" />
+            <ui:VisualElement class="hud-bracket bracket-sw" />
+
+            <ui:VisualElement name="logo-section">
+                <ui:Label text="ASCENDANT" class="hud-title" />
+                <ui:Label text="PROJECT_CANINE_INITIATED" class="hud-reading" />
+                <ui:VisualElement class="neon-line" style="width: 150px; height: 2px; margin-top: 5px;" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="btn-stack" class="btn-container">
+                <!-- Spacing labels to prevent button stretching -->
+                <ui:Label text="[ SYS_ENTRY_POINT ]" class="hud-reading" style="margin-bottom: 5px;" />
+                <ui:Button name="play-btn" text="> EXEC_SAMPLE_SCENE" class="hud-btn" />
+                
+                <ui:Label text="[ CONFIG_MODULE ]" class="hud-reading" style="margin-top: 10px; margin-bottom: 5px;" />
+                <ui:Button name="settings-btn" text="> SYSTEM_CONFIG" class="hud-btn" />
+                
+                <ui:Label text="[ SIGNAL_END ]" class="hud-reading" style="margin-top: 10px; margin-bottom: 5px;" />
+                <ui:Button name="quit-btn" text="> DISCONNECT" class="hud-btn" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="sidebar-footer">
+                <ui:Label text="LINK_ID: 0x88F2A" class="hud-reading" />
+                <ui:Label text="BUILD_V104_B" class="hud-reading" style="opacity: 0.3;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- TOP DIAGNOSTICS -->
+        <ui:VisualElement name="top-bar" class="hud-top-bar">
+            <ui:Label text="SYSTEM_DIAGNOSTICS: RUNNING" class="hud-reading" />
+            <ui:Label text="SECURE_CHANNEL_READY" class="hud-reading hud-reading-amber" />
+        </ui:VisualElement>
+
+        <!-- CONTENT OVERLAY AREA -->
+        <ui:VisualElement name="content-area" class="hud-overlay hidden">
+             <!-- Settings populates here -->
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

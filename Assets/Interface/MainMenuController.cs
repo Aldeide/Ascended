@@ -1,93 +1,80 @@
-﻿using Gameplay.Scripts;
-using Steamworks;
-using Steamworks.Data;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
-namespace Interface
+namespace Assets.Interface
 {
     public class MainMenuController : MonoBehaviour
     {
-        public UIDocument SettingsMenu;
-        public UIDocument _document;
+        [Header("UI Document")]
+        [SerializeField] private UIDocument uiDocument;
+
+        [Header("Settings UI")]
+        [SerializeField] private UIDocument settingsUIDocument;
+
+        private VisualElement _root;
+        private VisualElement _contentArea;
         
-        // Buttons
-        private Button _playButton;
-        private Button _settingsButton;
-        private Button _hostButton;
-        
-        private VisualElement _mainMenu;
-        private TemplateContainer _settingsTemplate;
-        private TemplateContainer _playTemplate;
-        
-        private LobbyBrowserController _lobbyBrowserController;
-        
-        private void Start()
+        private Button _playBtn;
+        private Button _settingsBtn;
+        private Button _quitBtn;
+
+        private void OnEnable()
         {
-            _document = GetComponent<UIDocument>();
-            //SettingsMenu.rootVisualElement.visible = false;
-            _playButton = _document.rootVisualElement.Q<Button>("PlayButton");
-            _settingsButton = _document.rootVisualElement.Q<Button>("SettingsButton");
-            _hostButton = _document.rootVisualElement.Q<Button>("HostButton");
+            _root = uiDocument.rootVisualElement;
+
+            // Find buttons
+            _playBtn = _root.Q<Button>("play-btn");
+            _settingsBtn = _root.Q<Button>("settings-btn");
+            _quitBtn = _root.Q<Button>("quit-btn");
+            _contentArea = _root.Q<VisualElement>("content-area");
+
+            // Register events
+            _playBtn.clicked += OnPlayClicked;
+            _settingsBtn.clicked += OnSettingsClicked;
+            _quitBtn.clicked += OnQuitClicked;
             
-            _playButton.clicked += OnPlayButtonClicked;
-            _settingsButton.clicked += OnSettingsButtonClicked;
-            _hostButton.clicked += OnHostButtonClicked;
-            
-            _mainMenu = _document.rootVisualElement.Q<VisualElement>("MainMenuTemplate");
-            _settingsTemplate = _document.rootVisualElement.Q<TemplateContainer>("SettingsTemplate");
-            _settingsTemplate.visible = false;
-            _playTemplate = _document.rootVisualElement.Q<TemplateContainer>("PlayMenu");
-            _playTemplate.visible = false;
-            _lobbyBrowserController = new LobbyBrowserController();
-            _lobbyBrowserController.Initialise(_playTemplate, this);
-            _mainMenu.visible = true;
-            
-            SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
-
+            // Initial State: Ensure settings document is hidden if it exists
+            if (settingsUIDocument != null)
+            {
+                settingsUIDocument.rootVisualElement.style.display = DisplayStyle.None;
+            }
         }
 
-        public void ShowMainMenu()
+        private void OnPlayClicked()
         {
-            _mainMenu.visible = true;
-            _settingsTemplate.visible = false;
-            _playTemplate.visible = false;
+            Debug.Log("Loading SampleScene...");
+            SceneManager.LoadScene("SampleScene");
         }
 
-        private void OnPlayButtonClicked()
+        private void OnSettingsClicked()
         {
-            Debug.Log("PlayButtonClicked");
-            _mainMenu.visible = false;
-            _settingsTemplate.visible = false;
-            _playTemplate.visible = true;
-        }
-        
-        private void OnSettingsButtonClicked()
-        {
-            _mainMenu.visible = false;
-            _settingsTemplate.visible = true;
-            Debug.Log("SettingsButtonClicked");
-            //_document.rootVisualElement.visible = false;
+            ToggleSettings();
         }
 
-        private void OnHostButtonClicked()
+        private void OnQuitClicked()
         {
-            SteamMatchmaking.CreateLobbyAsync(4);
-        }
-
-        public void OnLobbyCreated(Result result, Lobby lobby)
-        {
-            lobby.SetData("LobbyName", "TestLobby");
-            Debug.Log("Lobby created");
-        }
-        
-        private void OnQuitButtonClicked()
-        {
-            Debug.Log("QuitButtonClicked");
+            Debug.Log("Quitting application...");
             Application.Quit();
-#if UNITY_EDITOR
+            
+            #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-#endif
+            #endif
+        }
+
+        private void ToggleSettings()
+        {
+            if (settingsUIDocument == null) return;
+
+            var settingsRoot = settingsUIDocument.rootVisualElement;
+            if (settingsRoot.style.display == DisplayStyle.None)
+            {
+                settingsRoot.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                settingsRoot.style.display = DisplayStyle.None;
+            }
         }
     }
 }

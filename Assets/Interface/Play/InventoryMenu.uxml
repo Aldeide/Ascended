@@ -1,0 +1,34 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="inventory-screen" class="screen-overlay">
+        <ui:VisualElement name="menu-container" class="glass-panel">
+            <ui:Label name="menu-title" text="EQUIPMENT &amp; INVENTORY" class="panel-title" />
+            
+            <ui:VisualElement name="main-content" class="horizontal-layout">
+                <!-- Left Section: Character Equipment -->
+                <ui:VisualElement name="character-section" class="section-container">
+                    <ui:VisualElement name="character-preview" class="character-preview-box">
+                       <!-- Character silhouette/model would go here -->
+                        <ui:VisualElement name="slot-head" class="equipment-slot-view" />
+                        <ui:VisualElement name="slot-chest" class="equipment-slot-view" />
+                        <ui:VisualElement name="slot-legs" class="equipment-slot-view" />
+                        <ui:VisualElement name="slot-mainhand" class="equipment-slot-view" />
+                        <ui:VisualElement name="slot-offhand" class="equipment-slot-view" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Right Section: Inventory Grid -->
+                <ui:VisualElement name="inventory-section" class="section-container">
+                    <ui:ScrollView name="inventory-scroll" class="inventory-grid-container">
+                        <ui:VisualElement name="inventory-grid" class="item-grid" />
+                    </ui:ScrollView>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            
+            <!-- Bottom Details Panel -->
+            <ui:VisualElement name="item-details" class="details-panel hidden">
+                <ui:Label name="detail-name" text="Item Name" class="detail-header" />
+                <ui:Label name="detail-desc" text="Item description goes here..." class="detail-body" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

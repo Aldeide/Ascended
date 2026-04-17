@@ -1,0 +1,61 @@
+/* Settings Menu: A-X-L HUD Style */
+
+.settings-container {
+    width: 1000px;
+    height: 700px;
+    background-color: rgba(5, 5, 10, 0.98);
+    border-width: 1px;
+    border-color: var(--axl-cyan);
+    padding: 60px;
+    /* Absolute centering */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    margin-left: 200px;
+}
+
+/* TabView Overrides for HUD */
+.unity-tab-view__header {
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--axl-line-dim);
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+}
+
+.unity-tab {
+    background-color: rgba(0, 212, 255, 0.03);
+    border-width: 1px;
+    border-color: var(--axl-line-dim);
+    margin-right: 15px;
+    padding: 10px 20px;
+}
+
+.unity-tab:hover {
+    background-color: var(--axl-cyan);
+}
+
+.unity-tab:hover .unity-tab__label {
+    color: black;
+}
+
+.unity-tab--selected {
+    background-color: var(--axl-cyan);
+    border-color: white;
+}
+
+.unity-tab__label {
+    color: var(--axl-cyan);
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.unity-tab--selected .unity-tab__label {
+    color: black;
+    -unity-font-style: bold;
+}
+
+.unity-tab-view__content-container {
+    padding: 30px;
+}

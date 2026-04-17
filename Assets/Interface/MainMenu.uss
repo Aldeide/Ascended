@@ -1,0 +1,102 @@
+/* Main Menu: Tactical HUD Layout Recovery */
+
+:root {
+    --axl-sidebar-width: 450px;
+    --axl-btn-height: 55px;
+}
+
+.screen-root {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #020205;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+/* Background Layer */
+.hud-background-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('project://database/Assets/Art/Textures/main_menu_bg.png');
+    -unity-background-scale-mode: scale-and-crop;
+    opacity: 0.7;
+}
+
+.hud-reticle-bg {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    opacity: 0.1;
+    -unity-background-image-tint-color: var(--axl-cyan);
+    -unity-background-scale-mode: scale-to-fit;
+    background-image: url('project://database/Assets/Art/Textures/hud_reticle.png');
+}
+
+.hud-top-bar {
+    position: absolute;
+    top: 40px;
+    left: 480px;
+    right: 50px;
+    height: 35px;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--axl-line-dim);
+    padding-bottom: 5px;
+}
+
+/* Sidebar Lock */
+.hud-sidebar {
+    width: var(--axl-sidebar-width);
+    min-width: var(--axl-sidebar-width);
+    max-width: var(--axl-sidebar-width);
+    height: 100%;
+    background-color: rgba(5, 5, 8, 0.98);
+    border-right-width: 1px;
+    border-right-color: var(--axl-cyan);
+    padding: 80px 45px;
+    justify-content: flex-start; /* Stop stretching vertically */
+}
+
+.hud-title {
+    font-size: 48px;
+    color: white;
+    -unity-font-style: bold;
+    letter-spacing: 12px;
+    margin-bottom: 5px;
+    height: 70px; /* Fixed height for title area */
+}
+
+.btn-container {
+    margin-top: 80px;
+    flex-grow: 1;
+    justify-content: flex-start;
+}
+
+/* Button Stability */
+.hud-btn {
+    height: var(--axl-btn-height);
+    min-height: var(--axl-btn-height);
+    max-height: var(--axl-btn-height);
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.hud-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    padding-left: var(--axl-sidebar-width);
+}
+
+.hidden {
+    display: none;
+}

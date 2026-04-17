@@ -7,7 +7,7 @@ namespace Gameplay.Scripts
 {
     public class LobbyBrowserController
     {
-        private MainMenuController _mainMenuController;
+        //private MainMenuController _mainMenuController;
         private VisualElement _lobbyBrowserVisualElement;
         
         // Buttons
@@ -19,8 +19,9 @@ namespace Gameplay.Scripts
         private ListView _lobbyListView;
         private LobbyListController _lobbyListController;
         
-        public void Initialise(VisualElement lobbyVisualElement, MainMenuController mainMenuController)
+        public void Initialise(VisualElement lobbyVisualElement)
         {
+            /*
             Debug.Log("Init LobbyBrowserController");
             _mainMenuController = mainMenuController;
             _lobbyBrowserVisualElement = lobbyVisualElement;
@@ -34,6 +35,7 @@ namespace Gameplay.Scripts
             
             _refreshButton.clicked += RefreshLobbies;
             _mainMenuButton.clicked += _mainMenuController.ShowMainMenu;
+            */
         }
 
         private void RefreshLobbies()
