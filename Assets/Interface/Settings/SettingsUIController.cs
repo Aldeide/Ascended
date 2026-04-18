@@ -36,7 +36,9 @@ namespace Interface.Settings
 
         private void InitializeUI()
         {
-            // Find Elements
+            if (_root == null) return;
+
+            // Find Elements with null checks
             _resDropdown = _root.Q<DropdownField>("resolution-dropdown");
             _qualityDropdown = _root.Q<DropdownField>("quality-dropdown");
             _vsyncToggle = _root.Q<Toggle>("vsync-toggle");
@@ -44,21 +46,29 @@ namespace Interface.Settings
             _keybindingsList = _root.Q<VisualElement>("keybindings-list");
             _resetBtn = _root.Q<Button>("reset-rebinds-btn");
 
-            if (_resDropdown == null) return; // Haven't loaded yet?
+            if (_resDropdown == null || _qualityDropdown == null || _vsyncToggle == null || _volumeSlider == null)
+            {
+                Debug.LogWarning("[Settings] Some UI elements were not found in the UXML.");
+                return;
+            }
 
             InitializeGraphics();
             InitializeAudio();
             InitializeKeybindings();
 
-            _resetBtn.clicked -= OnResetClicked; // Prevent double registration
-            _resetBtn.clicked += OnResetClicked;
+            if (_resetBtn != null)
+            {
+                _resetBtn.clicked -= OnResetClicked;
+                _resetBtn.clicked += OnResetClicked;
+            }
         }
 
         private void InitializeGraphics()
         {
             // Resolutions
             _resolutions = Screen.resolutions.Select(r => r).Reverse().ToArray();
-            _resDropdown.choices = _resolutions.Select(r => $"{r.width}x{r.height} @ {r.refreshRateRatio.value:F0}Hz").ToList();
+            var resChoices = _resolutions.Select(r => $"{r.width}x{r.height} @ {r.refreshRateRatio.value:F0}Hz").ToList();
+            _resDropdown.choices = resChoices;
             
             // Find current resolution index
             int currentResIndex = 0;
@@ -71,9 +81,14 @@ namespace Interface.Settings
                 }
             }
             _resDropdown.index = currentResIndex;
+            
+            // Use Unregister if needed? No, Register is fine if we check for changes
             _resDropdown.RegisterValueChangedCallback(evt => {
-                var res = _resolutions[_resDropdown.index];
-                SettingsManager.Instance.SetResolution(res.width, res.height, Screen.fullScreen);
+                if (_resDropdown.index >= 0 && _resDropdown.index < _resolutions.Length)
+                {
+                    var res = _resolutions[_resDropdown.index];
+                    SettingsManager.Instance.SetResolution(res.width, res.height, Screen.fullScreen);
+                }
             });
 
             // Quality
@@ -100,20 +115,30 @@ namespace Interface.Settings
 
         private void InitializeKeybindings()
         {
-            if (inputActions == null || _keybindingsList == null) return;
+            if (inputActions == null || _keybindingsList == null || rebindRowTemplate == null) return;
 
             _keybindingsList.Clear();
 
-            foreach (var action in inputActions.FindActionMap("Player").actions)
+            // Try to find the Player map, or use the first one available
+            var map = inputActions.FindActionMap("Player") ?? inputActions.actionMaps.FirstOrDefault();
+            if (map == null) return;
+
+            foreach (var action in map.actions)
             {
+                // Skip if no bindings
+                if (action.bindings.Count == 0) continue;
+
                 var row = rebindRowTemplate.Instantiate();
                 var label = row.Q<Label>("action-name");
                 var button = row.Q<Button>("rebind-btn");
 
-                label.text = action.name.ToUpper();
-                button.text = action.bindings[0].ToDisplayString();
-
-                button.clicked += () => StartRebind(action, button);
+                if (label != null) label.text = action.name.ToUpper();
+                if (button != null)
+                {
+                    button.text = action.bindings[0].ToDisplayString();
+                    button.clicked += () => StartRebind(action, button);
+                }
+                
                 _keybindingsList.Add(row);
             }
         }
@@ -123,6 +148,9 @@ namespace Interface.Settings
             button.text = "PRESS ANY KEY...";
             button.SetEnabled(false);
 
+            // Disable all actions while rebinding to prevent accidental triggers
+            inputActions.Disable();
+
             var rebindOperation = action.PerformInteractiveRebinding()
                 .WithControlsExcluding("<Pointer>/position")
                 .WithControlsExcluding("<Pointer>/delta")
@@ -131,6 +159,13 @@ namespace Interface.Settings
                     button.text = action.bindings[0].ToDisplayString();
                     button.SetEnabled(true);
                     SettingsManager.Instance.SaveRebinds();
+                    inputActions.Enable();
+                    operation.Dispose();
+                })
+                .OnCancel(operation => {
+                    button.text = action.bindings[0].ToDisplayString();
+                    button.SetEnabled(true);
+                    inputActions.Enable();
                     operation.Dispose();
                 })
                 .Start();
@@ -139,9 +174,10 @@ namespace Interface.Settings
         private void OnResetClicked()
         {
             SettingsManager.Instance.ResetToDefaults();
-            // Refresh UI
-            InitializeGraphics();
-            InitializeAudio();
+            // Refresh UI values
+            _vsyncToggle.value = QualitySettings.vSyncCount > 0;
+            _volumeSlider.value = AudioListener.volume;
+            _qualityDropdown.index = QualitySettings.GetQualityLevel();
             InitializeKeybindings();
         }
     }
