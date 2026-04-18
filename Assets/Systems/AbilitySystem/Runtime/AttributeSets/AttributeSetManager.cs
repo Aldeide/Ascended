@@ -40,14 +40,14 @@ namespace AbilitySystem.Runtime.AttributeSets
             }
         }
 
-        public T GetAttributeSet<T>() where T : AttributeSet
+        public virtual T GetAttributeSet<T>() where T : AttributeSet
         {
             _attributeSets.TryGetValue(typeof(T), out AttributeSet result);
             return (T)result;
         }
 
         [CanBeNull]
-        public AttributeSet GetAttributeSet(string attributeSetName)
+        public virtual AttributeSet GetAttributeSet(string attributeSetName)
         {
             return _attributeSets.Values.FirstOrDefault(a => a.Name == attributeSetName);
         }
@@ -68,7 +68,7 @@ namespace AbilitySystem.Runtime.AttributeSets
         }
 
         [CanBeNull]
-        public Attribute GetAttribute(string attributeName)
+        public virtual Attribute GetAttribute(string attributeName)
         {
             return _attributeSets.Values.SelectMany(attributeSet =>
                     attributeSet.GetAllAttributes().Where(attribute => attribute.GetName() == attributeName))
@@ -76,22 +76,22 @@ namespace AbilitySystem.Runtime.AttributeSets
         }
 
         [CanBeNull]
-        public Attribute GetAttribute<T>(string attributeName)
+        public virtual Attribute GetAttribute<T>(string attributeName)
         {
             return GetAttribute(typeof(T), attributeName);
         }
 
         [CanBeNull]
-        public Attribute GetAttribute(Type attributeSetType, string attributeName)
+        public virtual Attribute GetAttribute(Type attributeSetType, string attributeName)
         {
             _attributeSets.TryGetValue(attributeSetType, out AttributeSet result);
             return result.GetAttribute(attributeName);
         }
 
-        public Attribute GetAttribute(string attributeSetName, string attributeName)
+        public virtual Attribute GetAttribute(string attributeSetName, string attributeName)
         {
             return _attributeSets.FirstOrDefault(
-                k => k.Value.Name == attributeSetName).Value.GetAttribute(attributeName);
+                k => k.Value.Name == attributeSetName).Value?.GetAttribute(attributeName);
         }
 
         public AttributeValue GetAttributeValue<T>(string attributeName) where T : AttributeSet

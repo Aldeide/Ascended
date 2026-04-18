@@ -18,14 +18,15 @@ namespace AbilitySystem.Runtime.Abilities
     public abstract class Ability
     {
         protected AbilityData AbilityArguments;
+        public virtual AbilityData Data => AbilityArguments;
         
         public AbilityDefinition Definition { get; }
         public AbilityCooldown Cooldown { get; set; }
-        public IAbilitySystem Owner { get; protected set; }
+        public virtual IAbilitySystem Owner { get; protected set; }
         public bool IsActive { get; private set; }
         public int ActiveCount { get; private set; }
         
-        public int Level { get; set; }
+        public virtual int Level { get; set; }
         
         public PredictionKey PredictionKey { get; private set; }
 
@@ -35,6 +36,11 @@ namespace AbilitySystem.Runtime.Abilities
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
         
+        protected Ability()
+        {
+            _activatedEffects = new List<Effect>();
+        }
+
         protected Ability(AbilityDefinition ability, IAbilitySystem owner, int level = 1)
         {
             Definition = ability;

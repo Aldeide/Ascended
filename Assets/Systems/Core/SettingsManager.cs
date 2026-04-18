@@ -33,22 +33,22 @@ namespace Systems.Core
             LoadSettings();
         }
 
-        public void SetQuality(int index)
+        public void SetQuality(int index, bool saveToPrefs = true)
         {
             QualitySettings.SetQualityLevel(index);
-            PlayerPrefs.SetInt(QUALITY_KEY, index);
+            if (saveToPrefs) PlayerPrefs.SetInt(QUALITY_KEY, index);
         }
 
-        public void SetVSync(bool enabled)
+        public void SetVSync(bool enabled, bool saveToPrefs = true)
         {
             QualitySettings.vSyncCount = enabled ? 1 : 0;
-            PlayerPrefs.SetInt(VSYNC_KEY, enabled ? 1 : 0);
+            if (saveToPrefs) PlayerPrefs.SetInt(VSYNC_KEY, enabled ? 1 : 0);
         }
 
-        public void SetVolume(float volume)
+        public void SetVolume(float volume, bool saveToPrefs = true)
         {
             AudioListener.volume = volume;
-            PlayerPrefs.SetFloat(VOLUME_KEY, volume);
+            if (saveToPrefs) PlayerPrefs.SetFloat(VOLUME_KEY, volume);
             
             if (audioMixer != null)
             {
@@ -95,8 +95,13 @@ namespace Systems.Core
         public void ResetToDefaults()
         {
             PlayerPrefs.DeleteAll();
-            LoadSettings();
+            PlayerPrefs.Save();
             
+            // Re-initialize values without saving them back to prefs immediately
+            SetQuality(QualitySettings.GetQualityLevel(), false);
+            SetVSync(QualitySettings.vSyncCount > 0, false);
+            SetVolume(1.0f, false); // Assuming 1.0 is the default
+
             // Clear input overrides
             if (inputActions != null)
             {

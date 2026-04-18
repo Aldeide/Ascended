@@ -33,6 +33,7 @@ namespace Item.Runtime
             Description = definition.Description;
             Mods = new Dictionary<Tag, Modifier>();
             _definition = definition;
+            MaxLevel = definition.MaxLevel;
             _manager = manager;
             Icon = definition.Icon;
 
@@ -44,6 +45,7 @@ namespace Item.Runtime
             _manager = manager;
             _definition = ItemLibrary.Instance.GetItemByName(serialisedEquipment.Name) as EquipmentDefinition;
             Level = serialisedEquipment.Level;
+            MaxLevel = _definition.MaxLevel;
             Name = _definition.Name;
             DisplayName = _definition.DisplayName;
             Description = _definition.Description;
@@ -110,7 +112,7 @@ namespace Item.Runtime
         public bool CanAddMod(Tag modSlot, Modifier mod)
         {
             var slot = _definition.ModSlots.FirstOrDefault(slot => slot.ModSlotTag == modSlot);
-            if (slot.ModSlotTag == modSlot) return false;
+            if (slot.ModSlotTag != modSlot) return false;
             return slot.RequiredLevel <= Level;
         }
 

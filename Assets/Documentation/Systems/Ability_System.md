@@ -13,7 +13,7 @@ The system is orchestrated by the **`AbilitySystemManager`**, which implements `
 - **`EffectManager`**: Handles the application, ticking, and stacking of persistent `GameplayEffects`.
 - **`AttributeSetManager`**: The global container for all `AttributeSets`. It handles attribute lookup, event dispatching, and state snapshotting for network reconciliation.
 - **`TagManager`**: Tracks active gameplay tags on the actor for blocking and requirements.
-- **`AbilityGraph` Integration**: Provides a visual node-based engine for creating complex ability logic. It uses a `GraphRunner` to execute nodes and supports `WaitableNode` for asynchronous gameplay logic.
+- **`AbilityGraph` Integration**: Provides a visual node-based engine for creating complex ability logic. It uses a `GraphRunner` to execute nodes and supports `WaitableNode` for asynchronous gameplay logic. See the [AbilityGraph Node Reference](./AbilityGraph_Nodes.md) for a full list of available nodes.
 - **`CueManager`**: Manages the dispatch and lifecycle of visual and audio feedback (Cues).
 
 ---
