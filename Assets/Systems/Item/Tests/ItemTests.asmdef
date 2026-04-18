@@ -6,7 +6,10 @@
         "GUID:27619889b8ba8c24980f49ee34dbb44a",
         "GUID:fd228ffb3c18f7343b2fddb130915e28",
         "GUID:eec0964c48f6f4e40bc3ec2257ccf8c5",
-        "GUID:d7b34ab9a31ff10458e662e8ac1561be"
+        "GUID:d7b34ab9a31ff10458e662e8ac1561be",
+        "GUID:f9c18cb9c0eed9d449c8e38d555810d9",
+        "GUID:5f3147f7af4c49739579b966c458f5e4",
+        "GUID:47a84ebde4ec47fabb620b30cc7a3e5c"
     ],
     "includePlatforms": [
         "Editor"
@@ -17,7 +20,9 @@
     "precompiledReferences": [
         "Castle.Core.dll",
         "Moq.dll",
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Sirenix.Serialization.dll",
+        "Sirenix.OdinInspector.Attributes.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [

@@ -8,6 +8,10 @@ namespace Systems.Core
     {
         public static SettingsManager Instance { get; private set; }
 
+        [Header("Audio")]
+        [SerializeField] private UnityEngine.Audio.AudioMixer audioMixer;
+        private const string MIXER_EXPOSED_PARAM = "MasterVolume";
+
         [Header("Input")]
         [SerializeField] private InputActionAsset inputActions;
 
@@ -45,7 +49,13 @@ namespace Systems.Core
         {
             AudioListener.volume = volume;
             PlayerPrefs.SetFloat(VOLUME_KEY, volume);
-            // TODO: Hook into AudioMixer if available
+            
+            if (audioMixer != null)
+            {
+                // Convert linear 0-1 to decibels -80 to 0
+                float db = volume > 0 ? Mathf.Log10(volume) * 20 : -80f;
+                audioMixer.SetFloat(MIXER_EXPOSED_PARAM, db);
+            }
         }
 
         public void SetResolution(int width, int height, bool fullScreen)
@@ -72,7 +82,7 @@ namespace Systems.Core
 
             // Volume
             float volume = PlayerPrefs.GetFloat(VOLUME_KEY, AudioListener.volume);
-            AudioListener.volume = volume;
+            SetVolume(volume);
 
             // Rebinds
             if (inputActions != null && PlayerPrefs.HasKey(REBIND_KEY))

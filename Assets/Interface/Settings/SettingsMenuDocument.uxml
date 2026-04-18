@@ -3,49 +3,66 @@
     <Style src="project://database/Assets/Interface/Settings/SettingsMenu.uss" />
     
     <ui:VisualElement name="settings-root" class="settings-container hud-frame">
+        <!-- Decoration: Technical Readouts -->
+        <ui:Label text="SEC_ID: 0x4F2A-BF12" class="hud-label-small" style="position: absolute; top: 10px; right: 20px;" />
+        <ui:Label text="STATUS: NOMINAL" class="hud-label-small" style="position: absolute; bottom: 10px; left: 20px;" />
+        <ui:Label text="MEM_LOAD: 42.8%" class="hud-label-small" style="position: absolute; bottom: 10px; right: 20px;" />
+        <ui:Label text="LATENCY_MAP: 16ms" class="hud-label-small" style="position: absolute; top: 10px; left: 20px;" />
+        <ui:Label text="PACKET_STATUS: STABLE" class="hud-label-small" style="position: absolute; bottom: 10px; right: 200px;" />
+        <ui:VisualElement class="scanline-overlay" />
+
         <!-- Frame Corners -->
         <ui:VisualElement class="hud-bracket bracket-nw" />
         <ui:VisualElement class="hud-bracket bracket-ne" />
         <ui:VisualElement class="hud-bracket bracket-se" />
         <ui:VisualElement class="hud-bracket bracket-sw" />
 
-        <ui:Label text="MODULE_CONFIG_v2.0" class="hud-reading" style="margin-bottom: 20px; -unity-font-style: bold;" />
+        <ui:Label text="MODULE_CONFIG_v2.0" class="hud-reading" style="margin-bottom: 20px; -unity-font-style: bold; font-size: 16px;" />
 
-        <ui:TabView view-data-key="TabbedMenu">
+        <ui:TabView view-data-key="TabbedMenu" class="hud-tabs">
             <ui:Tab label="[ 01_VIDEO ]" name="Graphics" view-data-key="GraphicsTab">
-                <ui:VisualElement class="settings-row">
-                    <ui:Label text="RESOLUTION" class="hud-reading" />
-                    <ui:DropdownField name="resolution-dropdown" class="hud-dropdown" />
-                </ui:VisualElement>
-                
-                <ui:VisualElement class="settings-row">
-                    <ui:Label text="QUALITY_LEVEL" class="hud-reading" />
-                    <ui:DropdownField name="quality-dropdown" class="hud-dropdown" />
-                </ui:VisualElement>
-
-                <ui:VisualElement class="settings-row">
-                    <ui:Label text="VSYNC_STATUS" class="hud-reading" />
-                    <ui:Toggle name="vsync-toggle" class="hud-toggle" />
+                <ui:VisualElement class="settings-content">
+                    <ui:VisualElement class="settings-row" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                        <ui:Label text="RESOLUTION_TARGET" class="hud-reading" />
+                        <ui:DropdownField name="resolution-dropdown" class="hud-dropdown" style="width: 300px;" />
+                    </ui:VisualElement>
+                    
+                    <ui:VisualElement class="settings-row" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                        <ui:Label text="RENDER_Fidelity" class="hud-reading" />
+                        <ui:DropdownField name="quality-dropdown" class="hud-dropdown" style="width: 300px;" />
+                    </ui:VisualElement>
+    
+                    <ui:VisualElement class="settings-row" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                        <ui:Label text="VSYNC_INTERLOCK" class="hud-reading" />
+                        <ui:Toggle name="vsync-toggle" class="hud-toggle" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:Tab>
 
             <ui:Tab label="[ 02_AUDIO ]" view-data-key="AudioTab" name="Audio">
-                <ui:VisualElement class="settings-row">
-                    <ui:Label text="MASTER_VOLUME" class="hud-reading" />
-                    <ui:Slider name="volume-slider" low-value="0" high-value="1" class="hud-slider" />
+                <ui:VisualElement class="settings-content">
+                    <ui:VisualElement class="settings-row" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                        <ui:Label text="MASTER_SIGNAL_GAIN" class="hud-reading" />
+                        <ui:Slider name="volume-slider" low-value="0" high-value="1" class="hud-slider" style="width: 400px;" />
+                    </ui:VisualElement>
+                    <ui:Label text="WARNING: HIGH GAIN MAY OVERRIDE SYSTEM LIMITERS" class="hud-label-small" style="margin-top: 20px; color: var(--axl-amber);" />
                 </ui:VisualElement>
             </ui:Tab>
 
             <ui:Tab label="[ 03_SYSTEM ]" name="Gameplay" view-data-key="GameplayTab">
-                <ui:Label text="DIFFICULTY_THROTTLE" class="hud-reading" />
-                <ui:Label text="INPUT_SENSITIVITY" class="hud-reading" />
+                <ui:VisualElement class="settings-content">
+                    <ui:Label text="DIFFICULTY_THROTTLE: 1.0" class="hud-reading" />
+                    <ui:Label text="INPUT_SENSITIVITY: HI-RES" class="hud-reading" />
+                </ui:VisualElement>
             </ui:Tab>
 
             <ui:Tab label="[ 04_INPUTS ]" name="Keybindings" view-data-key="KeybindingsTab">
-                <ui:ScrollView name="keybindings-list" class="hud-scroll">
-                    <!-- Population via C# -->
-                </ui:ScrollView>
-                <ui:Button name="reset-rebinds-btn" text="RESET_TO_DEFAULTS" class="hud-btn" style="margin-top: 20px; width: 250px;" />
+                <ui:VisualElement class="settings-content">
+                    <ui:ScrollView name="keybindings-list" class="hud-scroll" style="height: 350px;">
+                        <!-- Population via C# -->
+                    </ui:ScrollView>
+                    <ui:Button name="reset-rebinds-btn" text="RESET_SYSTEM_INPUTS" class="hud-btn" style="margin-top: 20px; width: 300px;" />
+                </ui:VisualElement>
             </ui:Tab>
         </ui:TabView>
     </ui:VisualElement>

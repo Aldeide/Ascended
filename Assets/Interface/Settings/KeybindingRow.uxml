@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement class="rebind-row" style="flex-direction: row; justify-content: space-between; margin-bottom: 5px; padding: 5px; border-bottom-width: 1px; border-color: rgba(255, 255, 255, 0.05);">
-        <ui:Label name="action-name" text="Action Name" class="hud-reading" style="width: 200px;" />
-        <ui:Button name="rebind-btn" text="KEY_PLACEHOLDER" class="hud-btn" style="width: 150px; height: 35px; font-size: 14px;" />
+    <ui:VisualElement class="rebind-row" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 12px; background-color: rgba(0, 212, 255, 0.02); border-left-width: 2px; border-color: var(--axl-cyan);">
+        <ui:Label name="action-name" text="Action Name" class="hud-reading" style="width: 200px; -unity-font-style: bold;" />
+        <ui:Button name="rebind-btn" text="KEY_PLACEHOLDER" class="hud-btn" style="width: 180px; height: 35px; font-size: 14px; margin: 0;" />
     </ui:VisualElement>
 </ui:UXML>

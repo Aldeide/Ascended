@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using Item.Runtime.Database;
@@ -38,8 +39,8 @@ namespace Item.Runtime.Manager
                 Items.Add(item);
                 // TODO: Create item database entry so we can have a unique id per item.
                 _replicationManager.NotifyClientAddItem(item.Name, 1);
-                OnInventoryChanged?.Invoke();
             }
+            OnInventoryChanged?.Invoke();
         }
 
         public void AddItem(string itemName, int amount)
@@ -54,27 +55,63 @@ namespace Item.Runtime.Manager
 
         public void RemoveItem(IBaseItem item)
         {
-            throw new System.NotImplementedException();
+            if (Items.Remove(item))
+            {
+                OnInventoryChanged?.Invoke();
+            }
         }
 
         public bool HasItem(IBaseItem item)
         {
-            throw new System.NotImplementedException();
+            return Items.Contains(item);
         }
 
         public bool HasItemQuantity(IBaseItem item, int quantity)
         {
-            throw new System.NotImplementedException();
+            var count = 0;
+            foreach (var i in Items)
+            {
+                if (i.Name == item.Name)
+                {
+                    count++;
+                }
+            }
+            return count >= quantity;
         }
 
         public bool HasItems(Dictionary<ItemDefinition, int> items)
         {
-            throw new System.NotImplementedException();
+            foreach (var required in items)
+            {
+                var count = 0;
+                foreach (var i in Items)
+                {
+                    if (i.Name == required.Key.Name)
+                    {
+                        count++;
+                    }
+                }
+                if (count < required.Value) return false;
+            }
+            return true;
         }
 
         public void ConsumeItems(Dictionary<ItemDefinition, int> items)
         {
-            throw new System.NotImplementedException();
+            if (!HasItems(items)) return;
+
+            foreach (var required in items)
+            {
+                for (int j = 0; j < required.Value; j++)
+                {
+                    var itemToRemove = Items.FirstOrDefault(i => i.Name == required.Key.Name);
+                    if (itemToRemove != null)
+                    {
+                        Items.Remove(itemToRemove);
+                    }
+                }
+            }
+            OnInventoryChanged?.Invoke();
         }
 
         public ItemDefinition GetItemDefinition(string itemName)

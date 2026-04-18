@@ -1,0 +1,26 @@
+{
+    "name": "CoreTests",
+    "rootNamespace": "Systems.Core.Tests",
+    "references": [
+        "Core",
+        "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Moq.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

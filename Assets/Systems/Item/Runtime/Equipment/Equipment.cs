@@ -116,12 +116,16 @@ namespace Item.Runtime
 
         public void Upgrade()
         {
-            throw new System.NotImplementedException();
+            if (!CanUpgrade()) return;
+            _manager.ConsumeItems(NextUpgradeCosts);
+            Level++;
         }
 
         public bool CanUpgrade()
         {
-            throw new System.NotImplementedException();
+            if (Level >= MaxLevel) return false;
+            if (NextUpgradeCosts == null) return false;
+            return _manager.HasItems(NextUpgradeCosts);
         }
 
         private void InitialiseMods()

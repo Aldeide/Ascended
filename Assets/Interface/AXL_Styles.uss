@@ -76,3 +76,79 @@
     pointer-events: none;
     opacity: 0.1;
 }
+/* Tactical Sliders */
+.hud-slider {
+    margin: 10px 0;
+}
+
+.hud-slider .unity-base-slider__tracker {
+    background-color: var(--axl-line-dim);
+    border-width: 0;
+    height: 4px;
+}
+
+.hud-slider .unity-base-slider__dragger {
+    background-color: var(--axl-cyan);
+    border-radius: 0;
+    width: 12px;
+    height: 20px;
+    border-width: 0;
+}
+
+.hud-slider .unity-base-slider__dragger:hover {
+    background-color: white;
+    box-shadow: 0 0 10px var(--axl-cyan);
+}
+
+/* Tactical Toggles */
+.hud-toggle {
+    margin: 10px 0;
+}
+
+.hud-toggle .unity-toggle__checkmark {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: var(--axl-cyan);
+    border-width: 1px;
+    border-radius: 0;
+    width: 24px;
+    height: 24px;
+    -unity-background-image-tint-color: var(--axl-cyan);
+}
+
+.hud-toggle:hover .unity-toggle__checkmark {
+    border-color: white;
+}
+
+/* Tactical Dropdowns */
+.hud-dropdown {
+    margin: 10px 0;
+    background-color: rgba(0, 212, 255, 0.05);
+    border-color: var(--axl-line-dim);
+    border-width: 1px;
+    color: var(--axl-cyan);
+}
+
+.hud-dropdown .unity-base-popup-field__text {
+    color: var(--axl-cyan);
+    letter-spacing: 1px;
+}
+
+.hud-dropdown:hover {
+    border-color: var(--axl-cyan);
+    background-color: rgba(0, 212, 255, 0.1);
+}
+
+/* Data Labels */
+.hud-label-small {
+    font-size: 9px;
+    color: var(--axl-line-dim);
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+/* Scroll View */
+.hud-scroll {
+    border-color: var(--axl-line-dim);
+    border-width: 1px;
+    padding: 10px;
+}
