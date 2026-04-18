@@ -33,10 +33,9 @@ namespace Item.Runtime.Manager
 
         public void AddItem(IBaseItem item)
         {
-            if (_replicationManager.IsServer())
+            Items.Add(item);
+            if (_replicationManager != null && _replicationManager.IsServer())
             {
-                // We add the item on the server and notify the owner that an item was added.
-                Items.Add(item);
                 // TODO: Create item database entry so we can have a unique id per item.
                 _replicationManager.NotifyClientAddItem(item.Name, 1);
             }
@@ -50,6 +49,12 @@ namespace Item.Runtime.Manager
             {
                 Items.Add(item);
             }
+
+            if (_replicationManager != null && _replicationManager.IsServer())
+            {
+                _replicationManager.NotifyClientAddItem(itemName, amount);
+            }
+            
             OnInventoryChanged?.Invoke();
         }
 

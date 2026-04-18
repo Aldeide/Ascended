@@ -81,7 +81,7 @@ namespace AbilitySystem.Runtime.Tags
                     EffectTags[tag].Remove(effect);
                 }
 
-                if (EffectTags[tag].Count == 0)
+                if (EffectTags.ContainsKey(tag) && EffectTags[tag].Count == 0)
                 {
                     EffectTags.Remove(tag);
                 }
@@ -99,7 +99,7 @@ namespace AbilitySystem.Runtime.Tags
                     OnTagsChanged?.Invoke();
                 }
 
-                if (AbilityTags[tag].Count == 0)
+                if (AbilityTags.ContainsKey(tag) && AbilityTags[tag].Count == 0)
                 {
                     AbilityTags.Remove(tag);
                 }
@@ -119,7 +119,7 @@ namespace AbilitySystem.Runtime.Tags
             OnTagsChanged?.Invoke();
         }
 
-        public bool HasTag(Tag gameplayTag)
+        public virtual bool HasTag(Tag gameplayTag)
         {
             return Tags.Contains(gameplayTag) || EffectTags.ContainsKey(gameplayTag) ||
                    AbilityTags.ContainsKey(gameplayTag);

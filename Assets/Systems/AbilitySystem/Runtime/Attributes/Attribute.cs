@@ -16,8 +16,12 @@ namespace AbilitySystem.Runtime.Attributes
         private AttributeValue _value;
         private string _name;
 
-        public float BaseValue => _value.BaseValue;
-        public float CurrentValue => _value.CurrentValue;
+        public virtual float BaseValue => _value.BaseValue;
+        public virtual float CurrentValue => _value.CurrentValue;
+
+        public Attribute()
+        {
+        }
 
         public Func<Attribute, float, float> OnAttributeBaseValuePreChange;
         public Action<Attribute, float, float> OnAttributeBaseValueChanged;
@@ -52,7 +56,7 @@ namespace AbilitySystem.Runtime.Attributes
         /// and maximum limits, and invokes necessary events or listeners when the base value changes.
         /// </summary>
         /// <param name="value">The new base value to set for the attribute.</param>
-        public void SetBaseValue(float value)
+        public virtual void SetBaseValue(float value)
         {
             var previousValue = _value.BaseValue;
             value = InvokePreBaseValueListeners(value);
