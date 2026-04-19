@@ -74,7 +74,7 @@ namespace AbilitySystem.Runtime.Core
         {
             var data = new CueData();
             data.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
-            Debug.Log("Tag:" + cue.CueTag);
+            Debug.Log("Tag:" + cue.CueTag.Name);
             OnPlayCueRequested?.Invoke(cue.CueTag.Name, data, isPredicted);
         }
 

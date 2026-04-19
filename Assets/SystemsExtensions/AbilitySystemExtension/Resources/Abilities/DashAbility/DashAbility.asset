@@ -16,6 +16,11 @@ MonoBehaviour:
   nodes:
   - rid: 2200808162856009823
   - rid: 2200808162856009824
+  - rid: 2200808191412142087
+  - rid: 2200808191412142088
+  - rid: 2200808191412142089
+  - rid: 2200808191412142090
+  - rid: 2200808191412142091
   edges:
   - GUID: d5e3190c-4e31-4ce1-886b-e544fa297645
     owner: {fileID: 11400000}
@@ -23,6 +28,46 @@ MonoBehaviour:
     outputNodeGUID: c5880ed0-8915-4150-911c-a3be5838e1d0
     inputFieldName: Executed
     outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0aa7567b-2358-4732-835e-082dfd30a65e
+    owner: {fileID: 11400000}
+    inputNodeGUID: a88a5cac-56d5-49bb-a635-ee595562340f
+    outputNodeGUID: bebf0245-71a9-4d02-af49-c5afc774e4b5
+    inputFieldName: Force
+    outputFieldName: Output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8a202e5b-dbbe-4172-934b-615ca6c39a31
+    owner: {fileID: 11400000}
+    inputNodeGUID: 6b569d36-09d0-45bd-9680-75bda5992aef
+    outputNodeGUID: a88a5cac-56d5-49bb-a635-ee595562340f
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 21f72c73-327a-4da7-879e-fe413ef4d423
+    owner: {fileID: 11400000}
+    inputNodeGUID: 95276f17-d7a5-45e3-8822-b41489825a49
+    outputNodeGUID: 6b569d36-09d0-45bd-9680-75bda5992aef
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 38806df9-c6a7-4607-8e8b-50730a61d0e7
+    owner: {fileID: 11400000}
+    inputNodeGUID: 466bf956-15ba-462c-9714-5ce4f99948d8
+    outputNodeGUID: ee91b97d-90ec-4500-b330-e8f0dcf74263
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 7865d486-380d-4df6-a3ca-61338bc267f4
+    owner: {fileID: 11400000}
+    inputNodeGUID: ee91b97d-90ec-4500-b330-e8f0dcf74263
+    outputNodeGUID: 95276f17-d7a5-45e3-8822-b41489825a49
+    inputFieldName: Executed
+    outputFieldName: ExecuteAfter
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -104,7 +149,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: a88a5cac-56d5-49bb-a635-ee595562340f
-        computeOrder: 1
+        computeOrder: 2
         position:
           serializedVersion: 2
           x: 612
@@ -115,3 +160,82 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         Force: {x: 0, y: 0, z: 0}
+    - rid: 2200808191412142087
+      type: {class: Vector3Node, ns: AbilityGraph.Runtime.Nodes.Primitives, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: bebf0245-71a9-4d02-af49-c5afc774e4b5
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 377
+          y: 380
+          width: 102
+          height: 75
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        Output: {x: 0, y: 0, z: 0}
+        Input: {x: 0, y: 2, z: 0}
+    - rid: 2200808191412142088
+      type: {class: SendCue, ns: AbilityGraph.Runtime.Nodes.Cues, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 6b569d36-09d0-45bd-9680-75bda5992aef
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 824
+          y: 292
+          width: 275
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        CueDefinition: {fileID: 11400000, guid: f23a580a52e82644b825880b531a8bf7, type: 2}
+    - rid: 2200808191412142089
+      type: {class: WaitForGroundedEvent, ns: AbilitySystemExtension.Runtime.Nodes.Character, asm: AbilitySystemExtension}
+      data:
+        nodeCustomName: 
+        GUID: 95276f17-d7a5-45e3-8822-b41489825a49
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1362
+          y: 292
+          width: 193
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 2200808191412142090
+      type: {class: SendCue, ns: AbilityGraph.Runtime.Nodes.Cues, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: ee91b97d-90ec-4500-b330-e8f0dcf74263
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 1609
+          y: 292
+          width: 275
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        CueDefinition: {fileID: 11400000, guid: b06e2a3132f9138418087a89cfc11071, type: 2}
+    - rid: 2200808191412142091
+      type: {class: CallEndAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 466bf956-15ba-462c-9714-5ce4f99948d8
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: 1936
+          y: 292
+          width: 170
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
