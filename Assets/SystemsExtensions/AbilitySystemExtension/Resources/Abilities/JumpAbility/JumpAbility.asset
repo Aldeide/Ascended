@@ -161,7 +161,7 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 532
+          x: 416
           y: 212
           width: 193
           height: 123
@@ -178,9 +178,9 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 790
+          x: 632
           y: 212
-          width: 275
+          width: 498
           height: 95
         expanded: 0
         debug: 0
@@ -194,7 +194,7 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1309
+          x: 1160
           y: 212
           width: 170
           height: 99
@@ -210,8 +210,8 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1186
-          y: 322
+          x: 1028
+          y: 335
           width: 102
           height: 75
         expanded: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 1528
+          x: 1361
           y: 212
           width: 193
           height: 99
@@ -242,9 +242,9 @@ MonoBehaviour:
         computeOrder: 6
         position:
           serializedVersion: 2
-          x: 1790
-          y: 216
-          width: 275
+          x: 1573
+          y: 212
+          width: 548
           height: 95
         expanded: 0
         debug: 0
@@ -258,8 +258,8 @@ MonoBehaviour:
         computeOrder: 7
         position:
           serializedVersion: 2
-          x: 2364.4
-          y: 216
+          x: 2135
+          y: 212
           width: 170
           height: 75
         expanded: 0

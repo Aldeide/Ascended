@@ -23,16 +23,16 @@ MonoBehaviour:
       m_Bits: 4294967295
   maximumSamples:
     m_OverrideState: 1
-    m_Value: 16
+    m_Value: 256
   minimumDepth:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   maximumDepth:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 4
   maximumIntensity:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 10
   denoising:
     m_OverrideState: 1
     m_Value: 1
@@ -40,8 +40,8 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   temporal:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   separateVolumetrics:
     m_OverrideState: 1
     m_Value: 1
@@ -56,7 +56,7 @@ MonoBehaviour:
     m_Value: {x: 1, y: 1, z: 0, w: 0}
   seedMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   customSeed:
     m_OverrideState: 0
     m_Value: 0
@@ -72,13 +72,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d877a03bef431a847adca8ab343db3e1, type: 3}
   m_Name: RayTracingSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   rayBias:
     m_OverrideState: 1
-    m_Value: 0.0357
+    m_Value: 0.0128
   distantRayBias:
     m_OverrideState: 1
-    m_Value: 0.0989
+    m_Value: 0.0184
   extendShadowCulling:
     m_OverrideState: 1
     m_Value: 1
@@ -90,7 +90,7 @@ MonoBehaviour:
     m_Value: 1000
   directionalShadowFallbackIntensity:
     m_OverrideState: 1
-    m_Value: 0.838
+    m_Value: 0.345
   buildMode:
     m_OverrideState: 0
     m_Value: 0
@@ -103,6 +103,128 @@ MonoBehaviour:
   minSolidAngle:
     m_OverrideState: 0
     m_Value: 4
+--- !u!114 &-4279664389363582665
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384c4d03a551c44448145f4093304119, type: 3}
+  m_Name: ScreenSpaceReflection
+  m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.ScreenSpaceReflection
+  active: 1
+  quality:
+    m_OverrideState: 0
+    m_Value: 3
+  enabled:
+    m_OverrideState: 1
+    m_Value: 1
+  enabledTransparent:
+    m_OverrideState: 0
+    m_Value: 1
+  tracing:
+    m_OverrideState: 1
+    m_Value: 2
+  m_MinSmoothness:
+    m_OverrideState: 1
+    m_Value: 0.512
+  m_SmoothnessFadeStart:
+    m_OverrideState: 1
+    m_Value: 0.621
+  reflectSky:
+    m_OverrideState: 0
+    m_Value: 1
+  usedAlgorithm:
+    m_OverrideState: 1
+    m_Value: 0
+  depthBufferThickness:
+    m_OverrideState: 1
+    m_Value: 0.001
+  screenFadeDistance:
+    m_OverrideState: 1
+    m_Value: 0.777
+  accumulationFactor:
+    m_OverrideState: 0
+    m_Value: 0.75
+  biasFactor:
+    m_OverrideState: 0
+    m_Value: 0.5
+  speedRejectionParam:
+    m_OverrideState: 0
+    m_Value: 0.5
+  speedRejectionScalerFactor:
+    m_OverrideState: 0
+    m_Value: 0.2
+  speedSmoothReject:
+    m_OverrideState: 0
+    m_Value: 0
+  speedSurfaceOnly:
+    m_OverrideState: 0
+    m_Value: 1
+  speedTargetOnly:
+    m_OverrideState: 0
+    m_Value: 1
+  enableWorldSpeedRejection:
+    m_OverrideState: 0
+    m_Value: 0
+  m_RayMaxIterations:
+    m_OverrideState: 0
+    m_Value: 24
+  rayMiss:
+    m_OverrideState: 0
+    m_Value: 3
+  lastBounceFallbackHierarchy:
+    m_OverrideState: 0
+    m_Value: 3
+  ambientProbeDimmer:
+    m_OverrideState: 0
+    m_Value: 1
+  layerMask:
+    m_OverrideState: 0
+    m_Value:
+      serializedVersion: 2
+      m_Bits: 4294967295
+  textureLodBias:
+    m_OverrideState: 0
+    m_Value: 1
+  m_RayLength:
+    m_OverrideState: 1
+    m_Value: 50
+  m_ClampValue:
+    m_OverrideState: 0
+    m_Value: 100
+  m_Denoise:
+    m_OverrideState: 1
+    m_Value: 1
+  m_DenoiserRadius:
+    m_OverrideState: 1
+    m_Value: 0.75
+  m_DenoiserAntiFlickeringStrength:
+    m_OverrideState: 1
+    m_Value: 1
+  mode:
+    m_OverrideState: 0
+    m_Value: 2
+  m_FullResolution:
+    m_OverrideState: 0
+    m_Value: 0
+  sampleCount:
+    m_OverrideState: 1
+    m_Value: 1
+  bounceCount:
+    m_OverrideState: 1
+    m_Value: 1
+  m_RayMaxIterationsRT:
+    m_OverrideState: 0
+    m_Value: 48
+  adaptiveProbeVolumesLayerMask:
+    m_OverrideState: 0
+    m_Value:
+      serializedVersion: 0
+      m_Bits: 1
 --- !u!114 &-3705632827693859245
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -120,7 +242,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   compositionMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   clusterCount:
     m_OverrideState: 0
@@ -349,10 +471,10 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.78
+    m_Value: 1.95
   intensity:
     m_OverrideState: 1
-    m_Value: 0.47
+    m_Value: 0.46
   scatter:
     m_OverrideState: 1
     m_Value: 0.657
@@ -405,6 +527,8 @@ MonoBehaviour:
   - {fileID: -662597396952029876}
   - {fileID: -6066482227050827298}
   - {fileID: -2710453808952224394}
+  - {fileID: 7029837469006849315}
+  - {fileID: -4279664389363582665}
 --- !u!114 &1608239618351108785
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -417,10 +541,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
   m_Name: GlobalIllumination
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 3
   enable:
     m_OverrideState: 1
     m_Value: 1
@@ -443,16 +567,16 @@ MonoBehaviour:
     m_Value: 1
   m_MaxRaySteps:
     m_OverrideState: 1
-    m_Value: 256
+    m_Value: 128
   m_DenoiseSS:
     m_OverrideState: 1
     m_Value: 1
   m_HalfResolutionDenoiserSS:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   m_DenoiserRadiusSS:
     m_OverrideState: 1
-    m_Value: 0.295
+    m_Value: 0.5
   m_SecondDenoiserPassSS:
     m_OverrideState: 1
     m_Value: 1
@@ -468,14 +592,14 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
   textureLodBias:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 7
   m_RayLength:
     m_OverrideState: 1
     m_Value: 50
   m_ClampValue:
     m_OverrideState: 1
-    m_Value: 3.4
+    m_Value: 0.17
   mode:
     m_OverrideState: 1
     m_Value: 2
@@ -496,10 +620,10 @@ MonoBehaviour:
     m_Value: 0
   m_DenoiserRadius:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.202
   m_SecondDenoiserPass:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   m_MaxMixedRaySteps:
     m_OverrideState: 1
     m_Value: 64
@@ -518,7 +642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9e4ed5a6f56fb4ebd693e39684f36f, type: 3}
   m_Name: VolumetricClouds
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enable:
     m_OverrideState: 1
     m_Value: 0
@@ -834,13 +958,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
   m_Name: HDRISky
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   rotation:
     m_OverrideState: 0
     m_Value: 0
   skyIntensityMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   exposure:
     m_OverrideState: 0
     m_Value: 0
@@ -854,7 +978,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {x: 0.18750615, y: 0.29181966, z: 0.5}
   desiredLuxValue:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 20000
   updateMode:
     m_OverrideState: 0
@@ -1107,6 +1231,34 @@ MonoBehaviour:
   maxNits:
     m_OverrideState: 0
     m_Value: 1000
+--- !u!114 &7029837469006849315
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f034cba68ab55e046ae1445a42f18c0e, type: 3}
+  m_Name: IndirectLightingController
+  m_EditorClassIdentifier: Unity.RenderPipelines.HighDefinition.Runtime::UnityEngine.Rendering.HighDefinition.IndirectLightingController
+  active: 1
+  indirectDiffuseLightingMultiplier:
+    m_OverrideState: 1
+    m_Value: 1
+  indirectDiffuseLightingLayers:
+    m_OverrideState: 1
+    m_Value: 65535
+  reflectionLightingMultiplier:
+    m_OverrideState: 1
+    m_Value: 1
+  reflectionLightingLayers:
+    m_OverrideState: 1
+    m_Value: 65535
+  reflectionProbeIntensityMultiplier:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &8349958959486029648
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1124,8 +1276,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   rayTracing:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   intensity:
     m_OverrideState: 1
     m_Value: 0.78
@@ -1212,7 +1364,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 13.55833
+    m_Value: -2.611495
   compensation:
     m_OverrideState: 0
     m_Value: 0
