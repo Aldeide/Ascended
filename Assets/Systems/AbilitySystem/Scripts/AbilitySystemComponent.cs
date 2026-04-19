@@ -156,7 +156,18 @@ namespace AbilitySystem.Scripts
             
             abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
             abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
-            abilitySystemManager.OnPlayCueRequested += (tag, data, pred) => ObserversPlayCueWithDataRpc(tag, data, pred);
+            abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
+            {
+                // If it's predicted and we are the owner, play it locally immediately.
+                if (pred && IsOwner)
+                {
+                    AbilitySystem.CueManager.OnCueReceived(new Tag(tag), CueAction.Execute, data);
+                    _cueManagerComponent.PlayCue(tag, data);
+                }
+                
+                // Always send to everyone (including self, to be filtered by pred check in RPC body).
+                ObserversPlayCueWithDataRpc(tag, data, pred);
+            };
             foreach (var attributeSet in Definition.AttributeSets)
             {
                 var type = ReflectionUtil.GetAttributeSetType(attributeSet);

@@ -13,7 +13,7 @@ namespace AbilityGraph.Runtime.Nodes.Cues
         
         protected override void Process()
         {
-            Owner.PlayCue(CueDefinition);
+            Owner.PlayCue(CueDefinition, Owner.IsLocalClient());
         }
     }
 }

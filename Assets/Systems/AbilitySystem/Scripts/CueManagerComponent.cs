@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using Unity.Netcode;
@@ -29,8 +29,13 @@ namespace AbilitySystem.Scripts
 
         public void PlayCue(string cueTag, CueData data)
         {
-            if (!_abilitySystem.IsServer()) return;
             CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
+            if (cue == null) return;
+            
+            OnCueAdded?.Invoke(cueTag, cue);
+            
+            // Also notify the core CueManager so ICueListeners can respond.
+            _abilitySystem.CueManager.OnCueReceived(new GameplayTags.Runtime.Tag(cueTag), CueAction.Execute, data);
         }
     }
 }
