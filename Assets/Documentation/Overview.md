@@ -23,13 +23,15 @@ The project follows a strict **modular architecture** designed to separate reusa
 | `Assets/Systems/AbilitySystem` | The core Gameplay Ability System (GAS). |
 | `Assets/Systems/AbilityGraph` | Visual node-based engine for creating and executing abilities. |
 | `Assets/AISystem` | Modular AI framework based on Sensors, Goals, and Actions. |
-| `Assets/Systems/Item` | Full inventory, equipment, and upgrade management. |
+| `Assets/Systems/Item` | Foundation for items and inventories. |
+| `Assets/Systems/Equipment` | Logic for equipping items and managing stats. |
 | `Assets/Systems/Animation` | Abstraction layer for Unity Animator state control. |
-| `Assets/Systems/Camera` | Modular camera target and controller system. |
-| `Assets/SystemsExtensions` | Game-specific logic extending the core systems. |
+| `Assets/Systems/Core` | Bootstrapping, scene management, and singleton patterns. |
+| `Assets/Gameplay` | High-level game rules, controllers, and lobby logic. |
 | `Assets/Interface` | UI Toolkit assets (UXML, USS) and C# Controllers. |
+| `Assets/SystemsExtensions` | Game-specific implementations (e.g., "Player" ability). |
+| `Assets/Systems/GameplayTags` | Hierarchical tagging system for logic and identification. |
 | `Assets/Systems/ScalableFloat` | Data-driven mathematical scaling for designer values. |
-| `Assets/Systems/EternityCommon` | Utility library for shared project logic. |
 | `Assets/Localisation` | Multi-language support for UI and game data. |
 
 ## 🛠️ Key Technologies
