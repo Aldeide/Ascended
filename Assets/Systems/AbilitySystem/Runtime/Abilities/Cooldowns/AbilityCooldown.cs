@@ -18,6 +18,8 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
     {
         public EffectDefinition CooldownEffect;
         
+        public abstract AbilityCooldown Clone();
+
         public abstract float Calculate(IAbilitySystem owner);
 
         public virtual bool CanActivate(IAbilitySystem owner)
