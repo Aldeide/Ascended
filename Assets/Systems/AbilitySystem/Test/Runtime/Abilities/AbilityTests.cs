@@ -11,12 +11,12 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateAbility_AppliesModifiers()
         {
-            var owner = CreateMockAbilitySystem();
+            var serverAbilitySystem = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
-            owner.Setup(m => m.IsServer()).Returns(true);
-            owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            Assert.True(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
-            var healthAttribute = owner.Object.AttributeSetManager.GetAttribute("Health");
+            serverAbilitySystem.Setup(m => m.IsServer()).Returns(true);
+            serverAbilitySystem.Object.AbilityManager.GrantAbility(abilityDefinition);
+            Assert.True(serverAbilitySystem.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
+            var healthAttribute = serverAbilitySystem.Object.AttributeSetManager.GetAttribute("Health");
             
             Assert.AreEqual(1000, healthAttribute.CurrentValue);
             Assert.AreEqual(100, healthAttribute.BaseValue);
@@ -25,19 +25,19 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateAbilityMissingRequiredTags_ActivationFails()
         {
-            var owner = CreateMockAbilitySystem();
+            var serverAbilitySystem = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.ActivationRequiredTags = new Tag[] { new("Tag.That.Is.Missing") };
-            owner.Setup(m => m.IsServer()).Returns(true);
-            owner.Object.AbilityManager.GrantAbility(abilityDefinition);
+            serverAbilitySystem.Setup(m => m.IsServer()).Returns(true);
+            serverAbilitySystem.Object.AbilityManager.GrantAbility(abilityDefinition);
             
-            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
+            Assert.IsFalse(serverAbilitySystem.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
         }
         
         [Test]
         public void AbilityTests_ActivateAbilityWithRequiredTags_ActivationSucceeds()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.ActivationRequiredTags = new Tag[] { new("Tag.That.Is.Required") };
             owner.Setup(m => m.IsServer()).Returns(true);
@@ -50,7 +50,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateAbilityWithBlockedTag_ActivationFails()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.ActivationBlockedTags = new[] { new Tag("Blocking.Tag") };
             owner.Setup(m => m.IsServer()).Returns(true);
@@ -63,7 +63,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateAbilityWithoutBlockedTag_ActivationSucceeds()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.ActivationBlockedTags = new[] { new Tag("Blocking.Tag") };
             owner.Setup(m => m.IsServer()).Returns(true);
@@ -75,7 +75,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateAbilityWithCancelTags_CancelsAbilityWithTag()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.CancelAbilityTags = new[] { new Tag("Ability.Test") };
             var abilityDefinitionToCancel = CreateInstantAbilityDefinition();
@@ -93,7 +93,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateWithOwnedTags_GrantsTags()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.ActivationOwnedTags = new[] { new Tag("Ability.Grants.Tag") };
             owner.Setup(m => m.IsServer()).Returns(true);
@@ -106,7 +106,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateLocalOnServer_ActivationFails()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientOnly;
             owner.Setup(m => m.IsServer()).Returns(true);
@@ -118,7 +118,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivateLocalOnClient_ActivationSuccess()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockClientAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientOnly;
             owner.Setup(m => m.IsServer()).Returns(false);
@@ -132,7 +132,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_EndAbility_EndsAbility()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             owner.Setup(m => m.IsServer()).Returns(true);
             owner.Object.AbilityManager.GrantAbility(abilityDefinition);
@@ -147,7 +147,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityTests_ActivatePredictedAbility_PlaysCuesWithPredictionFlag()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockClientAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             var cueAsset = UnityEngine.ScriptableObject.CreateInstance<AbilitySystem.Runtime.Cues.CueDefinition>();
             abilityDefinition.ActivationCues = new[] { cueAsset };

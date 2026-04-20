@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8be7f54f99f04a6f9a25fe4d7449b2ae, type: 3}
   m_Name: FireAbility
   m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes: []
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   Description:
     m_TableReference:
       m_TableCollectionName: 
@@ -37,12 +49,22 @@ MonoBehaviour:
     rid: -2
   AbilityActivation:
     rid: -2
-  AssetTags: []
+  AssetTags:
+  - <Name>k__BackingField: Ability.Active
+    <HashCode>k__BackingField: 755603092
+    <AncestorsNames>k__BackingField:
+    - Ability
+    <AncestorsHashCodes>k__BackingField: b84ed1e0
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTags: []
   ActivationRequiredTags: []
-  ActivationBlockedTags: []
+  ActivationBlockedTags:
+  - <Name>k__BackingField: Status.Dead
+    <HashCode>k__BackingField: -124510100
+    <AncestorsNames>k__BackingField:
+    - Status
+    <AncestorsHashCodes>k__BackingField: b0c3cf74
   GrantedEffects: []
   NetworkPolicy: 1
   NetworkSecurityPolicy: 0
@@ -50,7 +72,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 08663847233e8da44827a54d286ad089, type: 2}
   - {fileID: 11400000, guid: 5ff599d715651c34c982d2d69c0a227f, type: 2}
   - {fileID: 11400000, guid: 333b2b472b3df33449273e10dc183dff, type: 2}
-  impactVisualEffect: {fileID: 11400000, guid: 606f9323f1538bf4e9ecdbd0908e1535, type: 2}
+  impactVisualEffect: {fileID: 11400000, guid: 2bb8bf8da093aa64ea42aec3f317ecd1, type: 2}
+  trailVisualEffect: {fileID: 11400000, guid: 38e1ffe9134907d4385b022b4a275478, type: 2}
   damageEffect: {fileID: 11400000, guid: 681c59784de32a64fb4fba43db3f81f9, type: 2}
   layerMask:
     serializedVersion: 2

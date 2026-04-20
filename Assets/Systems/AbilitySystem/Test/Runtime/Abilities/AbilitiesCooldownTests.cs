@@ -42,7 +42,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
 
         private Mock<IAbilitySystem> SetupAbilitySystemWithAbilityCooldown()
         {
-            var owner = CreateMockAbilitySystem();
+            var owner = CreateMockServerAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             abilityDefinition.Cooldown = new ConstantAbilityCooldown();
             var cooldownEffect = EffectUtilities.CreateDurationEffectDefinition();

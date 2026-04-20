@@ -4,6 +4,7 @@ using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 
 namespace AbilitySystem.Runtime.Tags
@@ -15,7 +16,9 @@ namespace AbilitySystem.Runtime.Tags
         // Tags granted while effects are active.
         public Dictionary<Tag, List<Effect>> EffectTags = new();
         // Tags granted while abilities are active.
-        public Dictionary<Tag, List<Ability>> AbilityTags = new();
+        public Dictionary<Tag, List<string>> AbilityTags = new();
+        // Tags that are currently preventing abilities with matching asset tags from activating.
+        public Dictionary<Tag, List<string>> BlockedAbilityTags = new();
         private IAbilitySystem _owner;
 
         public event Action OnTagsChanged;
@@ -62,13 +65,40 @@ namespace AbilitySystem.Runtime.Tags
             {
                 if (AbilityTags.ContainsKey(tag))
                 {
-                    AbilityTags[tag].Add(ability);
+                    AbilityTags[tag].Add(ability.Definition.UniqueName);
                     continue;
                 }
 
-                AbilityTags[tag] = new List<Ability> { ability };
+                AbilityTags[tag] = new List<string> { ability.Definition.UniqueName };
             }
             OnTagsChanged?.Invoke();
+        }
+        
+        public void AddAbilityTags(AbilitySystemComponent.AbilityTagSyncData abilityTags)
+        {
+            foreach (var tag in abilityTags.Tags)
+            {
+                if (AbilityTags.ContainsKey(tag))
+                {
+                    AbilityTags[tag].Add(abilityTags.AbilityUniqueName);
+                    continue;
+                }
+
+                AbilityTags[tag] = new List<string> { abilityTags.AbilityUniqueName };
+            }
+            OnTagsChanged?.Invoke();
+        }
+
+        public void AddAbilityTagsAndNotify(Ability ability)
+        {
+            if (!_owner.IsServer()) return;
+            AddAbilityTags(ability);
+            var abilityTags = new AbilitySystemComponent.AbilityTagSyncData
+            {
+                AbilityUniqueName = ability.Definition.UniqueName,
+                Tags = ability.Definition.ActivationOwnedTags
+            };
+            _owner.ReplicationManager.NotifyClientsAbilityTagsAdded(abilityTags);
         }
 
         public void RemoveEffectTags(Effect effect)
@@ -95,7 +125,7 @@ namespace AbilitySystem.Runtime.Tags
             {
                 if (AbilityTags.ContainsKey(tag))
                 {
-                    AbilityTags[tag].Remove(ability);
+                    AbilityTags[tag].Remove(ability.Definition.UniqueName);
                     OnTagsChanged?.Invoke();
                 }
 
@@ -104,6 +134,47 @@ namespace AbilitySystem.Runtime.Tags
                     AbilityTags.Remove(tag);
                 }
             }
+        }
+
+        public void AddAbilityBlockingTags(Ability ability)
+        {
+            if (ability.Definition.BlockAbilityTags == null) return;
+            foreach (var tag in ability.Definition.BlockAbilityTags)
+            {
+                if (BlockedAbilityTags.ContainsKey(tag))
+                {
+                    BlockedAbilityTags[tag].Add(ability.Definition.UniqueName);
+                    continue;
+                }
+
+                BlockedAbilityTags[tag] = new List<string> { ability.Definition.UniqueName };
+            }
+        }
+
+        public void RemoveAbilityBlockingTags(Ability ability)
+        {
+            if (ability.Definition.BlockAbilityTags == null) return;
+            foreach (var tag in ability.Definition.BlockAbilityTags)
+            {
+                if (BlockedAbilityTags.ContainsKey(tag))
+                {
+                    BlockedAbilityTags[tag].Remove(ability.Definition.UniqueName);
+                }
+
+                if (BlockedAbilityTags.ContainsKey(tag) && BlockedAbilityTags[tag].Count == 0)
+                {
+                    BlockedAbilityTags.Remove(tag);
+                }
+            }
+        }
+
+        public bool IsAbilityBlocked(Tag[] abilityTags)
+        {
+            if (abilityTags == null || abilityTags.Length == 0) return false;
+            
+            // Check if any of the ability's tags (or their parents) are currently blocked.
+            return abilityTags.Any(tag => 
+                BlockedAbilityTags.Keys.Any(blockedTag => blockedTag == tag || blockedTag.IsAncestorOf(tag)));
         }
 
         public void AddTag(Tag gameplayTag)
@@ -116,6 +187,12 @@ namespace AbilitySystem.Runtime.Tags
         public void RemoveTag(Tag gameplayTag)
         {
             Tags.Remove(gameplayTag);
+            OnTagsChanged?.Invoke();
+        }
+
+        public void RemoveAbilityTag(Tag gameplayTag)
+        {
+            AbilityTags.Remove(gameplayTag);
             OnTagsChanged?.Invoke();
         }
 
@@ -168,7 +245,7 @@ namespace AbilitySystem.Runtime.Tags
             {
                 abilityTags += tag.Key.Name + " (";
                 abilityTags = tag.Value.Aggregate(abilityTags,
-                    (current, ability) => current + (ability.Definition.name + " "));
+                    (current, ability) => current + (ability + " "));
                 abilityTags += ")\n";
             }
             return inherentTags + "\n" + effectTags + "\n" + abilityTags + "\n";

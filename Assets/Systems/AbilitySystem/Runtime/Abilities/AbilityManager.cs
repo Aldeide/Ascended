@@ -93,6 +93,7 @@ namespace AbilitySystem.Runtime.Abilities
 
             if ((_owner.IsServer() || _owner.IsHost()) && !ability.Definition.IsLocalAbility())
             {
+                Debug.Log("TryActivateAbility for serverhost: " + name);
                 return ability.TryActivateAbility(data);
             }
 
@@ -104,7 +105,7 @@ namespace AbilitySystem.Runtime.Abilities
             if (ability.Definition.HasLocalPrediction() && _owner.IsLocalClient())
             {
                 var key = PredictionKey.CreatePredictionKey();
-                
+                Debug.Log("Predicting" + ability.Definition.name);
                 // Snapshot before prediction
                 _predictionAttributeSnapshots[key.currentKey] = _owner.AttributeSetManager.Snapshot();
                 
@@ -125,10 +126,11 @@ namespace AbilitySystem.Runtime.Abilities
 
         public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, AbilityData data)
         {
+            Debug.Log("Trying to activate ability: " + name + "as server? " + _owner.IsServer());
             if (!_owner.IsServer()) return false;
-
             Abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
+            Debug.Log("Trying to activate ability 2: " + name + "as server? " + _owner.IsServer());
             return ability.TryActivateAbility(key, data);
         }
 

@@ -11,6 +11,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
     public class FireAbilityDefinition : AbilityDefinition
     {
         public CueDefinition impactVisualEffect;
+        public CueDefinition trailVisualEffect;
         public EffectDefinition damageEffect;
         public LayerMask layerMask;
         

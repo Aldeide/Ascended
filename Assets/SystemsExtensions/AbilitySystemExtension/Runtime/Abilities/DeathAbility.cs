@@ -17,12 +17,16 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
             _currentTimer = 0;
             Debug.Log("Death ability activated");
+            
+            PlayActivationCues();
+            /*
             if (Owner.IsServer())
             {
                 var test = new CueData();
                 test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
                 Owner.PlayCue("Cue.Animation.State.Player.Death", test, false);
             }
+            */
         }
 
         protected override void AbilityTick()
@@ -41,6 +45,11 @@ namespace AbilitySystemExtension.Runtime.Abilities
         public override void EndAbility()
         {
             RemoveTags();
+            var test = new CueData();
+            test.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
+            Owner.PlayCue("Cue.Animation.State.Idle", test, false);
+            Owner.PlayCue("Cue.IK.Feet.Enable", test, false);
+            Owner.PlayCue("Cue.IK.Arms.Enable", test, false);
             Debug.Log("Death ability ended");
         }
     }

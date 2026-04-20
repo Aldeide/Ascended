@@ -52,6 +52,18 @@ namespace AbilitySystem.Scripts
             }
         }
 
+        public struct AbilityTagSyncData : INetworkSerializable
+        {
+            public string AbilityUniqueName;
+            public Tag[] Tags;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref AbilityUniqueName);
+                serializer.SerializeValue(ref Tags);
+            }
+        }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -154,6 +166,8 @@ namespace AbilitySystem.Scripts
             abilitySystemManager.ReplicationManager.OnNotifyClientAbilityGranted += (def) => NotifyClientAbilityGrantedRpc(def.UniqueName);
             abilitySystemManager.ReplicationManager.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
             
+            abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
+            
             abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
             abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
             abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
@@ -235,6 +249,7 @@ namespace AbilitySystem.Scripts
             }
             else
             {
+                Debug.Log("Predicted ability failed: " + abilityName);
                 NotifyAbilityActivationFailedRpc(abilityName, key);
             }
         }
@@ -264,6 +279,11 @@ namespace AbilitySystem.Scripts
 
         public void ApplyEffect(EffectDefinition effectDefinition)
         {
+            if (effectDefinition.IsInstant())
+            {
+                ExecuteEffect(effectDefinition, AbilitySystem);
+                return;
+            }
             var effect = effectDefinition.ToEffect(AbilitySystem, AbilitySystem);
             effect.Activate();
             AbilitySystem.EffectManager.AddEffect(effect);
@@ -432,6 +452,12 @@ namespace AbilitySystem.Scripts
         public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
             AbilitySystem.AbilityManager.RemoveAbility(abilityName);
+        }
+        
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsAbilityTagsAddedRpc(AbilityTagSyncData tags)
+        {
+            AbilitySystem.TagManager.AddAbilityTags(tags);
         }
     }
 }

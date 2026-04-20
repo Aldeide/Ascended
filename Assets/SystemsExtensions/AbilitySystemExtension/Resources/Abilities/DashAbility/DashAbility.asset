@@ -114,12 +114,22 @@ MonoBehaviour:
     rid: -2
   AbilityActivation:
     rid: -2
-  AssetTags: []
+  AssetTags:
+  - <Name>k__BackingField: Ability.Active
+    <HashCode>k__BackingField: 755603092
+    <AncestorsNames>k__BackingField:
+    - Ability
+    <AncestorsHashCodes>k__BackingField: b84ed1e0
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTags: []
   ActivationRequiredTags: []
-  ActivationBlockedTags: []
+  ActivationBlockedTags:
+  - <Name>k__BackingField: Status.Dead
+    <HashCode>k__BackingField: -124510100
+    <AncestorsNames>k__BackingField:
+    - Status
+    <AncestorsHashCodes>k__BackingField: b0c3cf74
   GrantedEffects: []
   NetworkPolicy: 0
   NetworkSecurityPolicy: 0

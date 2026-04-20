@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed9a81ab69b4044a4647049980c5100, type: 3}
   m_Name: DeathAbility
   m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes: []
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   Description:
     m_TableReference:
       m_TableCollectionName: 
@@ -39,14 +51,32 @@ MonoBehaviour:
     rid: 4336599696947282121
   AssetTags: []
   CancelAbilityTags: []
-  BlockAbilityTags: []
-  ActivationOwnedTags: []
+  BlockAbilityTags:
+  - <Name>k__BackingField: Ability.Active
+    <HashCode>k__BackingField: 755603092
+    <AncestorsNames>k__BackingField:
+    - Ability
+    <AncestorsHashCodes>k__BackingField: b84ed1e0
+  - <Name>k__BackingField: Ability.Passive
+    <HashCode>k__BackingField: -1209000997
+    <AncestorsNames>k__BackingField:
+    - Ability
+    <AncestorsHashCodes>k__BackingField: b84ed1e0
+  ActivationOwnedTags:
+  - <Name>k__BackingField: Status.Dead
+    <HashCode>k__BackingField: -124510100
+    <AncestorsNames>k__BackingField:
+    - Status
+    <AncestorsHashCodes>k__BackingField: b0c3cf74
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   GrantedEffects: []
-  NetworkPolicy: 0
-  NetworkSecurityPolicy: 0
-  ActivationCues: []
+  NetworkPolicy: 2
+  NetworkSecurityPolicy: 1
+  ActivationCues:
+  - {fileID: 11400000, guid: 1bd82fbee60a2c141aa946d878eb293b, type: 2}
+  - {fileID: 11400000, guid: 8100d6559a0294f4c9c76070055ce646, type: 2}
+  - {fileID: 11400000, guid: a0d0f846ff3d97b4699a4da3bd10c825, type: 2}
   references:
     version: 2
     RefIds:

@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
@@ -15,6 +16,8 @@ namespace AbilitySystem.Test.Utilities
         public Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
+        public Action<AbilitySystemComponent.AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
+        public Action<string[]> OnNotifyClientsSyncTags { get; set; }
 
         public Action<Attribute, float, float> NotifyClientsAttributeBaseValueChangedCallback { get; set; }
 
@@ -64,6 +67,21 @@ namespace AbilitySystem.Test.Utilities
         }
 
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyClientsAbilityTagsAdded(AbilitySystemComponent.AbilityTagSyncData abilityTags)
+        {
+            OnNotifyClientsAbilityTagsAdded?.Invoke(abilityTags);
+        }
+
+        public void NotifyClientsAbilityTagsAdded(Tuple<string, Tag[]> abilityTags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyClientsSyncTags(string[] tagNames)
         {
             throw new NotImplementedException();
         }
