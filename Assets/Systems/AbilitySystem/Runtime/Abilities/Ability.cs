@@ -6,6 +6,7 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities
 {
@@ -90,6 +91,7 @@ namespace AbilitySystem.Runtime.Abilities
             if (!CanAffordCost()) return AbilityActivationResult.CostFailed;
             if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
             if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
+            if (Owner.TagManager.IsAbilityBlocked(Definition.AssetTags)) return AbilityActivationResult.BlockedByAbility;
             return IsOnCooldown() ? AbilityActivationResult.CooldownFailed :
                 AbilityActivationResult.Success;
         }
@@ -138,16 +140,30 @@ namespace AbilitySystem.Runtime.Abilities
         {
             AbilityArguments = data;
             var result = CanActivate();
+            Debug.Log("Trying to activate ability with prediction key: " + this.Definition.name + " as " + (Owner.IsServer() ? "server" : "client") + " result: " + result);
             var success = result == AbilityActivationResult.Success;
             if (success)
             {
                 IsActive = true;
                 ActiveCount++;
-                Owner.TagManager.AddAbilityTags(this);
+
+                
+                if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
+                {
+                    Owner.TagManager.AddAbilityTagsAndNotify(this);
+                }
+                else
+                {
+                    Owner.TagManager.AddAbilityTags(this);
+                }
+                Owner.TagManager.AddAbilityBlockingTags(this);
+                
+                
                 PredictionKey = key;
                 ApplyEffects();
                 Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags);
                 Cooldown?.Activate(Owner);
+                
                 ActivateAbility(AbilityArguments);
             }
 
@@ -164,6 +180,7 @@ namespace AbilitySystem.Runtime.Abilities
                 Owner.EffectManager.RemoveEffect(activatedEffect);
             }
             Owner.TagManager.RemoveAbilityTags(this);
+            Owner.TagManager.RemoveAbilityBlockingTags(this);
             EndAbility();
             _activatedEffects.Clear();
             _onEndAbility?.Invoke();
@@ -174,6 +191,7 @@ namespace AbilitySystem.Runtime.Abilities
             if (!IsActive) return;
             IsActive = false;
             Owner.TagManager.RemoveAbilityTags(this);
+            Owner.TagManager.RemoveAbilityBlockingTags(this);
             CancelAbility();
             _onCancelAbility?.Invoke();
         }
@@ -226,6 +244,14 @@ namespace AbilitySystem.Runtime.Abilities
             return PredictionKey.IsValidKey();
         }
 
+        public void AddTags()
+        {
+            foreach (var tag in Definition.ActivationOwnedTags)
+            {
+                Owner.TagManager.AddTag(tag);
+            }
+        }
+        
         public void RemoveTags()
         {
             foreach (var tag in Definition.ActivationOwnedTags)

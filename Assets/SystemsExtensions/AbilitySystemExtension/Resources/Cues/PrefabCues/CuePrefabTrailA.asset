@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 156aa6fa2a0f4cc681902921fd3fb6bf, type: 3}
+  m_Name: CuePrefabTrailA
+  m_EditorClassIdentifier: AbilitySystem::AbilitySystem.Runtime.Cues.CuePrefabDefinition
+  CueTag:
+    <Name>k__BackingField: Cue.Prefab.Trail.A
+    <HashCode>k__BackingField: -771277508
+    <AncestorsNames>k__BackingField:
+    - Cue
+    - Cue.Prefab
+    - Cue.Prefab.Trail
+    <AncestorsHashCodes>k__BackingField: d31da3893fd128efd7c649fc
+  Prefab: {fileID: 8688985813961490178, guid: b52ffbb685c5c964eb20a0ad4415d82e, type: 3}

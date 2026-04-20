@@ -2749,6 +2749,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1609222125523440066}
+  - component: {fileID: 3482532006492675771}
   m_Layer: 6
   m_Name: Target
   m_TagString: Untagged
@@ -2771,6 +2772,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3431953994317972873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3482532006492675771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5200428728908317077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 1
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &5335385487566891023
 GameObject:
   m_ObjectHideFlags: 0
@@ -3867,6 +3914,7 @@ GameObject:
   - component: {fileID: 3922097258888804137}
   - component: {fileID: 3927616742072257092}
   - component: {fileID: 8954473457822325761}
+  - component: {fileID: 5329675371770631307}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -5439,8 +5487,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <TagQuery>k__BackingField:
     Condition:
-    - MatchType: 0
-      Tags: []
+    - MatchType: 3
+      Tags:
+      - <Name>k__BackingField: Cue.IK
+        <HashCode>k__BackingField: -1627849197
+        <AncestorsNames>k__BackingField:
+        - Cue
+        <AncestorsHashCodes>k__BackingField: d31da389
 --- !u!114 &7532433191488090239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5495,6 +5548,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Item::Item.Scripts.InventoryComponent
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &5329675371770631307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4185cd54480c87d49a549eb19dcf1707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AbilitySystemExtension::AbilitySystemExtension.Scripts.PrefabCueListener
+  <TagQuery>k__BackingField:
+    Condition:
+    - MatchType: 3
+      Tags:
+      - <Name>k__BackingField: Cue.Prefab
+        <HashCode>k__BackingField: -282537665
+        <AncestorsNames>k__BackingField:
+        - Cue
+        <AncestorsHashCodes>k__BackingField: d31da389
 --- !u!1 &6911334762277334251
 GameObject:
   m_ObjectHideFlags: 0

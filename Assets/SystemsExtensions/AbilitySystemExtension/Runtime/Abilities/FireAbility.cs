@@ -16,6 +16,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
             var target = abilityData.TargetPosition;
             var muzzle = abilityData.MuzzlePosition;
+            var trail = ((FireAbilityDefinition)Definition).trailVisualEffect;
             var impact = ((FireAbilityDefinition)Definition).impactVisualEffect;
             PlayActivationCues();
             
@@ -27,9 +28,20 @@ namespace AbilitySystemExtension.Runtime.Abilities
             {
                 var data = new CueData
                 {
-                    VectorData = new[] {hit.point, muzzle}
+                    VectorData = new[] {hit.point, muzzle, hit.normal}
                 };
-                Owner.PlayCue(impact, data);
+                Debug.Log("FireAbility: Sending impact cue");
+                Owner.PlayCue(impact, data, true);
+            }
+
+            if (trail)
+            {
+                var data = new CueData
+                {
+                    VectorData = new[] {hit.point, muzzle, hit.normal}
+                };
+                Debug.Log("FireAbility: Sending trail cue");
+                Owner.PlayCue(trail, data, true);
             }
             
             var asc = hit.collider.GetComponent<AbilitySystemComponent>();

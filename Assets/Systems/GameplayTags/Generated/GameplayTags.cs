@@ -10,31 +10,32 @@ namespace GameplayTags.Generated
         public class __Ability_Group
         {
             public static implicit operator Tag(__Ability_Group _) => new Tag("Ability");
-            public readonly Tag Active = new Tag("Ability.Active");
+            public class __Ability_Active_Group
+            {
+                public static implicit operator Tag(__Ability_Active_Group _) => new Tag("Ability.Active");
+                public readonly Tag Test = new Tag("Ability.Active.Test");
+            }
+            public readonly __Ability_Active_Group Active = new __Ability_Active_Group();
             public readonly Tag Passive = new Tag("Ability.Passive");
         }
         public static readonly __Ability_Group Ability = new __Ability_Group();
-
         public class __Cue_Group
         {
             public static implicit operator Tag(__Cue_Group _) => new Tag("Cue");
-            
             public class __Cue_Animation_Group
             {
                 public static implicit operator Tag(__Cue_Animation_Group _) => new Tag("Cue.Animation");
-                
                 public class __Cue_Animation_Parameter_Group
                 {
                     public static implicit operator Tag(__Cue_Animation_Parameter_Group _) => new Tag("Cue.Animation.Parameter");
                     public readonly Tag Grounded = new Tag("Cue.Animation.Parameter.Grounded");
                 }
                 public readonly __Cue_Animation_Parameter_Group Parameter = new __Cue_Animation_Parameter_Group();
-
                 public class __Cue_Animation_State_Group
                 {
                     public static implicit operator Tag(__Cue_Animation_State_Group _) => new Tag("Cue.Animation.State");
                     public readonly Tag Death = new Tag("Cue.Animation.State.Death");
-                    
+                    public readonly Tag Idle = new Tag("Cue.Animation.State.Idle");
                     public class __Cue_Animation_State_Jump_Group
                     {
                         public static implicit operator Tag(__Cue_Animation_State_Jump_Group _) => new Tag("Cue.Animation.State.Jump");
@@ -45,11 +46,9 @@ namespace GameplayTags.Generated
                 public readonly __Cue_Animation_State_Group State = new __Cue_Animation_State_Group();
             }
             public readonly __Cue_Animation_Group Animation = new __Cue_Animation_Group();
-
             public class __Cue_Audio_Group
             {
                 public static implicit operator Tag(__Cue_Audio_Group _) => new Tag("Cue.Audio");
-                
                 public class __Cue_Audio_Gun_Group
                 {
                     public static implicit operator Tag(__Cue_Audio_Gun_Group _) => new Tag("Cue.Audio.Gun");
@@ -58,11 +57,28 @@ namespace GameplayTags.Generated
                 public readonly __Cue_Audio_Gun_Group Gun = new __Cue_Audio_Gun_Group();
             }
             public readonly __Cue_Audio_Group Audio = new __Cue_Audio_Group();
-
+            public class __Cue_IK_Group
+            {
+                public static implicit operator Tag(__Cue_IK_Group _) => new Tag("Cue.IK");
+                public class __Cue_IK_Arms_Group
+                {
+                    public static implicit operator Tag(__Cue_IK_Arms_Group _) => new Tag("Cue.IK.Arms");
+                    public readonly Tag Disable = new Tag("Cue.IK.Arms.Disable");
+                    public readonly Tag Enable = new Tag("Cue.IK.Arms.Enable");
+                }
+                public readonly __Cue_IK_Arms_Group Arms = new __Cue_IK_Arms_Group();
+                public class __Cue_IK_Feet_Group
+                {
+                    public static implicit operator Tag(__Cue_IK_Feet_Group _) => new Tag("Cue.IK.Feet");
+                    public readonly Tag Disable = new Tag("Cue.IK.Feet.Disable");
+                    public readonly Tag Enable = new Tag("Cue.IK.Feet.Enable");
+                }
+                public readonly __Cue_IK_Feet_Group Feet = new __Cue_IK_Feet_Group();
+            }
+            public readonly __Cue_IK_Group IK = new __Cue_IK_Group();
             public class __Cue_Light_Group
             {
                 public static implicit operator Tag(__Cue_Light_Group _) => new Tag("Cue.Light");
-                
                 public class __Cue_Light_Burst_Group
                 {
                     public static implicit operator Tag(__Cue_Light_Burst_Group _) => new Tag("Cue.Light.Burst");
@@ -71,31 +87,32 @@ namespace GameplayTags.Generated
                 public readonly __Cue_Light_Burst_Group Burst = new __Cue_Light_Burst_Group();
             }
             public readonly __Cue_Light_Group Light = new __Cue_Light_Group();
-
             public class __Cue_Prefab_Group
             {
                 public static implicit operator Tag(__Cue_Prefab_Group _) => new Tag("Cue.Prefab");
-                
                 public class __Cue_Prefab_Impact_Group
                 {
                     public static implicit operator Tag(__Cue_Prefab_Impact_Group _) => new Tag("Cue.Prefab.Impact");
                     public readonly Tag A = new Tag("Cue.Prefab.Impact.A");
                 }
                 public readonly __Cue_Prefab_Impact_Group Impact = new __Cue_Prefab_Impact_Group();
+                public class __Cue_Prefab_Trail_Group
+                {
+                    public static implicit operator Tag(__Cue_Prefab_Trail_Group _) => new Tag("Cue.Prefab.Trail");
+                    public readonly Tag A = new Tag("Cue.Prefab.Trail.A");
+                }
+                public readonly __Cue_Prefab_Trail_Group Trail = new __Cue_Prefab_Trail_Group();
             }
             public readonly __Cue_Prefab_Group Prefab = new __Cue_Prefab_Group();
-
             public class __Cue_VisualEffect_Group
             {
                 public static implicit operator Tag(__Cue_VisualEffect_Group _) => new Tag("Cue.VisualEffect");
-                
                 public class __Cue_VisualEffect_Dev_Group
                 {
                     public static implicit operator Tag(__Cue_VisualEffect_Dev_Group _) => new Tag("Cue.VisualEffect.Dev");
                     public readonly Tag Loop = new Tag("Cue.VisualEffect.Dev.Loop");
                 }
                 public readonly __Cue_VisualEffect_Dev_Group Dev = new __Cue_VisualEffect_Dev_Group();
-
                 public class __Cue_VisualEffect_Muzzle_Group
                 {
                     public static implicit operator Tag(__Cue_VisualEffect_Muzzle_Group _) => new Tag("Cue.VisualEffect.Muzzle");
@@ -106,15 +123,12 @@ namespace GameplayTags.Generated
             public readonly __Cue_VisualEffect_Group VisualEffect = new __Cue_VisualEffect_Group();
         }
         public static readonly __Cue_Group Cue = new __Cue_Group();
-
         public class __Effect_Group
         {
             public static implicit operator Tag(__Effect_Group _) => new Tag("Effect");
-            
             public class __Effect_Cost_Group
             {
                 public static implicit operator Tag(__Effect_Cost_Group _) => new Tag("Effect.Cost");
-                
                 public class __Effect_Cost_Ability_Group
                 {
                     public static implicit operator Tag(__Effect_Cost_Ability_Group _) => new Tag("Effect.Cost.Ability");
@@ -123,11 +137,9 @@ namespace GameplayTags.Generated
                 public readonly __Effect_Cost_Ability_Group Ability = new __Effect_Cost_Ability_Group();
             }
             public readonly __Effect_Cost_Group Cost = new __Effect_Cost_Group();
-
             public class __Effect_Modifier_Group
             {
                 public static implicit operator Tag(__Effect_Modifier_Group _) => new Tag("Effect.Modifier");
-                
                 public class __Effect_Modifier_Damage_Group
                 {
                     public static implicit operator Tag(__Effect_Modifier_Damage_Group _) => new Tag("Effect.Modifier.Damage");
@@ -138,12 +150,10 @@ namespace GameplayTags.Generated
             public readonly __Effect_Modifier_Group Modifier = new __Effect_Modifier_Group();
         }
         public static readonly __Effect_Group Effect = new __Effect_Group();
-
         public class __EquipmentSlot_Group
         {
             public static implicit operator Tag(__EquipmentSlot_Group _) => new Tag("EquipmentSlot");
             public readonly Tag Core = new Tag("EquipmentSlot.Core");
-            
             public class __EquipmentSlot_Utility_Group
             {
                 public static implicit operator Tag(__EquipmentSlot_Utility_Group _) => new Tag("EquipmentSlot.Utility");
@@ -153,18 +163,15 @@ namespace GameplayTags.Generated
             public readonly __EquipmentSlot_Utility_Group Utility = new __EquipmentSlot_Utility_Group();
         }
         public static readonly __EquipmentSlot_Group EquipmentSlot = new __EquipmentSlot_Group();
-
         public class __Item_Group
         {
             public static implicit operator Tag(__Item_Group _) => new Tag("Item");
-            
             public class __Item_Equipment_Group
             {
                 public static implicit operator Tag(__Item_Equipment_Group _) => new Tag("Item.Equipment");
                 public readonly Tag EnergyCore = new Tag("Item.Equipment.EnergyCore");
             }
             public readonly __Item_Equipment_Group Equipment = new __Item_Equipment_Group();
-
             public class __Item_Modifier_Group
             {
                 public static implicit operator Tag(__Item_Modifier_Group _) => new Tag("Item.Modifier");
@@ -174,15 +181,12 @@ namespace GameplayTags.Generated
             public readonly __Item_Modifier_Group Modifier = new __Item_Modifier_Group();
         }
         public static readonly __Item_Group Item = new __Item_Group();
-
         public class __Mod_Group
         {
             public static implicit operator Tag(__Mod_Group _) => new Tag("Mod");
-            
             public class __Mod_Slot_Group
             {
                 public static implicit operator Tag(__Mod_Slot_Group _) => new Tag("Mod.Slot");
-                
                 public class __Mod_Slot_Active_Group
                 {
                     public static implicit operator Tag(__Mod_Slot_Active_Group _) => new Tag("Mod.Slot.Active");
@@ -190,7 +194,6 @@ namespace GameplayTags.Generated
                     public readonly Tag _2 = new Tag("Mod.Slot.Active.2");
                 }
                 public readonly __Mod_Slot_Active_Group Active = new __Mod_Slot_Active_Group();
-
                 public class __Mod_Slot_Passive_Group
                 {
                     public static implicit operator Tag(__Mod_Slot_Passive_Group _) => new Tag("Mod.Slot.Passive");
@@ -202,11 +205,9 @@ namespace GameplayTags.Generated
             public readonly __Mod_Slot_Group Slot = new __Mod_Slot_Group();
         }
         public static readonly __Mod_Group Mod = new __Mod_Group();
-
         public class __Slot_Group
         {
             public static implicit operator Tag(__Slot_Group _) => new Tag("Slot");
-            
             public class __Slot_Hip_Group
             {
                 public static implicit operator Tag(__Slot_Hip_Group _) => new Tag("Slot.Hip");
@@ -216,7 +217,6 @@ namespace GameplayTags.Generated
             public readonly __Slot_Hip_Group Hip = new __Slot_Hip_Group();
         }
         public static readonly __Slot_Group Slot = new __Slot_Group();
-
         public class __Status_Group
         {
             public static implicit operator Tag(__Status_Group _) => new Tag("Status");
@@ -225,7 +225,12 @@ namespace GameplayTags.Generated
             public readonly Tag Immobilised = new Tag("Status.Immobilised");
         }
         public static readonly __Status_Group Status = new __Status_Group();
-
+        public class __Test_Group
+        {
+            public static implicit operator Tag(__Test_Group _) => new Tag("Test");
+            public readonly Tag Test = new Tag("Test.Test");
+        }
+        public static readonly __Test_Group Test = new __Test_Group();
         public class __Unit_Group
         {
             public static implicit operator Tag(__Unit_Group _) => new Tag("Unit");
@@ -236,14 +241,23 @@ namespace GameplayTags.Generated
         private static readonly List<Tag> AllTags = new List<Tag>
         {
             new Tag("Ability.Active"),
+            new Tag("Ability.Active.Test"),
             new Tag("Ability.Passive"),
             new Tag("Cue.Animation"),
             new Tag("Cue.Animation.Parameter.Grounded"),
             new Tag("Cue.Animation.State.Death"),
+            new Tag("Cue.Animation.State.Idle"),
             new Tag("Cue.Animation.State.Jump.Start"),
             new Tag("Cue.Audio.Gun.B"),
+            new Tag("Cue.IK"),
+            new Tag("Cue.IK.Arms.Disable"),
+            new Tag("Cue.IK.Arms.Enable"),
+            new Tag("Cue.IK.Feet.Disable"),
+            new Tag("Cue.IK.Feet.Enable"),
             new Tag("Cue.Light.Burst.Muzzle"),
+            new Tag("Cue.Prefab"),
             new Tag("Cue.Prefab.Impact.A"),
+            new Tag("Cue.Prefab.Trail.A"),
             new Tag("Cue.VisualEffect.Dev.Loop"),
             new Tag("Cue.VisualEffect.Muzzle.A"),
             new Tag("Effect.Cost.Ability.Dash"),
@@ -264,6 +278,7 @@ namespace GameplayTags.Generated
             new Tag("Status.Aiming"),
             new Tag("Status.Dead"),
             new Tag("Status.Immobilised"),
+            new Tag("Test.Test"),
             new Tag("Unit.Player"),
         };
 

@@ -33,7 +33,7 @@ namespace AbilitySystem.Runtime.Cues
         /// <param name="cueData">The data associated with the cue, including positional and normal information.</param>
         public void OnCueReceived(Tag cueTag, CueAction cueAction, CueData cueData)
         {
-            Debug.Log("Received Cue: " + cueTag + " / " + cueAction + " / " + cueData + " /");
+            Debug.Log("Received Cue: " + cueTag.Name + " / " + cueAction.ToString() + " / " + cueData + " /");
             // Don't play cues on the server.
             if (_owner.IsServer() && !_owner.IsHost()) return;
 

@@ -35,5 +35,20 @@ namespace AbilitySystem.Test.Utilities
             abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.Server;
             return abilityDefinition;
         }
+
+        public static TestAbilityDefinition CreateServerAbilityDefinition()
+        {
+            var abilityDefinition = ScriptableObject.CreateInstance<TestAbilityDefinition>();
+            abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.Server;
+            abilityDefinition.NetworkSecurityPolicy = AbilityNetworkSecurityPolicy.ServerOnly;
+            abilityDefinition.ActivationRequiredTags = new Tag[] { };
+            abilityDefinition.ActivationBlockedTags = new Tag[] { };
+            abilityDefinition.ActivationOwnedTags = new Tag[] { new("Tag.Test") };
+            abilityDefinition.CancelAbilityTags = new Tag[] { };
+            abilityDefinition.AssetTags = new Tag[] { };
+            abilityDefinition.UniqueName = "TestAbility";
+            abilityDefinition.GrantedEffects = new[] { CreateInfiniteEffectDefinitionWithModifier() };
+            return abilityDefinition;
+        }
     }
 }

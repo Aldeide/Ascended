@@ -17,7 +17,6 @@ namespace AbilitySystemExtension.Scripts
 
         public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
-            Debug.Log("AnimatorCueListener received cue: " + definition.CueTag.Name);
             if (!TagQuery.MatchesTag(definition.CueTag)) return;
             if (definition is CueAnimationParameterDefinition parameterDefinition)
             {

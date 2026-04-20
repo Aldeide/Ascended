@@ -19,10 +19,18 @@ MonoBehaviour:
   - Cue.Animation
   - Cue.Animation.Parameter.Grounded
   - Cue.Animation.State.Death
+  - Cue.Animation.State.Idle
   - Cue.Animation.State.Jump.Start
   - Cue.Audio.Gun.B
+  - Cue.IK
+  - Cue.IK.Arms.Disable
+  - Cue.IK.Arms.Enable
+  - Cue.IK.Feet.Disable
+  - Cue.IK.Feet.Enable
   - Cue.Light.Burst.Muzzle
+  - Cue.Prefab
   - Cue.Prefab.Impact.A
+  - Cue.Prefab.Trail.A
   - Cue.VisualEffect.Dev.Loop
   - Cue.VisualEffect.Muzzle.A
   - Effect.Cost.Ability.Dash

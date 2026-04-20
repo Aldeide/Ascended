@@ -59,7 +59,12 @@ MonoBehaviour:
     rid: -2
   AbilityActivation:
     rid: -2
-  AssetTags: []
+  AssetTags:
+  - <Name>k__BackingField: Ability.Passive
+    <HashCode>k__BackingField: -1209000997
+    <AncestorsNames>k__BackingField:
+    - Ability
+    <AncestorsHashCodes>k__BackingField: b84ed1e0
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTags: []

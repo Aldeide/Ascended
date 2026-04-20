@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4b6bd928f3440bbe97a401c2f7418f, type: 3}
   m_Name: AimCameraAbility
   m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes: []
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   Description:
     m_TableReference:
       m_TableCollectionName: 
@@ -42,7 +54,12 @@ MonoBehaviour:
   BlockAbilityTags: []
   ActivationOwnedTags: []
   ActivationRequiredTags: []
-  ActivationBlockedTags: []
+  ActivationBlockedTags:
+  - <Name>k__BackingField: Status.Dead
+    <HashCode>k__BackingField: -124510100
+    <AncestorsNames>k__BackingField:
+    - Status
+    <AncestorsHashCodes>k__BackingField: b0c3cf74
   GrantedEffects: []
   NetworkPolicy: 0
   NetworkSecurityPolicy: 0

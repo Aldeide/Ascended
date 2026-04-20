@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using UnityEngine;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
@@ -21,6 +22,7 @@ namespace AbilitySystem.Runtime.Networking
         public Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
+        public Action<AbilitySystemComponent.AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
 
         public ReplicationManager(IAbilitySystem owner)
         {
@@ -73,6 +75,12 @@ namespace AbilitySystem.Runtime.Networking
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
             OnNotifyClientAbilityRemoved?.Invoke(abilityDefinition);
+        }
+        
+        // Tags
+        public void NotifyClientsAbilityTagsAdded(AbilitySystemComponent.AbilityTagSyncData abilityTags)
+        {
+            OnNotifyClientsAbilityTagsAdded?.Invoke(abilityTags);
         }
     }
 }

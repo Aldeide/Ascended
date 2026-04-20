@@ -66,5 +66,14 @@ namespace AbilitySystem.Test.Utilities
             asset.ApplicationRequiredTags = Array.Empty<Tag>();
             return asset;
         }
+        
+        public static EffectDefinition CreateInstantEffectDefinition()
+        {
+            var asset = ScriptableObject.CreateInstance<EffectDefinition>();
+            asset.DurationType = EffectDurationType.Instant;
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
+            return asset;
+        }
     }
 }

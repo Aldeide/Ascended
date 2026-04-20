@@ -1,4 +1,4 @@
-﻿namespace AbilitySystem.Runtime.Abilities
+namespace AbilitySystem.Runtime.Abilities
 {
     public enum AbilityActivationResult
     {
@@ -7,6 +7,7 @@
         CooldownFailed = 2,
         BlockedByTag = 3,
         MissingRequiredTag = 4,
-        Success = 5
+        BlockedByAbility = 5,
+        Success = 6
     }
 }
