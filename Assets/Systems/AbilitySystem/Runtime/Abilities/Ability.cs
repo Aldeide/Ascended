@@ -48,8 +48,7 @@ namespace AbilitySystem.Runtime.Abilities
             Owner = owner;
             IsActive = false;
             Level = level;
-            // TODO: clone cooldown.
-            Cooldown = Definition.Cooldown;
+            Cooldown = Definition.Cooldown?.Clone();
             _activatedEffects = new List<Effect>();
 
             if (Definition.AbilityActivation != null)

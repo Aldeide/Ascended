@@ -26,6 +26,16 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
         
         private readonly List<Tuple<Effect, Modifier>> _relevantModifiers = new();
 
+        public override AbilityCooldown Clone()
+        {
+            return new AttributeDrivenAbilityCooldown
+            {
+                CooldownEffect = CooldownEffect,
+                CooldownAttribute = CooldownAttribute,
+                TagQuery = TagQuery
+            };
+        }
+
         public override bool Activate(IAbilitySystem owner)
         {
             if (!CanActivate(owner)) return false;

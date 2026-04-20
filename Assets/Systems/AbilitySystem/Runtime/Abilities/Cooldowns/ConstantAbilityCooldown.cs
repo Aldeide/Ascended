@@ -13,6 +13,14 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
     [Serializable]
     public class ConstantAbilityCooldown : AbilityCooldown
     {
+        public override AbilityCooldown Clone()
+        {
+            return new ConstantAbilityCooldown
+            {
+                CooldownEffect = CooldownEffect
+            };
+        }
+
         public override float Calculate(IAbilitySystem owner)
         {
             return CooldownEffect.DurationSeconds;
