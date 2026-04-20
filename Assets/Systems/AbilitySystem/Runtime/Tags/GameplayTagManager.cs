@@ -4,6 +4,7 @@ using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 
@@ -74,7 +75,7 @@ namespace AbilitySystem.Runtime.Tags
             OnTagsChanged?.Invoke();
         }
         
-        public void AddAbilityTags(AbilitySystemComponent.AbilityTagSyncData abilityTags)
+        public void AddAbilityTags(AbilityTagSyncData abilityTags)
         {
             foreach (var tag in abilityTags.Tags)
             {
@@ -93,12 +94,24 @@ namespace AbilitySystem.Runtime.Tags
         {
             if (!_owner.IsServer()) return;
             AddAbilityTags(ability);
-            var abilityTags = new AbilitySystemComponent.AbilityTagSyncData
+            var abilityTags = new AbilityTagSyncData
             {
                 AbilityUniqueName = ability.Definition.UniqueName,
                 Tags = ability.Definition.ActivationOwnedTags
             };
             _owner.ReplicationManager.NotifyClientsAbilityTagsAdded(abilityTags);
+        }
+        
+        public void RemoveAbilityTagsAndNotify(Ability ability)
+        {
+            if (!_owner.IsServer()) return;
+            RemoveAbilityTags(ability);
+            var abilityTags = new AbilityTagSyncData
+            {
+                AbilityUniqueName = ability.Definition.UniqueName,
+                Tags = ability.Definition.ActivationOwnedTags
+            };
+            _owner.ReplicationManager.NotifyClientsAbilityTagsRemoved(abilityTags);
         }
 
         public void RemoveEffectTags(Effect effect)
@@ -126,6 +139,25 @@ namespace AbilitySystem.Runtime.Tags
                 if (AbilityTags.ContainsKey(tag))
                 {
                     AbilityTags[tag].Remove(ability.Definition.UniqueName);
+                    OnTagsChanged?.Invoke();
+                }
+
+                if (AbilityTags.ContainsKey(tag) && AbilityTags[tag].Count == 0)
+                {
+                    AbilityTags.Remove(tag);
+                }
+            }
+        }
+        
+        public void RemoveAbilityTags(AbilityTagSyncData abilityTags)
+        {
+            if (abilityTags.Tags == null) return;
+            var tags = abilityTags.Tags;
+            foreach (var tag in tags)
+            {
+                if (AbilityTags.ContainsKey(tag))
+                {
+                    AbilityTags[tag].Remove(abilityTags.AbilityUniqueName);
                     OnTagsChanged?.Invoke();
                 }
 

@@ -60,6 +60,7 @@ namespace AbilitySystem.Test.Utilities
         public static EffectDefinition CreateDurationEffectDefinition()
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
+            asset.name = "TestDurationEffect";
             asset.DurationType = EffectDurationType.FixedDuration;
             asset.DurationSeconds = 100;
             asset.ApplicationImmunityTags = Array.Empty<Tag>();

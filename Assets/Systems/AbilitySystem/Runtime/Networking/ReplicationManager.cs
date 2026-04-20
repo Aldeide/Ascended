@@ -22,8 +22,8 @@ namespace AbilitySystem.Runtime.Networking
         public Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
-        public Action<AbilitySystemComponent.AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
-
+        public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
+        public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
         public ReplicationManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -78,9 +78,14 @@ namespace AbilitySystem.Runtime.Networking
         }
         
         // Tags
-        public void NotifyClientsAbilityTagsAdded(AbilitySystemComponent.AbilityTagSyncData abilityTags)
+        public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags)
         {
             OnNotifyClientsAbilityTagsAdded?.Invoke(abilityTags);
+        }
+
+        public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags)
+        {
+            OnNotifyClientsAbilityTagsRemoved?.Invoke(abilityTags);
         }
     }
 }

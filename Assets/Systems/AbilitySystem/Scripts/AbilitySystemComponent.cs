@@ -23,46 +23,6 @@ namespace AbilitySystem.Scripts
         private CueManagerComponent _cueManagerComponent;
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
-        
-        public struct AttributeSyncData : INetworkSerializable
-        {
-            public string AttributeName;
-            public float BaseValue;
-            public float CurrentValue;
-
-            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-            {
-                serializer.SerializeValue(ref AttributeName);
-                serializer.SerializeValue(ref BaseValue);
-                serializer.SerializeValue(ref CurrentValue);
-            }
-        }
-
-        public struct EffectSyncData : INetworkSerializable
-        {
-            public string EffectName;
-            public float ActivationTime;
-            public ulong SourceId;
-
-            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-            {
-                serializer.SerializeValue(ref EffectName);
-                serializer.SerializeValue(ref ActivationTime);
-                serializer.SerializeValue(ref SourceId);
-            }
-        }
-
-        public struct AbilityTagSyncData : INetworkSerializable
-        {
-            public string AbilityUniqueName;
-            public Tag[] Tags;
-
-            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-            {
-                serializer.SerializeValue(ref AbilityUniqueName);
-                serializer.SerializeValue(ref Tags);
-            }
-        }
 
         public override void OnNetworkSpawn()
         {
@@ -167,6 +127,7 @@ namespace AbilitySystem.Scripts
             abilitySystemManager.ReplicationManager.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
             
             abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
+            abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
             
             abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
             abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
@@ -458,6 +419,12 @@ namespace AbilitySystem.Scripts
         public void NotifyClientsAbilityTagsAddedRpc(AbilityTagSyncData tags)
         {
             AbilitySystem.TagManager.AddAbilityTags(tags);
+        }
+        
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsAbilityTagsRemovedRpc(AbilityTagSyncData tags)
+        {
+            AbilitySystem.TagManager.RemoveAbilityTags(tags);
         }
     }
 }

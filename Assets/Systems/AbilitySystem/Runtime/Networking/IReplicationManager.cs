@@ -15,7 +15,8 @@ namespace AbilitySystem.Runtime.Networking
         Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
         Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
         Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
-        Action<AbilitySystemComponent.AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
+        Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
+        Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
         
         public void NotifyClientsAttributeBaseValueChanged(AbilitySystem.Runtime.Attributes.Attribute attribute, float oldValue, float newValue);
         public void OnAttributeBaseValueChanged(string attributeName, float newValue);
@@ -29,6 +30,7 @@ namespace AbilitySystem.Runtime.Networking
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition);
         
         // Tags.
-        public void NotifyClientsAbilityTagsAdded(AbilitySystemComponent.AbilityTagSyncData abilityTags);
+        public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags);
+        public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags);
     }
 }
