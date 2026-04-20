@@ -1,6 +1,8 @@
-﻿using AbilitySystem.Test.Utilities;
+﻿using System.Linq;
+using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
 using NUnit.Framework;
+using UnityEngine;
 using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 using static AbilitySystem.Test.Utilities.AbilityUtilities;
 
@@ -64,5 +66,76 @@ namespace AbilitySystem.Test.Runtime.Abilities
             Assert.IsTrue(clientAbilitySystem.TagManager.AbilityTags.Count == 1);
         }
         
+        [Test]
+        public void AbilityServerTests_ServerOnlyAbility_GrantsMultipleTagToClient()
+        {
+            var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
+            var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
+            var abilityDefinition = CreateServerAbilityDefinition();
+            var tags = new[] {new Tag("Tag.Test"), new Tag("Tag.Test2")};
+            abilityDefinition.ActivationOwnedTags = tags;
+            serverAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (data) =>
+            {
+                clientAbilitySystem.TagManager.AddAbilityTags(data);
+            };
+            
+            serverAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
+            
+            Assert.IsTrue(clientAbilitySystem.TagManager.HasTag(new Tag("Tag.Test")));
+            Assert.IsTrue(clientAbilitySystem.TagManager.HasTag(new Tag("Tag.Test2")));
+            Assert.IsTrue(clientAbilitySystem.TagManager.AbilityTags.Count == 2);
+        }
+        
+        [Test]
+        public void AbilityServerTests_ServerOnlyAbility_RemovesTagsOnClientWhenEnded()
+        {
+            var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
+            var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
+            var abilityDefinition = CreateServerAbilityDefinition();
+            var tags = new[] {new Tag("Tag.Test"), new Tag("Tag.Test2")};
+            abilityDefinition.ActivationOwnedTags = tags;
+            serverAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (data) =>
+            {
+                clientAbilitySystem.TagManager.AddAbilityTags(data);
+            };
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsAbilityTagsRemoved += (data) =>
+            {
+                clientAbilitySystem.TagManager.RemoveAbilityTags(data);
+            };
+            
+            serverAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
+            
+            Assert.IsTrue(clientAbilitySystem.TagManager.HasTag(new Tag("Tag.Test")));
+            Assert.IsTrue(clientAbilitySystem.TagManager.HasTag(new Tag("Tag.Test2")));
+            Assert.IsTrue(clientAbilitySystem.TagManager.AbilityTags.Count == 2);
+            
+            serverAbilitySystem.AbilityManager.EndAbility(abilityDefinition.UniqueName);
+            
+            Debug.Log(clientAbilitySystem.TagManager.AbilityTags.Count);
+            Assert.IsTrue(clientAbilitySystem.TagManager.AbilityTags.Count == 0);
+        }
+        
+        /*
+        [Test]
+        public void AbilityServerTests_ServerOnlyAbility_GrantsEffectToClient()
+        {
+            var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
+            var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
+            var abilityDefinition = CreateServerAbilityDefinition();
+            abilityDefinition.GrantedEffects = new[] {EffectUtilities.CreateDurationEffectDefinition()};
+            serverAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (data) =>
+            {
+                clientAbilitySystem.TagManager.AddAbilityTags(data);
+            };
+            
+            serverAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
+            
+            Assert.IsTrue(clientAbilitySystem.EffectManager.Effects.Count == 1);
+            Assert.IsTrue(clientAbilitySystem.EffectManager.Effects.Exists(e => e.Definition.name == "TestEffect"));
+        }
+        */
     }
 }

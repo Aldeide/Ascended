@@ -68,12 +68,12 @@ namespace AbilitySystem.Runtime.Effects
         
         [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
         public CueDefinition[] Cues;
-        bool IsPeriodic()
+        public bool IsPeriodic()
         {
             return IsDurationalPolicy() && Period > 0;
         }
 
-        bool IsDurationalPolicy()
+        public bool IsDurationalPolicy()
         {
             return DurationType is EffectDurationType.FixedDuration or EffectDurationType.Infinite;
         }

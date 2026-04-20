@@ -179,7 +179,14 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 Owner.EffectManager.RemoveEffect(activatedEffect);
             }
-            Owner.TagManager.RemoveAbilityTags(this);
+            if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
+            {
+                Owner.TagManager.RemoveAbilityTagsAndNotify(this);
+            }
+            else
+            {
+                Owner.TagManager.RemoveAbilityTags(this);
+            }
             Owner.TagManager.RemoveAbilityBlockingTags(this);
             EndAbility();
             _activatedEffects.Clear();

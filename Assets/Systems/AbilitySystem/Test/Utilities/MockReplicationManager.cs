@@ -16,7 +16,8 @@ namespace AbilitySystem.Test.Utilities
         public Action<Tag, CueAction, CueData> OnNotifyClientsPlayCue { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityGranted { get; set; }
         public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
-        public Action<AbilitySystemComponent.AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
+        public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
+        public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
         public Action<string[]> OnNotifyClientsSyncTags { get; set; }
 
         public Action<Attribute, float, float> NotifyClientsAttributeBaseValueChangedCallback { get; set; }
@@ -71,9 +72,14 @@ namespace AbilitySystem.Test.Utilities
             throw new NotImplementedException();
         }
 
-        public void NotifyClientsAbilityTagsAdded(AbilitySystemComponent.AbilityTagSyncData abilityTags)
+        public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags)
         {
             OnNotifyClientsAbilityTagsAdded?.Invoke(abilityTags);
+        }
+        
+        public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags)
+        {
+            OnNotifyClientsAbilityTagsRemoved?.Invoke(abilityTags);
         }
 
         public void NotifyClientsAbilityTagsAdded(Tuple<string, Tag[]> abilityTags)
