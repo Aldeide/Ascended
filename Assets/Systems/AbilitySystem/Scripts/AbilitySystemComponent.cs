@@ -98,7 +98,8 @@ namespace AbilitySystem.Scripts
                     var data = new EffectSyncData
                     {
                         EffectName = effect.Definition.name,
-                        ActivationTime = effect.ActivationTime
+                        ActivationTime = effect.ActivationTime,
+                        PredictionKey = effect.PredictionKey
                     };
                     
                     if (effect.Source != null && effect.Source.NetworkRole != null)
@@ -128,6 +129,14 @@ namespace AbilitySystem.Scripts
             
             abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
             abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
+            abilitySystemManager.ReplicationManager.OnNotifyClientsEffectAdded += (data) =>
+            {
+                if (data.PredictionKey.IsValidKey())
+                    NotifyOwnerEffectAddedRpc(data.PredictionKey, data.EffectName, data.ActivationTime, data.SourceId);
+                else
+                    NotifyOwnerEffectAddedRpc(data.EffectName, data.ActivationTime, data.SourceId);
+            };
+            abilitySystemManager.ReplicationManager.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
             
             abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
             abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
@@ -157,8 +166,6 @@ namespace AbilitySystem.Scripts
 
             AbilitySystem.AttributeSetManager.OnAnyAttributeBaseValueChanged += OnAttributeBaseValueChanged;
             AbilitySystem.AttributeSetManager.OnAnyAttributeCurrentValueChanged += OnAttributeBaseCurrentChanged;
-            AbilitySystem.EffectManager.OnEffectAdded += OnEffectAdded;
-            AbilitySystem.EffectManager.OnEffectRemoved += OnEffectRemoved;
             
             OnAbilitySystemInitialised?.Invoke();
         }
@@ -256,28 +263,7 @@ namespace AbilitySystem.Scripts
             effect.Execute();
         }
 
-        public void OnEffectAdded(Effect effect)
-        {
-            if (IsServer && !IsHost)
-            {
-                ulong sourceId = effect.Source != null && effect.Source.NetworkRole != null ? effect.Source.NetworkRole.NetworkObjectId : NetworkObjectId;
-
-                if (effect.PredictionKey.IsValidKey())
-                {
-                    NotifyOwnerEffectAddedRpc(effect.PredictionKey, effect.Definition.name, effect.ActivationTime, sourceId);
-                    return;
-                }
-                NotifyOwnerEffectAddedRpc(effect.Definition.name, effect.ActivationTime, sourceId);
-            }
-        }
-        
-        public void OnEffectRemoved(Effect effect)
-        {
-            if (IsServer && !IsHost)
-            {
-                NotifyOwnerEffectRemovedRpc(effect.Definition.name);
-            }
-        }
+        // These are now handled via ReplicationManager bridge in Initialise()
 
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime, ulong sourceId)

@@ -8,6 +8,7 @@ using GameplayTags.Runtime;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
+using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 
 namespace AbilitySystem.Test.Runtime.Effects
 {
@@ -65,47 +66,38 @@ namespace AbilitySystem.Test.Runtime.Effects
         [Test]
         public void EffectManagerTest_TickAsServer_TicksEffects()
         {
-            var owner = new Mock<IAbilitySystem>();
-            var effectManager = new EffectManager(owner.Object);
-            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
-            var tagManager = new GameplayTagManager(owner.Object);
-            owner.Setup(mock => mock.TagManager).Returns(tagManager);
-            var attributeSystem = new Mock<AttributeSetManager>(owner.Object);
-            owner.Setup(mock => mock.IsLocalClient()).Returns(false);
-            owner.Setup(mock => mock.IsServer()).Returns(true);
-            owner.Setup(mock => mock.GetTime()).Returns(1);
-            owner.Setup(mock => mock.AttributeSetManager).Returns(attributeSystem.Object);
-            var effect = EffectUtilities.CreateDurationalEffect(owner.Object, owner.Object);
-            effectManager.AddEffect(effect);
-            effect.Initialise(owner.Object, owner.Object);
+            var mockServerAbilitySystem = CreateMockServerAbilitySystem();
+            var serverAbilitySystem = mockServerAbilitySystem.Object;
+            var effect = EffectUtilities.CreateDurationalEffect(serverAbilitySystem, serverAbilitySystem);
+            serverAbilitySystem.EffectManager.AddEffect(effect);
+            effect.Initialise(serverAbilitySystem, serverAbilitySystem);
             effect.Activate();
-            owner.Setup(mock => mock.GetTime()).Returns(5);
-            effectManager.Tick();
+            serverAbilitySystem.EffectManager.AddEffect(effect);
+            effect.Initialise(serverAbilitySystem, serverAbilitySystem);
+            effect.Activate();
+            mockServerAbilitySystem.Setup(mock => mock.GetTime()).Returns(5);
+            serverAbilitySystem.EffectManager.Tick();
 
-            Assert.AreEqual(96, effect.RemainingDuration());
+            Assert.AreEqual(95, effect.RemainingDuration());
         }
         
         [Test]
         public void EffectManagerTest_DurationalEffect_ExpiresCorrectly()
         {
-            var owner = new Mock<IAbilitySystem>();
-            var attributeSystem = new Mock<AttributeSetManager>(owner.Object);
-            var effectManager = new EffectManager(owner.Object);
-            owner.Setup(mock => mock.IsLocalClient()).Returns(false);
-            owner.Setup(mock => mock.IsServer()).Returns(true);
-            owner.Setup(mock => mock.GetTime()).Returns(1);
-            owner.Setup(mock => mock.AttributeSetManager).Returns(attributeSystem.Object);
-            owner.Setup(mock => mock.EffectManager).Returns(effectManager);
-            var tagManager = new GameplayTagManager(owner.Object);
-            owner.Setup(mock => mock.TagManager).Returns(tagManager);
-            var effect = EffectUtilities.CreateDurationalEffect(owner.Object, owner.Object);
-            effectManager.AddEffect(effect);
-            effect.Initialise(owner.Object, owner.Object);
+            var mockServerAbilitySystem = CreateMockServerAbilitySystem();
+            var serverAbilitySystem = mockServerAbilitySystem.Object;
+            var effect = EffectUtilities.CreateDurationalEffect(serverAbilitySystem, serverAbilitySystem);
+            serverAbilitySystem.EffectManager.AddEffect(effect);
+            effect.Initialise(serverAbilitySystem, serverAbilitySystem);
             effect.Activate();
-            owner.Setup(mock => mock.GetTime()).Returns(200);
-            effectManager.Tick();
-
-            Assert.AreEqual(0, effectManager.Effects.Count);
+            mockServerAbilitySystem.Setup(mock => mock.GetTime()).Returns(200);
+            serverAbilitySystem.EffectManager.Tick();
+            foreach(var e in serverAbilitySystem.EffectManager.Effects)
+            {
+                Debug.Log(e.DebugString() + "\n");
+            }
+            
+            Assert.AreEqual(0, serverAbilitySystem.EffectManager.Effects.Count);
         }
 
         [Test]

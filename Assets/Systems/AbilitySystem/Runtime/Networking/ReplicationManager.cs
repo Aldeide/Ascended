@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using UnityEngine;
@@ -24,6 +25,8 @@ namespace AbilitySystem.Runtime.Networking
         public Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
         public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
         public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
+        public Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
+        public Action<string> OnNotifyClientsEffectRemoved { get; set; }
         public ReplicationManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -86,6 +89,31 @@ namespace AbilitySystem.Runtime.Networking
         public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags)
         {
             OnNotifyClientsAbilityTagsRemoved?.Invoke(abilityTags);
+        }
+
+        public void NotifyClientsEffectAdded(Effect effect)
+        {
+            if (!_owner.IsServer()) return;
+
+            var data = new EffectSyncData
+            {
+                EffectName = effect.Definition.name,
+                ActivationTime = effect.ActivationTime,
+                PredictionKey = effect.PredictionKey
+            };
+
+            if (effect.Source != null && effect.Source.NetworkRole != null)
+                data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
+            else
+                data.SourceId = _owner.NetworkRole.NetworkObjectId;
+
+            OnNotifyClientsEffectAdded?.Invoke(data);
+        }
+
+        public void NotifyClientsEffectRemoved(Effect effect)
+        {
+            if (!_owner.IsServer()) return;
+            OnNotifyClientsEffectRemoved?.Invoke(effect.Definition.name);
         }
     }
 }
