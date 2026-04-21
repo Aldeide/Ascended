@@ -10,10 +10,8 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void AbilityPolicyTests_ClientOnly_ClientOrServer_ActivatesOnClient()
         {
-            var mockClientAbilitySystem = CreateMockClientAbilitySystem();
-            var mockServerAbilitySystem = CreateMockServerAbilitySystem();
-            var clientAbilitySystem = mockClientAbilitySystem.Object;
-            var serverAbilitySystem = mockServerAbilitySystem.Object;
+            var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
+            var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
             var abilityDefinition = CreateTestAbilityDefinition();
             abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientOnly;
             abilityDefinition.NetworkSecurityPolicy = AbilityNetworkSecurityPolicy.ClientOrServer;
