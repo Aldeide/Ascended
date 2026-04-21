@@ -15,16 +15,18 @@ namespace AbilitySystem.Test.Runtime.Abilities
         public void AbilityPredictedTests_PredictedAbility_TriggersRequestOnServer()
         {
             var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
-            var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
             var abilityDefinition = CreatePredictedAbilityDefinition();
-            serverAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
             clientAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
             
-            //OnServerTryActivateAbilityRequested
+            var eventDispatched = false;
+            clientAbilitySystem.AbilityManager.OnServerTryActivateAbilityRequested += (abilityName, key, data) =>
+            {
+                eventDispatched = true;
+            };
             
             clientAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
             
-            Assert.IsTrue(clientAbilitySystem.AbilityManager.Abilities[abilityDefinition.UniqueName].IsActive, "Predicted ability isn't active on client but should.");
+            Assert.IsTrue(eventDispatched, "Predicted ability didn't call server.");
         }
     }
 }
