@@ -20,12 +20,16 @@ namespace AbilitySystem.Runtime.Abilities
         public Dictionary<string, Ability> Abilities;
         private List<Ability> _abilitySnapshot;
         private PredictionKey _predictionKey;
-        
-        private Dictionary<int, Dictionary<string, AbilitySystem.Runtime.Attributes.AttributeValue>> _predictionAttributeSnapshots = new();
+
+        private Dictionary<int, Dictionary<string, AbilitySystem.Runtime.Attributes.AttributeValue>>
+            _predictionAttributeSnapshots = new();
 
         public Action OnAbilityGranted;
         public Action<string, PredictionKey, AbilityData> OnServerTryActivateAbilityRequested;
+        public Action<string, AbilityData> OnServerTryUnpredictedAbilityRequested;
+        public Action<string, AbilityData> OnNotifyClientActivateAbility;
         public Action<string> OnServerTryEndAbilityRequested;
+
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
@@ -72,7 +76,7 @@ namespace AbilitySystem.Runtime.Abilities
             if (!abilityDefinition) return;
             RemoveAbility(abilityDefinition.UniqueName);
         }
-        
+
         public void RemoveAbilityServer(AbilityDefinition abilityDefinition)
         {
             if (!abilityDefinition) return;
@@ -86,15 +90,46 @@ namespace AbilitySystem.Runtime.Abilities
             if (!Abilities.Remove(abilityName)) return;
         }
 
+        public bool ForceActivateAbility(string abilityName, AbilityData data = new AbilityData())
+        {
+            Abilities.TryGetValue(abilityName, out Ability ability);
+            if (ability == null) return false;
+            return ability.TryActivateAbility(data);
+        }
+        
         public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
         {
             Abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
 
+            if (
+                (ability.Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnly ||
+                 ability.Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnlyExecution) &
+                _owner.IsLocalClient())
+            {
+                Debug.Log("Attempted to execute ability " + ability.Definition.UniqueName +
+                          " from the client but it is server only execution.");
+                return false;
+            }
+
+            if (_owner.IsLocalClient() &&
+                ability.Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ClientOrServer &&
+                ability.Definition.NetworkPolicy == AbilityNetworkPolicy.Server)
+            {
+                OnServerTryUnpredictedAbilityRequested?.Invoke(name, data);
+                return true;
+            }
+                
+
             if ((_owner.IsServer() || _owner.IsHost()) && !ability.Definition.IsLocalAbility())
             {
                 Debug.Log("TryActivateAbility for serverhost: " + name);
                 return ability.TryActivateAbility(data);
+            }
+
+            if (ability.Definition.IsLocalAbility() && !_owner.IsLocalClient())
+            {
+                OnNotifyClientActivateAbility?.Invoke(name, data);
             }
 
             if (ability.Definition.IsLocalAbility() && _owner.IsLocalClient())
@@ -108,7 +143,7 @@ namespace AbilitySystem.Runtime.Abilities
                 Debug.Log("Predicting" + ability.Definition.name);
                 // Snapshot before prediction
                 _predictionAttributeSnapshots[key.currentKey] = _owner.AttributeSetManager.Snapshot();
-                
+
                 var success = ability.TryActivateAbility(key, data);
                 if (success)
                 {
@@ -178,10 +213,10 @@ namespace AbilitySystem.Runtime.Abilities
                     _owner.AttributeSetManager.Restore(snapshot);
                     _predictionAttributeSnapshots.Remove(key.currentKey);
                 }
-                
+
                 // End any abilities that were started with this key
                 EndAbility(key);
-                
+
                 // Retract any effects that were started with this key
                 _owner.EffectManager.RetractPredictedEffect(key);
             }
