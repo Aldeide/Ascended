@@ -1,4 +1,4 @@
-﻿using GameplayTags.Runtime;
+using GameplayTags.Runtime;
 using Unity.Netcode;
 
 namespace AbilitySystem.Runtime.Networking
@@ -22,12 +22,14 @@ namespace AbilitySystem.Runtime.Networking
         public string EffectName;
         public float ActivationTime;
         public ulong SourceId;
+        public PredictionKey PredictionKey;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref EffectName);
             serializer.SerializeValue(ref ActivationTime);
             serializer.SerializeValue(ref SourceId);
+            serializer.SerializeValue(ref PredictionKey);
         }
     }
 

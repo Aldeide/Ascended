@@ -107,6 +107,10 @@ namespace AbilitySystem.Runtime.Effects
             }
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);
+            if (_owner.IsServer())
+            {
+                _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
+            }
             return EffectApplicationResult.Success;
         }
 
@@ -114,6 +118,10 @@ namespace AbilitySystem.Runtime.Effects
         {
             Effects.Remove(effect);
             OnEffectRemoved?.Invoke(effect);
+            if (_owner.IsServer())
+            {
+                _owner.ReplicationManager.NotifyClientsEffectRemoved(effect);
+            }
         }
 
         public void RemoveEffect(string effectName)

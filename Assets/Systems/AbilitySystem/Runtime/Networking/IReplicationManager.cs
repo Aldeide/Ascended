@@ -2,6 +2,7 @@ using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 
@@ -17,6 +18,8 @@ namespace AbilitySystem.Runtime.Networking
         Action<AbilityDefinition> OnNotifyClientAbilityRemoved { get; set; }
         Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsAdded { get; set; }
         Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
+        Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
+        Action<string> OnNotifyClientsEffectRemoved { get; set; }
         
         public void NotifyClientsAttributeBaseValueChanged(AbilitySystem.Runtime.Attributes.Attribute attribute, float oldValue, float newValue);
         public void OnAttributeBaseValueChanged(string attributeName, float newValue);
@@ -32,5 +35,9 @@ namespace AbilitySystem.Runtime.Networking
         // Tags.
         public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags);
         public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags);
+
+        // Effects.
+        public void NotifyClientsEffectAdded(Effect effect);
+        public void NotifyClientsEffectRemoved(Effect effect);
     }
 }

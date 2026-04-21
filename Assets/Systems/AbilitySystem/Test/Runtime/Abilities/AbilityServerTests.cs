@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
 using NUnit.Framework;
@@ -117,25 +118,69 @@ namespace AbilitySystem.Test.Runtime.Abilities
             Assert.IsTrue(clientAbilitySystem.TagManager.AbilityTags.Count == 0);
         }
         
-        /*
         [Test]
         public void AbilityServerTests_ServerOnlyAbility_GrantsEffectToClient()
         {
             var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
             var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
             var abilityDefinition = CreateServerAbilityDefinition();
-            abilityDefinition.GrantedEffects = new[] {EffectUtilities.CreateDurationEffectDefinition()};
+            var effectDefinition = EffectUtilities.CreateDurationEffectDefinition();
+            abilityDefinition.GrantedEffects = new[] {effectDefinition};
             serverAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
-            serverAbilitySystem.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (data) =>
-            {
-                clientAbilitySystem.TagManager.AddAbilityTags(data);
-            };
             
+            // Link replication for effects
+            var networkData = new EffectSyncData {
+                
+            };
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsEffectAdded += (data) =>
+            {
+                var effect = effectDefinition.ToEffect(serverAbilitySystem, clientAbilitySystem);
+                effect.ActivationTime = data.ActivationTime;
+                clientAbilitySystem.EffectManager.AddEffectFromServer(effect);
+                networkData = data;
+            };
+
             serverAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
             
             Assert.IsTrue(clientAbilitySystem.EffectManager.Effects.Count == 1);
-            Assert.IsTrue(clientAbilitySystem.EffectManager.Effects.Exists(e => e.Definition.name == "TestEffect"));
+            Assert.IsTrue(clientAbilitySystem.EffectManager.Effects.Exists(e => e.Definition.name == "TestDurationEffect"));
+            Assert.IsTrue(networkData.EffectName == "TestDurationEffect");
+            // This ability is non-predicted.
+            Assert.IsFalse(networkData.PredictionKey.IsValidKey(), "Received a valid prediction key but the ability shouldn't be predicted");
         }
-        */
+        
+        public void AbilityServerTests_ServerOnlyAbility_RemovesEffectsOnClientWhenEnded()
+        {
+            var serverAbilitySystem = CreateMockServerAbilitySystem().Object;
+            var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
+            var abilityDefinition = CreateServerAbilityDefinition();
+            var effectDefinition = EffectUtilities.CreateDurationEffectDefinition();
+            abilityDefinition.GrantedEffects = new[] {effectDefinition};
+            serverAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
+            
+            // Link replication for effects
+            string networkData = "";
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsEffectAdded += (data) =>
+            {
+                var effect = effectDefinition.ToEffect(serverAbilitySystem, clientAbilitySystem);
+                effect.ActivationTime = data.ActivationTime;
+                clientAbilitySystem.EffectManager.AddEffectFromServer(effect);
+            };
+            var eventDispatched = false;
+            serverAbilitySystem.ReplicationManager.OnNotifyClientsEffectRemoved += (effectName) =>
+            {
+                clientAbilitySystem.EffectManager.RemoveEffect(effectName);
+                networkData = effectName;
+                eventDispatched = true;
+            };
+
+            serverAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
+            serverAbilitySystem.AbilityManager.EndAbility(abilityDefinition.UniqueName);
+            
+            Assert.IsTrue(eventDispatched, "OnNotifyClientsEffectRemoved was not dispatched.");
+            Assert.IsTrue(clientAbilitySystem.EffectManager.Effects.Count == 0, "Client effectManager has an effect when it shouldn't.");
+            // This ability is non-predicted.
+            Assert.IsTrue(networkData == "TestDurationEffect", "The wrong effect name was passed over the network.");
+        }
     }
 }
