@@ -139,7 +139,10 @@ namespace AbilitySystem.Scripts
             abilitySystemManager.ReplicationManager.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
             
             abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
+            abilitySystemManager.AbilityManager.OnServerTryUnpredictedAbilityRequested += (name, data) => ServerTryActivateUnpredictedAbilityRpc(name, data);
             abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
+            abilitySystemManager.AbilityManager.OnNotifyClientActivateAbility +=
+                (name, data) => NotifyOwnerActivateAbilityRpc(name, data);
             abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
             {
                 // If it's predicted and we are the owner, play it locally immediately.
@@ -223,9 +226,21 @@ namespace AbilitySystem.Scripts
         }
         
         [Rpc(SendTo.Server)]
+        public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data)
+        {
+            AbilitySystem.AbilityManager.TryActivateAbility(abilityName, data);
+        }
+        
+        [Rpc(SendTo.Server)]
         public void ServerTryEndAbilityRpc(string abilityName)
         {
             AbilitySystem.AbilityManager.EndAbility(abilityName);
+        }
+
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerActivateAbilityRpc(string abilityName, AbilityData data)
+        {
+            AbilitySystem.AbilityManager.ForceActivateAbility(abilityName, data);
         }
 
         [Rpc(SendTo.Owner)]
