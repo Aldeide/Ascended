@@ -174,7 +174,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             {
                 if (isProcessing) return;
                 isProcessing = true;
-                _clientAbilitySystem.AbilityManager.EndAbility(name);
+                _clientAbilitySystem.AbilityManager.ForceEndAbility(name);
                 isProcessing = false;
             };
 
