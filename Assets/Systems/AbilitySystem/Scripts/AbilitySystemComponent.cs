@@ -216,7 +216,7 @@ namespace AbilitySystem.Scripts
         public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data, RpcParams rpcParams = default)
         {
             if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
-            if (!AbilitySystem.AbilityManager.HasAuthorityToActivate(ability, true))
+            if (!AbilityManager.HasAuthorityToActivate(ability, true))
             {
                 Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to activate {abilityName} but lacks authority.");
                 NotifyAbilityActivationFailedRpc(abilityName, key);
@@ -238,7 +238,7 @@ namespace AbilitySystem.Scripts
         public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data, RpcParams rpcParams = default)
         {
             if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
-            if (!AbilitySystem.AbilityManager.HasAuthorityToActivate(ability, true))
+            if (!AbilityManager.HasAuthorityToActivate(ability, true))
             {
                 Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to activate {abilityName} but lacks authority.");
                 return;
@@ -249,12 +249,6 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Server)]
         public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
-            if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
-            if (!AbilitySystem.AbilityManager.HasAuthorityToTerminate(ability, true))
-            {
-                Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to end {abilityName} but lacks authority.");
-                return;
-            }
             AbilitySystem.AbilityManager.EndAbility(abilityName);
         }
 
@@ -267,7 +261,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEndAbilityRpc(string abilityName)
         {
-            AbilitySystem.AbilityManager.EndAbility(abilityName);
+            AbilitySystem.AbilityManager.ForceEndAbility(abilityName);
         }
 
         [Rpc(SendTo.Owner)]

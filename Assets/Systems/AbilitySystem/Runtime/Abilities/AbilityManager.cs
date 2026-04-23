@@ -97,13 +97,6 @@ namespace AbilitySystem.Runtime.Abilities
             if (ability == null) return false;
             return ability.TryActivateAbility(data);
         }
-
-        public void ForceEndAbility(string abilityName)
-        {
-            Abilities.TryGetValue(abilityName, out Ability ability);
-            if (ability == null) return;
-            ability.TryEndAbility();
-        }
         
         public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
         {
@@ -180,22 +173,27 @@ namespace AbilitySystem.Runtime.Abilities
             return false;
         }
 
-        public bool HasAuthorityToActivate(Ability ability, bool isClient)
+        public static bool HasAuthorityToActivate(Ability ability, bool isClient)
         {
             if (!isClient) return true;
             var policy = ability.Definition.NetworkSecurityPolicy;
-            if (policy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
-            if (policy == AbilityNetworkSecurityPolicy.ServerOnlyTermination) return true;
-            return false;
+            return policy switch
+            {
+                AbilityNetworkSecurityPolicy.ClientOrServer
+                    or AbilityNetworkSecurityPolicy.ServerOnlyTermination => true,
+                _ => false
+            };
         }
 
-        public bool HasAuthorityToTerminate(Ability ability, bool isClient)
+        public static bool HasAuthorityToTerminate(Ability ability, bool isClient)
         {
             if (!isClient) return true;
             var policy = ability.Definition.NetworkSecurityPolicy;
-            if (policy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
-            if (policy == AbilityNetworkSecurityPolicy.ServerOnlyExecution) return true;
-            return false;
+            return policy switch
+            {
+                AbilityNetworkSecurityPolicy.ClientOrServer or AbilityNetworkSecurityPolicy.ServerOnlyExecution => true,
+                _ => false
+            };
         }
 
         public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, AbilityData data)
@@ -248,6 +246,12 @@ namespace AbilitySystem.Runtime.Abilities
                 .ForEach(a => a.Value.TryEndAbility());
         }
 
+        public void ForceEndAbility(string abilityName)
+        {
+            Abilities.TryGetValue(abilityName, out var ability);
+            ability?.TryEndAbility();
+        }
+        
         public void CancelAbilitiesWithTags(Tag[] tags)
         {
             foreach (var ability in Abilities.Values.Where(ability =>

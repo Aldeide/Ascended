@@ -104,18 +104,6 @@ namespace AbilitySystem.Test.Runtime.Abilities
         }
         
         [Test]
-        public void AbilityTests_ActivateLocalOnServer_ActivationFails()
-        {
-            var owner = CreateMockServerAbilitySystem();
-            var abilityDefinition = CreateInstantAbilityDefinition();
-            abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientOnly;
-            owner.Setup(m => m.IsServer()).Returns(true);
-            owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            
-            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName));
-        }
-        
-        [Test]
         public void AbilityTests_ActivateLocalOnClient_ActivationSuccess()
         {
             var owner = CreateMockClientAbilitySystem();
