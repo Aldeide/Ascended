@@ -96,20 +96,20 @@ namespace AbilitySystem.Test.Runtime.Abilities
             _serverAbilitySystem.AbilityManager.GrantAbility(_abilityDefinition);
 
             var rpcStarted = false;
-            _clientAbilitySystem.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            _clientAbilitySystem.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
                 rpcStarted = true;
                 // Simulate network bridge to server
-                _serverAbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(name, key, data);
+                _serverAbilitySystem.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
             };
-            _clientAbilitySystem.AbilityManager.OnServerTryUnpredictedAbilityRequested += (name, data) =>
+            _clientAbilitySystem.ReplicationManager.OnServerAbilityUnpredictedActivationRequested += (name, data) =>
             {
                 rpcStarted = true;
-                _serverAbilitySystem.AbilityManager.TryActivateAbility(name, data);
+                _serverAbilitySystem.ReplicationManager.ProcessServerAbilityUnpredictedActivation(name, data);
             };
-            _serverAbilitySystem.AbilityManager.OnNotifyClientActivateAbility += (name, data) =>
+            _serverAbilitySystem.ReplicationManager.OnClientActivateAbility += (name, data) =>
             {
-                 _clientAbilitySystem.AbilityManager.ForceActivateAbility(name, data);
+                 _clientAbilitySystem.ReplicationManager.ProcessClientActivateAbility(name, data);
             };
 
             var initiator = tc.RequestFromClient ? _clientAbilitySystem : _serverAbilitySystem;
@@ -163,19 +163,24 @@ namespace AbilitySystem.Test.Runtime.Abilities
             _clientAbilitySystem.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
 
             bool isProcessing = false;
-            _clientAbilitySystem.AbilityManager.OnServerTryEndAbilityRequested += (name) =>
+            _clientAbilitySystem.ReplicationManager.OnServerAbilityTerminationRequested += (name) =>
             {
                 if (isProcessing) return;
                 isProcessing = true;
-                _serverAbilitySystem.AbilityManager.EndAbility(name);
+                _serverAbilitySystem.ReplicationManager.ProcessServerAbilityTermination(name);
                 isProcessing = false;
             };
-            _serverAbilitySystem.AbilityManager.OnNotifyClientEndAbility += (name) =>
+            _serverAbilitySystem.ReplicationManager.OnClientEndAbility += (name) =>
             {
                 if (isProcessing) return;
                 isProcessing = true;
-                _clientAbilitySystem.AbilityManager.ForceEndAbility(name);
+                _clientAbilitySystem.ReplicationManager.ProcessClientEndAbility(name);
                 isProcessing = false;
+            };
+            _serverAbilitySystem.ReplicationManager.OnAbilityActivationResponded += (key, success) =>
+            {
+                if (success) _clientAbilitySystem.ReplicationManager.ProcessAbilityActivationConfirmed(key);
+                else _clientAbilitySystem.ReplicationManager.ProcessAbilityActivationDenied("", key);
             };
 
             var initiator = tc.RequestFromClient ? _clientAbilitySystem : _serverAbilitySystem;
@@ -196,7 +201,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             hostSystem.AbilityManager.GrantAbility(_abilityDefinition);
 
             bool rpcFired = false;
-            hostSystem.AbilityManager.OnServerTryActivateAbilityRequested += (n, k, d) => rpcFired = true;
+            hostSystem.ReplicationManager.OnServerAbilityActivationRequested += (n, k, d) => rpcFired = true;
 
             hostSystem.AbilityManager.TryActivateAbility(_abilityDefinition.UniqueName);
 

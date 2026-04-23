@@ -19,12 +19,14 @@ namespace AbilitySystem.Runtime.Core
         public AttributeSetManager AttributeSetManager { get; set; }
         public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
+        public IDataManager DataManager { get; set; }
         public EventManager EventManager { get; set; }
 
         public Action<string, CueData, bool> OnPlayCueRequested;
 
-        public AbilitySystemManager()
+        public AbilitySystemManager(IDataManager dataManager = null)
         {
+            DataManager = dataManager;
             EventManager = new EventManager();
             AttributeSetManager = new AttributeSetManager(this);
             EffectManager = new EffectManager(this);
@@ -32,6 +34,7 @@ namespace AbilitySystem.Runtime.Core
             TagManager = new GameplayTagManager(this);
             CueManager = new CueManager(this);
             ReplicationManager = new ReplicationManager(this);
+            ReplicationManager.DataManager = dataManager;
         }
         
         public void Tick()

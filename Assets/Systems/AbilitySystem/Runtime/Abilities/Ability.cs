@@ -24,7 +24,7 @@ namespace AbilitySystem.Runtime.Abilities
         public AbilityDefinition Definition { get; }
         public AbilityCooldown Cooldown { get; set; }
         public virtual IAbilitySystem Owner { get; protected set; }
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; set; }
         public int ActiveCount { get; private set; }
         
         public virtual int Level { get; set; }
@@ -138,13 +138,15 @@ namespace AbilitySystem.Runtime.Abilities
         
         public virtual bool TryActivateAbility(PredictionKey key, AbilityData data)
         {
+            Debug.Log($"[DIAG] Ability {this.Definition.UniqueName} ({this.GetHashCode()}) TryActivateAbility entry. Current IsActive: {IsActive}");
             AbilityArguments = data;
             var result = CanActivate();
-            Debug.Log("Trying to activate ability with prediction key: " + this.Definition.name + " as " + (Owner.IsServer() ? "server" : "client") + " result: " + result);
+            Debug.Log("Trying to activate ability with prediction key: " + this.Definition.UniqueName + " as " + (Owner.IsServer() ? "server" : "client") + " result: " + result);
             var success = result == AbilityActivationResult.Success;
             if (success)
             {
                 IsActive = true;
+                Debug.Log($"[DIAG] Ability {this.Definition.UniqueName} ({this.GetHashCode()}) set IsActive = true");
                 ActiveCount++;
 
                 
@@ -173,8 +175,10 @@ namespace AbilitySystem.Runtime.Abilities
         
         public virtual void TryEndAbility()
         {
+            Debug.Log($"[DIAG] Ability {this.Definition.UniqueName} ({this.GetHashCode()}) TryEndAbility called. Current IsActive: {IsActive}");
             if (!IsActive) return;
             IsActive = false;
+            Debug.Log($"[DIAG] Ability {this.Definition.UniqueName} ({this.GetHashCode()}) set IsActive = false");
             foreach (var activatedEffect in _activatedEffects)
             {
                 Owner.EffectManager.RemoveEffect(activatedEffect);

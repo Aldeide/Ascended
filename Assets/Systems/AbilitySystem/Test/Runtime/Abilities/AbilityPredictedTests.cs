@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
@@ -19,7 +19,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             clientAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
             
             var eventDispatched = false;
-            clientAbilitySystem.AbilityManager.OnServerTryActivateAbilityRequested += (abilityName, key, data) =>
+            clientAbilitySystem.ReplicationManager.OnServerAbilityActivationRequested += (abilityName, key, data) =>
             {
                 eventDispatched = true;
             };

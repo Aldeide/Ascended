@@ -24,7 +24,7 @@ namespace AbilitySystem.Test.Runtime.Networking
             AbilitySystem.Runtime.Networking.PredictionKey requestedPredictionKey = default;
             
             // Subscribe to the event that replaces the old direct RPC logic.
-            clientSystem.Object.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
                 requestedAbilityName = name;
                 requestedPredictionKey = key;
@@ -55,11 +55,11 @@ namespace AbilitySystem.Test.Runtime.Networking
             serverSystem.Object.AbilityManager.GrantAbility(abilityDef);
 
             // Connect the simulated systems directly without Netcode
-            clientSystem.Object.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
                 // This simulates the RPC flying across the network.
                 // The server receives the key and validation data from the client, running its own TryActivateAbility routine safely.
-                serverSystem.Object.AbilityManager.ServerTryActivateAbilityWithKey(name, key, data);
+                serverSystem.Object.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
             };
 
             // Before activation: ability on the server should be inactive

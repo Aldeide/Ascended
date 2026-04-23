@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace AbilitySystem.Scripts
 {
-    public class DataLibrary : MonoBehaviour
+    public class DataLibrary : MonoBehaviour, IDataManager
     {
         public static DataLibrary Instance { get; private set; }
         [ShowInInspector] private Dictionary<string, AbilityDefinition> _abilities = new();
