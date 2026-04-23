@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
@@ -22,6 +22,8 @@ namespace AbilitySystem.Test.Utilities
             var attributeSetManager = new AttributeSetManager(owner.Object);
             attributeSetManager.AddAttributeSet(typeof(TestAttributeSet), new TestAttributeSet(owner.Object));
             owner.SetupGet(x => x.AttributeSetManager).Returns(attributeSetManager);
+            var replicationManager = new MockReplicationManager(owner.Object);
+            owner.Setup(x => x.ReplicationManager).Returns(replicationManager);
             var abilityManager = new AbilityManager(owner.Object);
             owner.Setup(x => x.AbilityManager).Returns(abilityManager);
             return owner;
@@ -41,10 +43,13 @@ namespace AbilitySystem.Test.Utilities
             var attributeSetManager = new AttributeSetManager(owner.Object);
             attributeSetManager.AddAttributeSet(typeof(TestAttributeSet), new TestAttributeSet(owner.Object));
             owner.SetupGet(x => x.AttributeSetManager).Returns(attributeSetManager);
+            var replicationManager = new MockReplicationManager(owner.Object);
+            owner.Setup(x => x.ReplicationManager).Returns(replicationManager);
             var abilityManager = new AbilityManager(owner.Object);
             owner.Setup(x => x.AbilityManager).Returns(abilityManager);
-            var replicationManager = new MockReplicationManager(owner.Object);
-            owner.Setup(x=>x.ReplicationManager).Returns(replicationManager);
+            var dataManager = new Mock<IDataManager>();
+            owner.Setup(x => x.DataManager).Returns(dataManager.Object);
+            replicationManager.DataManager = dataManager.Object;
             return owner;
         }
         
@@ -63,10 +68,13 @@ namespace AbilitySystem.Test.Utilities
             var attributeSetManager = new AttributeSetManager(owner.Object);
             attributeSetManager.AddAttributeSet(typeof(TestAttributeSet), new TestAttributeSet(owner.Object));
             owner.SetupGet(x => x.AttributeSetManager).Returns(attributeSetManager);
+            var replicationManager = new MockReplicationManager(owner.Object);
+            owner.Setup(x => x.ReplicationManager).Returns(replicationManager);
             var abilityManager = new AbilityManager(owner.Object);
             owner.Setup(x => x.AbilityManager).Returns(abilityManager);
-            var replicationManager = new MockReplicationManager(owner.Object);
-            owner.Setup(x=>x.ReplicationManager).Returns(replicationManager);
+            var dataManager = new Mock<IDataManager>();
+            owner.Setup(x => x.DataManager).Returns(dataManager.Object);
+            replicationManager.DataManager = dataManager.Object;
             return owner;
         }
     }

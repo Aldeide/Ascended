@@ -25,11 +25,6 @@ namespace AbilitySystem.Runtime.Abilities
             _predictionAttributeSnapshots = new();
 
         public Action OnAbilityGranted;
-        public Action<string, PredictionKey, AbilityData> OnServerTryActivateAbilityRequested;
-        public Action<string, AbilityData> OnServerTryUnpredictedAbilityRequested;
-        public Action<string, AbilityData> OnNotifyClientActivateAbility;
-        public Action<string> OnNotifyClientEndAbility;
-        public Action<string> OnServerTryEndAbilityRequested;
 
         public AbilityManager(IAbilitySystem owner)
         {
@@ -125,7 +120,7 @@ namespace AbilitySystem.Runtime.Abilities
                 else if (_owner.IsServer())
                 {
                     // Server tells client to start their local version
-                    OnNotifyClientActivateAbility?.Invoke(name, data);
+                    _owner.ReplicationManager.RequestClientActivateAbility(name, data);
                     return true;
                 }
             }
@@ -140,7 +135,7 @@ namespace AbilitySystem.Runtime.Abilities
                 else if (isClientRequest)
                 {
                     // Request server to start it
-                    OnServerTryUnpredictedAbilityRequested?.Invoke(name, data);
+                    _owner.ReplicationManager.RequestAbilityActivationUnpredicted(name, data);
                     return true;
                 }
             }
@@ -162,7 +157,8 @@ namespace AbilitySystem.Runtime.Abilities
                     var success = ability.TryActivateAbility(key, data);
                     if (success)
                     {
-                        OnServerTryActivateAbilityRequested?.Invoke(name, key, data);
+                        _owner.ReplicationManager.RequestAbilityActivation(name, key, data);
+                        Debug.Log($"[DIAG] AbilityManager.TryActivateAbility: After replication request, ability {name} IsActive: {ability.IsActive}");
                         return true;
                     }
                     _predictionAttributeSnapshots.Remove(key.currentKey);
@@ -228,22 +224,30 @@ namespace AbilitySystem.Runtime.Abilities
                 // Predicted abilities are ended locally immediately. 
                 // We notify the server regardless to keep state in sync.
                 ability.TryEndAbility();
-                OnServerTryEndAbilityRequested?.Invoke(abilityName);
+                _owner.ReplicationManager.RequestAbilityTermination(abilityName);
             }
             else if (isServerRequest)
             {
                 ability.TryEndAbility();
                 // Notify clients (especially the owner for predicted abilities)
-                OnNotifyClientEndAbility?.Invoke(abilityName);
+                _owner.ReplicationManager.RequestClientEndAbility(abilityName);
             }
         }
 
         public void EndAbility(PredictionKey key)
         {
-            Abilities.Where(kv =>
+            Debug.Log($"EndAbility called with key: {key.currentKey}");
+            var abilitiesToEnd = Abilities.Where(kv =>
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
-                .ForEach(a => a.Value.TryEndAbility());
+                .ToList();
+            
+            Debug.Log($"Found {abilitiesToEnd.Count} abilities to end for key {key.currentKey}");
+            foreach(var kv in abilitiesToEnd)
+            {
+                Debug.Log($"Ending ability: {kv.Key} (Active: {kv.Value.IsActive})");
+                kv.Value.TryEndAbility();
+            }
         }
 
         public void ForceEndAbility(string abilityName)
@@ -264,6 +268,7 @@ namespace AbilitySystem.Runtime.Abilities
         public void NotifyServerResponse(PredictionKey key, bool success)
         {
             if (!_owner.IsLocalClient()) return;
+            Debug.Log($"NotifyServerResponse: Key {key.currentKey}, Success: {success}");
 
             if (success)
             {
@@ -275,8 +280,13 @@ namespace AbilitySystem.Runtime.Abilities
                 // Prediction denied. Rollback.
                 if (_predictionAttributeSnapshots.TryGetValue(key.currentKey, out var snapshot))
                 {
+                    Debug.Log($"Restoring snapshot for key {key.currentKey}");
                     _owner.AttributeSetManager.Restore(snapshot);
                     _predictionAttributeSnapshots.Remove(key.currentKey);
+                }
+                else
+                {
+                    Debug.LogWarning($"NO snapshot found for key {key.currentKey}");
                 }
 
                 // End any abilities that were started with this key

@@ -1,4 +1,5 @@
-﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Networking;
 
 namespace AbilitySystem.Runtime.Abilities.InstantAbility
 {
@@ -6,6 +7,11 @@ namespace AbilitySystem.Runtime.Abilities.InstantAbility
     {
         public InstantAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
+        }
+
+        public override bool TryActivateAbility(PredictionKey key, AbilityData data)
+        {
+            return base.TryActivateAbility(key, data);
         }
 
         protected override void ActivateAbility(AbilityData data)

@@ -117,33 +117,40 @@ namespace AbilitySystem.Scripts
         {
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
-            var abilitySystemManager = new AbilitySystemManager();
+            var abilitySystemManager = new AbilitySystemManager(DataLibrary.Instance);
             abilitySystemManager.NetworkRole = this;
             AbilitySystem = abilitySystemManager;
 
-            abilitySystemManager.ReplicationManager.OnNotifyClientsAttributeBaseValueChanged += (attr, val) => NotifyClientsBaseValueChangedRpc(attr, val);
-            abilitySystemManager.ReplicationManager.OnNotifyClientsAttributeCurrentValueChanged += (attr, old, val) => NotifyClientsCurrentValueChangedRpc(attr, old, val);
-            abilitySystemManager.ReplicationManager.OnNotifyClientsPlayCue += (tag, act, data) => NotifyClientsPlayCueRpc(tag, act, data);
-            abilitySystemManager.ReplicationManager.OnNotifyClientAbilityGranted += (def) => NotifyClientAbilityGrantedRpc(def.UniqueName);
-            abilitySystemManager.ReplicationManager.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
+            var repl = AbilitySystem.ReplicationManager;
+
+            repl.OnNotifyClientsAttributeBaseValueChanged += (attr, val) => NotifyClientsBaseValueChangedRpc(attr, val);
+            repl.OnNotifyClientsAttributeCurrentValueChanged += (attr, old, val) => NotifyClientsCurrentValueChangedRpc(attr, old, val);
+            repl.OnNotifyClientsPlayCue += (tag, act, data) => NotifyClientsPlayCueRpc(tag, act, data);
+            repl.OnNotifyClientAbilityGranted += (def) => NotifyClientAbilityGrantedRpc(def.UniqueName);
+            repl.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
             
-            abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
-            abilitySystemManager.ReplicationManager.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
-            abilitySystemManager.ReplicationManager.OnNotifyClientsEffectAdded += (data) =>
+            repl.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
+            repl.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
+            repl.OnNotifyClientsEffectAdded += (data) =>
             {
                 if (data.PredictionKey.IsValidKey())
                     NotifyOwnerEffectAddedRpc(data.PredictionKey, data.EffectName, data.ActivationTime, data.SourceId);
                 else
                     NotifyOwnerEffectAddedRpc(data.EffectName, data.ActivationTime, data.SourceId);
             };
-            abilitySystemManager.ReplicationManager.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
+            repl.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
             
-            abilitySystemManager.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
-            abilitySystemManager.AbilityManager.OnServerTryUnpredictedAbilityRequested += (name, data) => ServerTryActivateUnpredictedAbilityRpc(name, data);
-            abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
-            abilitySystemManager.AbilityManager.OnNotifyClientActivateAbility +=
-                (name, data) => NotifyOwnerActivateAbilityRpc(name, data);
-            abilitySystemManager.AbilityManager.OnNotifyClientEndAbility += (name) => NotifyOwnerEndAbilityRpc(name);
+            // New Ability Networking bindings
+            repl.OnServerAbilityActivationRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
+            repl.OnServerAbilityUnpredictedActivationRequested += (name, data) => ServerTryActivateUnpredictedAbilityRpc(name, data);
+            repl.OnServerAbilityTerminationRequested += (name) => ServerTryEndAbilityRpc(name);
+            repl.OnAbilityActivationResponded += (key, success) =>
+            {
+                if (success) NotifyAbilityActivationSucceededRpc(key);
+                else NotifyAbilityActivationFailedRpc("", key);
+            };
+            repl.OnClientActivateAbility += (name, data) => NotifyOwnerActivateAbilityRpc(name, data);
+            repl.OnClientEndAbility += (name) => NotifyOwnerEndAbilityRpc(name);
             abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
             {
                 // If it's predicted and we are the owner, play it locally immediately.
@@ -215,65 +222,43 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Server)]
         public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data, RpcParams rpcParams = default)
         {
-            if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
-            if (!AbilityManager.HasAuthorityToActivate(ability, true))
-            {
-                Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to activate {abilityName} but lacks authority.");
-                NotifyAbilityActivationFailedRpc(abilityName, key);
-                return;
-            }
-
-            if (AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key, data))
-            {
-                NotifyAbilityActivationSucceededRpc(key);
-            }
-            else
-            {
-                Debug.Log("Predicted ability failed: " + abilityName);
-                NotifyAbilityActivationFailedRpc(abilityName, key);
-            }
+            AbilitySystem.ReplicationManager.ProcessServerAbilityActivation(abilityName, key, data);
         }
         
         [Rpc(SendTo.Server)]
         public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data, RpcParams rpcParams = default)
         {
-            if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
-            if (!AbilityManager.HasAuthorityToActivate(ability, true))
-            {
-                Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to activate {abilityName} but lacks authority.");
-                return;
-            }
-            AbilitySystem.AbilityManager.TryActivateAbility(abilityName, data);
+            AbilitySystem.ReplicationManager.ProcessServerAbilityUnpredictedActivation(abilityName, data);
         }
         
         [Rpc(SendTo.Server)]
         public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
-            AbilitySystem.AbilityManager.EndAbility(abilityName);
+            AbilitySystem.ReplicationManager.ProcessServerAbilityTermination(abilityName);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerActivateAbilityRpc(string abilityName, AbilityData data)
         {
-            AbilitySystem.AbilityManager.ForceActivateAbility(abilityName, data);
+            AbilitySystem.ReplicationManager.ProcessClientActivateAbility(abilityName, data);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEndAbilityRpc(string abilityName)
         {
-            AbilitySystem.AbilityManager.ForceEndAbility(abilityName);
+            AbilitySystem.ReplicationManager.ProcessClientEndAbility(abilityName);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationSucceededRpc(PredictionKey key)
         {
-            AbilitySystem.AbilityManager.NotifyServerResponse(key, true);
+            AbilitySystem.ReplicationManager.ProcessAbilityActivationConfirmed(key);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationFailedRpc(string abilityName, PredictionKey key)
         {
-            AbilitySystem.AbilityManager.NotifyServerResponse(key, false);
+            AbilitySystem.ReplicationManager.ProcessAbilityActivationDenied(abilityName, key);
         }
 
         public void EndAbility(string abilityName)

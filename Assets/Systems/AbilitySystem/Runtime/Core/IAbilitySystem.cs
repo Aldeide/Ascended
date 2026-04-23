@@ -19,6 +19,7 @@ namespace AbilitySystem.Runtime.Core
         public AttributeSetManager AttributeSetManager { get; set; }
         public CueManager CueManager { get; set; }
         public IReplicationManager ReplicationManager { get; set; }
+        public IDataManager DataManager { get; set; }
         public EventManager EventManager { get; set; }
         
         public void Tick();

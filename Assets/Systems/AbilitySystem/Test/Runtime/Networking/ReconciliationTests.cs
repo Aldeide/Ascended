@@ -26,11 +26,15 @@ namespace AbilitySystem.Test.Runtime.Networking
             clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
             serverSystem.Object.AbilityManager.GrantAbility(abilityDef);
 
-            clientSystem.Object.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
-                bool serverSuccess = serverSystem.Object.AbilityManager.ServerTryActivateAbilityWithKey(name, key, data);
-                // RPC back to client
-                clientSystem.Object.AbilityManager.NotifyServerResponse(key, serverSuccess);
+                serverSystem.Object.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
+            };
+
+            serverSystem.Object.ReplicationManager.OnAbilityActivationResponded += (key, success) =>
+            {
+                if (success) clientSystem.Object.ReplicationManager.ProcessAbilityActivationConfirmed(key);
+                else clientSystem.Object.ReplicationManager.ProcessAbilityActivationDenied(abilityDef.UniqueName, key);
             };
 
             // Act
@@ -55,11 +59,15 @@ namespace AbilitySystem.Test.Runtime.Networking
             clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
             // DO NOT GRANT ON SERVER (or otherwise make it fail)
 
-            clientSystem.Object.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
-                bool serverSuccess = serverSystem.Object.AbilityManager.ServerTryActivateAbilityWithKey(name, key, data);
-                // RPC back to client (simulating failure)
-                clientSystem.Object.AbilityManager.NotifyServerResponse(key, serverSuccess);
+                serverSystem.Object.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
+            };
+            
+            serverSystem.Object.ReplicationManager.OnAbilityActivationResponded += (key, success) =>
+            {
+                if (success) clientSystem.Object.ReplicationManager.ProcessAbilityActivationConfirmed(key);
+                else clientSystem.Object.ReplicationManager.ProcessAbilityActivationDenied(abilityDef.UniqueName, key);
             };
 
             // Act
@@ -86,17 +94,17 @@ namespace AbilitySystem.Test.Runtime.Networking
             clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
             serverSystem.Object.AbilityManager.GrantAbility(abilityDef);
 
-            clientSystem.Object.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
                 // Server confirms 
-                serverSystem.Object.AbilityManager.ServerTryActivateAbilityWithKey(name, key, data);
+                serverSystem.Object.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
                 
                 // SIMULATE SERVER SENDING AUTHORITATIVE EFFECT
                 var serverEffect = effectDef.ToEffect(serverSystem.Object, clientSystem.Object);
                 serverEffect.IsActive = true; 
                 serverEffect.PredictionKey = key;
                 // Client receives response and reconcile (simulated RPC flow)
-                clientSystem.Object.AbilityManager.NotifyServerResponse(key, true);
+                clientSystem.Object.ReplicationManager.ProcessAbilityActivationConfirmed(key);
                 clientSystem.Object.EffectManager.ReconcilePredictedEffect(key, serverEffect);
             };
 
@@ -137,10 +145,10 @@ namespace AbilitySystem.Test.Runtime.Networking
             var health = clientSystem.Object.AttributeSetManager.GetAttribute("Health");
             float initialHealth = health.CurrentValue;
 
-            clientSystem.Object.AbilityManager.OnServerTryActivateAbilityRequested += (name, key, data) =>
+            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
                 // Server denies
-                clientSystem.Object.AbilityManager.NotifyServerResponse(key, false);
+                clientSystem.Object.ReplicationManager.ProcessAbilityActivationDenied(name, key);
             };
 
             // Act

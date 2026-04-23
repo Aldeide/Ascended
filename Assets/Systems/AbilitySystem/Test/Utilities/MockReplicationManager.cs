@@ -116,5 +116,94 @@ namespace AbilitySystem.Test.Utilities
         {
             OnNotifyClientsEffectRemoved?.Invoke(effect.Definition.name);
         }
+
+        public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
+        public Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
+        public Action<string> OnServerAbilityTerminationRequested { get; set; }
+        public Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
+        public Action<string, AbilityData> OnClientActivateAbility { get; set; }
+        public Action<string> OnClientEndAbility { get; set; }
+        public IDataManager DataManager { get; set; }
+
+        public void RequestAbilityActivation(string name, PredictionKey key, AbilityData data)
+        {
+            OnServerAbilityActivationRequested?.Invoke(name, key, data);
+        }
+
+        public void RequestAbilityActivationUnpredicted(string name, AbilityData data)
+        {
+            OnServerAbilityUnpredictedActivationRequested?.Invoke(name, data);
+        }
+
+        public void RequestAbilityTermination(string name)
+        {
+            OnServerAbilityTerminationRequested?.Invoke(name);
+        }
+
+        public void RequestClientActivateAbility(string name, AbilityData data)
+        {
+            OnClientActivateAbility?.Invoke(name, data);
+        }
+
+        public void RequestClientEndAbility(string name)
+        {
+            OnClientEndAbility?.Invoke(name);
+        }
+
+        public void ProcessServerAbilityActivation(string name, PredictionKey key, AbilityData data)
+        {
+            // Logic moved here for simulation in tests if needed
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability))
+            {
+                OnAbilityActivationResponded?.Invoke(key, false);
+                return;
+            }
+            if (!AbilityManager.HasAuthorityToActivate(ability, true))
+            {
+                OnAbilityActivationResponded?.Invoke(key, false);
+                return;
+            }
+
+            if (_owner.AbilityManager.ServerTryActivateAbilityWithKey(name, key, data))
+            {
+                OnAbilityActivationResponded?.Invoke(key, true);
+            }
+            else
+            {
+                OnAbilityActivationResponded?.Invoke(key, false);
+            }
+        }
+
+        public void ProcessServerAbilityUnpredictedActivation(string name, AbilityData data)
+        {
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
+            if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
+            _owner.AbilityManager.TryActivateAbility(name, data);
+        }
+
+        public void ProcessServerAbilityTermination(string name)
+        {
+            _owner.AbilityManager.EndAbility(name);
+        }
+
+        public void ProcessAbilityActivationConfirmed(PredictionKey key)
+        {
+            _owner.AbilityManager.NotifyServerResponse(key, true);
+        }
+
+        public void ProcessAbilityActivationDenied(string name, PredictionKey key)
+        {
+            _owner.AbilityManager.NotifyServerResponse(key, false);
+        }
+
+        public void ProcessClientActivateAbility(string name, AbilityData data)
+        {
+            _owner.AbilityManager.ForceActivateAbility(name, data);
+        }
+
+        public void ProcessClientEndAbility(string name)
+        {
+            _owner.AbilityManager.ForceEndAbility(name);
+        }
     }
 }
