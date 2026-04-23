@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.Abilities
         public Action<string, PredictionKey, AbilityData> OnServerTryActivateAbilityRequested;
         public Action<string, AbilityData> OnServerTryUnpredictedAbilityRequested;
         public Action<string, AbilityData> OnNotifyClientActivateAbility;
+        public Action<string> OnNotifyClientEndAbility;
         public Action<string> OnServerTryEndAbilityRequested;
 
         public AbilityManager(IAbilitySystem owner)
@@ -96,66 +97,104 @@ namespace AbilitySystem.Runtime.Abilities
             if (ability == null) return false;
             return ability.TryActivateAbility(data);
         }
+
+        public void ForceEndAbility(string abilityName)
+        {
+            Abilities.TryGetValue(abilityName, out Ability ability);
+            if (ability == null) return;
+            ability.TryEndAbility();
+        }
         
         public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
         {
             Abilities.TryGetValue(name, out Ability ability);
             if (ability == null) return false;
 
-            if (
-                (ability.Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnly ||
-                 ability.Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnlyExecution) &
-                _owner.IsLocalClient())
+            var isClientRequest = _owner.IsLocalClient() && !_owner.IsServer();
+            var isServerRequest = _owner.IsServer();
+
+            if (!HasAuthorityToActivate(ability, isClientRequest))
             {
-                Debug.Log("Attempted to execute ability " + ability.Definition.UniqueName +
-                          " from the client but it is server only execution.");
+                if (isClientRequest)
+                {
+                    Debug.LogWarning($"Client attempted to activate {name} but lacks authority (Security Policy: {ability.Definition.NetworkSecurityPolicy})");
+                }
                 return false;
             }
 
-            if (_owner.IsLocalClient() &&
-                ability.Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ClientOrServer &&
-                ability.Definition.NetworkPolicy == AbilityNetworkPolicy.Server)
+            // Case 1: ClientOnly ability
+            if (ability.Definition.IsLocalAbility())
             {
-                OnServerTryUnpredictedAbilityRequested?.Invoke(name, data);
-                return true;
-            }
-                
-
-            if ((_owner.IsServer() || _owner.IsHost()) && !ability.Definition.IsLocalAbility())
-            {
-                Debug.Log("TryActivateAbility for serverhost: " + name);
-                return ability.TryActivateAbility(data);
-            }
-
-            if (ability.Definition.IsLocalAbility() && !_owner.IsLocalClient())
-            {
-                OnNotifyClientActivateAbility?.Invoke(name, data);
-            }
-
-            if (ability.Definition.IsLocalAbility() && _owner.IsLocalClient())
-            {
-                return ability.TryActivateAbility(data);
-            }
-
-            if (ability.Definition.HasLocalPrediction() && _owner.IsLocalClient())
-            {
-                var key = PredictionKey.CreatePredictionKey();
-                Debug.Log("Predicting" + ability.Definition.name);
-                // Snapshot before prediction
-                _predictionAttributeSnapshots[key.currentKey] = _owner.AttributeSetManager.Snapshot();
-
-                var success = ability.TryActivateAbility(key, data);
-                if (success)
+                if (_owner.IsLocalClient())
                 {
-                    OnServerTryActivateAbilityRequested?.Invoke(name, key, data);
+                    return ability.TryActivateAbility(data);
+                }
+                else if (_owner.IsServer())
+                {
+                    // Server tells client to start their local version
+                    OnNotifyClientActivateAbility?.Invoke(name, data);
                     return true;
                 }
-
-                // If prediction failed locally, cleanup snapshot
-                _predictionAttributeSnapshots.Remove(key.currentKey);
-                return false;
             }
 
+            // Case 2: Server-only behavior (passive or server-driven)
+            if (ability.Definition.NetworkPolicy == AbilityNetworkPolicy.Server)
+            {
+                if (isServerRequest)
+                {
+                    return ability.TryActivateAbility(data);
+                }
+                else if (isClientRequest)
+                {
+                    // Request server to start it
+                    OnServerTryUnpredictedAbilityRequested?.Invoke(name, data);
+                    return true;
+                }
+            }
+
+            // Case 3: Predicted behavior
+            if (ability.Definition.HasLocalPrediction())
+            {
+                if (isServerRequest)
+                {
+                    // If server starts it directly, it just runs. 
+                    // Replicated state will inform the client.
+                    return ability.TryActivateAbility(data);
+                }
+                else if (isClientRequest)
+                {
+                    var key = PredictionKey.CreatePredictionKey();
+                    _predictionAttributeSnapshots[key.currentKey] = _owner.AttributeSetManager.Snapshot();
+
+                    var success = ability.TryActivateAbility(key, data);
+                    if (success)
+                    {
+                        OnServerTryActivateAbilityRequested?.Invoke(name, key, data);
+                        return true;
+                    }
+                    _predictionAttributeSnapshots.Remove(key.currentKey);
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasAuthorityToActivate(Ability ability, bool isClient)
+        {
+            if (!isClient) return true;
+            var policy = ability.Definition.NetworkSecurityPolicy;
+            if (policy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
+            if (policy == AbilityNetworkSecurityPolicy.ServerOnlyTermination) return true;
+            return false;
+        }
+
+        public bool HasAuthorityToTerminate(Ability ability, bool isClient)
+        {
+            if (!isClient) return true;
+            var policy = ability.Definition.NetworkSecurityPolicy;
+            if (policy == AbilityNetworkSecurityPolicy.ClientOrServer) return true;
+            if (policy == AbilityNetworkSecurityPolicy.ServerOnlyExecution) return true;
             return false;
         }
 
@@ -172,10 +211,32 @@ namespace AbilitySystem.Runtime.Abilities
         public void EndAbility(string abilityName)
         {
             Abilities.TryGetValue(abilityName, out Ability ability);
-            ability?.TryEndAbility();
-            if (_owner.IsLocalClient() && !_owner.IsHost())
+            if (ability == null) return;
+
+            var isClientRequest = _owner.IsLocalClient() && !_owner.IsServer();
+            var isServerRequest = _owner.IsServer();
+
+            if (!HasAuthorityToTerminate(ability, isClientRequest))
             {
+                if (isClientRequest)
+                {
+                    Debug.LogWarning($"Client attempted to terminate {abilityName} but lacks authority (Security Policy: {ability.Definition.NetworkSecurityPolicy})");
+                }
+                return;
+            }
+
+            if (isClientRequest)
+            {
+                // Predicted abilities are ended locally immediately. 
+                // We notify the server regardless to keep state in sync.
+                ability.TryEndAbility();
                 OnServerTryEndAbilityRequested?.Invoke(abilityName);
+            }
+            else if (isServerRequest)
+            {
+                ability.TryEndAbility();
+                // Notify clients (especially the owner for predicted abilities)
+                OnNotifyClientEndAbility?.Invoke(abilityName);
             }
         }
 
