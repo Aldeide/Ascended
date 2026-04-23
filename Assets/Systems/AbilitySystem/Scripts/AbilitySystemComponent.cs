@@ -143,6 +143,7 @@ namespace AbilitySystem.Scripts
             abilitySystemManager.AbilityManager.OnServerTryEndAbilityRequested += (name) => ServerTryEndAbilityRpc(name);
             abilitySystemManager.AbilityManager.OnNotifyClientActivateAbility +=
                 (name, data) => NotifyOwnerActivateAbilityRpc(name, data);
+            abilitySystemManager.AbilityManager.OnNotifyClientEndAbility += (name) => NotifyOwnerEndAbilityRpc(name);
             abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
             {
                 // If it's predicted and we are the owner, play it locally immediately.
@@ -212,8 +213,16 @@ namespace AbilitySystem.Scripts
         }
 
         [Rpc(SendTo.Server)]
-        public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data)
+        public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data, RpcParams rpcParams = default)
         {
+            if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
+            if (!AbilitySystem.AbilityManager.HasAuthorityToActivate(ability, true))
+            {
+                Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to activate {abilityName} but lacks authority.");
+                NotifyAbilityActivationFailedRpc(abilityName, key);
+                return;
+            }
+
             if (AbilitySystem.AbilityManager.ServerTryActivateAbilityWithKey(abilityName, key, data))
             {
                 NotifyAbilityActivationSucceededRpc(key);
@@ -226,14 +235,26 @@ namespace AbilitySystem.Scripts
         }
         
         [Rpc(SendTo.Server)]
-        public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data)
+        public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data, RpcParams rpcParams = default)
         {
+            if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
+            if (!AbilitySystem.AbilityManager.HasAuthorityToActivate(ability, true))
+            {
+                Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to activate {abilityName} but lacks authority.");
+                return;
+            }
             AbilitySystem.AbilityManager.TryActivateAbility(abilityName, data);
         }
         
         [Rpc(SendTo.Server)]
-        public void ServerTryEndAbilityRpc(string abilityName)
+        public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
+            if (!AbilitySystem.AbilityManager.Abilities.TryGetValue(abilityName, out var ability)) return;
+            if (!AbilitySystem.AbilityManager.HasAuthorityToTerminate(ability, true))
+            {
+                Debug.LogWarning($"Client {rpcParams.Receive.SenderClientId} attempted to end {abilityName} but lacks authority.");
+                return;
+            }
             AbilitySystem.AbilityManager.EndAbility(abilityName);
         }
 
@@ -241,6 +262,12 @@ namespace AbilitySystem.Scripts
         public void NotifyOwnerActivateAbilityRpc(string abilityName, AbilityData data)
         {
             AbilitySystem.AbilityManager.ForceActivateAbility(abilityName, data);
+        }
+
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEndAbilityRpc(string abilityName)
+        {
+            AbilitySystem.AbilityManager.EndAbility(abilityName);
         }
 
         [Rpc(SendTo.Owner)]

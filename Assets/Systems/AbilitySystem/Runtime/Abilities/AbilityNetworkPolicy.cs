@@ -1,4 +1,4 @@
-﻿namespace AbilitySystem.Runtime.Abilities
+namespace AbilitySystem.Runtime.Abilities
 {
     public enum AbilityNetworkPolicy
     {
@@ -15,9 +15,9 @@
     {
         // Client or server can both trigger execution and termination.
         ClientOrServer,
-        // Client request to activate this ability will be ignored. Client can request termination.
+        // Server only can initiate execution. Client can still request termination.
         ServerOnlyExecution,
-        // Clients can request activation but not termination.
+        // Client can initiate execution. Server only can request termination.
         ServerOnlyTermination,
         // Only the server can activate and terminate this ability.
         ServerOnly
