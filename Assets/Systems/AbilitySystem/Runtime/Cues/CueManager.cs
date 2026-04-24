@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
@@ -13,6 +13,7 @@ namespace AbilitySystem.Runtime.Cues
     public class CueManager
     {
         private readonly IAbilitySystem _owner;
+        private readonly IDataManager _dataManager;
 
         public Action<CueDefinition, CueData> OnCueAdd;
         public Action<CueDefinition, CueData> OnCueRemove;
@@ -20,9 +21,10 @@ namespace AbilitySystem.Runtime.Cues
 
         private readonly Dictionary<Tag, CueData> _activeCues = new();
         
-        public CueManager(IAbilitySystem owner)
+        public CueManager(IAbilitySystem owner, IDataManager dataManager = null)
         {
             _owner = owner;
+            _dataManager = dataManager ?? owner.DataManager;
         }
 
         /// <summary>
@@ -37,11 +39,11 @@ namespace AbilitySystem.Runtime.Cues
             // Don't play cues on the server.
             if (_owner.IsServer() && !_owner.IsHost()) return;
 
-            var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
+            var cueDefinition = _dataManager.GetCueByTag(cueTag);
             if (!cueDefinition)
             {
 #if UNITY_EDITOR
-                Debug.LogWarning("Cue not found in data library: " + cueTag);
+                Debug.LogWarning("Cue not found in data manager: " + cueTag);
 #endif
                 return;
             }
