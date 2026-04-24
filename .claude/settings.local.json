@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(awk '{print $NF}')"
+      "Bash(awk '{print $NF}')",
+      "PowerShell(& \"C:\\\\Program Files\\\\Unity\\\\Hub\\\\Editor\\\\6000.2.0b12\\\\Editor\\\\Unity.exe\" -batchmode -quit -projectPath \"c:\\\\RepoGit\\\\Ascended\" -logFile \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\build_check.log\" -executeMethod UnityEditor.SyncVS.SyncSolution; Write-Host \"Exit code: $LASTEXITCODE\")",
+      "PowerShell(& \"C:\\\\Program Files\\\\Unity\\\\Hub\\\\Editor\\\\6000.2.0b12\\\\Editor\\\\Unity.exe\" -batchmode -runTests -testPlatform EditMode -projectPath \"c:\\\\RepoGit\\\\Ascended\" -testResults \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\test_results.xml\" -logFile \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\test_run.log\"; Write-Host \"Exit code: $LASTEXITCODE\")"
     ]
   }
 }
