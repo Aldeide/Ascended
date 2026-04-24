@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
@@ -99,8 +100,16 @@ namespace AbilitySystem.Scripts
                     {
                         EffectName = effect.Definition.name,
                         ActivationTime = effect.ActivationTime,
-                        PredictionKey = effect.PredictionKey
+                        PredictionKey = effect.PredictionKey,
+                        Level = effect.Level,
+                        NumStacks = effect.NumStacks
                     };
+
+                    if (effect.SetByCallerTagMagnitudes.Count > 0)
+                    {
+                        data.SetByCallerTags = effect.SetByCallerTagMagnitudes.Keys.ToArray();
+                        data.SetByCallerValues = effect.SetByCallerTagMagnitudes.Values.ToArray();
+                    }
                     
                     if (effect.Source != null && effect.Source.NetworkRole != null)
                         data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
@@ -131,13 +140,7 @@ namespace AbilitySystem.Scripts
             
             repl.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
             repl.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
-            repl.OnNotifyClientsEffectAdded += (data) =>
-            {
-                if (data.PredictionKey.IsValidKey())
-                    NotifyOwnerEffectAddedRpc(data.PredictionKey, data.EffectName, data.ActivationTime, data.SourceId);
-                else
-                    NotifyOwnerEffectAddedRpc(data.EffectName, data.ActivationTime, data.SourceId);
-            };
+            repl.OnNotifyClientsEffectAdded += (data) => NotifyOwnerEffectAddedRpc(data);
             repl.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
             
             // New Ability Networking bindings
@@ -287,44 +290,55 @@ namespace AbilitySystem.Scripts
         // These are now handled via ReplicationManager bridge in Initialise()
 
         [Rpc(SendTo.Owner)]
-        public void NotifyOwnerEffectAddedRpc(string effectName, float applicationTime, ulong sourceId)
+        public void NotifyOwnerEffectAddedRpc(EffectSyncData data)
         {
             if (IsServer) return;
-            var effectDefinition = DataLibrary.Instance.GetEffectByName(effectName);
+            var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
+            if (effectDefinition == null) return;
             
-            IAbilitySystem source = AbilitySystem;
-            if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(sourceId, out var networkObj))
-            {
-                if (networkObj.TryGetComponent<AbilitySystemComponent>(out var asc))
-                {
-                    source = asc.AbilitySystem;
-                }
-            }
+            IAbilitySystem source = FindSource(data.SourceId);
+            var effect = effectDefinition.ToEffect(source, AbilitySystem);
+            ApplySyncDataToEffect(effect, data);
 
-            var effect = effectDefinition.ToEffect(source, AbilitySystem);
-            effect.ActivationTime = applicationTime;
-            AbilitySystem.EffectManager.AddEffectFromServer(effect);
+            if (data.PredictionKey.IsValidKey())
+            {
+                AbilitySystem.AbilityManager.NotifyServerResponse(data.PredictionKey, true);
+                AbilitySystem.EffectManager.ReconcilePredictedEffect(data.PredictionKey, effect);
+            }
+            else
+            {
+                AbilitySystem.EffectManager.AddEffectFromServer(effect);
+            }
         }
-        
-        [Rpc(SendTo.Owner)]
-        public void NotifyOwnerEffectAddedRpc(PredictionKey key,string effectName, float applicationTime, ulong sourceId)
+
+        private void ApplySyncDataToEffect(Effect effect, EffectSyncData data)
         {
-            if (IsServer) return;
-            var effectDefinition = DataLibrary.Instance.GetEffectByName(effectName);
-            
-            IAbilitySystem source = AbilitySystem;
+            effect.ActivationTime = data.ActivationTime;
+            effect.Level = data.Level;
+            effect.NumStacks = data.NumStacks;
+
+            if (data.SetByCallerTags != null && data.SetByCallerValues != null)
+            {
+                for (int i = 0; i < data.SetByCallerTags.Length; i++)
+                {
+                    if (i < data.SetByCallerValues.Length)
+                    {
+                        effect.SetSetByCallerMagnitude(data.SetByCallerTags[i], data.SetByCallerValues[i]);
+                    }
+                }
+            }
+        }
+
+        private IAbilitySystem FindSource(ulong sourceId)
+        {
             if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(sourceId, out var networkObj))
             {
                 if (networkObj.TryGetComponent<AbilitySystemComponent>(out var asc))
                 {
-                    source = asc.AbilitySystem;
+                    return asc.AbilitySystem;
                 }
             }
-            
-            var effect = effectDefinition.ToEffect(source, AbilitySystem);
-            effect.ActivationTime = applicationTime;
-            AbilitySystem.AbilityManager.NotifyServerResponse(key, true);
-            AbilitySystem.EffectManager.ReconcilePredictedEffect(key, effect);
+            return AbilitySystem;
         }
         
         [Rpc(SendTo.Owner)]
@@ -394,17 +408,9 @@ namespace AbilitySystem.Scripts
                 var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
                 if (effectDefinition == null) continue;
                 
-                IAbilitySystem source = AbilitySystem;
-                if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(data.SourceId, out var networkObj))
-                {
-                    if (networkObj.TryGetComponent<AbilitySystemComponent>(out var asc))
-                    {
-                        source = asc.AbilitySystem;
-                    }
-                }
-                
+                IAbilitySystem source = FindSource(data.SourceId);
                 var effect = effectDefinition.ToEffect(source, AbilitySystem);
-                effect.ActivationTime = data.ActivationTime;
+                ApplySyncDataToEffect(effect, data);
                 AbilitySystem.EffectManager.AddEffectFromServer(effect);
             }
         }

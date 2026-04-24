@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
@@ -109,8 +110,17 @@ namespace AbilitySystem.Runtime.Networking
             {
                 EffectName = effect.Definition.name,
                 ActivationTime = effect.ActivationTime,
-                PredictionKey = effect.PredictionKey
+                PredictionKey = effect.PredictionKey,
+                Level = effect.Level,
+                NumStacks = effect.NumStacks
             };
+
+            // Set By Caller sync
+            if (effect.SetByCallerTagMagnitudes.Count > 0)
+            {
+                data.SetByCallerTags = effect.SetByCallerTagMagnitudes.Keys.ToArray();
+                data.SetByCallerValues = effect.SetByCallerTagMagnitudes.Values.ToArray();
+            }
 
             if (effect.Source != null && effect.Source.NetworkRole != null)
                 data.SourceId = effect.Source.NetworkRole.NetworkObjectId;

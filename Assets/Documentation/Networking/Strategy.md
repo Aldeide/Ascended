@@ -29,8 +29,15 @@ For high-responsiveness, the project supports prediction via **Prediction Keys**
 - **Movement & Abilities**: Clients execute logic immediately and send a timestamped request to the server.
 - **Reconciliation**: The server executes the same logic and sends a confirmation/correction back. If a correction is sent, the client "snaps" to the server's state.
 
-### 3. Gameplay Cues
-Cues are replicated globally. This ensures that visual effects (explosions, flashes) and sounds are synchronized across all clients for a consistent experience.
+### 3. Gameplay Cues (Predictive Handshake)
+Cues are replicated globally. To ensure local responsiveness:
+- **Prediction**: Originating clients play cues immediately and "mark" them with a **PredictionKey**.
+- **Culling**: When the server replicates the same cue back, the originating client "culls" it from its local playback queue if the key matches, preventing double-playback.
+
+### 4. Effect Data Synchronization
+`GameplayEffects` sync more than just their ID. The system reconciles:
+- **SetByCaller Magnitudes**: Ensures dynamic data (like damage calculated from equipment) is identical on all clients.
+- **Stacks & Levels**: Maintains parity for durational and stacking logic.
 
 ## 📦 Inventory & Equipment Sync
 

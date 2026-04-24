@@ -23,6 +23,10 @@ namespace AbilitySystem.Runtime.Networking
         public float ActivationTime;
         public ulong SourceId;
         public PredictionKey PredictionKey;
+        public int Level;
+        public int NumStacks;
+        public Tag[] SetByCallerTags;
+        public float[] SetByCallerValues;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
@@ -30,6 +34,10 @@ namespace AbilitySystem.Runtime.Networking
             serializer.SerializeValue(ref ActivationTime);
             serializer.SerializeValue(ref SourceId);
             serializer.SerializeValue(ref PredictionKey);
+            serializer.SerializeValue(ref Level);
+            serializer.SerializeValue(ref NumStacks);
+            serializer.SerializeValue(ref SetByCallerTags);
+            serializer.SerializeValue(ref SetByCallerValues);
         }
     }
 
