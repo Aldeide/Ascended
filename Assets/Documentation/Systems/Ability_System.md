@@ -98,6 +98,12 @@ When a client triggers a predicted ability:
         - **Effect Retraction**: Any `PredictedEffects` associated with that key are forcefully removed via `RetractPredictedEffect()`.
         - **Ability Termination**: The predicted ability instance is killed.
 
+### 3. Effect Data Synchronization
+To ensure consistent results during prediction and server-driven logic, `GameplayEffects` are fully synchronized:
+- **`SetByCaller` Magnitudes**: Dynamically applied magnitudes (e.g., from item stats) are reconciled on the client.
+- **Level & Stacks**: The server replicates the current effect level and stack count to ensure logic parity.
+- **Late-Joiners**: Effects are synced via a catch-up RPC on client connection, including all dynamic magnitudes.
+
 ---
 
 ## 🏷️ Gameplay Cues & Audio-Visual Feedback
@@ -111,8 +117,26 @@ Cues respond to four primary events via the `CueAction` enum:
 - **Remove**: Cleans up a persistent visual when an effect expires.
 - **Execute**: Immediate logic-driven cue.
 
-### 2. Prediction in Cues
-The `PlayCue` method accepts a `isPredicted` flag. If true, the client plays the cue immediately. On the server, cues are replicated back to *other* clients but usually suppressed for the instigating client to prevent double-play (Ghosting).
+### 2. Predictive Handshake
+The system uses a **Mark-and-Cull** pattern to handle local prediction:
+- **Client**: When a predicted ability triggers a cue, it marks the cue's **PredictionKey** in the `CueManager`.
+- **Server**: Replicates the cue back to all clients.
+- **Instigating Client**: The `CueManager` checks its sliding-window cache. If a cue with the arriving `PredictionKey` is already marked as predicted, it is culled (double-play prevented). If it arrives without a matching local prediction, it executes normally.
+
+---
+
+## 🎯 Ability Data & Targeted Execution
+
+Abilities often require more than just an activation trigger. The system handles complex payloads through **`AbilityData`** and **`TargetDataHandle`**.
+
+### 1. Polymorphic Targeting (`ITargetData`)
+Targeting data is encapsulated in a networked-safe container that supports multiple data types:
+- **`TargetDataActor`**: Tracks a specific `NetworkObjectId`.
+- **`TargetDataLocation`**: Tracks a 3D coordinate and rotation.
+- **`TargetDataHitResult`**: Contains detailed raycast/collision information.
+
+### 2. Payload Serialization
+The `TargetDataHandle` implements custom serialization, allowing a client to package targeting results (like a crosshair point) and send them to the server as part of an `AbilityData` payload.
 
 ---
 

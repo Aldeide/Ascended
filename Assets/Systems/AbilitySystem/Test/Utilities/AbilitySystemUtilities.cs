@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Events;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
 using Moq;
 
@@ -38,6 +39,10 @@ namespace AbilitySystem.Test.Utilities
 
         private static void SetupDefaultMocks(Mock<IAbilitySystem> owner)
         {
+            var networkRole = new Mock<INetworkRole>();
+            networkRole.SetupGet(nr => nr.NetworkObjectId).Returns(1);
+            owner.SetupGet(o => o.NetworkRole).Returns(networkRole.Object);
+
             var effectManager = new EffectManager(owner.Object);
             owner.Setup(x => x.EffectManager).Returns(effectManager);
             var eventManager = new EventManager();
