@@ -1,69 +1,75 @@
-using AbilitySystem.Runtime.Cues;
-using AbilitySystem.Scripts;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
 using NUnit.Framework;
-using Moq;
 using UnityEngine;
 
 namespace AbilitySystem.Test.Runtime.Cues
 {
     public class CuePredictionTests
     {
-        private GameObject _holder;
-        private AbilitySystemComponent _asc;
-        private CueManagerComponent _cueManagerComponent;
-        private Mock<IAbilitySystem> _mockAbilitySystem;
-        private Mock<ICueListener> _mockListener;
-
-        [SetUp]
-        public void Setup()
+        [Test]
+        public void CueManager_CullsPredictedCue_WhenReceivedFromServer()
         {
-            _holder = new GameObject("TestHolder");
-            _asc = _holder.AddComponent<AbilitySystemComponent>();
-            _cueManagerComponent = _holder.AddComponent<CueManagerComponent>();
+            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
+            mockSys.Setup(s => s.IsServer()).Returns(false); // Client
             
-            _mockAbilitySystem = AbilitySystemUtilities.CreateMockClientAbilitySystem();
+            var manager = new CueManager(mockSys.Object);
             
-            // Inject the mock ability system into the ASC
-            // Note: Since AbilitySystem property is private set, we might need to rely on the Initialise method
-            // or just test the component's internal logic if we can.
-        }
-
-        [TearDown]
-        public void Teardown()
-        {
-            Object.DestroyImmediate(_holder);
+            var tag = new Tag("Cue.Test");
+            var key = new PredictionKey(12345);
+            var data = new CueData { PredictionKey = key };
+            
+            // 1. Mark as predicted
+            manager.MarkCueAsPredicted(tag.Name, key);
+            
+            // 2. Receive same cue from server
+            var cueExecuted = false;
+            manager.OnCueExecute += (def, d) => cueExecuted = true;
+            
+            manager.OnCueReceived(tag, CueAction.Execute, data);
+            
+            // 3. Verify it was culled (Not executed)
+            Assert.IsFalse(cueExecuted, "Predicted cue should have been culled!");
         }
 
         [Test]
-        public void CuePrediction_OwnerPlaysPredictedCue_TriggersLocalListener()
+        public void CueManager_ExecutesReplicatedCue_WhenNotPredicted()
         {
-            // This test verifies that if the owner plays a predicted cue, 
-            // the listener on the owner's machine receives it.
+            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
+            mockSys.Setup(s => s.IsServer()).Returns(false); // Client
             
-            // 1. Setup CueManager and Listener
-            var cueManager = new CueManager(_mockAbilitySystem.Object);
-            _mockAbilitySystem.Setup(x => x.CueManager).Returns(cueManager);
+            // Create a simple mock data manager
+            var dataManager = new MockDataManager(); 
+            var manager = new CueManager(mockSys.Object, dataManager);
             
-            var listenerMock = new Mock<ICueListener>();
-            cueManager.OnCueExecute += listenerMock.Object.OnExecuteCue;
+            var tag = new Tag("Cue.Test");
+            var def = ScriptableObject.CreateInstance<CueDefinition>();
+            def.CueTag = tag;
+            dataManager.Cues.Add(def);
+            
+            var key = new PredictionKey(999);
+            var data = new CueData { PredictionKey = key };
+            
+            // Receive cue WITHOUT marking as predicted
+            var cueExecuted = false;
+            manager.OnCueExecute += (d, dat) => cueExecuted = true;
+            
+            manager.OnCueReceived(tag, CueAction.Execute, data);
+            
+            Assert.IsTrue(cueExecuted, "Unpredicted replicated cue should execute!");
+        }
 
-            // 2. Simulate AbilitySystem firing PlayCue
-            var cueTag = "Cue.Test.Prediction";
-            var cueDefinition = ScriptableObject.CreateInstance<CueDefinition>();
-            cueDefinition.CueTag = new Tag(cueTag);
-            
-            // We setup the mock to actually fire the event when PlayCue is called
-            // This simulates the AbilitySystemManager.PlayCue logic
-            _mockAbilitySystem.Setup(x => x.PlayCue(cueDefinition, true))
-                .Callback<CueDefinition, bool>((c, p) => cueManager.OnCueExecute?.Invoke(c, new CueData()));
-            
-            _mockAbilitySystem.Object.PlayCue(cueDefinition, isPredicted: true);
-            
-            // Assert: Verify the listener received the cue
-            listenerMock.Verify(x => x.OnExecuteCue(It.IsAny<CueDefinition>(), It.IsAny<CueData>()), Times.Once);
+        private class MockDataManager : ScriptableObject, IDataManager
+        {
+            public List<CueDefinition> Cues = new();
+            public CueDefinition GetCueByTag(Tag tag) => Cues.Find(c => c.CueTag.Name == tag.Name);
+            public CueDefinition GetCueByTag(string tag) => Cues.Find(c => c.CueTag.Name == tag);
+            public AbilitySystem.Runtime.Abilities.AbilityDefinition GetAbilityByName(string name) => null;
+            public AbilitySystem.Runtime.Effects.EffectDefinition GetEffectByName(string name) => null;
         }
     }
 }

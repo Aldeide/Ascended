@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using UnityEngine;
@@ -20,11 +21,31 @@ namespace AbilitySystem.Runtime.Cues
         public Action<CueDefinition, CueData> OnCueExecute;
 
         private readonly Dictionary<Tag, CueData> _activeCues = new();
+        private readonly List<(string Tag, PredictionKey Key, float Time)> _predictedCues = new();
+        private const float PredictedCueTimeout = 5.0f; // Clear predicted cues after 5 seconds
         
         public CueManager(IAbilitySystem owner, IDataManager dataManager = null)
         {
             _owner = owner;
             _dataManager = dataManager ?? owner.DataManager;
+        }
+
+        public void MarkCueAsPredicted(string cueTag, PredictionKey key)
+        {
+            if (!key.IsValidKey()) return;
+            _predictedCues.Add((cueTag, key, Time.time));
+            CleanOldPredictedCues();
+        }
+
+        private bool IsCuePredicted(string cueTag, PredictionKey key)
+        {
+            if (!key.IsValidKey()) return false;
+            return _predictedCues.Exists(c => c.Tag == cueTag && c.Key.currentKey == key.currentKey);
+        }
+
+        private void CleanOldPredictedCues()
+        {
+            _predictedCues.RemoveAll(c => Time.time - c.Time > PredictedCueTimeout);
         }
 
         /// <summary>
@@ -35,9 +56,17 @@ namespace AbilitySystem.Runtime.Cues
         /// <param name="cueData">The data associated with the cue, including positional and normal information.</param>
         public void OnCueReceived(Tag cueTag, CueAction cueAction, CueData cueData)
         {
-            Debug.Log("Received Cue: " + cueTag.Name + " / " + cueAction.ToString() + " / " + cueData + " /");
             // Don't play cues on the server.
             if (_owner.IsServer() && !_owner.IsHost()) return;
+
+            // Prediction Culling: If this was a predicted cue and it's coming from the server, cull it.
+            if (!_owner.IsServer() && IsCuePredicted(cueTag.Name, cueData.PredictionKey))
+            {
+                Debug.Log($"[CueManager] Culling predicted cue: {cueTag.Name}");
+                return;
+            }
+
+            Debug.Log("Processing Received Cue: " + cueTag.Name + " / " + cueAction.ToString());
 
             var cueDefinition = _dataManager.GetCueByTag(cueTag);
             if (!cueDefinition)

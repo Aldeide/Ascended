@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 
@@ -29,9 +29,8 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
         {
             if (!CanActivate(owner)) return false;
             
-            var effect = CooldownEffect.ToEffect(owner, owner);
-            effect.Activate();
-            owner.EffectManager.AddEffect(effect);
+            var effect = owner.MakeOutgoingEffect(CooldownEffect);
+            owner.ApplyEffectToSelf(effect);
             return true;
         }
     }

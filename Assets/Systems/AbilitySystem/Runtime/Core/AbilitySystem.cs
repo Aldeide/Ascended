@@ -77,23 +77,51 @@ namespace AbilitySystem.Runtime.Core
         {
             var data = new CueData();
             data.VectorData = new[] {Vector3.one, Vector3.one, Vector3.one};
-            Debug.Log("Tag:" + cue.CueTag.Name);
-            OnPlayCueRequested?.Invoke(cue.CueTag.Name, data, isPredicted);
+            PlayCue(cue.CueTag.Name, data, isPredicted);
         }
 
         public void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false)
         {
-            OnPlayCueRequested?.Invoke(cue.CueTag.Name, data, isPredicted);
+            PlayCue(cue.CueTag.Name, data, isPredicted);
         }
 
         public void PlayCue(string cueTag, CueData data, bool isPredicted = false)
         {
+            if (isPredicted && !IsServer())
+            {
+                CueManager.MarkCueAsPredicted(cueTag, data.PredictionKey);
+            }
             OnPlayCueRequested?.Invoke(cueTag, data, isPredicted);
+        }
+
+        public void PlayCue(GameplayTags.Runtime.Tag cueTag, CueData data, bool isPredicted)
+        {
+            PlayCue(cueTag.Name, data, isPredicted);
         }
 
         public void AddCue(CueDefinition cue, CueData data)
         {
             // Placeholder
+        }
+
+        public Effect MakeOutgoingEffect(EffectDefinition definition, int level = 1, EffectContext context = null)
+        {
+            if (context == null)
+            {
+                context = MakeEffectContext();
+            }
+            return definition.ToEffect(this, this, context);
+        }
+
+        public EffectContext MakeEffectContext()
+        {
+            return new EffectContext(this, this);
+        }
+
+        public EffectApplicationResult ApplyEffectToSelf(Effect effect)
+        {
+            effect.Activate();
+            return EffectManager.AddEffect(effect);
         }
 
         public void Reset()

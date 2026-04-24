@@ -87,10 +87,23 @@ namespace AbilitySystem.Runtime.Effects
                     return EffectApplicationResult.Success;
                 }
 
+                if (existingEffect.NumStacks >= existingEffect.Definition.EffectStack.MaxStacks)
+                {
+                    if (existingEffect.Definition.EffectStack.EffectStackOverflowPolicy.DenyOverflowApplication)
+                    {
+                        return EffectApplicationResult.OverflowDeny;
+                    }
+
+                    if (existingEffect.Definition.EffectStack.EffectStackOverflowPolicy.ClearStackOnOverflow)
+                    {
+                        RemoveEffect(existingEffect);
+                        return EffectApplicationResult.OverflowClear;
+                    }
+                }
+
                 if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.AggregateByTarget)
                 {
                     existingEffect.AddStack();
-                    OnEffectAdded?.Invoke(effect);
                     return EffectApplicationResult.Success;
                 }
                 
@@ -100,7 +113,6 @@ namespace AbilitySystem.Runtime.Effects
                     if (existingEffectFromSource != null)
                     {
                         existingEffectFromSource.AddStack();
-                        OnEffectAdded?.Invoke(effect);
                         return EffectApplicationResult.Success;
                     }
                 }

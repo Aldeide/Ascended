@@ -84,8 +84,13 @@ namespace AbilitySystem.Runtime.Effects
 
         public Effect ToEffect(IAbilitySystem source, IAbilitySystem target)
         {
+            return ToEffect(source, target, new EffectContext(source, source));
+        }
+
+        public Effect ToEffect(IAbilitySystem source, IAbilitySystem target, EffectContext context)
+        {
             var effect = new Effect(this);
-            effect.Initialise(source, target);
+            effect.Initialise(source, target, context);
             return effect;
         }
 

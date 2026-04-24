@@ -138,6 +138,8 @@ namespace AbilitySystem.Test.Runtime.Abilities
             var owner = CreateMockClientAbilitySystem();
             var abilityDefinition = CreateInstantAbilityDefinition();
             var cueAsset = UnityEngine.ScriptableObject.CreateInstance<AbilitySystem.Runtime.Cues.CueDefinition>();
+            var cueTag = new Tag("Cue.Test");
+            cueAsset.CueTag = cueTag;
             abilityDefinition.ActivationCues = new[] { cueAsset };
             abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
             
@@ -152,7 +154,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             ability.TryActivateAbility(key, new AbilityData());
             ability.PlayActivationCues();
             
-            owner.Verify(m => m.PlayCue(cueAsset, true), Moq.Times.Once);
+            owner.Verify(m => m.PlayCue(cueTag, Moq.It.Is<AbilitySystem.Runtime.Cues.CueData>(d => d.PredictionKey.currentKey == 123), true), Moq.Times.Once);
         }
     }
 }
