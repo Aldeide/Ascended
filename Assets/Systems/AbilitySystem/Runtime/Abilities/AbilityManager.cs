@@ -158,7 +158,6 @@ namespace AbilitySystem.Runtime.Abilities
                     if (success)
                     {
                         _owner.ReplicationManager.RequestAbilityActivation(name, key, data);
-                        Debug.Log($"[DIAG] AbilityManager.TryActivateAbility: After replication request, ability {name} IsActive: {ability.IsActive}");
                         return true;
                     }
                     _predictionAttributeSnapshots.Remove(key.currentKey);
