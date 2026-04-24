@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
 {
@@ -40,6 +40,6 @@ namespace AbilitySystem.Runtime.Effects
             _remainingPeriod = Period;
         }
 
-        private float Period => _effect.Definition.GetPeriod();
+        private float Period => _effect.Period;
     }
 }

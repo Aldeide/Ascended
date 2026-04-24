@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities.AbilityActivation;
 using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
@@ -48,8 +49,6 @@ namespace AbilitySystem.Runtime.Abilities
             Owner = owner;
             IsActive = false;
             Level = level;
-            // TODO: clone cooldown.
-            Cooldown = Definition.Cooldown;
             _activatedEffects = new List<Effect>();
 
             if (Definition.AbilityActivation != null)
@@ -59,6 +58,14 @@ namespace AbilitySystem.Runtime.Abilities
                     var eventType = activation.ActivationEvent.EventType;
                     owner.EventManager?.Subscribe(eventType, OnActivationEvent);
                 }
+            }
+            
+            if (Definition.Cooldown != null)
+            {
+                // Cooldown is now an instantiation of the cooldown handler if needed, 
+                // but since it's an abstract class, we just take the reference.
+                // The actual cloning happens in the concrete Cooldown implementations if they have state.
+                Cooldown = Definition.Cooldown; 
             }
         }
         
@@ -206,7 +213,8 @@ namespace AbilitySystem.Runtime.Abilities
         public virtual void CommitCostAndCooldown()
         {
             if (Definition.Cost == null) return;
-            Definition.Cost.ToEffect(Owner, Owner).Execute();
+            var costEffect = MakeOutgoingEffect(Definition.Cost);
+            ApplyEffectToSelf(costEffect);
         }
         
         public virtual void Dispose()
@@ -220,7 +228,8 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var cue in Definition.ActivationCues)
             {
-                Owner.PlayCue(cue, IsPredicted());
+                var data = new CueData { PredictionKey = PredictionKey };
+                Owner.PlayCue(cue.CueTag, data, IsPredicted());
             }
         }
 
@@ -228,27 +237,54 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var grantedEffect in Definition.GrantedEffects)
             {
-                var effect = grantedEffect.ToEffect(Owner, Owner);
-                effect.Activate();
+                var effect = MakeOutgoingEffect(grantedEffect);
+                ApplyEffectToSelf(effect);
                 _activatedEffects.Add(effect);
-                if (PredictionKey.IsValidKey() && !Owner.IsServer())
-                {
-                    effect.PredictionKey = PredictionKey;
-                    Owner.EffectManager.AddPredictedEffect(PredictionKey, effect);
-                    continue;
-                }
-
-                if (PredictionKey.IsValidKey())
-                {
-                    effect.PredictionKey = PredictionKey;
-                }
-                Owner.EffectManager.AddEffect(effect);
             }
+        }
+
+        public Effect MakeOutgoingEffect(EffectDefinition definition)
+        {
+            var context = Owner.MakeEffectContext();
+            var effect = Owner.MakeOutgoingEffect(definition, Level, context);
+            if (IsPredicted())
+            {
+                effect.PredictionKey = PredictionKey;
+            }
+            return effect;
+        }
+
+        public EffectApplicationResult ApplyEffectToSelf(Effect effect)
+        {
+            if (effect.IsPredicted() && !Owner.IsServer())
+            {
+                Owner.EffectManager.AddPredictedEffect(effect.PredictionKey, effect);
+                return EffectApplicationResult.Success;
+            }
+            return Owner.ApplyEffectToSelf(effect);
         }
 
         public bool IsPredicted()
         {
             return PredictionKey.IsValidKey();
+        }
+
+        public Targeting.TargetDataHandle GetTargetData()
+        {
+            return AbilityArguments.TargetData;
+        }
+
+        public List<T> GetTargetDataItems<T>() where T : Targeting.ITargetData
+        {
+            var results = new List<T>();
+            foreach (var item in GetTargetData().Data)
+            {
+                if (item is T typedItem)
+                {
+                    results.Add(typedItem);
+                }
+            }
+            return results;
         }
 
         public void AddTags()

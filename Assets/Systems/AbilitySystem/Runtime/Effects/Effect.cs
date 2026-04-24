@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using GameplayTags.Runtime;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
@@ -22,6 +23,9 @@ namespace AbilitySystem.Runtime.Effects
 
         public Dictionary<string, float> OwnerCapturedAttributes { get; private set; } = new();
         public Dictionary<string, float> SourceCapturedAttributes { get; private set; } = new();
+        public Dictionary<Tag, float> SetByCallerTagMagnitudes { get; private set; } = new();
+        public EffectContext Context { get; private set; }
+        public float Period { get; set; }
         public Effect PeriodicEffect { get; private set; }
         public PredictionKey PredictionKey { get; set; }
         public Guid Guid;
@@ -36,15 +40,24 @@ namespace AbilitySystem.Runtime.Effects
 
         public void Initialise(IAbilitySystem source, IAbilitySystem target, int level = 1)
         {
+            Initialise(source, target, new EffectContext(source, source), level);
+        }
+
+        public void Initialise(IAbilitySystem source, IAbilitySystem target, EffectContext context, int level = 1)
+        {
             Owner = target;
             Source = source;
+            Context = context;
             Level = level;
+            Duration = Definition.DurationSeconds;
+            Period = Definition.Period;
             NumStacks = 1;
             if (Definition.PeriodicEffect && (Definition.IsInfinite() || Definition.IsFixedDuration()))
             {
-                PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target);
+                PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target, context);
             }
         }
+
 
         public void Activate()
         {
@@ -165,6 +178,16 @@ namespace AbilitySystem.Runtime.Effects
         public void RefreshDuration()
         {
             ActivationTime = Owner.GetTime();
+        }
+
+        public void SetSetByCallerMagnitude(Tag tag, float magnitude)
+        {
+            SetByCallerTagMagnitudes[tag] = magnitude;
+        }
+
+        public float GetSetByCallerMagnitude(Tag tag, float defaultValue = 0f)
+        {
+            return SetByCallerTagMagnitudes.GetValueOrDefault(tag, defaultValue);
         }
         
         public bool IsPredictable() 

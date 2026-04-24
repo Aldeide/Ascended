@@ -33,10 +33,14 @@ namespace AbilitySystem.Runtime.Core
         public bool IsHost();
 
         public bool HasAuthority();
-        public void PlayCue(CueDefinition cue, bool isPredicted = false);
-        public void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false);
-        public void PlayCue(string cueTag, CueData data, bool isPredicted = false);
+        void PlayCue(CueDefinition cue, bool isPredicted = false);
+        void PlayCue(CueDefinition cue, CueData data, bool isPredicted = false);
+        void PlayCue(string cueTag, CueData data, bool isPredicted = false);
+        void PlayCue(GameplayTags.Runtime.Tag cueTag, CueData data, bool isPredicted);
 
+        public Effect MakeOutgoingEffect(EffectDefinition definition, int level = 1, EffectContext context = null);
+        public EffectContext MakeEffectContext();
+        public EffectApplicationResult ApplyEffectToSelf(Effect effect);
         public void Reset();
     }
 }
