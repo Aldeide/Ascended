@@ -1,4 +1,5 @@
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Scripts;
 using UnityEditor;
 using UnityEngine;
@@ -6,69 +7,282 @@ using UnityEngine.UIElements;
 
 public class AbilitySystemDebugWindow : EditorWindow
 {
-    [SerializeField]
-    private VisualTreeAsset m_VisualTreeAsset = default;
-
-    private GameObject _inspectedObject;
-    private IAbilitySystem _inspectedAsc;
-    private VisualElement _label;
-    private VisualElement _text;
+    private AbilitySystemComponent _inspectedComponent;
     
-    [MenuItem("Window/UI Toolkit/AbilitySystemDebugWindow")]
-    public static void ShowExample()
+    private ScrollView _localScroll;
+    private Label _localServerDebugText;
+    private Label _objectNameLabel;
+    
+    // Details panel
+    private VisualElement _detailsContainer;
+    private Effect _selectedEffect;
+
+    [MenuItem("Window/Ability System/Debug Window")]
+    public static void ShowWindow()
     {
         AbilitySystemDebugWindow wnd = GetWindow<AbilitySystemDebugWindow>();
-        wnd.titleContent = new GUIContent("AbilitySystemDebugWindow");
+        wnd.titleContent = new GUIContent("Ability System Debug");
+        wnd.minSize = new Vector2(700, 500);
     }
 
     public void CreateGUI()
     {
         VisualElement root = rootVisualElement;
-        if (_label == null)
-        {
-            _label = new Label("Placeholder");
-        }
+        
+        // --- Header ---
+        var header = new VisualElement();
+        header.style.flexDirection = FlexDirection.Row;
+        header.style.paddingLeft = 5;
+        header.style.paddingTop = 5;
+        header.style.paddingBottom = 5;
+        header.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f);
+        header.style.borderBottomWidth = 1;
+        header.style.borderBottomColor = Color.black;
+        
+        _objectNameLabel = new Label("Select a GameObject with an AbilitySystemComponent");
+        _objectNameLabel.style.fontSize = 14;
+        _objectNameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+        header.Add(_objectNameLabel);
 
-        if (_text == null)
-        {
-            _text = new Label("Placeholder");
-        }
-        root.Add(_label);
-        root.Add(_text);
+        var refreshBtn = new Button(() => { if(_inspectedComponent) _inspectedComponent.RequestUpdateFromServer(); });
+        refreshBtn.text = "Force Server Sync";
+        refreshBtn.style.marginLeft = 20;
+        header.Add(refreshBtn);
+        
+        root.Add(header);
+
+        // --- Main Content (Split View) ---
+        var mainSplit = new TwoPaneSplitView(0, 350, TwoPaneSplitViewOrientation.Horizontal);
+        root.Add(mainSplit);
+
+        // Left Pane: Local Info
+        var leftPane = new VisualElement();
+        leftPane.style.flexGrow = 1;
+        leftPane.Add(CreatePanelHeader("LOCAL STATE (Active Client)"));
+        _localScroll = new ScrollView();
+        leftPane.Add(_localScroll);
+        mainSplit.Add(leftPane);
+
+        // Right Pane: Vertically Split for Details and Server State
+        var rightSplit = new TwoPaneSplitView(0, 250, TwoPaneSplitViewOrientation.Vertical);
+        mainSplit.Add(rightSplit);
+
+        // Details Panel
+        _detailsContainer = new VisualElement();
+        _detailsContainer.style.paddingLeft = 5;
+        _detailsContainer.Add(CreatePanelHeader("SELECTION DETAILS"));
+        rightSplit.Add(_detailsContainer);
+
+        // Server Comparison
+        var serverPane = new VisualElement();
+        serverPane.Add(CreatePanelHeader("SERVER STATE (REMOTE SNAPSHOT)", new Color(0.4f, 0.2f, 0.2f)));
+        var serverScroll = new ScrollView();
+        _localServerDebugText = new Label("No data received from server.");
+        _localServerDebugText.style.fontSize = 11;
+        _localServerDebugText.style.color = new Color(0.8f, 0.8f, 0.8f);
+        _localServerDebugText.style.paddingLeft = 5;
+        serverScroll.Add(_localServerDebugText);
+        serverPane.Add(serverScroll);
+        rightSplit.Add(serverPane);
+    }
+
+    private VisualElement CreatePanelHeader(string title, Color? bgColor = null)
+    {
+        var label = new Label($" {title}");
+        label.style.unityFontStyleAndWeight = FontStyle.Bold;
+        label.style.backgroundColor = bgColor ?? new Color(0.25f, 0.25f, 0.25f);
+        label.style.color = Color.white;
+        label.style.height = 20;
+        return label;
     }
 
     private void OnSelectionChange()
     {
-        if (Selection.objects.Length == 1 && Selection.objects[0] is GameObject)
+        var active = Selection.activeGameObject;
+        if (active != null)
         {
-            _inspectedObject = (GameObject)Selection.objects[0];
-            _label = new Label(_inspectedObject.gameObject.name);
-            var asc = _inspectedObject.GetComponent<AbilitySystemComponent>();
-            if (asc)
+            var component = active.GetComponent<AbilitySystemComponent>();
+            if (component != null)
             {
-                _inspectedAsc = asc.AbilitySystem;
-                _text = new Label(DisplayData());
+                _inspectedComponent = component;
+                _objectNameLabel.text = $"Inspecting: {active.name}";
+                Repaint();
             }
-            rootVisualElement.Clear();
-            CreateGUI();
         }
     }
 
-    private void Update()
+    private void OnInspectorUpdate()
     {
-        if (_inspectedAsc == null) return;
-        _text = new Label(DisplayData());
-        rootVisualElement.Clear();
-        CreateGUI();
+        if (_inspectedComponent == null) return;
+        
+        if (EditorApplication.isPlaying)
+        {
+            _inspectedComponent.RequestUpdateFromServer();
+        }
+        
+        RefreshGUI();
     }
-    
-    private string DisplayData()
+
+    private void RefreshGUI()
     {
-        if (_inspectedAsc == null) return "";
-        var output = _inspectedAsc.AttributeSetManager.DebugString() + "\n\n";
-        output += _inspectedAsc.EffectManager.DebugString() + "\n\n";
-        output += _inspectedAsc.AbilityManager.DebugString() + "\n\n";
-        output += _inspectedAsc.TagManager.DebugString() + "\n\n";
-        return output;
+        if (_inspectedComponent == null || _inspectedComponent.AbilitySystem == null) return;
+
+        // Update Server Text
+        _localServerDebugText.text = string.IsNullOrEmpty(_inspectedComponent.ServerDebugString) 
+            ? "Waiting for server response..." 
+            : _inspectedComponent.ServerDebugString;
+
+        // Update Local List
+        _localScroll.Clear();
+        
+        // Attributes Section
+        AddHeader(_localScroll, "Attributes");
+        foreach (var set in _inspectedComponent.AbilitySystem.AttributeSetManager.AttributeSets.Values)
+        {
+            foreach (var attr in set.GetAllAttributes())
+            {
+                var row = new VisualElement();
+                row.style.flexDirection = FlexDirection.Row;
+                row.style.justifyContent = Justify.SpaceBetween;
+                row.style.paddingLeft = 10;
+                row.style.paddingRight = 10;
+                row.style.borderBottomWidth = 1;
+                row.style.borderBottomColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+
+                row.Add(new Label(attr.GetName()));
+                row.Add(new Label($"{attr.CurrentValue:F2} / {attr.BaseValue:F2}") { style = { unityFontStyleAndWeight = FontStyle.Bold } });
+                _localScroll.Add(row);
+            }
+        }
+
+        // Effects Section
+        AddHeader(_localScroll, "Active Effects");
+        var activeEffects = _inspectedComponent.AbilitySystem.EffectManager.Effects;
+        if (activeEffects.Count == 0)
+        {
+            _localScroll.Add(new Label("  (None)") { style = { color = Color.gray, marginLeft = 10 } });
+        }
+        foreach (var effect in activeEffects)
+        {
+            var btn = new Button(() => SelectEffect(effect));
+            btn.text = $"{effect.Definition.name} (x{effect.NumStacks})";
+            btn.style.unityTextAlign = TextAnchor.MiddleLeft;
+            btn.style.marginLeft = 5;
+            btn.style.marginRight = 5;
+            
+            if (effect == _selectedEffect)
+            {
+                btn.style.backgroundColor = new Color(0.2f, 0.4f, 0.7f);
+                btn.style.color = Color.white;
+            }
+            
+            _localScroll.Add(btn);
+        }
+        
+        // Predicted Effects Section
+        var predicted = _inspectedComponent.AbilitySystem.EffectManager.PredictedEffects;
+        if (predicted.Count > 0)
+        {
+            AddHeader(_localScroll, "Predicted Effects");
+            foreach (var group in predicted)
+            {
+                foreach (var effect in group.Value)
+                {
+                    var btn = new Button(() => SelectEffect(effect));
+                    btn.text = $"[P] {effect.Definition.name} (Key: {group.Key})";
+                    btn.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    btn.style.color = new Color(1f, 0.8f, 0.4f);
+                    btn.style.marginLeft = 5;
+                    _localScroll.Add(btn);
+                }
+            }
+        }
+
+        // Tags Section
+        AddHeader(_localScroll, "Gameplay Tags");
+        var tagLabel = new Label(_inspectedComponent.AbilitySystem.TagManager.DebugString());
+        tagLabel.style.fontSize = 10;
+        tagLabel.style.paddingLeft = 10;
+        _localScroll.Add(tagLabel);
+
+        UpdateDetails();
+    }
+
+    private void AddHeader(VisualElement container, string text)
+    {
+        var h = new Label(text.ToUpper());
+        h.style.unityFontStyleAndWeight = FontStyle.Bold;
+        h.style.fontSize = 11;
+        h.style.marginTop = 15;
+        h.style.marginBottom = 5;
+        h.style.color = new Color(0.7f, 0.7f, 0.7f);
+        h.style.borderBottomWidth = 1;
+        h.style.borderBottomColor = new Color(0.4f, 0.4f, 0.4f);
+        container.Add(h);
+    }
+
+    private void SelectEffect(Effect effect)
+    {
+        _selectedEffect = effect;
+        UpdateDetails();
+    }
+
+    private void UpdateDetails()
+    {
+        _detailsContainer.Clear();
+        _detailsContainer.Add(CreatePanelHeader("SELECTION DETAILS"));
+
+        if (_selectedEffect == null)
+        {
+            var noSel = new Label("Select an effect from the list to see details.");
+            noSel.style.paddingTop = 20;
+            noSel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            noSel.style.color = Color.gray;
+            _detailsContainer.Add(noSel);
+            return;
+        }
+
+        var box = new VisualElement();
+        box.style.paddingLeft = 10;
+        box.style.paddingTop = 10;
+
+        box.Add(new Label($"Effect Name: {_selectedEffect.Definition.name}") { style = { unityFontStyleAndWeight = FontStyle.Bold, fontSize = 13 } });
+        box.Add(new Label($"Guid: {_selectedEffect.Guid}"));
+        box.Add(new Label($"Level: {_selectedEffect.Level}"));
+        box.Add(new Label($"Stacks: {_selectedEffect.NumStacks}"));
+        
+        string durationStr = _selectedEffect.Definition.IsInfinite() ? "Infinite" : $"{_selectedEffect.RemainingDuration():F2}s / {_selectedEffect.Duration:F2}s";
+        box.Add(new Label($"Duration: {durationStr}"));
+        box.Add(new Label($"Is Predicted: {_selectedEffect.IsPredicted()}") { style = { color = _selectedEffect.IsPredicted() ? Color.yellow : Color.white } });
+        
+        if (_selectedEffect.Context != null)
+        {
+            box.Add(new Label($"Source ID: {_selectedEffect.Source?.NetworkRole?.NetworkObjectId ?? 0}"));
+        }
+
+        if (_selectedEffect.SetByCallerTagMagnitudes.Count > 0)
+        {
+            var sbcHeader = new Label("\nSET BY CALLER DATA:");
+            sbcHeader.style.unityFontStyleAndWeight = FontStyle.Bold;
+            box.Add(sbcHeader);
+            foreach (var kvp in _selectedEffect.SetByCallerTagMagnitudes)
+            {
+                box.Add(new Label($"  - {kvp.Key.Name}: {kvp.Value:F3}"));
+            }
+        }
+        
+        var tagsHeader = new Label("\nTAGS:");
+        tagsHeader.style.unityFontStyleAndWeight = FontStyle.Bold;
+        box.Add(tagsHeader);
+        if (_selectedEffect.Definition.AssetTags != null)
+        {
+            foreach(var t in _selectedEffect.Definition.AssetTags) box.Add(new Label($"  - {t.Name} (Asset)"));
+        }
+        if (_selectedEffect.Definition.GrantedTags != null)
+        {
+            foreach(var t in _selectedEffect.Definition.GrantedTags) box.Add(new Label($"  - {t.Name} (Granted)"));
+        }
+
+        _detailsContainer.Add(box);
     }
 }

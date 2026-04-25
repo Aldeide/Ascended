@@ -20,21 +20,21 @@ namespace AbilitySystem.Runtime.AttributeSets
         public Action<Attribute, float, float> OnAnyAttributeCurrentValueChanged;
 
         private IAbilitySystem _owner;
-        private Dictionary<Type, AttributeSet> _attributeSets;
+        public Dictionary<Type, AttributeSet> AttributeSets;
         private Dictionary<string, AttributeAggregator> _attributeAggregators;
         private Dictionary<string, Attribute> _attributeFullNameCache;
 
         public AttributeSetManager(IAbilitySystem owner)
         {
             _owner = owner;
-            _attributeSets = new Dictionary<Type, AttributeSet>();
+            AttributeSets = new Dictionary<Type, AttributeSet>();
             _attributeAggregators = new Dictionary<string, AttributeAggregator>();
             _attributeFullNameCache = new Dictionary<string, Attribute>();
         }
 
         public void Reset()
         {
-            foreach (var attributeSet in _attributeSets.Values)
+            foreach (var attributeSet in AttributeSets.Values)
             {
                 attributeSet.Reset();
             }
@@ -42,20 +42,20 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public virtual T GetAttributeSet<T>() where T : AttributeSet
         {
-            _attributeSets.TryGetValue(typeof(T), out AttributeSet result);
+            AttributeSets.TryGetValue(typeof(T), out AttributeSet result);
             return (T)result;
         }
 
         [CanBeNull]
         public virtual AttributeSet GetAttributeSet(string attributeSetName)
         {
-            return _attributeSets.Values.FirstOrDefault(a => a.Name == attributeSetName);
+            return AttributeSets.Values.FirstOrDefault(a => a.Name == attributeSetName);
         }
 
         public void AddAttributeSet(Type type, AttributeSet attributeSet)
         {
             attributeSet.InitializeAttributes();
-            _attributeSets[type] = attributeSet;
+            AttributeSets[type] = attributeSet;
             foreach (var attribute in attributeSet.GetAllAttributes())
             {
                 attribute.OnAttributeBaseValueChanged += OnAttributeBaseValueChanged;
@@ -70,7 +70,7 @@ namespace AbilitySystem.Runtime.AttributeSets
         [CanBeNull]
         public virtual Attribute GetAttribute(string attributeName)
         {
-            return _attributeSets.Values.SelectMany(attributeSet =>
+            return AttributeSets.Values.SelectMany(attributeSet =>
                     attributeSet.GetAllAttributes().Where(attribute => attribute.GetName() == attributeName))
                 .FirstOrDefault();
         }
@@ -84,13 +84,13 @@ namespace AbilitySystem.Runtime.AttributeSets
         [CanBeNull]
         public virtual Attribute GetAttribute(Type attributeSetType, string attributeName)
         {
-            _attributeSets.TryGetValue(attributeSetType, out AttributeSet result);
+            AttributeSets.TryGetValue(attributeSetType, out AttributeSet result);
             return result.GetAttribute(attributeName);
         }
 
         public virtual Attribute GetAttribute(string attributeSetName, string attributeName)
         {
-            return _attributeSets.FirstOrDefault(
+            return AttributeSets.FirstOrDefault(
                 k => k.Value.Name == attributeSetName).Value?.GetAttribute(attributeName);
         }
 
@@ -102,7 +102,7 @@ namespace AbilitySystem.Runtime.AttributeSets
         public Dictionary<string, AttributeValue> Snapshot()
         {
             Dictionary<string, AttributeValue> output = new Dictionary<string, AttributeValue>();
-            foreach (var attributeSet in _attributeSets.Values)
+            foreach (var attributeSet in AttributeSets.Values)
             {
                 foreach (var attribute in attributeSet.GetAllAttributes())
                 {
@@ -115,7 +115,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public void Restore(Dictionary<string, AttributeValue> snapshot)
         {
-            foreach (var attributeSet in _attributeSets.Values)
+            foreach (var attributeSet in AttributeSets.Values)
             {
                 foreach (var attribute in attributeSet.GetAllAttributes())
                 {
@@ -129,7 +129,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public void RegisterOnAttributeChanged(string attributeName, Action<Attribute, float, float> action)
         {
-            foreach (var attributeSet in _attributeSets.Values)
+            foreach (var attributeSet in AttributeSets.Values)
             {
                 foreach (var attribute in attributeSet.GetAllAttributes())
                 {
@@ -197,7 +197,7 @@ namespace AbilitySystem.Runtime.AttributeSets
 
         public string DebugString()
         {
-            return _attributeSets.Values.Aggregate(
+            return AttributeSets.Values.Aggregate(
                 "Attributes\n", (current, attributeSet) => current + (attributeSet.DebugString() + "\n"));
         }
 
