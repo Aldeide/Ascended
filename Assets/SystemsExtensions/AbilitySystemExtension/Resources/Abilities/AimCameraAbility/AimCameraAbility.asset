@@ -46,7 +46,7 @@ MonoBehaviour:
   UniqueName: AimCameraAbility
   Cost: {fileID: 0}
   Cooldown:
-    rid: 5120009157357076583
+    rid: -2
   AbilityActivation:
     rid: -2
   AssetTags: []
@@ -69,10 +69,3 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 5120009157357076583
-      type: {class: AttributeDrivenAbilityCooldown, ns: AbilitySystem.Runtime.Abilities.Cooldowns, asm: AbilitySystem}
-      data:
-        CooldownEffect: {fileID: 0}
-        CooldownAttribute: CharacteristicsAttributeSet.Health
-        TagQuery:
-          Condition: []

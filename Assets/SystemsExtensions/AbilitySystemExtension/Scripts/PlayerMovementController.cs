@@ -178,5 +178,10 @@ namespace AbilitySystemExtension.Scripts
             _isGrounded = IsGrounded();
             if (previousGroundedState != _isGrounded) OnGroundedChanged?.Invoke(_isGrounded);
         }
+
+        public void SetIsAiming(bool isAiming)
+        {
+            _isAiming = isAiming;
+        }
     }
 }
