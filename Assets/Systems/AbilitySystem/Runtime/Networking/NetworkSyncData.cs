@@ -1,3 +1,4 @@
+using System;
 using GameplayTags.Runtime;
 using Unity.Netcode;
 
@@ -36,6 +37,14 @@ namespace AbilitySystem.Runtime.Networking
             serializer.SerializeValue(ref PredictionKey);
             serializer.SerializeValue(ref Level);
             serializer.SerializeValue(ref NumStacks);
+
+            // Array serialization requires non-null arrays in some NGO versions or specific contexts
+            if (!serializer.IsReader)
+            {
+                SetByCallerTags ??= Array.Empty<Tag>();
+                SetByCallerValues ??= Array.Empty<float>();
+            }
+
             serializer.SerializeValue(ref SetByCallerTags);
             serializer.SerializeValue(ref SetByCallerValues);
         }
@@ -49,6 +58,12 @@ namespace AbilitySystem.Runtime.Networking
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref AbilityUniqueName);
+
+            if (!serializer.IsReader)
+            {
+                Tags ??= Array.Empty<Tag>();
+            }
+
             serializer.SerializeValue(ref Tags);
         }
     }
