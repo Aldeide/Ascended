@@ -16,6 +16,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             def.name = "TestEffect";
+            def.DurationType = EffectDurationType.Infinite;
             def.EffectStack = new EffectStack 
             { 
                 EffectStackType = EffectStackType.AggregateByTarget,
@@ -45,6 +46,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             def.name = "TestEffect";
+            def.DurationType = EffectDurationType.Infinite;
             def.EffectStack = new EffectStack 
             { 
                 EffectStackType = EffectStackType.AggregateByTarget,
@@ -67,6 +69,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             def.name = "TestEffect";
+            def.DurationType = EffectDurationType.Infinite;
             def.EffectStack = new EffectStack 
             { 
                 EffectStackType = EffectStackType.AggregateByTarget,

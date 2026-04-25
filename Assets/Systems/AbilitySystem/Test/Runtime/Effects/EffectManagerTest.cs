@@ -36,8 +36,9 @@ namespace AbilitySystem.Test.Runtime.Effects
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
             effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
             effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
+            effectAsset.DurationType = EffectDurationType.Infinite;
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
-            
+            Debug.Log(effect.Definition.DurationType);
             effectManager.AddEffect(effect);
             
             Assert.AreEqual(1, effectManager.Effects.Count);
@@ -55,6 +56,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
             effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
             effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
+            effectAsset.DurationType = EffectDurationType.Infinite;
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             
             effectManager.AddEffect(effect);
@@ -116,6 +118,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             effectAsset.name = "TestStackingEffect";
             effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
             effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
+            effectAsset.DurationType = EffectDurationType.Infinite;
             effectAsset.EffectStack = new EffectStack
             {
                 EffectStackType = EffectStackType.AggregateBySource,
@@ -159,6 +162,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             effectAsset.name = "TestStackingEventEffect";
             effectAsset.ApplicationImmunityTags = Array.Empty<Tag>();
             effectAsset.ApplicationRequiredTags = Array.Empty<Tag>();
+            effectAsset.DurationType = EffectDurationType.Infinite;
             effectAsset.EffectStack = new EffectStack
             {
                 EffectStackType = EffectStackType.AggregateByTarget,
@@ -187,6 +191,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             var poisonAsset = ScriptableObject.CreateInstance<EffectDefinition>();
             var poisonTag = new Tag("Debuff.Poison");
             poisonAsset.AssetTags = new Tag[] { poisonTag };
+            poisonAsset.DurationType = EffectDurationType.Infinite;
             var poisonEffect = poisonAsset.ToEffect(owner.Object, owner.Object);
             effectManager.AddEffect(poisonEffect);
             
@@ -194,6 +199,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             
             // Antidote effect
             var antidoteAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            antidoteAsset.DurationType = EffectDurationType.Infinite;
             antidoteAsset.RemoveGameplayEffectsWithTags = new Tag[] { poisonTag };
             var antidoteEffect = antidoteAsset.ToEffect(owner.Object, owner.Object);
             effectManager.AddEffect(antidoteEffect);
@@ -253,6 +259,7 @@ namespace AbilitySystem.Test.Runtime.Effects
             owner.Setup(mock => mock.EffectManager).Returns(effectManager);
             
             var effectAsset = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectAsset.DurationType = EffectDurationType.Infinite;
             var effect = effectAsset.ToEffect(owner.Object, owner.Object);
             var predictionKey = new AbilitySystem.Runtime.Networking.PredictionKey() { currentKey = 1 };
             
