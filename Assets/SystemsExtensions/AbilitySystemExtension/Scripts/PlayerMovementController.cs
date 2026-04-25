@@ -76,7 +76,7 @@ namespace AbilitySystemExtension.Scripts
                               _camera.transform.eulerAngles.y;
             var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
                 turnSmoothTime);
-            if (_isAiming)
+            if (_isAiming || _movementInput.magnitude > 0.01f)
             {
                 _rigidbody.MoveRotation(ComputeRotation(angle));
             }
