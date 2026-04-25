@@ -22,6 +22,46 @@ namespace AbilitySystem.Scripts
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
+
+        public string ServerDebugString { get; private set; }
+        private float _lastDebugRequestTime;
+
+        public void RequestUpdateFromServer()
+        {
+            if (IsServer)
+            {
+                ServerDebugString = CalculateFullDebugInfo();
+                return;
+            }
+
+            if (UnityEngine.Time.time - _lastDebugRequestTime < 0.5f) return;
+            _lastDebugRequestTime = UnityEngine.Time.time;
+            RequestDebugDataServerRpc();
+        }
+
+        [Rpc(SendTo.Server)]
+        public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
+        {
+            var debugInfo = CalculateFullDebugInfo();
+            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
+        }
+
+        [Rpc(SendTo.Everyone)]
+        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
+        {
+            if (NetworkManager.LocalClientId != targetId) return;
+            ServerDebugString = debugInfo;
+        }
+
+        public string CalculateFullDebugInfo()
+        {
+            if (AbilitySystem == null) return "No Ability System";
+            var output = "--- Attributes ---\n" + AbilitySystem.AttributeSetManager.DebugString() + "\n\n";
+            output += "--- Effects ---\n" + AbilitySystem.EffectManager.DebugString() + "\n\n";
+            output += "--- Abilities ---\n" + AbilitySystem.AbilityManager.DebugString() + "\n\n";
+            output += "--- Tags ---\n" + AbilitySystem.TagManager.DebugString() + "\n";
+            return output;
+        }
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
 
