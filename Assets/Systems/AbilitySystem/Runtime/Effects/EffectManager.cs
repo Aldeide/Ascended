@@ -76,6 +76,16 @@ namespace AbilitySystem.Runtime.Effects
                 }
             }
 
+            if (effect.Definition.IsInstant())
+            {
+                effect.Execute();
+                if (_owner.IsServer())
+                {
+                    _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
+                }
+                return EffectApplicationResult.Success;
+            }
+
             // If that effect is already applied, check stacking behaviour.
             if (Effects.Exists(e => e.Definition.name == effect.Definition.name))
             {
@@ -84,6 +94,10 @@ namespace AbilitySystem.Runtime.Effects
                 {
                     Effects.Add(effect);
                     OnEffectAdded?.Invoke(effect);
+                    if (_owner.IsServer())
+                    {
+                        _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
+                    }
                     return EffectApplicationResult.Success;
                 }
 
@@ -160,6 +174,10 @@ namespace AbilitySystem.Runtime.Effects
             else
             {
                 PredictedEffects[predictionKey.currentKey] = new List<Effect> { predictedEffect };
+            }
+            if (predictedEffect.Definition.IsInstant())
+            {
+                predictedEffect.Execute();
             }
             OnEffectAdded?.Invoke(predictedEffect);
         }
