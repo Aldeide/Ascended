@@ -76,14 +76,18 @@ namespace AbilitySystemExtension.Scripts
                               _camera.transform.eulerAngles.y;
             var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
                 turnSmoothTime);
-            _rigidbody.MoveRotation(ComputeRotation(angle));
+            if (_isAiming)
+            {
+                _rigidbody.MoveRotation(ComputeRotation(angle));
+            }
+            
             ComputeMovementDirection(targetAngle);
             if (_movementInput.magnitude <= 0.01f)
-                {
-                    UpdateAnimator();
-                    MovementDirection = Vector3.zero;
-                    return;
-                }
+            {
+                UpdateAnimator();
+                MovementDirection = Vector3.zero;
+                return;
+            }
 
             _rigidbody.MovePosition(transform.position += MovementDirection * (Time.deltaTime * _movementSpeed));
 
