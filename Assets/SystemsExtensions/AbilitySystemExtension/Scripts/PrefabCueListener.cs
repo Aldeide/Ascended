@@ -15,6 +15,7 @@ namespace AbilitySystemExtension.Scripts
 
         public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
+            if (TagQuery.MatchesTag(definition.CueTag) == false) return;
             var prefab = (definition as CuePrefabDefinition)?.Prefab;
             var position = cueData.VectorData[0];
             var muzzle = cueData.VectorData[1];

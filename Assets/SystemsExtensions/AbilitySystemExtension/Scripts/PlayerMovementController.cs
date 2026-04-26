@@ -31,7 +31,8 @@ namespace AbilitySystemExtension.Scripts
         [ShowInInspector] [SerializeField] private bool _isGrounded = true;
         public float turnSmoothTime = 0.1f;
         private float _turnSmoothVelocity = 0.2f;
-        [ShowInInspector] [SerializeField] private bool _isAiming;
+        [ShowInInspector] [SerializeField] private bool _manualAiming;
+        [ShowInInspector] [SerializeField] private bool _combatStance;
         private Camera _camera;
 
         public Vector3 MovementDirection { get; private set; } = new Vector3(0, 0, 0);
@@ -63,7 +64,7 @@ namespace AbilitySystemExtension.Scripts
             UpdateGrounded();
 
             // Temp
-            if (_isAiming)
+            if (IsInAimingState())
             {
                 _ikCueListener.EnableAimIK();
             }
@@ -76,7 +77,7 @@ namespace AbilitySystemExtension.Scripts
                               _camera.transform.eulerAngles.y;
             var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
                 turnSmoothTime);
-            if (_isAiming || _movementInput.magnitude > 0.01f)
+            if (IsInAimingState() || _movementInput.magnitude > 0.01f)
             {
                 _rigidbody.MoveRotation(ComputeRotation(angle));
             }
@@ -112,7 +113,7 @@ namespace AbilitySystemExtension.Scripts
             if (_movementInput.magnitude > 0.01f)
             {
                 _animationController.SetIsMoving(true);
-                if (_isAiming)
+                if (IsInAimingState())
                 {
                     // TODO: add animation transition smotthing.
                     _animationController.SetMovement(_movementInput.x, _movementInput.z);
@@ -170,7 +171,7 @@ namespace AbilitySystemExtension.Scripts
 
         private Quaternion ComputeRotation(float angle)
         {
-            if (!_isAiming) return Quaternion.Euler(0f, angle, 0f);
+            if (!IsInAimingState()) return Quaternion.Euler(0f, angle, 0f);
             var target = transform.position + _camera.transform.forward;
             var actualTarget = new Vector3(target.x, transform.position.y, target.z);
             return Quaternion.LookRotation(actualTarget - transform.position);
@@ -183,9 +184,19 @@ namespace AbilitySystemExtension.Scripts
             if (previousGroundedState != _isGrounded) OnGroundedChanged?.Invoke(_isGrounded);
         }
 
-        public void SetIsAiming(bool isAiming)
+        public void SetManualAiming(bool manualAiming)
         {
-            _isAiming = isAiming;
+            _manualAiming = manualAiming;
+        }
+
+        public void SetCombatStance(bool combatStance)
+        {
+            _combatStance = combatStance;
+        }
+
+        private bool IsInAimingState()
+        {
+            return _manualAiming || _combatStance;
         }
     }
 }

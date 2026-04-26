@@ -20,7 +20,6 @@ namespace AbilitySystemExtension.Runtime.Abilities
         protected override void ActivateAbility(AbilityData data)
         {
             _cameraController.aimVirtualCamera.SetActive(true);
-            _playerController.SetIsAiming(true);
         }
 
         protected override void CancelAbility()
@@ -31,7 +30,6 @@ namespace AbilitySystemExtension.Runtime.Abilities
         public override void EndAbility()
         {
             _cameraController.aimVirtualCamera.SetActive(false);
-            _playerController.SetIsAiming(false);
         }
     }
 }
