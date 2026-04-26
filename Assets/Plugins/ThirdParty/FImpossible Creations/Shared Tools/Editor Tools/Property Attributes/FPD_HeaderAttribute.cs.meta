@@ -12,8 +12,9 @@ MonoImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 154245
-  packageName: Legs Animator
-  packageVersion: 1.0.4.3
-  assetPath: Assets/FImpossible Creations/Shared Tools/Editor Tools/Property Attributes/FPD_HeaderAttribute.cs
-  uploadId: 749480
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Shared Tools/Editor
+    Tools/Property Attributes/FPD_HeaderAttribute.cs
+  uploadId: 894154

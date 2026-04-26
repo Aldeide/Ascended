@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: be22127178429a542b73756ceee3408f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Editor/Plugins - Editor
+    - Animating/Animation Designer/Utilities/ADPlayablePreview.cs
+  uploadId: 894154
