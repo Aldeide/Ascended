@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Systems.Controllers
 {
@@ -20,8 +20,16 @@ namespace Systems.Controllers
             if(!RectangleTransform || !Entity) return;
 
             // Position the unitframe.
-            Vector2 position = _camera.WorldToScreenPoint(Entity.transform.position + Offset);
-            RectangleTransform.anchoredPosition = new Vector2(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
+            Vector3 screenPosition = _camera.WorldToScreenPoint(Entity.transform.position + Offset);
+            
+            // If the entity is behind the camera (z < 0), hide it by moving off-screen.
+            if (screenPosition.z < 0)
+            {
+                RectangleTransform.anchoredPosition = new Vector2(-10000, -10000);
+                return;
+            }
+            
+            RectangleTransform.anchoredPosition = new Vector2(Mathf.RoundToInt(screenPosition.x), Mathf.RoundToInt(screenPosition.y));
             
             // Billboard the unitframe.
             transform.LookAt(RectangleTransform.position - _camera.transform.rotation * Vector3.forward, _camera.transform.rotation * Vector3.up);

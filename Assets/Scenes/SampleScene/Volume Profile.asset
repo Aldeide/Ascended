@@ -130,10 +130,10 @@ MonoBehaviour:
     m_Value: 2
   m_MinSmoothness:
     m_OverrideState: 1
-    m_Value: 0.512
+    m_Value: 0.84
   m_SmoothnessFadeStart:
     m_OverrideState: 1
-    m_Value: 0.621
+    m_Value: 0.88
   reflectSky:
     m_OverrideState: 0
     m_Value: 1
@@ -188,14 +188,14 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
   textureLodBias:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2.63
   m_RayLength:
     m_OverrideState: 1
-    m_Value: 50
-  m_ClampValue:
-    m_OverrideState: 0
     m_Value: 100
+  m_ClampValue:
+    m_OverrideState: 1
+    m_Value: 4
   m_Denoise:
     m_OverrideState: 1
     m_Value: 1
@@ -206,7 +206,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   mode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 2
   m_FullResolution:
     m_OverrideState: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
     m_Value: 1
   bounceCount:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   m_RayMaxIterationsRT:
     m_OverrideState: 0
     m_Value: 48
