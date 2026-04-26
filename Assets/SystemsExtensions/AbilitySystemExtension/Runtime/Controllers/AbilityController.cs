@@ -1,6 +1,8 @@
-﻿using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Scripts;
+using AbilitySystemExtension.Scripts;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Systems.Controllers
@@ -11,11 +13,29 @@ namespace Systems.Controllers
         private WeaponController _weaponController;
         private PlayerTargetController _targetController;
 
+        private PlayerMovementController _movementController;
+        private float _combatStanceTimer = 0f;
+
         public void Start()
         {
             _asc = GetComponent<AbilitySystemComponent>();
             _weaponController = GetComponent<WeaponController>();
             _targetController = GetComponent<PlayerTargetController>();
+            _movementController = GetComponent<PlayerMovementController>();
+        }
+
+        public void Update()
+        {
+            if (!IsLocalPlayer) return;
+
+            if (_combatStanceTimer > 0)
+            {
+                _combatStanceTimer -= Time.deltaTime;
+                if (_combatStanceTimer <= 0)
+                {
+                    _movementController.SetCombatStance(false);
+                }
+            }
         }
 
         public void OnAim(InputAction.CallbackContext context)
@@ -23,11 +43,13 @@ namespace Systems.Controllers
             if (!IsLocalPlayer) return;
             if (context.phase == InputActionPhase.Started)
             {
+                _movementController.SetManualAiming(true);
                 _asc.TryActivateAbility("AimCameraAbility");
             }
 
             if (context.phase == InputActionPhase.Canceled)
             {
+                _movementController.SetManualAiming(false);
                 _asc.EndAbility("AimCameraAbility");
             }
         }
@@ -42,6 +64,11 @@ namespace Systems.Controllers
                     MuzzlePosition = _weaponController.GetMuzzlePosition(),
                     TargetPosition = _targetController.GetTargetPosition()
                 };
+                
+                // Enter combat stance
+                _movementController.SetCombatStance(true);
+                _combatStanceTimer = 2f;
+
                 _asc.TryActivateAbility("FireAbility", data);
             }
 
