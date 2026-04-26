@@ -130,6 +130,8 @@ namespace AbilitySystemExtension.Scripts
             {
                 _animationController.SetIsMoving(false);
             }
+
+            _animationController.SetIsFiring(IsInAimingState());
         }
 
         public void OnMoveAction(InputAction.CallbackContext context)

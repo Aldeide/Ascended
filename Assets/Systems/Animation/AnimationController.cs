@@ -15,12 +15,22 @@ namespace Systems.Animation
         private Animator _animator;
         
         private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int IsFiring = Animator.StringToHash("IsFiring");
         private static readonly int MovementX = Animator.StringToHash("MovementX");
         private static readonly int MovementY = Animator.StringToHash("MovementY");
         
         private void Start()
         {
             _animator = GetComponent<Animator>();
+        }
+
+        /// <summary>
+        /// Sets the firing state in the Animator component.
+        /// </summary>
+        /// <param name="isFiring">A boolean indicating whether the character is firing (true) or not (false).</param>
+        public void SetIsFiring(bool isFiring)
+        {
+            _animator.SetBool(IsFiring, isFiring);
         }
 
         /// <summary>
