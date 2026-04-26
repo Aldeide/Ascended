@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 7802c532a788fb84e972cbccfff66f9f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Plugins - Level Design/Generators
+    Shared/Helpers/SearchableDropdown.cs
+  uploadId: 894154

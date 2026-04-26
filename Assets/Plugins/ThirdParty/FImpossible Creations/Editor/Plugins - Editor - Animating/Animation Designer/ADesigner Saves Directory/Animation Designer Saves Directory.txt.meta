@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 278efee1b5f7ab74b84f8d7196f197cc
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Editor/Plugins - Editor
+    - Animating/Animation Designer/ADesigner Saves Directory/Animation Designer Saves
+    Directory.txt
+  uploadId: 894154

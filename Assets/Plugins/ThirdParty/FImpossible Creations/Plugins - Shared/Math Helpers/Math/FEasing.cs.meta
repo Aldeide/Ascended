@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: fc641929bb5b9dc468f81c4d80c0cda0
+timeCreated: 1607337550
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Plugins - Shared/Math
+    Helpers/Math/FEasing.cs
+  uploadId: 894154

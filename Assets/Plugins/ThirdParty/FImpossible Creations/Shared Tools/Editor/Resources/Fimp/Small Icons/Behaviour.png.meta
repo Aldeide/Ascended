@@ -86,9 +86,9 @@ TextureImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 154245
-  packageName: Legs Animator
-  packageVersion: 1.0.4.3
-  assetPath: Assets/FImpossible Creations/Shared Tools/Editor/Resources/Fimp/Small
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Shared Tools/Editor/Resources/Fimp/Small
     Icons/Behaviour.png
-  uploadId: 749480
+  uploadId: 894154

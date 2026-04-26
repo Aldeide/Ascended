@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 7502876f3a7fc4648ac29443a7d6817a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210513
+  packageName: Animation Designer
+  packageVersion: 1.2.6
+  assetPath: Assets/Plugins/ThirdParty/FImpossible Creations/Plugins - Shared/Math
+    Helpers/Animating/FAnimationClips.cs
+  uploadId: 894154
