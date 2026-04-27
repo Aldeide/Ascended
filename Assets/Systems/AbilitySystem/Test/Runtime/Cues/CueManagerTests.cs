@@ -115,5 +115,23 @@ namespace AbilitySystem.Test.Runtime.Cues
 
             Assert.IsTrue(onCueExecuteCalled);
         }
+        
+        [Test]
+        public void CueManagerTests_ClientAbilitySystem_AddCueDefinitionNotFound_NoCueAdded()
+        {
+            _mockAbilitySystem.Setup(x => x.IsServer()).Returns(false);
+            var cueManager = new CueManager(_mockAbilitySystem.Object, _mockDataManager.Object);
+            var onCueAddCalled = false;
+            cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
+            var tag = new Tag("Cue.Test.Add");
+            var cueDef = ScriptableObject.CreateInstance<CueDefinition>();
+            cueDef.CueTag = tag;
+            _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns((CueDefinition)null);
+            
+            cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
+
+            Assert.IsFalse(onCueAddCalled);
+            Assert.AreEqual(0, cueManager.GetActiveCues().Count, "Cues were added when no definition exists.");
+        }
     }
 }

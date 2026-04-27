@@ -1,10 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
+using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -44,9 +45,10 @@ namespace AbilitySystem.Scripts
             }
         }
 
+        [CanBeNull]
         public CueDefinition GetCueByTag(Tag cueTag)
         {
-            return _cues.GetValueOrDefault(cueTag);
+            return _cues.TryGetValue(cueTag, out var cue) ? cue : null;
         }
 
         public CueDefinition GetCueByTag(string cueTag)
