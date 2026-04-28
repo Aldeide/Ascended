@@ -7,6 +7,8 @@ using NUnit.Framework;
 using Moq;
 using UnityEngine;
 
+using static AbilitySystem.Test.Utilities.CueUtilities;
+
 namespace AbilitySystem.Test.Runtime.Cues
 {
     public class CueManagerTests
@@ -42,8 +44,7 @@ namespace AbilitySystem.Test.Runtime.Cues
             cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
             
             var tag = new Tag("Cue.Test.Add");
-            var cueDef = ScriptableObject.CreateInstance<CueDefinition>();
-            cueDef.CueTag = tag;
+            var cueDef = CueUtilities.CreateCueDefinitionWithTag(tag);
             _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns(cueDef);
             
             cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
@@ -62,8 +63,7 @@ namespace AbilitySystem.Test.Runtime.Cues
             cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
             
             var tag = new Tag("Cue.Test.Add");
-            var cueDef = ScriptableObject.CreateInstance<CueDefinition>();
-            cueDef.CueTag = tag;
+            var cueDef = CueUtilities.CreateCueDefinitionWithTag(tag);
             _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns(cueDef);
             
             cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
@@ -80,8 +80,7 @@ namespace AbilitySystem.Test.Runtime.Cues
             var cueManager = new CueManager(_mockAbilitySystem.Object, _mockDataManager.Object);
             
             var tag = new Tag("Cue.Test.Add");
-            var cueDef = ScriptableObject.CreateInstance<CueDefinition>();
-            cueDef.CueTag = tag;
+            var cueDef = CueUtilities.CreateCueDefinitionWithTag(tag);
             _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns(cueDef);
             
             // Add first
@@ -107,8 +106,7 @@ namespace AbilitySystem.Test.Runtime.Cues
             cueManager.OnCueExecute += (c, d) => onCueExecuteCalled = true;
             
             var tag = new Tag("Cue.Test.Execute");
-            var cueDef = ScriptableObject.CreateInstance<CueDefinition>();
-            cueDef.CueTag = tag;
+            var cueDef = CueUtilities.CreateCueDefinitionWithTag(tag);
             _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns(cueDef);
             
             cueManager.OnCueReceived(tag, CueAction.Execute, new CueData());
@@ -124,8 +122,7 @@ namespace AbilitySystem.Test.Runtime.Cues
             var onCueAddCalled = false;
             cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
             var tag = new Tag("Cue.Test.Add");
-            var cueDef = ScriptableObject.CreateInstance<CueDefinition>();
-            cueDef.CueTag = tag;
+            var cueDef = CueUtilities.CreateCueDefinitionWithTag(tag);
             _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns((CueDefinition)null);
             
             cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
