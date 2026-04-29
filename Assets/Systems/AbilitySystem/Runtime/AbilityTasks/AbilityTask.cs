@@ -1,19 +1,53 @@
-﻿using System;
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 
 namespace AbilitySystem.Runtime.AbilityTasks
 {
-    [Serializable]
     public abstract class AbilityTask
     {
-        protected Ability _owningAbility;
-        protected IAbilitySystem _owner;
+        public Ability OwningAbility { get; private set; }
+        public IAbilitySystem OwnerSystem { get; private set; }
+        
+        public bool IsActive { get; private set; }
 
-        public void Initialize(Ability owningAbility, IAbilitySystem owner)
+        protected void Initialize(Ability owningAbility)
         {
-            _owningAbility = owningAbility;
-            _owner = owner;
+            OwningAbility = owningAbility;
+            OwnerSystem = owningAbility.Owner;
+        }
+
+        public void ReadyForActivation()
+        {
+            if (IsActive) return;
+            
+            IsActive = true;
+            OwningAbility.RegisterTask(this);
+            Activate();
+        }
+
+        protected virtual void Activate()
+        {
+            // Override in subclasses
+        }
+
+        public virtual void TickTask()
+        {
+            // Override in subclasses if tick is needed
+        }
+
+        public void EndTask()
+        {
+            if (!IsActive) return;
+            
+            IsActive = false;
+            OnDestroy();
+            OwningAbility.UnregisterTask(this);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            // Override in subclasses for cleanup
         }
     }
 }

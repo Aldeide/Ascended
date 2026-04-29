@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities.AbilityActivation;
 using AbilitySystem.Runtime.Abilities.Cooldowns;
+using AbilitySystem.Runtime.AbilityTasks;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
@@ -33,6 +34,7 @@ namespace AbilitySystem.Runtime.Abilities
         public PredictionKey PredictionKey { get; private set; }
 
         private readonly List<Effect> _activatedEffects;
+        private readonly List<AbilityTask> _activeTasks;
         
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
@@ -50,6 +52,7 @@ namespace AbilitySystem.Runtime.Abilities
             IsActive = false;
             Level = level;
             _activatedEffects = new List<Effect>();
+            _activeTasks = new List<AbilityTask>();
 
             if (Definition.AbilityActivation != null)
             {
@@ -77,6 +80,23 @@ namespace AbilitySystem.Runtime.Abilities
 
         protected virtual void AbilityTick()
         {
+            for (int i = _activeTasks.Count - 1; i >= 0; i--)
+            {
+                _activeTasks[i].TickTask();
+            }
+        }
+
+        public void RegisterTask(AbilityTask task)
+        {
+            if (!_activeTasks.Contains(task))
+            {
+                _activeTasks.Add(task);
+            }
+        }
+
+        public void UnregisterTask(AbilityTask task)
+        {
+            _activeTasks.Remove(task);
         }
 
         protected abstract void ActivateAbility(AbilityData data);
@@ -182,6 +202,14 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (!IsActive) return;
             IsActive = false;
+            
+            var tasksToClean = new List<AbilityTask>(_activeTasks);
+            foreach (var task in tasksToClean)
+            {
+                task.EndTask();
+            }
+            _activeTasks.Clear();
+
             foreach (var activatedEffect in _activatedEffects)
             {
                 Owner.EffectManager.RemoveEffect(activatedEffect);
@@ -204,6 +232,14 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (!IsActive) return;
             IsActive = false;
+            
+            var tasksToClean = new List<AbilityTask>(_activeTasks);
+            foreach (var task in tasksToClean)
+            {
+                task.EndTask();
+            }
+            _activeTasks.Clear();
+
             Owner.TagManager.RemoveAbilityTags(this);
             Owner.TagManager.RemoveAbilityBlockingTags(this);
             CancelAbility();
