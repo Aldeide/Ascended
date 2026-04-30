@@ -5,6 +5,7 @@ using GraphProcessor;
 
 namespace AbilityGraph.Runtime.Nodes.Logic
 {
+    [System.Serializable, NodeMenuItem("Logic/Branch")]
     public class BranchNode : ExecutableNode, IExecutableNode
     {
         [Input(name = "Condition")]
