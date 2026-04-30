@@ -41,24 +41,24 @@ namespace AbilitySystem.Runtime.Abilities
         
         [Title("Tags")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] AssetTags;
+        public Tag[] AssetTags = Array.Empty<Tag>();
 
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] CancelAbilityTags;
+        public Tag[] CancelAbilityTags = Array.Empty<Tag>();
 
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] BlockAbilityTags;
+        public Tag[] BlockAbilityTags = Array.Empty<Tag>();
 
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] ActivationOwnedTags;
+        public Tag[] ActivationOwnedTags = Array.Empty<Tag>();
 
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] ActivationRequiredTags;
+        public Tag[] ActivationRequiredTags = Array.Empty<Tag>();
 
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] ActivationBlockedTags;
+        public Tag[] ActivationBlockedTags = Array.Empty<Tag>();
 
-        [Space] [Title("Granted Effects")] public EffectDefinition[] GrantedEffects;
+        [Space] [Title("Granted Effects")] public EffectDefinition[] GrantedEffects = Array.Empty<EffectDefinition>();
 
         [Space] [Title("Network")]
         public AbilityNetworkPolicy NetworkPolicy;
@@ -68,7 +68,7 @@ namespace AbilitySystem.Runtime.Abilities
         [HideInInspector]
         public AbilityTags AbilityTags;
 
-        [Space] [Title("Cues")] public CueDefinition[] ActivationCues;
+        [Space] [Title("Cues")] public CueDefinition[] ActivationCues = Array.Empty<CueDefinition>();
         
         public AbilityDefinition()
         {

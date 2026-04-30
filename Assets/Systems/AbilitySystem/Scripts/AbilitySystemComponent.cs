@@ -479,5 +479,14 @@ namespace AbilitySystem.Scripts
         {
             AbilitySystem.TagManager.RemoveAbilityTags(tags);
         }
+
+        public GameObject GetGameObjectFromNetworkId(ulong networkId)
+        {
+            if (NetworkManager.Singleton != null && NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkId, out var networkObj))
+            {
+                return networkObj.gameObject;
+            }
+            return null;
+        }
     }
 }

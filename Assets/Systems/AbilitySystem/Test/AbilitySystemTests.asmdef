@@ -8,7 +8,8 @@
         "GUID:4fac15158846a8247be07c8ee1f890ef",
         "GUID:f9c18cb9c0eed9d449c8e38d555810d9",
         "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
-        "Unity.Netcode.Runtime"
+        "Unity.Netcode.Runtime",
+        "AbilitySystemTestUtilities"
     ],
     "includePlatforms": [
         "Editor"
@@ -21,7 +22,7 @@
         "Moq.dll",
         "Castle.Core.dll"
     ],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

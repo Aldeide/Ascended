@@ -20,6 +20,10 @@ MonoBehaviour:
   - rid: 2200808440408047627
   - rid: 2200808440408047628
   - rid: 2200808440408047728
+  - rid: 2200808440408047747
+  - rid: 2200808440408047748
+  - rid: 2200808440408047753
+  - rid: 2200808440408047754
   edges:
   - GUID: 4df042c8-1d58-413a-a1da-e96a74fb18c2
     owner: {fileID: 11400000}
@@ -51,14 +55,6 @@ MonoBehaviour:
     outputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
     inputFieldName: Target
     outputFieldName: HitGameObject
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 2ddd9c25-cbf2-4435-9d79-0f4c9aaa6353
-    owner: {fileID: 11400000}
-    inputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
-    outputNodeGUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
-    inputFieldName: Executed
-    outputFieldName: ExecuteAfter
     inputPortIdentifier: 
     outputPortIdentifier: 
   - GUID: 3c008d32-96f6-41b6-923f-dc044cf9da29
@@ -93,6 +89,46 @@ MonoBehaviour:
     outputFieldName: ExecutesIfFalse
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 51c9425f-3a36-4119-afe3-eb0fc644e76e
+    owner: {fileID: 11400000}
+    inputNodeGUID: b38f8012-941a-4f6f-95cd-59f6957756e9
+    outputNodeGUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
+    inputFieldName: input
+    outputFieldName: ExecuteAfter
+    inputPortIdentifier: 0
+    outputPortIdentifier: 
+  - GUID: 48126036-a4c0-4630-8593-9dc5d2da56d6
+    owner: {fileID: 11400000}
+    inputNodeGUID: 72bac3ab-677a-4157-bca6-7421ffbb1289
+    outputNodeGUID: b38f8012-941a-4f6f-95cd-59f6957756e9
+    inputFieldName: input
+    outputFieldName: output
+    inputPortIdentifier: 0
+    outputPortIdentifier: 0
+  - GUID: 83c4d904-d792-47d9-8c7a-df099671b73a
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    outputNodeGUID: 72bac3ab-677a-4157-bca6-7421ffbb1289
+    inputFieldName: Executed
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 0
+  - GUID: 57f2f9a9-c332-4c0b-9b27-04a5aafea1c3
+    owner: {fileID: 11400000}
+    inputNodeGUID: 5768b5de-c8fd-4a15-a79d-914042b1e13f
+    outputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 9f1cae90-c82b-49bb-98a1-d4529ddc069f
+    owner: {fileID: 11400000}
+    inputNodeGUID: ec040c5d-b721-4deb-a9f2-936cfffa6845
+    outputNodeGUID: bab785d9-38e5-45c9-8354-6b27c6b1b7ee
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements:
@@ -111,7 +147,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 0, y: 0, z: 0}
+  position: {x: 0, y: 22, z: 0}
   scale: {x: 1, y: 1, z: 1}
   Description:
     m_TableReference:
@@ -145,7 +181,7 @@ MonoBehaviour:
   ActivationRequiredTags: []
   ActivationBlockedTags: []
   GrantedEffects: []
-  NetworkPolicy: 0
+  NetworkPolicy: 1
   NetworkSecurityPolicy: 0
   ActivationCues: []
   references:
@@ -161,7 +197,7 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 328
+          x: 134
           y: 355
           width: 127
           height: 75
@@ -185,7 +221,7 @@ MonoBehaviour:
         nodeLock: 0
         Start: {x: 0, y: 0, z: 0}
         End: {x: 0, y: 0, z: 0}
-        MaxDistance: 100
+        MaxDistance: 0
         LayerMask:
           serializedVersion: 2
           m_Bits: 1025
@@ -200,16 +236,16 @@ MonoBehaviour:
         computeOrder: -2
         position:
           serializedVersion: 2
-          x: 1081
-          y: 218
-          width: 285
-          height: 137
+          x: 1084
+          y: 203
+          width: 395
+          height: 161
         expanded: 0
         debug: 0
         nodeLock: 0
         Target: {fileID: 0}
         Level: 1
-        EffectDefinition: {fileID: 0}
+        EffectDefinition: {fileID: 11400000, guid: 681c59784de32a64fb4fba43db3f81f9, type: 2}
         ServerOnly: 1
     - rid: 2200808440408047627
       type: {class: WaitDelayTaskNode, ns: AbilityGraph.Runtime.Nodes.Utilities, asm: AbilityGraph}
@@ -219,8 +255,8 @@ MonoBehaviour:
         computeOrder: -2
         position:
           serializedVersion: 2
-          x: 1409
-          y: 315
+          x: 1529
+          y: 318
           width: 193
           height: 99
         expanded: 0
@@ -235,10 +271,10 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 1111
-          y: 521
-          width: 204
-          height: 118
+          x: 1219
+          y: 506
+          width: 143
+          height: 116
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -284,3 +320,73 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         Condition: 0
+    - rid: 2200808440408047747
+      type: {class: RelayNode, ns: , asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        nodeCustomName: 
+        GUID: b38f8012-941a-4f6f-95cd-59f6957756e9
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 1753
+          y: 137
+          width: 200
+          height: 200
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        unpackOutput: 0
+        packInput: 0
+        inputEdgeCount: 0
+    - rid: 2200808440408047748
+      type: {class: RelayNode, ns: , asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        nodeCustomName: 
+        GUID: 72bac3ab-677a-4157-bca6-7421ffbb1289
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 430
+          y: 137
+          width: 200
+          height: 200
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        unpackOutput: 0
+        packInput: 0
+        inputEdgeCount: 0
+    - rid: 2200808440408047753
+      type: {class: DebugNode, ns: AbilityGraph.Runtime.Nodes.Utilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 5768b5de-c8fd-4a15-a79d-914042b1e13f
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 809
+          y: 195
+          width: 193
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: '"HI"'
+        logType: 3
+    - rid: 2200808440408047754
+      type: {class: DebugNode, ns: AbilityGraph.Runtime.Nodes.Utilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: ec040c5d-b721-4deb-a9f2-936cfffa6845
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 287
+          y: 838
+          width: 193
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: Active
+        logType: 3

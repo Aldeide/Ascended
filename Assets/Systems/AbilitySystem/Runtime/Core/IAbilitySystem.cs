@@ -7,6 +7,7 @@ using AbilitySystem.Runtime.Events;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
 using AbilitySystem.Scripts;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Core
 {
@@ -42,5 +43,6 @@ namespace AbilitySystem.Runtime.Core
         public EffectContext MakeEffectContext();
         public EffectApplicationResult ApplyEffectToSelf(Effect effect);
         public void Reset();
+        public GameObject GetGameObjectFromNetworkId(ulong networkId);
     }
 }
