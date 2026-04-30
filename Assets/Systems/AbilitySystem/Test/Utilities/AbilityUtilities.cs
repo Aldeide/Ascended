@@ -80,5 +80,20 @@ namespace AbilitySystem.Test.Utilities
             abilityDefinition.GrantedEffects = new[] { CreateInfiniteEffectDefinitionWithModifier() };
             return abilityDefinition;
         }
+
+        public static TestAbilityDefinition CreateStunAbilityDefinition()
+        {
+            var abilityDefinition = ScriptableObject.CreateInstance<TestAbilityDefinition>();
+            abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
+            abilityDefinition.NetworkSecurityPolicy = AbilityNetworkSecurityPolicy.ClientOrServer;
+            abilityDefinition.ActivationRequiredTags = new Tag[] { };
+            abilityDefinition.ActivationBlockedTags = new Tag[] { };
+            abilityDefinition.ActivationOwnedTags = new Tag[] { new("Tag.Test") };
+            abilityDefinition.CancelAbilityTags = new Tag[] { new("Ability.Active") };
+            abilityDefinition.AssetTags = new Tag[] { };
+            abilityDefinition.UniqueName = "TestStunAbility";
+            abilityDefinition.GrantedEffects = new[] { CreateInfiniteEffectDefinitionWithModifier() };
+            return abilityDefinition;
+        }
     }
 }

@@ -2,6 +2,7 @@ using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Test.Utilities;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -24,8 +25,8 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
             // For testing, we can use an empty monobehaviour and manually mock the node's Process by mocking Owner.
             // Wait, the node uses Target.GetComponent<IAbilitySystem>(). This requires a real MonoBehaviour.
             // Let's create a dummy component.
-            _targetObj.AddComponent<DummyAbilitySystem>();
-            var dummyTarget = _targetObj.GetComponent<DummyAbilitySystem>();
+            _targetObj.AddComponent<DummyAbilitySystemComponent>();
+            var dummyTarget = _targetObj.GetComponent<DummyAbilitySystemComponent>();
 
             _mockTargetSystem = new Mock<IAbilitySystem>();
             dummyTarget.MockSystem = _mockTargetSystem.Object;
@@ -85,33 +86,5 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
         }
     }
 
-    public class DummyAbilitySystem : MonoBehaviour, IAbilitySystem
-    {
-        public IAbilitySystem MockSystem;
 
-        public AbilitySystem.Runtime.Networking.INetworkRole NetworkRole { get => MockSystem.NetworkRole; set => MockSystem.NetworkRole = value; }
-        public AbilitySystem.Runtime.Tags.GameplayTagManager TagManager { get => MockSystem.TagManager; set => MockSystem.TagManager = value; }
-        public EffectManager EffectManager { get => MockSystem.EffectManager; set => MockSystem.EffectManager = value; }
-        public AbilityManager AbilityManager { get => MockSystem.AbilityManager; set => MockSystem.AbilityManager = value; }
-        public AbilitySystem.Runtime.AttributeSets.AttributeSetManager AttributeSetManager { get => MockSystem.AttributeSetManager; set => MockSystem.AttributeSetManager = value; }
-        public AbilitySystem.Runtime.Cues.CueManager CueManager { get => MockSystem.CueManager; set => MockSystem.CueManager = value; }
-        public AbilitySystem.Runtime.Networking.IReplicationManager ReplicationManager { get => MockSystem.ReplicationManager; set => MockSystem.ReplicationManager = value; }
-        public AbilitySystem.Runtime.Core.IDataManager DataManager { get => MockSystem.DataManager; set => MockSystem.DataManager = value; }
-        public AbilitySystem.Runtime.Events.EventManager EventManager { get => MockSystem.EventManager; set => MockSystem.EventManager = value; }
-
-        public void Tick() => MockSystem.Tick();
-        public float GetTime() => MockSystem.GetTime();
-        public bool IsLocalClient() => MockSystem.IsLocalClient();
-        public bool IsServer() => MockSystem.IsServer();
-        public bool IsHost() => MockSystem.IsHost();
-        public bool HasAuthority() => MockSystem.HasAuthority();
-        public void PlayCue(AbilitySystem.Runtime.Cues.CueDefinition cue, bool isPredicted = false) => MockSystem.PlayCue(cue, isPredicted);
-        public void PlayCue(AbilitySystem.Runtime.Cues.CueDefinition cue, AbilitySystem.Runtime.Cues.CueData data, bool isPredicted = false) => MockSystem.PlayCue(cue, data, isPredicted);
-        public void PlayCue(string cueTag, AbilitySystem.Runtime.Cues.CueData data, bool isPredicted = false) => MockSystem.PlayCue(cueTag, data, isPredicted);
-        public void PlayCue(GameplayTags.Runtime.Tag cueTag, AbilitySystem.Runtime.Cues.CueData data, bool isPredicted) => MockSystem.PlayCue(cueTag, data, isPredicted);
-        public Effect MakeOutgoingEffect(EffectDefinition definition, int level = 1, EffectContext context = null) => MockSystem.MakeOutgoingEffect(definition, level, context);
-        public EffectContext MakeEffectContext() => MockSystem.MakeEffectContext();
-        public EffectApplicationResult ApplyEffectToSelf(Effect effect) => MockSystem.ApplyEffectToSelf(effect);
-        public void Reset() => MockSystem?.Reset();
-    }
 }

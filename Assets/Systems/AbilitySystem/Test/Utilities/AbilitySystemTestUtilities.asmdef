@@ -1,19 +1,15 @@
 {
-    "name": "AbilityGraphTests",
+    "name": "AbilitySystemTestUtilities",
     "rootNamespace": "",
     "references": [
-        "GUID:bc169f93cfa55c34fbb4e95a2ce629c2",
-        "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:0acc523941302664db1f4e527237feb3",
-        "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
-        "GUID:f9c18cb9c0eed9d449c8e38d555810d9",
         "GUID:fd228ffb3c18f7343b2fddb130915e28",
-        "GUID:1dbcf327d689953449e0c0ba0b5ffe59",
-        "GUID:7127c5fef4debc746b2bc6039bd3e81a"
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:f9c18cb9c0eed9d449c8e38d555810d9",
+        "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
+        "Unity.Netcode.Runtime"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

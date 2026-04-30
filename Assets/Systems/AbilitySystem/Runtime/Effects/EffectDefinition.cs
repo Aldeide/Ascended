@@ -45,29 +45,29 @@ namespace AbilitySystem.Runtime.Effects
         [FormerlySerializedAs("assetTags")]
         [Title("Effect Tags")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] AssetTags;
+        public Tag[] AssetTags = Array.Empty<Tag>();
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] GrantedTags;
+        public Tag[] GrantedTags = Array.Empty<Tag>();
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] ApplicationRequiredTags;
+        public Tag[] ApplicationRequiredTags = Array.Empty<Tag>();
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] OngoingRequiredTags;
+        public Tag[] OngoingRequiredTags = Array.Empty<Tag>();
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] RemoveGameplayEffectsWithTags;
+        public Tag[] RemoveGameplayEffectsWithTags = Array.Empty<Tag>();
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] ApplicationImmunityTags;
+        public Tag[] ApplicationImmunityTags = Array.Empty<Tag>();
         
         [Space]
         [ShowInInspector]
         [Title("Modifiers")]
         [SerializeReference]
-        public Modifier[] Modifiers;
+        public Modifier[] Modifiers = Array.Empty<Modifier>();
         
         [Space] [ShowInInspector] [Title("Execution Calculations")]
-        public AbilitySystem.Runtime.Calculations.ExecutionCalculation[] Executions;
+        public AbilitySystem.Runtime.Calculations.ExecutionCalculation[] Executions = Array.Empty<AbilitySystem.Runtime.Calculations.ExecutionCalculation>();
         
         [Space] [ShowInInspector] [Title("Cues")] [SerializeReference]
-        public CueDefinition[] Cues;
+        public CueDefinition[] Cues = Array.Empty<CueDefinition>();
         public bool IsPeriodic()
         {
             return IsDurationalPolicy() && Period > 0;

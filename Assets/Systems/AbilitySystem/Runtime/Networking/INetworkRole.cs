@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Networking
 {
@@ -12,5 +13,6 @@ namespace AbilitySystem.Runtime.Networking
         bool HasAuthority { get; }
         double Time { get; }
         ulong NetworkObjectId { get; }
+        GameObject GetGameObjectFromNetworkId(ulong networkId);
     }
 }

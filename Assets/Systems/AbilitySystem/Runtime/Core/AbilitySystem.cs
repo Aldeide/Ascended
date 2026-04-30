@@ -120,6 +120,7 @@ namespace AbilitySystem.Runtime.Core
 
         public EffectApplicationResult ApplyEffectToSelf(Effect effect)
         {
+            effect.Initialise(effect.Source, this, effect.Context, effect.Level);
             effect.Activate();
             return EffectManager.AddEffect(effect);
         }
@@ -127,6 +128,11 @@ namespace AbilitySystem.Runtime.Core
         public void Reset()
         {
             AttributeSetManager.Reset();
+        }
+
+        public GameObject GetGameObjectFromNetworkId(ulong networkId)
+        {
+            return NetworkRole?.GetGameObjectFromNetworkId(networkId);
         }
     }
 }

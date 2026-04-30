@@ -66,9 +66,13 @@ namespace AbilitySystem.Test.Utilities
             owner.Setup(x => x.ApplyEffectToSelf(It.IsAny<Effect>()))
                 .Returns((Effect eff) =>
                 {
+                    eff.Initialise(eff.Source, owner.Object, eff.Context, eff.Level);
                     eff.Activate();
                     return owner.Object.EffectManager.AddEffect(eff);
                 });
+
+            owner.Setup(x => x.GetGameObjectFromNetworkId(It.IsAny<ulong>()))
+                .Returns((ulong id) => null);
         }
     }
 }

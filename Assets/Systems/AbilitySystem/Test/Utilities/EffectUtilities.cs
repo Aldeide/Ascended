@@ -76,5 +76,17 @@ namespace AbilitySystem.Test.Utilities
             asset.ApplicationRequiredTags = Array.Empty<Tag>();
             return asset;
         }
+        
+        public static Effect CreateStunEffect(IAbilitySystem source, IAbilitySystem target)
+        {
+            var asset = ScriptableObject.CreateInstance<EffectDefinition>();
+            asset.DurationType = EffectDurationType.FixedDuration;
+            asset.AssetTags = new Tag[] { new Tag("Status.Immune.Stun") };
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.GrantedTags = new Tag[] { new Tag("Status.Stun") };
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
+            asset.DurationSeconds = 10;
+            return asset.ToEffect(source, target);
+        }
     }
 }

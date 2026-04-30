@@ -4,6 +4,7 @@ using AbilityGraph.Runtime.Nodes.Spatial;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Test.Utilities;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace AbilityGraph.Tests.Runtime.Integration
         private Mock<IAbilitySystem> _clientSystem;
         private Mock<IAbilitySystem> _serverSystem;
         private GameObject _targetObj;
-        private DummyAbilitySystem _dummyTarget;
+        private DummyAbilitySystemComponent _dummyTarget;
         private Mock<IAbilitySystem> _mockTargetSystem;
         private EffectDefinition _effectDef;
 
@@ -32,7 +33,7 @@ namespace AbilityGraph.Tests.Runtime.Integration
             _serverSystem.Setup(x => x.IsLocalClient()).Returns(false);
 
             _targetObj = new GameObject("Target");
-            _dummyTarget = _targetObj.AddComponent<DummyAbilitySystem>();
+            _dummyTarget = _targetObj.AddComponent<DummyAbilitySystemComponent>();
             _mockTargetSystem = new Mock<IAbilitySystem>();
             _dummyTarget.MockSystem = _mockTargetSystem.Object;
 
@@ -90,33 +91,5 @@ namespace AbilityGraph.Tests.Runtime.Integration
         }
     }
 
-    public class DummyAbilitySystem : MonoBehaviour, IAbilitySystem
-    {
-        public IAbilitySystem MockSystem;
 
-        public AbilitySystem.Runtime.Networking.INetworkRole NetworkRole { get => MockSystem.NetworkRole; set => MockSystem.NetworkRole = value; }
-        public AbilitySystem.Runtime.Tags.GameplayTagManager TagManager { get => MockSystem.TagManager; set => MockSystem.TagManager = value; }
-        public EffectManager EffectManager { get => MockSystem.EffectManager; set => MockSystem.EffectManager = value; }
-        public AbilityManager AbilityManager { get => MockSystem.AbilityManager; set => MockSystem.AbilityManager = value; }
-        public AbilitySystem.Runtime.AttributeSets.AttributeSetManager AttributeSetManager { get => MockSystem.AttributeSetManager; set => MockSystem.AttributeSetManager = value; }
-        public AbilitySystem.Runtime.Cues.CueManager CueManager { get => MockSystem.CueManager; set => MockSystem.CueManager = value; }
-        public AbilitySystem.Runtime.Networking.IReplicationManager ReplicationManager { get => MockSystem.ReplicationManager; set => MockSystem.ReplicationManager = value; }
-        public AbilitySystem.Runtime.Core.IDataManager DataManager { get => MockSystem.DataManager; set => MockSystem.DataManager = value; }
-        public AbilitySystem.Runtime.Events.EventManager EventManager { get => MockSystem.EventManager; set => MockSystem.EventManager = value; }
-
-        public void Tick() => MockSystem?.Tick();
-        public float GetTime() => MockSystem?.GetTime() ?? 0f;
-        public bool IsLocalClient() => MockSystem?.IsLocalClient() ?? false;
-        public bool IsServer() => MockSystem?.IsServer() ?? false;
-        public bool IsHost() => MockSystem?.IsHost() ?? false;
-        public bool HasAuthority() => MockSystem?.HasAuthority() ?? false;
-        public void PlayCue(AbilitySystem.Runtime.Cues.CueDefinition cue, bool isPredicted = false) => MockSystem?.PlayCue(cue, isPredicted);
-        public void PlayCue(AbilitySystem.Runtime.Cues.CueDefinition cue, AbilitySystem.Runtime.Cues.CueData data, bool isPredicted = false) => MockSystem?.PlayCue(cue, data, isPredicted);
-        public void PlayCue(string cueTag, AbilitySystem.Runtime.Cues.CueData data, bool isPredicted = false) => MockSystem?.PlayCue(cueTag, data, isPredicted);
-        public void PlayCue(GameplayTags.Runtime.Tag cueTag, AbilitySystem.Runtime.Cues.CueData data, bool isPredicted) => MockSystem?.PlayCue(cueTag, data, isPredicted);
-        public Effect MakeOutgoingEffect(EffectDefinition definition, int level = 1, EffectContext context = null) => MockSystem?.MakeOutgoingEffect(definition, level, context);
-        public EffectContext MakeEffectContext() => MockSystem?.MakeEffectContext();
-        public EffectApplicationResult ApplyEffectToSelf(Effect effect) => MockSystem?.ApplyEffectToSelf(effect) ?? (EffectApplicationResult)0;
-        public void Reset() => MockSystem?.Reset();
-    }
 }
