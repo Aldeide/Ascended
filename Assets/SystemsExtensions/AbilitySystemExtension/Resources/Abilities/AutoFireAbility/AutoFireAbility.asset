@@ -1,0 +1,286 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e71cc2528764403a1e6975de75704fe, type: 3}
+  m_Name: AutoFireAbility
+  m_EditorClassIdentifier: AbilityGraph::AbilityGraph.Runtime.AbilityGraphDefinition
+  serializedNodes: []
+  nodes:
+  - rid: 2200808440408047624
+  - rid: 2200808440408047625
+  - rid: 2200808440408047626
+  - rid: 2200808440408047627
+  - rid: 2200808440408047628
+  - rid: 2200808440408047728
+  edges:
+  - GUID: 4df042c8-1d58-413a-a1da-e96a74fb18c2
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    outputNodeGUID: bab785d9-38e5-45c9-8354-6b27c6b1b7ee
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4f5a388b-a5b1-4a8f-8b91-40fa942e54b9
+    owner: {fileID: 11400000}
+    inputNodeGUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
+    outputNodeGUID: 85943b23-234b-4c23-abe3-5870f460aeeb
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 6a9c8d77-bd1c-43d8-8e65-5024490c63db
+    owner: {fileID: 11400000}
+    inputNodeGUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
+    outputNodeGUID: 36dc5d54-df38-4e70-a32c-253197684b22
+    inputFieldName: Duration
+    outputFieldName: currentValue
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 30426648-67ed-4aa3-aeca-45cb4064efc1
+    owner: {fileID: 11400000}
+    inputNodeGUID: 85943b23-234b-4c23-abe3-5870f460aeeb
+    outputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    inputFieldName: Target
+    outputFieldName: HitGameObject
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 2ddd9c25-cbf2-4435-9d79-0f4c9aaa6353
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    outputNodeGUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
+    inputFieldName: Executed
+    outputFieldName: ExecuteAfter
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 3c008d32-96f6-41b6-923f-dc044cf9da29
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2e457b9f-d4da-4abf-889e-ce98dfe495f7
+    outputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    inputFieldName: Condition
+    outputFieldName: DidHit
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 6ae4178d-6a97-4be8-bcf3-be5b7fd83f8e
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2e457b9f-d4da-4abf-889e-ce98dfe495f7
+    outputNodeGUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+    inputFieldName: Executed
+    outputFieldName: Executes
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 55973dbd-28db-43e3-88e9-d15651925010
+    owner: {fileID: 11400000}
+    inputNodeGUID: 85943b23-234b-4c23-abe3-5870f460aeeb
+    outputNodeGUID: 2e457b9f-d4da-4abf-889e-ce98dfe495f7
+    inputFieldName: Executed
+    outputFieldName: ExecutesIfTrue
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 2ccd6da9-f035-4b68-bd04-a6f219cc5fa5
+    owner: {fileID: 11400000}
+    inputNodeGUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
+    outputNodeGUID: 2e457b9f-d4da-4abf-889e-ce98dfe495f7
+    inputFieldName: Executed
+    outputFieldName: ExecutesIfFalse
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  exposedParameters:
+  - rid: 2200808440408047632
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  DisplayName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Icon: {fileID: 0}
+  UniqueName: AutoFire
+  Cost: {fileID: 0}
+  Cooldown:
+    rid: -2
+  AbilityActivation:
+    rid: -2
+  AssetTags: []
+  CancelAbilityTags: []
+  BlockAbilityTags: []
+  ActivationOwnedTags: []
+  ActivationRequiredTags: []
+  ActivationBlockedTags: []
+  GrantedEffects: []
+  NetworkPolicy: 0
+  NetworkSecurityPolicy: 0
+  ActivationCues: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2200808440408047624
+      type: {class: ActivateAbilityNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: bab785d9-38e5-45c9-8354-6b27c6b1b7ee
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 328
+          y: 355
+          width: 127
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 2200808440408047625
+      type: {class: LineTraceNode, ns: AbilityGraph.Runtime.Nodes.Spatial, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 7b4d12a5-751e-4e7f-9881-93be509d6300
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 526
+          y: 355
+          width: 227
+          height: 166
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Start: {x: 0, y: 0, z: 0}
+        End: {x: 0, y: 0, z: 0}
+        MaxDistance: 100
+        LayerMask:
+          serializedVersion: 2
+          m_Bits: 1025
+        HitGameObject: {fileID: 0}
+        HitLocation: {x: 0, y: 0, z: 0}
+        DidHit: 0
+    - rid: 2200808440408047626
+      type: {class: ApplyEffectToTargetNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 85943b23-234b-4c23-abe3-5870f460aeeb
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 1081
+          y: 218
+          width: 285
+          height: 137
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Target: {fileID: 0}
+        Level: 1
+        EffectDefinition: {fileID: 0}
+        ServerOnly: 1
+    - rid: 2200808440408047627
+      type: {class: WaitDelayTaskNode, ns: AbilityGraph.Runtime.Nodes.Utilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: f35b3d7c-c329-44af-864e-a9f9a8382e74
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 1409
+          y: 315
+          width: 193
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Duration: 0
+    - rid: 2200808440408047628
+      type: {class: GetAttributeNode, ns: AbilityGraph.Runtime.Nodes.Abilities, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 36dc5d54-df38-4e70-a32c-253197684b22
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 1111
+          y: 521
+          width: 204
+          height: 118
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        currentValue: 0
+        baseValue: 0
+        attributeFullName: WeaponAttributeSet.ReloadTime
+    - rid: 2200808440408047632
+      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: e780be1f-b4f4-40b7-8af8-a3b3f035e7cf
+        name: New Float
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 2200808440408047633
+        val: 0
+    - rid: 2200808440408047633
+      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: e780be1f-b4f4-40b7-8af8-a3b3f035e7cf
+        mode: 0
+        min: 0
+        max: 1
+    - rid: 2200808440408047728
+      type: {class: BranchNode, ns: AbilityGraph.Runtime.Nodes.Logic, asm: AbilityGraph}
+      data:
+        nodeCustomName: 
+        GUID: 2e457b9f-d4da-4abf-889e-ce98dfe495f7
+        computeOrder: -2
+        position:
+          serializedVersion: 2
+          x: 809
+          y: 452.5
+          width: 206
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Condition: 0
