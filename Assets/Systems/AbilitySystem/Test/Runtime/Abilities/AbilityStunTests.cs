@@ -115,27 +115,32 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [Test]
         public void StunAbility_Cancellation_CancelsActiveAbilityOnTarget()
         {
-            // 1. Setup target with an active ability
+            // 1. Setup target with an active ability that has the "Ability.Active" tag
+            _mainAbilityDef.AssetTags = new[] { new Tag("Ability.Active") };
             _targetServer.Object.AbilityManager.GrantAbility(_mainAbilityDef);
             _targetServer.Object.AbilityManager.TryActivateAbility(_mainAbilityDef.UniqueName);
             var activeAbility = _targetServer.Object.AbilityManager.Abilities[_mainAbilityDef.UniqueName];
             Assert.IsTrue(activeAbility.IsActive);
 
-            // 2. Apply Stun Effect to Target (simulating what the StunAbility does)
+            // 2. Setup Stun Ability with effects
             var stunEffectDef = ScriptableObject.CreateInstance<EffectDefinition>();
             stunEffectDef.DurationType = EffectDurationType.FixedDuration;
             stunEffectDef.DurationSeconds = 5f;
             stunEffectDef.GrantedTags = new Tag[] { new Tag("Status.Stun") };
-            
-            // In this version of the system, we assume being stunned means the target 
-            // should have their abilities cancelled. 
-            // If we use the StunAbility ON the target, it cancels via CancelAbilityTags.
-            
-            _targetServer.Object.AbilityManager.GrantAbility(_stunAbilityDef);
-            _targetServer.Object.AbilityManager.TryActivateAbility(_stunAbilityDef.UniqueName);
+            _stunAbilityDef.GrantedEffects = new[] { stunEffectDef };
 
-            // 3. Main ability should be cancelled
-            Assert.IsFalse(activeAbility.IsActive);
+            // 3. Source activates Stun Ability on Target
+            // NetworkObjectId 2 is the target (from Setup)
+            var targetData = new TargetDataHandle();
+            targetData.Add(new TargetDataActor { NetworkObjectId = 2 });
+            var abilityData = new AbilityData { TargetData = targetData };
+
+            _sourceServer.Object.AbilityManager.GrantAbility(_stunAbilityDef);
+            _sourceServer.Object.AbilityManager.TryActivateAbility(_stunAbilityDef.UniqueName, abilityData);
+
+            // 4. Verification: Main ability on target should be cancelled by StunAbility's explicit call
+            Assert.IsFalse(activeAbility.IsActive, "Active ability on target should be cancelled by StunAbility");
+            Assert.IsTrue(_targetServer.Object.TagManager.HasTag(new Tag("Status.Stun")), "Target should have Stun tag from the ability's granted effect");
         }
 
         [Test]
