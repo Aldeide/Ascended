@@ -34,11 +34,11 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             _sourceClient = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             _sourceServer = AbilitySystemUtilities.CreateMockServerAbilitySystem();
-            LinkAbilitySystems(_sourceClient, _sourceServer);
+            AbilitySystemUtilities.LinkAbilitySystems(_sourceClient, _sourceServer);
 
             _targetClient = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             _targetServer = AbilitySystemUtilities.CreateMockServerAbilitySystem();
-            LinkAbilitySystems(_targetClient, _targetServer);
+            AbilitySystemUtilities.LinkAbilitySystems(_targetClient, _targetServer);
 
             // Setup Target NetworkObjectId
             Mock.Get(_targetServer.Object.NetworkRole).SetupGet(nr => nr.NetworkObjectId).Returns(2);
@@ -70,17 +70,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             Object.DestroyImmediate(_targetGameObject);
         }
 
-        private void LinkAbilitySystems(Mock<IAbilitySystem> client, Mock<IAbilitySystem> server)
-        {
-            var clientRep = (MockReplicationManager)client.Object.ReplicationManager;
-            var serverRep = (MockReplicationManager)server.Object.ReplicationManager;
 
-            clientRep.OnServerAbilityActivationRequested = (name, key, data) => 
-                serverRep.ProcessServerAbilityActivation(name, key, data);
-            
-            serverRep.OnAbilityActivationResponded = (key, success) => 
-                client.Object.AbilityManager.NotifyServerResponse(key, success);
-        }
 
         [Test]
         public void StunAbility_RealImplementation_AppliesEffectToTarget()

@@ -74,5 +74,16 @@ namespace AbilitySystem.Test.Utilities
             owner.Setup(x => x.GetGameObjectFromNetworkId(It.IsAny<ulong>()))
                 .Returns((ulong id) => null);
         }
+        public static void LinkAbilitySystems(Mock<IAbilitySystem> client, Mock<IAbilitySystem> server)
+        {
+            var clientRep = (MockReplicationManager)client.Object.ReplicationManager;
+            var serverRep = (MockReplicationManager)server.Object.ReplicationManager;
+
+            clientRep.OnServerAbilityActivationRequested = (name, key, data) => 
+                serverRep.ProcessServerAbilityActivation(name, key, data);
+            
+            serverRep.OnAbilityActivationResponded = (key, success) => 
+                client.Object.AbilityManager.NotifyServerResponse(key, success);
+        }
     }
 }
