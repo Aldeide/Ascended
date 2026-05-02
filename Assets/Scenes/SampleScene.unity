@@ -376,7 +376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 359.92, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 8564, y: -512}
+  m_AnchoredPosition: {x: 8885, y: -536}
   m_SizeDelta: {x: 120, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27816427
@@ -8127,6 +8127,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 195873417232982026, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 799853768078755484, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2720605637121664837, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: finalScaleReference
       value: 0.92891586
@@ -8214,6 +8222,10 @@ PrefabInstance:
     - target: {fileID: 6861893469669043747, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861893469669043747, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8198681687235754659, guid: 123c8690da8ab17429d50fe76c8fcc05, type: 3}
       propertyPath: GlobalObjectIdHash
