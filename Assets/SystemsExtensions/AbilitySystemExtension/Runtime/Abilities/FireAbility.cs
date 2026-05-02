@@ -15,6 +15,8 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
         public override AbilityActivationResult CanActivate()
         {
+            if (IsActive) return AbilityActivationResult.BlockedByAbility;
+            
             var weaponSet = Owner.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
             if (weaponSet != null && weaponSet.CurrentClip.CurrentValue <= 0)
             {
@@ -35,8 +37,10 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
             if (weaponSet.CurrentClip.CurrentValue <= 0)
             {
-                Debug.Log("FireAbility: Out of ammo! Triggering reload.");
-                Owner.AbilityManager.TryActivateAbility("ReloadWeaponAbility");
+                if (Owner.IsLocalClient())
+                {
+                    Owner.AbilityManager.TryActivateAbility("ReloadWeaponAbility");
+                }
                 EndAbility();
                 return;
             }
@@ -80,8 +84,10 @@ namespace AbilitySystemExtension.Runtime.Abilities
             // Always check for reload after shot, regardless of hit
             if (weaponSet.CurrentClip.CurrentValue <= 0)
             {
-                Debug.Log("FireAbility: Clip empty. Triggering reload.");
-                Owner.AbilityManager.TryActivateAbility("ReloadWeaponAbility");
+                if (Owner.IsLocalClient())
+                {
+                    Owner.AbilityManager.TryActivateAbility("ReloadWeaponAbility");
+                }
             }
 
             EndAbility();
