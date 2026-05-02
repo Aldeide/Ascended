@@ -56,6 +56,36 @@ The `Attribute` class provides powerful hooks for game logic:
 
 ---
 
+## 🛠️ Modifier Types & Examples
+
+Modifiers determine the **magnitude** of an effect. The system provides several ways to calculate these values.
+
+### 1. Scalable Float (`FloatModifier`)
+Uses a fixed value that can scale with the effect's level (e.g., via a Curve or Linear scale).
+*   **Best for**: Hardcoded values that don't depend on external stats.
+*   **Example**: A "Minor Healing Potion" that always restores `20 + (5 * Level)` HP.
+
+### 2. Attribute Based (`AttributeBasedModifier`)
+Calculates magnitude based on the value of *another* attribute on either the **Source** or the **Target**.
+*   **Capture Types**:
+    *   **SnapshotOnCreation**: Captures the attribute value once when the effect is created. Changes to the attribute later won't affect this instance.
+    *   **OnApplication**: Uses the live attribute value whenever the effect is calculated, but doesn't trigger a recalculation on its own.
+    *   **Dynamic**: Uses the live value AND automatically triggers an effect recalculation if the underlying attribute changes.
+*   **Example**: 
+    *   **Snapshot**: A "Bleed" that deals damage based on the target's HP *at the moment they were hit*.
+    *   **Dynamic**: A "Berserker" buff that grants `AttackPower` based on your `MissingHealth`. As your HP drops, your Attack Power increases in real-time.
+
+### 3. Set By Caller (`SetByCallerModifier`)
+Allows the "Caller" (the Ability, projectile, or script) to pass a dynamic value to the effect at runtime using a **Gameplay Tag** as a key.
+*   **Best for**: Decoupling effect logic from ability logic.
+*   **Example**: A "Charged Shot" ability.
+    1.  The player holds the button for `X` seconds.
+    2.  The Ability script calculates `Damage = Base * X`.
+    3.  The Ability calls `effect.SetSetByCallerMagnitude(Data.Damage, Damage)`.
+    4.  The system uses this specific `Damage` value for that one application.
+
+---
+
 ## 🧪 Gameplay Effect Lifecycle: Deep Dive
 
 Gameplay Effects (GEs) are the primary vehicle for all state changes.
