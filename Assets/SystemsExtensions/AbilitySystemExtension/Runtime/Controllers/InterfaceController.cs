@@ -10,6 +10,7 @@ namespace Systems.Controllers
     {
         [SerializeField] private Slider healthSlider;
         [SerializeField] private Slider _energySlider;
+        [SerializeField] private Text _ammoCount;
         private AbilitySystemManager _asc;
 
         public void Initialise(AbilitySystemManager owner)
@@ -19,6 +20,8 @@ namespace Systems.Controllers
             _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxHealth", OnHealthChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("Energy", OnEnergyChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxEnergy", OnEnergyChanged);
+            _asc.AttributeSetManager.RegisterOnAttributeChanged("ClipSize", OnAmmoChanged);
+            _asc.AttributeSetManager.RegisterOnAttributeChanged("CurrentClip", OnAmmoChanged);
             healthSlider.value = 1;
             UpdateHealth();
         }
@@ -31,6 +34,13 @@ namespace Systems.Controllers
         public void OnEnergyChanged(Attribute attribute, float oldValue, float newValue)
         {
             UpdateEnergy();
+        }
+
+        public void OnAmmoChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            var current = _asc.AttributeSetManager.GetAttributeValue<WeaponAttributeSet>("CurrentClip").CurrentValue;
+            var max = _asc.AttributeSetManager.GetAttributeValue<WeaponAttributeSet>("ClipSize").CurrentValue;
+            _ammoCount.text = $"{current}/{max}";
         }
         
         private void UpdateHealth()

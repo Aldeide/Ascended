@@ -56,13 +56,12 @@ namespace AbilitySystem.Runtime.Effects
             {
                 PeriodicEffect = Definition.GetPeriodicEffectDefinition().ToEffect(source, target, context);
             }
+
+            CaptureAttributes();
         }
 
-
-        public void Activate()
+        private void CaptureAttributes()
         {
-            if (IsActive) return;
-            ActivationTime = Owner.GetTime();
             if (Definition.Modifiers != null)
             {
                 foreach (var modifier in Definition.Modifiers)
@@ -70,6 +69,13 @@ namespace AbilitySystem.Runtime.Effects
                     modifier.CaptureAttributes(this);
                 }
             }
+        }
+
+
+        public void Activate()
+        {
+            if (IsActive) return;
+            ActivationTime = Owner.GetTime();
             IsActive = true;
             if (Definition.OngoingRequiredTags != null && Definition.OngoingRequiredTags.Length > 0)
             {
