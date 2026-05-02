@@ -84,6 +84,41 @@ namespace Plugins.GameplayTags.Tests.Runtime
         }
         
         [Test]
+        public void TagTest_IsAncestorOf_ReturnsTrueForDirectParent()
+        {
+            var parent = new Tag("Testing.Tag");
+            var child = new Tag("Testing.Tag.TagA");
+
+            Assert.IsTrue(parent.IsAncestorOf(child));
+        }
+
+        [Test]
+        public void TagTest_IsAncestorOf_ReturnsFalseForSibling()
+        {
+            var tag1 = new Tag("Testing.Tag.TagA");
+            var tag2 = new Tag("Testing.Tag.TagB");
+
+            Assert.IsFalse(tag1.IsAncestorOf(tag2));
+        }
+
+        [Test]
+        public void TagTest_IsAncestorOf_ReturnsFalseForSelf()
+        {
+            var tag = new Tag("Testing.Tag.TagA");
+
+            Assert.IsFalse(tag.IsAncestorOf(tag));
+        }
+
+        [Test]
+        public void TagTest_IsAncestorOf_ReturnsFalseForChild()
+        {
+            var child = new Tag("Testing.Tag.TagA");
+            var parent = new Tag("Testing.Tag");
+
+            Assert.IsFalse(child.IsAncestorOf(parent));
+        }
+
+        [Test]
         public void TagTest_Operators_AreFunctional()
         {
             var tag = new Tag("Testing.Tag.TagA");
