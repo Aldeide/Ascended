@@ -115,11 +115,7 @@ namespace AbilitySystemExtension.Scripts
                 _animationController.SetIsMoving(true);
                 if (IsInAimingState())
                 {
-                    // TODO: add animation transition smotthing.
-                    _animationController.SetMovement(_movementInput.x, _movementInput.z);
-
-                    //_animator.SetFloat(MovementX, _movementInput.x, 0.2f, Time.deltaTime);
-                    //_animator.SetFloat(MovementY, _movementInput.z, 0.2f, Time.deltaTime);
+                    _animationController.SetMovement(_movementInput.x, _movementInput.z, 0.2f, Time.deltaTime);
                 }
                 else
                 {
