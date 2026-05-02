@@ -30,7 +30,8 @@ namespace AbilitySystem.Runtime.Modifiers
         public enum AttributeCaptureType
         {
             SnapshotOnCreation,
-            OnApplication
+            OnApplication,
+            Dynamic
         }
         
         public override void CaptureAttributes(Effect effect)
@@ -107,7 +108,7 @@ namespace AbilitySystem.Runtime.Modifiers
         }
         public Attribute GetDynamicDependency(Effect effect)
         {
-            if (captureType == AttributeCaptureType.SnapshotOnCreation) return null;
+            if (captureType != AttributeCaptureType.Dynamic) return null;
             var split = attributeFromName.Split(".");
             return attributeFromType == AttributeFrom.Source 
                 ? effect.Source.AttributeSetManager.GetAttribute(split[0], split[1]) 
