@@ -135,23 +135,30 @@ public class AbilitySystemDebugWindow : EditorWindow
         // Update Local List
         _localScroll.Clear();
         
+        // Network Section
+        AddHeader(_localScroll, "Network Information");
+        var system = _inspectedComponent.AbilitySystem;
+        var role = system.NetworkRole;
+        
+        AddRow(_localScroll, "Network ID", role?.NetworkObjectId.ToString() ?? "N/A");
+        AddRow(_localScroll, "Is Server", system.IsServer().ToString());
+        AddRow(_localScroll, "Is Host", system.IsHost().ToString());
+        AddRow(_localScroll, "Is Local Client", system.IsLocalClient().ToString());
+        
+        if (role != null)
+        {
+            AddRow(_localScroll, "Is Owner", role.IsOwner.ToString());
+            AddRow(_localScroll, "Is Local Player", role.IsLocalPlayer.ToString());
+            AddRow(_localScroll, "Has Authority", role.HasAuthority.ToString());
+        }
+
         // Attributes Section
         AddHeader(_localScroll, "Attributes");
         foreach (var set in _inspectedComponent.AbilitySystem.AttributeSetManager.AttributeSets.Values)
         {
             foreach (var attr in set.GetAllAttributes())
             {
-                var row = new VisualElement();
-                row.style.flexDirection = FlexDirection.Row;
-                row.style.justifyContent = Justify.SpaceBetween;
-                row.style.paddingLeft = 10;
-                row.style.paddingRight = 10;
-                row.style.borderBottomWidth = 1;
-                row.style.borderBottomColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
-
-                row.Add(new Label(attr.GetName()));
-                row.Add(new Label($"{attr.CurrentValue:F2} / {attr.BaseValue:F2}") { style = { unityFontStyleAndWeight = FontStyle.Bold } });
-                _localScroll.Add(row);
+                AddRow(_localScroll, attr.GetName(), $"{attr.CurrentValue:F2} / {attr.BaseValue:F2}");
             }
         }
 
@@ -206,6 +213,21 @@ public class AbilitySystemDebugWindow : EditorWindow
         _localScroll.Add(tagLabel);
 
         UpdateDetails();
+    }
+
+    private void AddRow(VisualElement container, string label, string value)
+    {
+        var row = new VisualElement();
+        row.style.flexDirection = FlexDirection.Row;
+        row.style.justifyContent = Justify.SpaceBetween;
+        row.style.paddingLeft = 10;
+        row.style.paddingRight = 10;
+        row.style.borderBottomWidth = 1;
+        row.style.borderBottomColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+
+        row.Add(new Label(label));
+        row.Add(new Label(value) { style = { unityFontStyleAndWeight = FontStyle.Bold } });
+        container.Add(row);
     }
 
     private void AddHeader(VisualElement container, string text)
