@@ -11,22 +11,26 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         public Attribute CurrentClip { get; private set; }
         public Attribute ReloadTime { get; private set; }
         public Attribute FireRate { get; private set; }
+        public Attribute ReloadEnergyCost { get; private set; }
         public WeaponAttributeSet(IAbilitySystem owner) : base(owner)
         {
             Name = nameof(WeaponAttributeSet);
-            ClipSize = new Attribute("ClipSize", this, 100);
-            CurrentClip = new Attribute("CurrentClip", this, 100);
-            ReloadTime = new Attribute("ReloadTime", this, 100);
-            FireRate = new Attribute("FireRate", this, 2);
+            ClipSize = new Attribute("ClipSize", this, 30);
+            CurrentClip = new Attribute("CurrentClip", this, 30);
+            ReloadTime = new Attribute("ReloadTime", this, 2);
+            FireRate = new Attribute("FireRate", this, 10);
+            ReloadEnergyCost = new Attribute("ReloadEnergyCost", this, 100);
             AddAttribute(ClipSize);
             AddAttribute(CurrentClip);
             AddAttribute(ReloadTime);
             AddAttribute(FireRate);
+            AddAttribute(ReloadEnergyCost);
         }
 
         public override void Reset()
         {
-            throw new NotImplementedException();
+            CurrentClip.SetBaseValue(ClipSize.BaseValue);
+            CurrentClip.SetCurrentValue(ClipSize.BaseValue);
         }
     }
 }
