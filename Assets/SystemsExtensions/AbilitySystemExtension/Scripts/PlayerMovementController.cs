@@ -3,6 +3,7 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using AbilitySystemExtension.Runtime.AttributeSets;
 using GameplayTags.Generated;
+using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
 using Systems.Animation;
 using Unity.Netcode;
@@ -90,7 +91,7 @@ namespace AbilitySystemExtension.Scripts
                 return;
             }
 
-            _rigidbody.MovePosition(transform.position += MovementDirection * (Time.deltaTime * _movementSpeed));
+            _rigidbody.MovePosition(_rigidbody.position + MovementDirection * (Time.deltaTime * _movementSpeed));
 
             UpdateAnimator();
         }
@@ -152,7 +153,8 @@ namespace AbilitySystemExtension.Scripts
         public bool CanMove()
         {
             return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Immobilised) &&
-                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Dead);
+                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Dead) &&
+                   !_abilitySystem.TagManager.HasTag(new Tag("Status.Dashing"));
         }
 
         private void ComputeMovementDirection(float targetAngle)
