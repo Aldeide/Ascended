@@ -47,22 +47,21 @@ namespace Plugins.GameplayTags.Tests.Runtime
             Assert.AreEqual(85776883, tag.GetHashCode());
         }
         
-        [Test]
-        public void TagTest_HasTag_ReturnsTrueWhenContainsOtherTag()
+        [TestCase("Testing.Tag.TagA", "Testing", true)]
+        [TestCase("Testing.Tag.TagA", "Testing.Tag", true)]
+        [TestCase("Testing.Tag.TagA", "Testing.Tag.TagA", true)]
+        [TestCase("Testing.Tag.TagA", "Tag.TagA", true)]
+        [TestCase("Testing.Tag.TagA", "TagA", true)]
+        [TestCase("Testing.Tag.TagA", "TestingButDifferent", false)]
+        [TestCase("Testing.Tag.TagA", "Testing.Tag.TagB", false)]
+        [TestCase("Testing.Tag.TagA", "Testing.Tag.TagA.Extra", false)]
+        [TestCase("Testing.Tag.TagA", "", true)]
+        public void TagTest_HasTag_ReturnsExpectedResult(string mainTagName, string otherTagName, bool expectedResult)
         {
-            var tag = new Tag("Testing.Tag.TagA");
-            var otherTag = new Tag("Testing");
+            var tag = new Tag(mainTagName);
+            var otherTag = new Tag(otherTagName);
             
-            Assert.IsTrue(tag.HasTag(otherTag));
-        }
-        
-        [Test]
-        public void TagTest_HasTag_ReturnsFalseWhenDoesNotContainOtherTag()
-        {
-            var tag = new Tag("Testing.Tag.TagA");
-            var otherTag = new Tag("TestingButDifferent");
-            
-            Assert.IsFalse(tag.HasTag(otherTag));
+            Assert.That(tag.HasTag(otherTag), Is.EqualTo(expectedResult));
         }
         
         [Test]
