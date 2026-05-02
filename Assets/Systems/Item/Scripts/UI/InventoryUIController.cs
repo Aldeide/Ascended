@@ -3,6 +3,7 @@ using AbilitySystem.Scripts;
 using Item.Runtime.Interface;
 using Item.Runtime.Manager;
 using Item.Scripts;
+using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,6 +23,7 @@ namespace Item.Scripts.UI
         private VisualElement _inventoryGrid;
         private VisualElement _screenOverlay;
         
+        [ShowInInspector]
         private InventoryComponent _localPlayerInventory;
         private AbilitySystemComponent _asc;
         private bool _isMenuOpen = false;
@@ -63,6 +65,8 @@ namespace Item.Scripts.UI
 
         public void OnInventory(InputAction.CallbackContext context)
         {
+            Debug.Log(context.action.name + " was performed!");
+            Debug.Log("IsClient" + IsClient);
             if (!IsLocalPlayer) return;
             if (context.phase == InputActionPhase.Performed)
             {
@@ -91,7 +95,14 @@ namespace Item.Scripts.UI
                     var equipUI = GetComponent<EquipmentUIController>();
                     if (equipComp != null && equipUI != null)
                     {
-                        equipUI.Initialize(_localPlayerInventory, equipComp.EquipmentManager);
+                        if (equipComp.EquipmentManager != null)
+                        {
+                            equipUI.Initialize(_localPlayerInventory, equipComp.EquipmentManager);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("InventoryUIController: EquipmentManager is null. Equipment UI will not be initialized.");
+                        }
                     }
                 }
             }
@@ -109,17 +120,8 @@ namespace Item.Scripts.UI
         {
             if (_localPlayerInventory != null) return true;
             
-            // In a real game, you'd get this from your Player singleton or LocalPlayer reference
-            var inventories = FindObjectsByType<InventoryComponent>(FindObjectsSortMode.None);
-            foreach (var inv in inventories)
-            {
-                if (inv.IsOwner)
-                {
-                    _localPlayerInventory = inv;
-                    return true;
-                }
-            }
-            return false;
+            _localPlayerInventory = GetComponentInParent<InventoryComponent>();
+            return _localPlayerInventory != null;
         }
 
         private void RefreshInventory()

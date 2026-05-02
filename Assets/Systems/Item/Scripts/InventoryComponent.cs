@@ -1,5 +1,6 @@
 ﻿using AbilitySystem.Scripts;
 using Item.Runtime.Interface.Core;
+using Item.Runtime.Manager;
 using Systems.Item.Runtime.Networking;
 using Unity.Netcode;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace Item.Scripts
         private void Initialise()
         {
             ReplicationManager = new ReplicationManager(this);
+            InventoryManager = new InventoryManager(GetComponent<AbilitySystemComponent>().AbilitySystem, ReplicationManager);
         }
 
         [Rpc(SendTo.Owner)]

@@ -47,6 +47,12 @@ namespace Item.Scripts.UI
 
         public void Initialize(InventoryComponent inventory, EquipmentManager equipmentManager)
         {
+            if (equipmentManager == null)
+            {
+                Debug.LogWarning("EquipmentUIController: EquipmentManager is null. Cannot initialize UI yet.");
+                return;
+            }
+
             if (!InitializeUI()) return;
             
             _localPlayerInventory = inventory;

@@ -3941,6 +3941,7 @@ Transform:
   - {fileID: 1355193958148072859}
   - {fileID: 7776207300931739800}
   - {fileID: 1381211342334250687}
+  - {fileID: 3670040328784451878}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8198681687235754659
@@ -4180,7 +4181,8 @@ MonoBehaviour:
   CameraTarget: {fileID: 0}
   _isGrounded: 1
   turnSmoothTime: 0.1
-  _isAiming: 0
+  _manualAiming: 0
+  _combatStance: 0
 --- !u!114 &901342143922891770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5948,6 +5950,166 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.10322426, y: 0.58113635, z: 0.20609415}
     m_Extent: {x: 0.06938593, y: 0.032788903, z: 0.05924511}
   m_DirtyAABB: 0
+--- !u!1 &7087196926738508994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3670040328784451878}
+  - component: {fileID: 5197334296451713787}
+  - component: {fileID: 4651346898769645890}
+  - component: {fileID: 74929961521300719}
+  - component: {fileID: 906191941378387349}
+  m_Layer: 0
+  m_Name: Interface/Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3670040328784451878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087196926738508994}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3431953994317972873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5197334296451713787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087196926738508994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: b62d228ebd44b834faabd00387b0676f, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 05e2e9f63eddbba46b532b23f77cd5ca, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &4651346898769645890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087196926738508994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da305f3722d22254e9b5dfaf9088d9b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Item::Item.Scripts.UI.InventoryUIController
+  ShowTopMostFoldoutHeaderGroup: 1
+  uiDocument: {fileID: 5197334296451713787}
+  itemTemplate: {fileID: 9197481963319205126, guid: 419d42c0edbf9af488cb952dd3875014, type: 3}
+--- !u!114 &74929961521300719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087196926738508994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e64d388d6d11f4d842aae0f3c4ce9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Item::Item.Scripts.UI.EquipmentUIController
+  uiDocument: {fileID: 5197334296451713787}
+--- !u!114 &906191941378387349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087196926738508994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: c4228e6d20a6be34997b44adaa15be5a, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 77c34336-4a48-41a0-a45a-ef9139a35a77
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1fb549a7-de0d-4511-b29e-f264184feb75
+    m_ActionName: 'Player/Look[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 305a54bb-ce67-4c4c-a93a-5969403edde9
+    m_ActionName: 'Player/MouseDelta[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8167c9d9-4a65-4a02-8938-0aa763a40aca
+    m_ActionName: 'Player/Aim[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 44a00069-6f3e-4b74-b4a9-0ed20eb2af72
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4353d761-b734-41f5-90ae-e63c00617e48
+    m_ActionName: 'Player/Dash[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f6040634-aea9-45c8-9c67-544096d00c53
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4651346898769645890}
+        m_TargetAssemblyTypeName: Item.Scripts.UI.InventoryUIController, Item
+        m_MethodName: OnInventory
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 484ff4eb-7df2-453d-baa4-a88a0f45f9bc
+    m_ActionName: 'Player/Inventory[/Keyboard/i]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &7110565215689833005
 GameObject:
   m_ObjectHideFlags: 0
