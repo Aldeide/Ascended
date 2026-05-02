@@ -28,6 +28,8 @@ namespace Systems.Item.Tests
             var owner = new Mock<IAbilitySystem>();
             owner.Setup(m => m.IsServer()).Returns(true);
             var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(owner.Object); // Setup GetOwner
+            
             var def = CreateMockDefinition("MainHand");
             
             var manager = new EquipmentManager(owner.Object, inv.Object, def);
@@ -48,6 +50,8 @@ namespace Systems.Item.Tests
             var owner = new Mock<IAbilitySystem>();
             owner.Setup(m => m.IsServer()).Returns(true);
             var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(owner.Object); // Setup GetOwner
+            
             var def = CreateMockDefinition("MainHand");
 
             var manager = new EquipmentManager(owner.Object, inv.Object, def);
