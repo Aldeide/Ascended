@@ -19,6 +19,8 @@ namespace Item.Scripts
         private IInventoryManager _inventoryManager;
         private AbilitySystemComponent _abilitySystemComponent;
 
+        private InventoryComponent _inventoryComponent;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -27,30 +29,39 @@ namespace Item.Scripts
             if (!IsServer && !IsClient) return;
 
             _abilitySystemComponent = GetComponent<AbilitySystemComponent>();
+            _inventoryComponent = GetComponent<InventoryComponent>();
             
-            var inventoryComp = GetComponent<InventoryComponent>();
-            if (inventoryComp != null)
+            if (_inventoryComponent != null)
             {
-                _inventoryManager = inventoryComp.InventoryManager;
+                _inventoryManager = _inventoryComponent.InventoryManager;
             }
 
-            // TODO: Figure out correct initialisation order (or maybe relying on an event is okay).
-            if (_abilitySystemComponent.IsInitialized)
+            // We need both the AbilitySystem and the InventoryManager to be initialized.
+            // We subscribe to both and check in Initialise() if we have everything.
+            _abilitySystemComponent.OnAbilitySystemInitialised += Initialise;
+            if (_inventoryComponent != null)
             {
-                Initialise();
+                _inventoryComponent.OnInventoryInitialised += Initialise;
             }
-            else
-            {
-                _abilitySystemComponent.OnAbilitySystemInitialised += Initialise;
-            }
+
+            Initialise();
         }
 
         public void Initialise()
         {
+            if (_equipmentManager != null) return;
+            if (!_abilitySystemComponent.IsInitialized) return;
+            
             // Ensure we have an inventory manager if we didn't find it yet
-            if (_inventoryManager == null)
+            if (_inventoryManager == null && _inventoryComponent != null)
             {
-                _inventoryManager = GetComponent<InventoryComponent>()?.InventoryManager;
+                _inventoryManager = _inventoryComponent.InventoryManager;
+            }
+
+            if (_inventoryManager == null || _inventoryManager.GetOwner() == null)
+            {
+                // Wait for inventory manager to be fully ready with its owner
+                return;
             }
 
             _equipmentManager = new EquipmentManager(_abilitySystemComponent.AbilitySystem, _inventoryManager,
