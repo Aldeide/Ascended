@@ -1,4 +1,5 @@
-﻿using AbilitySystem.Runtime.Events;
+using System;
+using AbilitySystem.Runtime.Events;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
 using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
@@ -47,6 +48,46 @@ namespace AbilitySystem.Test.Runtime.Events
             mockAbilitySystem.EventManager.TriggerEvent(new TestGameplayEvent(new TestGameplayEventArgs()));
             
             Assert.IsFalse(_eventReceived);
+        }
+
+        [Test]
+        public void EventManagerTests_GameplayEvent_ArgumentsCanBeRetrieved()
+        {
+            var args = new TestGameplayEventArgs();
+            var gameEvent = new TestGameplayEvent(args);
+            
+            Assert.AreEqual(args, gameEvent.Arguments);
+        }
+
+        [Test]
+        public void EventManagerTests_SubscribeTwice_BothHandlersCalled()
+        {
+            var eventManager = new EventManager();
+            int callCount = 0;
+            Action<GameplayEvent> handler = e => callCount++;
+            
+            eventManager.Subscribe(typeof(TestGameplayEvent), handler);
+            eventManager.Subscribe(typeof(TestGameplayEvent), handler);
+            
+            eventManager.TriggerEvent(new TestGameplayEvent(new TestGameplayEventArgs()));
+            
+            Assert.AreEqual(2, callCount);
+        }
+
+        [Test]
+        public void EventManagerTests_UnsubscribeNotSubscribed_DoesNotThrow()
+        {
+            var eventManager = new EventManager();
+            Action<GameplayEvent> handler = e => { };
+            
+            Assert.DoesNotThrow(() => eventManager.Unsubscribe(typeof(TestGameplayEvent), handler));
+        }
+
+        [Test]
+        public void EventManagerTests_TriggerEventNoSubscribers_DoesNotThrow()
+        {
+            var eventManager = new EventManager();
+            Assert.DoesNotThrow(() => eventManager.TriggerEvent(new TestGameplayEvent(new TestGameplayEventArgs())));
         }
 
         private void TestEventHandler(GameplayEvent gameplayEvent)
