@@ -54,10 +54,12 @@ namespace AbilitySystemExtension.Runtime.Abilities
             var weaponSet = Owner.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
             if (Owner.IsServer())
             {
-                // Refill clip
+                // Refill clip base value
                 weaponSet.CurrentClip.SetBaseValue(weaponSet.ClipSize.CurrentValue);
-                weaponSet.CurrentClip.SetCurrentValue(weaponSet.ClipSize.CurrentValue);
             }
+            
+            // Set current value immediately for both client and server
+            weaponSet.CurrentClip.SetCurrentValue(weaponSet.ClipSize.CurrentValue);
 
             
             Debug.Log("Reload complete!");

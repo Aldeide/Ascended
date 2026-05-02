@@ -131,6 +131,7 @@ namespace AbilitySystemExtension.Tests.Runtime
         {
             AbilitySystemUtilities.LinkAbilitySystems(_client, _server);
             _clientWeaponSet.CurrentClip.SetCurrentValue(30);
+            _serverWeaponSet.CurrentClip.SetCurrentValue(30);
             
             bool success = _client.Object.AbilityManager.TryActivateAbility("FireAbility");
             Assert.IsTrue(success);
@@ -143,7 +144,9 @@ namespace AbilitySystemExtension.Tests.Runtime
         {
             AbilitySystemUtilities.LinkAbilitySystems(_client, _server);
             _clientCharSet.Energy.SetCurrentValue(100);
+            _serverCharSet.Energy.SetCurrentValue(100);
             _clientWeaponSet.CurrentClip.SetCurrentValue(1);
+            _serverWeaponSet.CurrentClip.SetCurrentValue(1);
             
             bool success = _client.Object.AbilityManager.TryActivateAbility("FireAbility");
             Assert.IsTrue(success, "FireAbility should activate");
@@ -173,10 +176,14 @@ namespace AbilitySystemExtension.Tests.Runtime
         public void ReloadPrediction_RollsBack_WhenServerDenies()
         {
             // Setup: Client thinks it has enough energy, server knows it doesn't
+            _clientCharSet.Energy.SetBaseValue(100);
             _clientCharSet.Energy.SetCurrentValue(100);
+            _serverCharSet.Energy.SetBaseValue(0); 
             _serverCharSet.Energy.SetCurrentValue(0); 
 
+            _clientWeaponSet.CurrentClip.SetBaseValue(0);
             _clientWeaponSet.CurrentClip.SetCurrentValue(0);
+            _serverWeaponSet.CurrentClip.SetBaseValue(0);
             _serverWeaponSet.CurrentClip.SetCurrentValue(0);
             
             _clientWeaponSet.ReloadEnergyCost.SetBaseValue(50);
