@@ -72,7 +72,7 @@ namespace AbilitySystem.Runtime.Abilities
             }
         }
         
-        public void Tick()
+        public virtual void Tick()
         {
             if (!IsActive) return;
             AbilityTick();

@@ -8,6 +8,7 @@ namespace AbilitySystem.Runtime.Abilities
         BlockedByTag = 3,
         MissingRequiredTag = 4,
         BlockedByAbility = 5,
+        NoCharges = 7,
         Success = 6
     }
 }
