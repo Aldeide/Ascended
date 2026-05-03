@@ -48,43 +48,7 @@ namespace AbilitySystem.Runtime.Modifiers
                 _relevantModifiers.Add(new Tuple<Effect, Modifier>(modifier.Effect, modifier.Modifier));
             }
 
-            return ApplyModifiers();
-        }
-
-        private float ApplyModifiers()
-        {
-            var value = BaseCost;
-            var additive = 0f;
-            var multiplicative = 1f;
-            var overrideValue = 0f;
-            var hasOverride = false;
-            foreach (var modifier in _relevantModifiers)
-            {
-                switch (modifier.Item2.Operation)
-                {
-                    case EffectOperation.Additive:
-                        additive += modifier.Item2.Calculate(modifier.Item1);
-                        break;
-                    case EffectOperation.Subtractive:
-                        additive -= modifier.Item2.Calculate(modifier.Item1);
-                        break;
-                    case EffectOperation.Multiplicative:
-                        multiplicative *= modifier.Item2.Calculate(modifier.Item1);
-                        break;
-                    case EffectOperation.Divisive:
-                        multiplicative /= modifier.Item2.Calculate(modifier.Item1);
-                        break;
-                    case EffectOperation.Override:
-                        overrideValue = modifier.Item2.Calculate(modifier.Item1);
-                        hasOverride = true;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            if (hasOverride) return overrideValue;
-            return (value + additive) * multiplicative;
+            return ModifierUtility.ApplyModifiers(BaseCost, _relevantModifiers);
         }
     }
 }
