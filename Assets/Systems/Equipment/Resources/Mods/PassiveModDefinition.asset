@@ -32,7 +32,13 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   Icon: {fileID: 0}
-  ModType: 0
+  OwnedTags:
+  - <Name>k__BackingField: Item.Modifier.Passive
+    <HashCode>k__BackingField: -1913498623
+    <AncestorsNames>k__BackingField:
+    - Item
+    - Item.Modifier
+    <AncestorsHashCodes>k__BackingField: 952fdcbc08953be7
   ModifiableEquipmentTags:
   - <Name>k__BackingField: Item.Equipment.EnergyCore
     <HashCode>k__BackingField: -1794758812

@@ -153,14 +153,9 @@ namespace GameplayTags.Generated
         public class __EquipmentSlot_Group
         {
             public static implicit operator Tag(__EquipmentSlot_Group _) => new Tag("EquipmentSlot");
+            public readonly Tag Armor = new Tag("EquipmentSlot.Armor");
             public readonly Tag Core = new Tag("EquipmentSlot.Core");
-            public class __EquipmentSlot_Utility_Group
-            {
-                public static implicit operator Tag(__EquipmentSlot_Utility_Group _) => new Tag("EquipmentSlot.Utility");
-                public readonly Tag One = new Tag("EquipmentSlot.Utility.One");
-                public readonly Tag Two = new Tag("EquipmentSlot.Utility.Two");
-            }
-            public readonly __EquipmentSlot_Utility_Group Utility = new __EquipmentSlot_Utility_Group();
+            public readonly Tag Weapon = new Tag("EquipmentSlot.Weapon");
         }
         public static readonly __EquipmentSlot_Group EquipmentSlot = new __EquipmentSlot_Group();
         public class __Item_Group
@@ -169,7 +164,9 @@ namespace GameplayTags.Generated
             public class __Item_Equipment_Group
             {
                 public static implicit operator Tag(__Item_Equipment_Group _) => new Tag("Item.Equipment");
+                public readonly Tag Armor = new Tag("Item.Equipment.Armor");
                 public readonly Tag EnergyCore = new Tag("Item.Equipment.EnergyCore");
+                public readonly Tag Weapon = new Tag("Item.Equipment.Weapon");
             }
             public readonly __Item_Equipment_Group Equipment = new __Item_Equipment_Group();
             public class __Item_Modifier_Group
@@ -263,10 +260,12 @@ namespace GameplayTags.Generated
             new Tag("Effect.Cost.Ability.Dash"),
             new Tag("Effect.Modifier.Damage"),
             new Tag("Effect.Modifier.Damage.Kinetic"),
+            new Tag("EquipmentSlot.Armor"),
             new Tag("EquipmentSlot.Core"),
-            new Tag("EquipmentSlot.Utility.One"),
-            new Tag("EquipmentSlot.Utility.Two"),
+            new Tag("EquipmentSlot.Weapon"),
+            new Tag("Item.Equipment.Armor"),
             new Tag("Item.Equipment.EnergyCore"),
+            new Tag("Item.Equipment.Weapon"),
             new Tag("Item.Modifier.Active"),
             new Tag("Item.Modifier.Passive"),
             new Tag("Mod.Slot.Active.1"),

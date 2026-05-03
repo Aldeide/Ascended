@@ -1,5 +1,7 @@
 using Item.Runtime;
 using Item.Runtime.Manager;
+using Item.Runtime.Interface;
+using Item.Runtime.Modifiers;
 using NUnit.Framework;
 using Moq;
 using AbilitySystem.Runtime.Core;
@@ -103,6 +105,111 @@ namespace Systems.Item.Tests
             inv.Setup(m => m.HasItems(equipment.NextUpgradeCosts)).Returns(true);
             
             Assert.IsTrue(equipment.CanUpgrade());
+        }
+
+        private static EquipmentDefinition CreateEquipmentWithSlot(
+            Tag equipmentTag, Tag modSlotTag, Tag requiredModTag, int requiredLevel = 0)
+        {
+            var def = UnityEngine.ScriptableObject.CreateInstance<EquipmentDefinition>();
+            def.Name = "Eq";
+            def.MaxLevel = 99;
+            def.EquipmentTags = new[] { equipmentTag };
+            def.ModSlots = new[]
+            {
+                new ModSlot
+                {
+                    ModSlotTag = modSlotTag,
+                    RequiredLevel = requiredLevel,
+                    TagQuery = new TagQuery(new TagCondition(TagMatchType.AnyOfExact, requiredModTag))
+                }
+            };
+            return def;
+        }
+
+        private static ModifierDefinition CreateModifierDef(Tag ownedTag, Tag modifiableEquipmentTag)
+        {
+            var def = UnityEngine.ScriptableObject.CreateInstance<ModifierDefinition>();
+            def.Name = "Mod";
+            def.MaxLevel = 1;
+            def.OwnedTags = new[] { ownedTag };
+            def.ModifiableEquipmentTags = new[] { modifiableEquipmentTag };
+            def.Recipe = new List<RecipeItem>();
+            return def;
+        }
+
+        [Test]
+        public void CanAddMod_ActiveModInPassiveSlot_ReturnsFalse()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Active"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            Assert.IsFalse(equipment.CanAddMod(slot, mod));
+        }
+
+        [Test]
+        public void CanAddMod_PassiveModInActiveSlot_ReturnsFalse()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var slot = new Tag("Mod.Slot.Active.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Active"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            Assert.IsFalse(equipment.CanAddMod(slot, mod));
+        }
+
+        [Test]
+        public void CanAddMod_ModWithIncompatibleEquipmentTag_ReturnsFalse()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.EnergyCore"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            Assert.IsFalse(equipment.CanAddMod(slot, mod));
+        }
+
+        [Test]
+        public void CanAddMod_LevelBelowRequired_ReturnsFalse()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var slot = new Tag("Mod.Slot.Passive.2");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"), requiredLevel: 5);
+            var equipment = new Equipment(inv.Object, def) { Level = 1 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            Assert.IsFalse(equipment.CanAddMod(slot, mod));
+        }
+
+        [Test]
+        public void CanAddMod_AllConstraintsSatisfied_ReturnsTrue()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            Assert.IsTrue(equipment.CanAddMod(slot, mod));
         }
     }
 }

@@ -111,9 +111,13 @@ namespace Item.Runtime
 
         public bool CanAddMod(Tag modSlot, Modifier mod)
         {
-            var slot = _definition.ModSlots.FirstOrDefault(slot => slot.ModSlotTag == modSlot);
+            var slot = _definition.ModSlots.FirstOrDefault(s => s.ModSlotTag == modSlot);
             if (slot.ModSlotTag != modSlot) return false;
-            return slot.RequiredLevel <= Level;
+            if (slot.RequiredLevel > Level) return false;
+            if (mod.OwnedTags == null || !slot.TagQuery.MatchesTags(mod.OwnedTags)) return false;
+            if (mod.ModifiableEquipmentTags == null
+                || !mod.ModifiableEquipmentTags.Any(t => _definition.EquipmentTags.Contains(t))) return false;
+            return true;
         }
 
         public void Upgrade()
