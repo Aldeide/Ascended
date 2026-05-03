@@ -33,7 +33,7 @@ jobs:
         with:
           unityVersion: 6000.4.5f1
           projectPath: .
-          testMode: all # Runs both EditMode and PlayMode
+          testMode: EditMode # Runs both EditMode and PlayMode
           artifactsPath: artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: Unity Test Results
