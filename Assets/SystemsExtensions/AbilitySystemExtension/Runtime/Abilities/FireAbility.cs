@@ -2,6 +2,7 @@ using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Scripts;
+using AbilitySystemExtension.Runtime.AttributeSets;
 using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Abilities
@@ -12,41 +13,84 @@ namespace AbilitySystemExtension.Runtime.Abilities
         {
         }
 
+        public override AbilityActivationResult CanActivate()
+        {
+            if (IsActive) return AbilityActivationResult.BlockedByAbility;
+            
+            var weaponSet = Owner.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
+            if (weaponSet != null && weaponSet.CurrentClip.CurrentValue <= 0)
+            {
+                return AbilityActivationResult.MissingRequiredTag;
+            }
+            return base.CanActivate();
+        }
+
         protected override void ActivateAbility(AbilityData abilityData)
         {
-            var target = abilityData.TargetPosition;
-            var muzzle = abilityData.MuzzlePosition;
-            var trail = ((FireAbilityDefinition)Definition).trailVisualEffect;
-            var impact = ((FireAbilityDefinition)Definition).impactVisualEffect;
-            PlayActivationCues();
-            
-            var ray = new Ray(muzzle, target - muzzle);
-            if (!Physics.Raycast(ray, out var hit, 100f, ((FireAbilityDefinition)Definition).layerMask)) return;
-            Debug.DrawLine(muzzle, hit.point, Color.red, 1.0f);
-            
-            if (impact)
+            var weaponSet = Owner.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
+            if (weaponSet == null)
             {
-                var data = new CueData
-                {
-                    VectorData = new[] {hit.point, muzzle, hit.normal}
-                };
-                Debug.Log("FireAbility: Sending impact cue");
-                Owner.PlayCue(impact, data, true);
+                Debug.LogError("FireAbility: WeaponAttributeSet not found on owner!");
+                EndAbility();
+                return;
             }
 
-            if (trail)
+            if (weaponSet.CurrentClip.CurrentValue <= 0)
             {
-                var data = new CueData
+                if (Owner.IsLocalClient())
                 {
-                    VectorData = new[] {hit.point, muzzle, hit.normal}
-                };
-                Debug.Log("FireAbility: Sending trail cue");
-                Owner.PlayCue(trail, data, true);
+                    Owner.AbilityManager.TryActivateAbility("ReloadWeaponAbility");
+                }
+                EndAbility();
+                return;
             }
+
+            // Consume ammo
+            weaponSet.CurrentClip.SetCurrentValue(weaponSet.CurrentClip.CurrentValue - 1);
+
+            PlayActivationCues();
             
-            var asc = hit.collider.GetComponent<AbilitySystemComponent>();
-            if (!asc) return;
-            asc.ExecuteEffect(((FireAbilityDefinition)Definition).damageEffect, Owner);
+            var target = abilityData.TargetPosition;
+            var muzzle = abilityData.MuzzlePosition;
+            var ray = new Ray(muzzle, target - muzzle);
+
+            // Raycast and damage logic
+            if (Physics.Raycast(ray, out var hit, 100f, ((FireAbilityDefinition)Definition).layerMask))
+            {
+                Debug.DrawLine(muzzle, hit.point, Color.red, 1.0f);
+                
+                var trail = ((FireAbilityDefinition)Definition).trailVisualEffect;
+                var impact = ((FireAbilityDefinition)Definition).impactVisualEffect;
+
+                if (impact)
+                {
+                    var data = new CueData { VectorData = new[] {hit.point, muzzle, hit.normal} };
+                    Owner.PlayCue(impact, data, true);
+                }
+
+                if (trail)
+                {
+                    var data = new CueData { VectorData = new[] {hit.point, muzzle, hit.normal} };
+                    Owner.PlayCue(trail, data, true);
+                }
+                
+                var asc = hit.collider.GetComponent<AbilitySystemComponent>();
+                if (asc) 
+                {
+                    asc.ExecuteEffect(((FireAbilityDefinition)Definition).damageEffect, Owner);
+                }
+            }
+
+            // Always check for reload after shot, regardless of hit
+            if (weaponSet.CurrentClip.CurrentValue <= 0)
+            {
+                if (Owner.IsLocalClient())
+                {
+                    Owner.AbilityManager.TryActivateAbility("ReloadWeaponAbility");
+                }
+            }
+
+            EndAbility();
         }
 
         protected override void CancelAbility()

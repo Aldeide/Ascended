@@ -1,58 +1,77 @@
-﻿using AbilitySystem.Runtime.Abilities.Cooldowns;
-using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
-using Moq;
 using NUnit.Framework;
-using static AbilitySystem.Test.Utilities.AbilityUtilities;
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
-    public class AbilitiesCooldownTests
+    /// <summary>
+    /// Unit tests for ability cooldowns, ensuring that abilities correctly trigger, respect, and recover from cooldown effects.
+    /// </summary>
+    public class AbilitiesCooldownTests : AbilitySystemTestBase
     {
+        private static readonly Tag CooldownTag = new Tag("CooldownTag");
+
+        /// <summary>
+        /// Verifies that activating an ability with a configured cooldown correctly applies the cooldown effect to the owner.
+        /// </summary>
         [Test]
-        public void AbilitiesCooldownTests_HasCooldown_TriggersCooldown()
+        public void AbilitiesCooldownTests_ActivateWithCooldown_TriggersCooldownEffect()
         {
-            var owner = SetupAbilitySystemWithAbilityCooldown();
-            owner.Object.AbilityManager.TryActivateAbility("TestAbility");
+            SetupAbilityWithCooldown();
             
-            Assert.AreEqual(100f, owner.Object.EffectManager.GetEffect(new Tag("CooldownTag")).Duration);
+            bool success = Source.AbilityManager.TryActivateAbility("TestAbility");
+            
+            Assert.IsTrue(success);
+            Assert.IsNotNull(Source.EffectManager.GetEffect(CooldownTag));
+            Assert.AreEqual(100f, Source.EffectManager.GetEffect(CooldownTag).Duration);
         }
         
+        /// <summary>
+        /// Verifies that an ability cannot be activated again if its cooldown effect is still active.
+        /// </summary>
         [Test]
-        public void AbilitiesCooldownTests_OnCooldown_CantBeActivated()
+        public void AbilitiesCooldownTests_OnCooldown_BlockedFromActivation()
         {
-            var owner = SetupAbilitySystemWithAbilityCooldown();
-            owner.Object.AbilityManager.TryActivateAbility("TestAbility");
+            SetupAbilityWithCooldown();
+            Source.AbilityManager.TryActivateAbility("TestAbility");
             
-            Assert.IsFalse(owner.Object.AbilityManager.TryActivateAbility("TestAbility"));
+            bool secondActivation = Source.AbilityManager.TryActivateAbility("TestAbility");
+            
+            Assert.IsFalse(secondActivation, "Ability should be blocked by active cooldown");
         }
         
+        /// <summary>
+        /// Verifies that an ability becomes available for activation once the system time exceeds the cooldown duration.
+        /// </summary>
         [Test]
-        public void AbilitiesCooldownTests_CooldownElapsed_CanBeActivated()
+        public void AbilitiesCooldownTests_CooldownElapsed_AllowsReactivation()
         {
-            var owner = SetupAbilitySystemWithAbilityCooldown();
-            owner.Object.AbilityManager.TryActivateAbility("TestAbility");
-            owner.Setup(m => m.GetTime()).Returns(101);
-            owner.Object.EffectManager.Tick();
+            SetupAbilityWithCooldown();
+            Source.AbilityManager.TryActivateAbility("TestAbility");
             
-            Assert.IsTrue(owner.Object.AbilityManager.TryActivateAbility("TestAbility"));
+            // Advance time beyond the 100s cooldown
+            SourceMock.Setup(m => m.GetTime()).Returns(101f);
+            Source.EffectManager.Tick();
+            
+            bool reactivation = Source.AbilityManager.TryActivateAbility("TestAbility");
+            
+            Assert.IsTrue(reactivation, "Ability should be available after cooldown expires");
         }
 
-        private Mock<IAbilitySystem> SetupAbilitySystemWithAbilityCooldown()
+        private void SetupAbilityWithCooldown()
         {
-            var owner = CreateMockServerAbilitySystem();
-            var abilityDefinition = CreateInstantAbilityDefinition();
+            var abilityDefinition = AbilityUtilities.CreateInstantAbilityDefinition();
+            abilityDefinition.UniqueName = "TestAbility";
             abilityDefinition.Cooldown = new ConstantAbilityCooldown();
+            
             var cooldownEffect = EffectUtilities.CreateDurationEffectDefinition();
-            var cooldownTag = new Tag("CooldownTag");
-            cooldownEffect.AssetTags = new[] { cooldownTag };
-            cooldownEffect.GrantedTags = new[] { cooldownTag };
+            cooldownEffect.AssetTags = new[] { CooldownTag };
+            cooldownEffect.GrantedTags = new[] { CooldownTag };
             abilityDefinition.Cooldown.CooldownEffect = cooldownEffect;
-            owner.Setup(m => m.IsServer()).Returns(true);
-            owner.Object.AbilityManager.GrantAbility(abilityDefinition);
-            return owner;
+            
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
+            Source.AbilityManager.GrantAbility(abilityDefinition);
         }
     }
 }

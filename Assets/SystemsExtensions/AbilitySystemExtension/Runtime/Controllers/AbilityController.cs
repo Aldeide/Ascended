@@ -95,5 +95,14 @@ namespace Systems.Controllers
                 _asc.TryActivateAbility("JumpAbility");
             }
         }
+
+        public void OnReload(InputAction.CallbackContext context)
+        {
+            if (!IsLocalPlayer) return;
+            if (context.phase == InputActionPhase.Performed)
+            {
+                _asc.TryActivateAbility("ReloadWeaponAbility");
+            }
+        }
     }
 }

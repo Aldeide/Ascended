@@ -3,112 +3,97 @@ using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Runtime.Attributes;
+using AbilitySystem.Runtime.AttributeSets;
 using GameplayTags.Runtime;
-using Sirenix.Utilities;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities
 {
-    /// <summary>
-    /// Responsible for managing abilities within an ability system. Handles the storage,
-    /// granting, activation, deactivation, and lifecycle of abilities, while integrating
-    /// with the associated <see cref="IAbilitySystem"/> owner.
-    /// </summary>
     public class AbilityManager
     {
-        private IAbilitySystem _owner;
-        public Dictionary<string, Ability> Abilities;
-        private List<Ability> _abilitySnapshot;
-        private PredictionKey _predictionKey;
-
-        private Dictionary<int, Dictionary<string, AbilitySystem.Runtime.Attributes.AttributeValue>>
-            _predictionAttributeSnapshots = new();
-
-        public Action OnAbilityGranted;
+        private readonly IAbilitySystem _owner;
+        public Dictionary<string, Ability> Abilities { get; private set; }
+        
+        private readonly Dictionary<int, Dictionary<string, AttributeValue>> _predictionAttributeSnapshots = new();
 
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
             Abilities = new Dictionary<string, Ability>();
-            _abilitySnapshot = new List<Ability>();
         }
 
-        public void Tick()
+        public void GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
         {
-            _abilitySnapshot.AddRange(Abilities.Values);
-            foreach (var ability in _abilitySnapshot)
-            {
-                ability.Tick();
-            }
-
-            _abilitySnapshot.Clear();
-        }
-
-        public void GrantAbility(AbilityDefinition abilityDefinition)
-        {
-            if (!abilityDefinition) return;
-            try
-            {
-                if (Abilities.ContainsKey(abilityDefinition.UniqueName)) return;
-                var ability = abilityDefinition.ToAbility(_owner);
-                Abilities.Add(ability.Definition.UniqueName, ability);
-            }
-            catch (MissingMethodException e)
-            {
-                Debug.LogError("Failed to add ability: " + abilityDefinition.GetType().FullName + " / " + e.Message);
-            }
-        }
-
-        public void GrantAbilityServer(AbilityDefinition abilityDefinition)
-        {
-            if (!abilityDefinition) return;
-            if (!_owner.IsServer()) return;
-            GrantAbility(abilityDefinition);
-            _owner.ReplicationManager.NotifyClientAbilityGranted(abilityDefinition);
-        }
-
-        public void RemoveAbility(AbilityDefinition abilityDefinition)
-        {
-            if (!abilityDefinition) return;
-            RemoveAbility(abilityDefinition.UniqueName);
-        }
-
-        public void RemoveAbilityServer(AbilityDefinition abilityDefinition)
-        {
-            if (!abilityDefinition) return;
-            if (!_owner.IsServer()) return;
-            RemoveAbility(abilityDefinition);
-            _owner.ReplicationManager.NotifyClientAbilityRemoved(abilityDefinition);
+            if (abilityDefinition == null) return;
+            if (Abilities.ContainsKey(abilityDefinition.UniqueName)) return;
+            var ability = abilityDefinition.ToAbility(_owner);
+            ability.SetLevel(level);
+            Abilities.Add(abilityDefinition.UniqueName, ability);
         }
 
         public void RemoveAbility(string abilityName)
         {
-            if (!Abilities.Remove(abilityName)) return;
+            if (Abilities.TryGetValue(abilityName, out var ability))
+            {
+                if (ability.IsActive) ability.TryEndAbility();
+                Abilities.Remove(abilityName);
+            }
         }
 
-        public bool ForceActivateAbility(string abilityName, AbilityData data = new AbilityData())
+        public void RemoveAbility(AbilityDefinition abilityDefinition)
         {
-            Abilities.TryGetValue(abilityName, out Ability ability);
-            if (ability == null) return false;
-            return ability.TryActivateAbility(data);
+            if (abilityDefinition == null) return;
+            RemoveAbility(abilityDefinition.UniqueName);
         }
-        
-        public bool TryActivateAbility(string name, AbilityData data = new AbilityData())
+
+        public void Tick()
         {
-            Abilities.TryGetValue(name, out Ability ability);
-            if (ability == null) return false;
+            foreach (var ability in Abilities.Values)
+            {
+                if (ability.IsActive)
+                {
+                    ability.Tick();
+                }
+            }
+        }
+
+        public string DebugString()
+        {
+            if (Abilities.Count == 0) return "No Abilities";
+            return string.Join("\n", Abilities.Select(kv => $"{kv.Key}: {(kv.Value.IsActive ? "Active" : "Inactive")} (Level: {kv.Value.Level})"));
+        }
+
+        public void CancelAbilitiesWithTags(Tag[] tags)
+        {
+            if (tags == null || tags.Length == 0) return;
+            
+            foreach (var ability in Abilities.Values.ToList())
+            {
+                if (ability.Definition.AssetTags == null) continue;
+                if (ability.Definition.AssetTags.Any(at => tags.Any(t => t == at)))
+                {
+                    ability.TryCancelAbility();
+                }
+            }
+        }
+
+        public void CancelAllAbilities()
+        {
+            foreach (var ability in Abilities.Values.ToList())
+            {
+                if (ability.IsActive) ability.TryCancelAbility();
+            }
+        }
+
+        public bool TryActivateAbility(string name, AbilityData data = default)
+        {
+            if (!Abilities.TryGetValue(name, out var ability)) return false;
 
             var isClientRequest = _owner.IsLocalClient() && !_owner.IsServer();
             var isServerRequest = _owner.IsServer();
-
-            if (!HasAuthorityToActivate(ability, isClientRequest))
-            {
-                if (isClientRequest)
-                {
-                    Debug.LogWarning($"Client attempted to activate {name} but lacks authority (Security Policy: {ability.Definition.NetworkSecurityPolicy})");
-                }
-                return false;
-            }
+            
+            if (!HasAuthorityToActivate(ability, isClientRequest)) return false;
 
             // Case 1: ClientOnly ability
             if (ability.Definition.IsLocalAbility())
@@ -119,13 +104,13 @@ namespace AbilitySystem.Runtime.Abilities
                 }
                 else if (_owner.IsServer())
                 {
-                    // Server tells client to start their local version
                     _owner.ReplicationManager.RequestClientActivateAbility(name, data);
                     return true;
                 }
+                return false;
             }
 
-            // Case 2: Server-only behavior (passive or server-driven)
+            // Case 2: Server-only behavior
             if (ability.Definition.NetworkPolicy == AbilityNetworkPolicy.Server)
             {
                 if (isServerRequest)
@@ -134,10 +119,10 @@ namespace AbilitySystem.Runtime.Abilities
                 }
                 else if (isClientRequest)
                 {
-                    // Request server to start it
                     _owner.ReplicationManager.RequestAbilityActivationUnpredicted(name, data);
                     return true;
                 }
+                return false;
             }
 
             // Case 3: Predicted behavior
@@ -145,8 +130,6 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 if (isServerRequest)
                 {
-                    // If server starts it directly, it just runs. 
-                    // Replicated state will inform the client.
                     return ability.TryActivateAbility(data);
                 }
                 else if (isClientRequest)
@@ -154,14 +137,12 @@ namespace AbilitySystem.Runtime.Abilities
                     var key = PredictionKey.CreatePredictionKey();
                     _predictionAttributeSnapshots[key.currentKey] = _owner.AttributeSetManager.Snapshot();
 
-                    var success = ability.TryActivateAbility(key, data);
-                    if (success)
+                    if (ability.TryActivateAbility(key, data))
                     {
                         _owner.ReplicationManager.RequestAbilityActivation(name, key, data);
                         return true;
                     }
                     _predictionAttributeSnapshots.Remove(key.currentKey);
-                    return false;
                 }
             }
 
@@ -193,11 +174,8 @@ namespace AbilitySystem.Runtime.Abilities
 
         public bool ServerTryActivateAbilityWithKey(string name, PredictionKey key, AbilityData data)
         {
-            Debug.Log("Trying to activate ability: " + name + "as server? " + _owner.IsServer());
             if (!_owner.IsServer()) return false;
-            Abilities.TryGetValue(name, out Ability ability);
-            if (ability == null) return false;
-            Debug.Log("Trying to activate ability 2: " + name + "as server? " + _owner.IsServer());
+            if (!Abilities.TryGetValue(name, out var ability)) return false;
             return ability.TryActivateAbility(key, data);
         }
 
@@ -209,42 +187,29 @@ namespace AbilitySystem.Runtime.Abilities
             var isClientRequest = _owner.IsLocalClient() && !_owner.IsServer();
             var isServerRequest = _owner.IsServer();
 
-            if (!HasAuthorityToTerminate(ability, isClientRequest))
-            {
-                if (isClientRequest)
-                {
-                    Debug.LogWarning($"Client attempted to terminate {abilityName} but lacks authority (Security Policy: {ability.Definition.NetworkSecurityPolicy})");
-                }
-                return;
-            }
+            if (!HasAuthorityToTerminate(ability, isClientRequest)) return;
 
             if (isClientRequest)
             {
-                // Predicted abilities are ended locally immediately. 
-                // We notify the server regardless to keep state in sync.
                 ability.TryEndAbility();
                 _owner.ReplicationManager.RequestAbilityTermination(abilityName);
             }
             else if (isServerRequest)
             {
                 ability.TryEndAbility();
-                // Notify clients (especially the owner for predicted abilities)
                 _owner.ReplicationManager.RequestClientEndAbility(abilityName);
             }
         }
 
         public void EndAbility(PredictionKey key)
         {
-            Debug.Log($"EndAbility called with key: {key.currentKey}");
             var abilitiesToEnd = Abilities.Where(kv =>
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
                 .ToList();
             
-            Debug.Log($"Found {abilitiesToEnd.Count} abilities to end for key {key.currentKey}");
             foreach(var kv in abilitiesToEnd)
             {
-                Debug.Log($"Ending ability: {kv.Key} (Active: {kv.Value.IsActive})");
                 kv.Value.TryEndAbility();
             }
         }
@@ -254,52 +219,35 @@ namespace AbilitySystem.Runtime.Abilities
             Abilities.TryGetValue(abilityName, out var ability);
             ability?.TryEndAbility();
         }
-        
-        public void CancelAbilitiesWithTags(Tag[] tags)
+
+        public void ForceActivateAbility(string abilityName, AbilityData data = default)
         {
-            foreach (var ability in Abilities.Values.Where(ability =>
-                         ability.Definition.AssetTags.Any(tags.Contains)))
+            if (Abilities.TryGetValue(abilityName, out var ability))
             {
-                ability.TryCancelAbility();
+                ability.TryActivateAbility(data);
             }
         }
 
         public void NotifyServerResponse(PredictionKey key, bool success)
         {
-            if (!_owner.IsLocalClient()) return;
-            Debug.Log($"NotifyServerResponse: Key {key.currentKey}, Success: {success}");
-
             if (success)
             {
-                // Prediction confirmed. Cleanup snapshot.
                 _predictionAttributeSnapshots.Remove(key.currentKey);
             }
             else
             {
-                // Prediction denied. Rollback.
                 if (_predictionAttributeSnapshots.TryGetValue(key.currentKey, out var snapshot))
                 {
-                    Debug.Log($"Restoring snapshot for key {key.currentKey}");
                     _owner.AttributeSetManager.Restore(snapshot);
                     _predictionAttributeSnapshots.Remove(key.currentKey);
                 }
-                else
+                
+                var abilitiesToEnd = Abilities.Where(kv => kv.Value.PredictionKey.currentKey == key.currentKey).ToList();
+                foreach(var kv in abilitiesToEnd)
                 {
-                    Debug.LogWarning($"NO snapshot found for key {key.currentKey}");
+                    kv.Value.TryCancelAbility();
                 }
-
-                // End any abilities that were started with this key
-                EndAbility(key);
-
-                // Retract any effects that were started with this key
-                _owner.EffectManager.RetractPredictedEffect(key);
             }
-        }
-
-        public string DebugString()
-        {
-            return Abilities.Keys.Aggregate("Abilities\n",
-                (current, ability) => current + (ability + " (" + Abilities[ability].IsActive + ")\n"));
         }
     }
 }

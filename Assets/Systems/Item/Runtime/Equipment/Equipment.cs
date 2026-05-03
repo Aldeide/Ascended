@@ -72,26 +72,40 @@ namespace Item.Runtime
 
         public void Equip()
         {
+            var owner = _manager.GetOwner();
+            if (owner == null)
+            {
+                UnityEngine.Debug.LogError($"Equipment {Name}: Cannot find owner via InventoryManager during Equip!");
+                return;
+            }
+
             foreach (var ability in _definition.GrantedAbilities)
             {
-                _manager.GetOwner().AbilityManager.GrantAbility(ability);
+                owner.AbilityManager.GrantAbility(ability);
             }
 
             foreach (var effect in _definition.GrantedEffects)
             {
-                _manager.GetOwner().EffectManager.AddEffect(effect.ToEffect(_manager.GetOwner(), _manager.GetOwner()));
+                owner.EffectManager.AddEffect(effect.ToEffect(owner, owner));
             }
         }
 
         public void Unequip()
         {
+            var owner = _manager.GetOwner();
+            if (owner == null)
+            {
+                UnityEngine.Debug.LogError($"Equipment {Name}: Cannot find owner via InventoryManager during Unequip!");
+                return;
+            }
+
             foreach (var ability in _definition.GrantedAbilities)
             {
-                _manager.GetOwner().AbilityManager.RemoveAbility(ability);
+                owner.AbilityManager.RemoveAbility(ability);
             }
             foreach (var effect in _definition.GrantedEffects)
             {
-                _manager.GetOwner().EffectManager.RemoveEffect(effect.name);
+                owner.EffectManager.RemoveEffect(effect.name);
             }
         }
 

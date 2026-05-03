@@ -5,6 +5,10 @@ using UnityEngine.InputSystem;
 
 namespace Systems.Core.Tests
 {
+    /// <summary>
+    /// Tests for the SettingsManager, verifying persistence and application of audio, 
+    /// quality, and resolution settings.
+    /// </summary>
     public class SettingsTests
     {
         private GameObject _settingsGO;
@@ -23,12 +27,16 @@ namespace Systems.Core.Tests
         [TearDown]
         public void TearDown()
         {
-            Object.DestroyImmediate(_settingsGO);
+            if (_settingsGO != null) Object.DestroyImmediate(_settingsGO);
             PlayerPrefs.DeleteAll();
         }
 
+        /// <summary>
+        /// Validates that setting the master volume persists across sessions and correctly 
+        /// updates the AudioListener.
+        /// </summary>
         [Test]
-        public void Settings_SetVolume_PersistsAndLoads()
+        public void SettingsTests_Volume_PersistsAndAppliesOnLoad()
         {
             float targetVolume = 0.75f;
             _manager.SetVolume(targetVolume);
@@ -45,8 +53,12 @@ namespace Systems.Core.Tests
             Assert.AreEqual(targetVolume, AudioListener.volume);
         }
 
+        /// <summary>
+        /// Validates that setting the quality level correctly updates Unity's QualitySettings 
+        /// and persists the choice.
+        /// </summary>
         [Test]
-        public void Settings_SetQuality_Persists()
+        public void SettingsTests_Quality_PersistsChoice()
         {
             int targetQuality = 1; // Example index
             _manager.SetQuality(targetQuality);
@@ -55,14 +67,15 @@ namespace Systems.Core.Tests
             Assert.AreEqual(targetQuality, PlayerPrefs.GetInt("Settings_Quality"));
         }
 
+        /// <summary>
+        /// Validates that resetting settings to default correctly clears saved preferences.
+        /// </summary>
         [Test]
-        public void Settings_Reset_ClearsPreferences()
+        public void SettingsTests_Reset_ClearsAllPreferences()
         {
             _manager.SetVolume(0.1f);
             _manager.ResetToDefaults();
 
-            // Default volume is typically 1.0f or whatever it was at build
-            // But we know PlayerPrefs should be empty
             Assert.IsFalse(PlayerPrefs.HasKey("Settings_Volume"));
         }
     }

@@ -5,102 +5,80 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Events;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
-using Moq;
 using UnityEngine;
 
 namespace AbilitySystem.Test.Runtime.AbilityTasks
 {
-    public class TestAbility : Ability
+    /// <summary>
+    /// Unit tests for AbilityTasks, verifying lifecycle management, event-driven completion, and automatic cleanup.
+    /// </summary>
+    public class AbilityTaskTests : AbilitySystemTestBase
     {
-        public TestAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
-        {
-        }
-
-        protected override void ActivateAbility(AbilityData data)
-        {
-        }
-
-        public override void EndAbility()
-        {
-        }
-    }
-
-    public class TestAbilityDefinition : AbilityDefinition
-    {
-        public override Type AbilityType() => typeof(TestAbility);
-
-        public override Ability ToAbility(IAbilitySystem owner)
-        {
-            return new TestAbility(this, owner);
-        }
-    }
-
-    public class TestGameplayEvent : GameplayEvent
-    {
-        public TestGameplayEvent() : base(EventArgs.Empty) { }
-    }
-
-    public class AbilityTaskTests
-    {
-        private Mock<IAbilitySystem> _mockAbilitySystem;
-        private EventManager _eventManager;
         private TestAbility _ability;
         private AbilityDefinition _abilityDefinition;
 
         [SetUp]
-        public void Setup()
+        public override void SetUp()
         {
-            _mockAbilitySystem = AbilitySystemUtilities.CreateMockAbilitySystem();
-            _eventManager = _mockAbilitySystem.Object.EventManager;
+            base.SetUp();
             
-            _abilityDefinition = ScriptableObject.CreateInstance<TestAbilityDefinition>();
-            _ability = new TestAbility(_abilityDefinition, _mockAbilitySystem.Object);
+            _abilityDefinition = ScriptableObject.CreateInstance<LocalTestAbilityDefinition>();
+            _ability = (TestAbility)_abilityDefinition.ToAbility(Source);
             
-            // Hack to make IsActive = true so TryCancelAbility works
+            // Force ability to be active for task execution
             _ability.IsActive = true;
         }
 
+        /// <summary>
+        /// Verifies that WaitDelayTask correctly identifies as finished after the specified duration has elapsed.
+        /// </summary>
         [Test]
-        public void WaitDelayTask_CompletesAfterDuration()
+        public void AbilityTaskTests_WaitDelay_CompletesAfterSpecifiedDuration()
         {
             float currentTime = 0f;
-            _mockAbilitySystem.Setup(x => x.GetTime()).Returns(() => currentTime);
+            SourceMock.Setup(x => x.GetTime()).Returns(() => currentTime);
 
             bool isFinished = false;
             var task = WaitDelayTask.CreateWaitDelay(_ability, 1.0f);
             task.OnFinished += () => isFinished = true;
             task.ReadyForActivation();
 
-            Assert.IsFalse(isFinished);
+            Assert.IsFalse(isFinished, "Task should not be finished initially");
             
             currentTime = 0.5f;
-            _ability.Tick(); // ability ticks tasks
-            Assert.IsFalse(isFinished);
+            _ability.Tick(); 
+            Assert.IsFalse(isFinished, "Task should not be finished halfway through the delay");
 
             currentTime = 1.1f;
             _ability.Tick();
-            Assert.IsTrue(isFinished);
-            Assert.IsFalse(task.IsActive);
+            Assert.IsTrue(isFinished, "Task should be finished after duration has passed");
+            Assert.IsFalse(task.IsActive, "Task should no longer be active after finishing");
         }
 
+        /// <summary>
+        /// Verifies that WaitGameplayEventTask correctly triggers its callback when a matching event is fired via the EventManager.
+        /// </summary>
         [Test]
-        public void WaitGameplayEventTask_CompletesOnEvent()
+        public void AbilityTaskTests_WaitGameplayEvent_TriggersOnMatchingEvent()
         {
             bool eventFired = false;
             var task = WaitGameplayEventTask.CreateWaitGameplayEvent(_ability, typeof(TestGameplayEvent));
             task.OnEventReceived += (payload) => eventFired = true;
             task.ReadyForActivation();
 
-            Assert.IsFalse(eventFired);
+            Assert.IsFalse(eventFired, "Event callback should not have fired yet");
 
-            _eventManager.TriggerEvent(new TestGameplayEvent());
+            Source.EventManager.TriggerEvent(new TestGameplayEvent(new TestGameplayEventArgs()));
 
-            Assert.IsTrue(eventFired);
-            Assert.IsTrue(task.IsActive); // WaitGameplayEventTask continues listening until cancelled or ended manually
+            Assert.IsTrue(eventFired, "Event callback should have fired after triggering the event");
+            Assert.IsTrue(task.IsActive, "WaitGameplayEventTask should remain active by default for multiple events");
         }
 
+        /// <summary>
+        /// Verifies that all active tasks associated with an ability are automatically terminated when the ability is cancelled.
+        /// </summary>
         [Test]
-        public void Task_AutoCleansUpOnAbilityCancel()
+        public void AbilityTaskTests_AbilityCancel_AutomaticallyCleansUpTasks()
         {
             var task = WaitDelayTask.CreateWaitDelay(_ability, 10f);
             task.ReadyForActivation();
@@ -109,19 +87,14 @@ namespace AbilitySystem.Test.Runtime.AbilityTasks
 
             _ability.TryCancelAbility();
 
-            Assert.IsFalse(task.IsActive);
-            
-            // Check it doesn't tick after
-            float currentTime = 0f;
-            _mockAbilitySystem.Setup(x => x.GetTime()).Returns(() => currentTime);
-            currentTime = 20f;
-            _ability.Tick();
-            
-            // We can't really assert if it ticked but since IsActive is false it shouldn't be in the list anymore
+            Assert.IsFalse(task.IsActive, "Task should have been deactivated when ability was cancelled");
         }
         
+        /// <summary>
+        /// Verifies that tasks correctly unsubscribe from events and clean up when their parent ability ends.
+        /// </summary>
         [Test]
-        public void Task_AutoCleansUpOnAbilityEnd()
+        public void AbilityTaskTests_AbilityEnd_SuccessfullyCleansUpTasksAndSubscriptions()
         {
             var task = WaitGameplayEventTask.CreateWaitGameplayEvent(_ability, typeof(TestGameplayEvent));
             task.ReadyForActivation();
@@ -130,14 +103,28 @@ namespace AbilitySystem.Test.Runtime.AbilityTasks
 
             _ability.TryEndAbility();
 
-            Assert.IsFalse(task.IsActive);
+            Assert.IsFalse(task.IsActive, "Task should no longer be active after ability ends");
             
             bool eventFired = false;
             task.OnEventReceived += (e) => eventFired = true;
-            _eventManager.TriggerEvent(new TestGameplayEvent());
+            Source.EventManager.TriggerEvent(new TestGameplayEvent(new TestGameplayEventArgs()));
             
-            // Should be unsubscribed, so event shouldn't fire
-            Assert.IsFalse(eventFired);
+            Assert.IsFalse(eventFired, "Task should have been unsubscribed from the event manager");
         }
+
+        #region Helper Classes
+        private class TestAbility : Ability
+        {
+            public TestAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner) { }
+            protected override void ActivateAbility(AbilityData data) { }
+            public override void EndAbility() { }
+        }
+
+        private class LocalTestAbilityDefinition : AbilityDefinition
+        {
+            public override Type AbilityType() => typeof(TestAbility);
+            public override Ability ToAbility(IAbilitySystem owner) => new TestAbility(this, owner);
+        }
+        #endregion
     }
 }

@@ -9,61 +9,74 @@ using UnityEngine;
 
 namespace AbilitySystem.Test.Runtime.Cues
 {
-    public class CuePredictionTests
+    /// <summary>
+    /// Unit tests for visual cue prediction, verifying that the CueManager correctly culls redundant replicated cues from the server to prevent duplicate visual effects.
+    /// </summary>
+    public class CuePredictionTests : AbilitySystemTestBase
     {
-        [Test]
-        public void CueManager_CullsPredictedCue_WhenReceivedFromServer()
+        private CueManager _cueManager;
+        private LocalMockDataManager _dataManager;
+
+        [SetUp]
+        public override void SetUp()
         {
-            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
-            mockSys.Setup(s => s.IsServer()).Returns(false); // Client
+            // Setup client system
+            SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
+            _dataManager = ScriptableObject.CreateInstance<LocalMockDataManager>();
+            _cueManager = new CueManager(Source, _dataManager);
             
-            var manager = new CueManager(mockSys.Object);
-            
-            var tag = new Tag("Cue.Test");
-            var key = new PredictionKey(12345);
-            var data = new CueData { PredictionKey = key };
-            
-            // 1. Mark as predicted
-            manager.MarkCueAsPredicted(tag.Name, key);
-            
-            // 2. Receive same cue from server
-            var cueExecuted = false;
-            manager.OnCueExecute += (def, d) => cueExecuted = true;
-            
-            manager.OnCueReceived(tag, CueAction.Execute, data);
-            
-            // 3. Verify it was culled (Not executed)
-            Assert.IsFalse(cueExecuted, "Predicted cue should have been culled!");
+            base.SetUp();
         }
 
+        /// <summary>
+        /// Verifies that a replicated cue from the server is suppressed (culled) if it has already been locally predicted using the same prediction key.
+        /// </summary>
         [Test]
-        public void CueManager_ExecutesReplicatedCue_WhenNotPredicted()
+        public void CuePredictionTests_ServerCueReceived_CullsIfAlreadyPredictedLocally()
         {
-            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
-            mockSys.Setup(s => s.IsServer()).Returns(false); // Client
+            var tag = new Tag("Cue.Test");
+            var key = new PredictionKey { currentKey = 12345 };
+            var data = new CueData { PredictionKey = key };
             
-            // Create a simple mock data manager
-            var dataManager = new MockDataManager(); 
-            var manager = new CueManager(mockSys.Object, dataManager);
+            // 1. Mark as predicted locally (as if an ability just triggered locally)
+            _cueManager.MarkCueAsPredicted(tag.Name, key);
             
+            // 2. Receive the same cue from the server via RPC
+            var cueExecuted = false;
+            _cueManager.OnCueExecute += (def, d) => cueExecuted = true;
+            
+            _cueManager.OnCueReceived(tag, CueAction.Execute, data);
+            
+            // 3. Verification
+            Assert.IsFalse(cueExecuted, "The replicated cue should have been culled because a local prediction with the same key was found");
+        }
+
+        /// <summary>
+        /// Verifies that a replicated cue from the server correctly executes if no matching local prediction exists for its prediction key.
+        /// </summary>
+        [Test]
+        public void CuePredictionTests_ServerCueReceived_ExecutesIfNotPredictedLocally()
+        {
             var tag = new Tag("Cue.Test");
             var def = ScriptableObject.CreateInstance<CueDefinition>();
             def.CueTag = tag;
-            dataManager.Cues.Add(def);
+            _dataManager.Cues.Add(def);
             
-            var key = new PredictionKey(999);
+            var key = new PredictionKey { currentKey = 999 };
             var data = new CueData { PredictionKey = key };
             
-            // Receive cue WITHOUT marking as predicted
+            // We do NOT mark this key as predicted
+            
             var cueExecuted = false;
-            manager.OnCueExecute += (d, dat) => cueExecuted = true;
+            _cueManager.OnCueExecute += (d, dat) => cueExecuted = true;
             
-            manager.OnCueReceived(tag, CueAction.Execute, data);
+            _cueManager.OnCueReceived(tag, CueAction.Execute, data);
             
-            Assert.IsTrue(cueExecuted, "Unpredicted replicated cue should execute!");
+            Assert.IsTrue(cueExecuted, "The replicated cue should execute because no matching local prediction was found");
         }
 
-        private class MockDataManager : ScriptableObject, IDataManager
+        #region Helper Classes
+        private class LocalMockDataManager : ScriptableObject, IDataManager
         {
             public List<CueDefinition> Cues = new();
             public CueDefinition GetCueByTag(Tag tag) => Cues.Find(c => c.CueTag.Name == tag.Name);
@@ -71,5 +84,6 @@ namespace AbilitySystem.Test.Runtime.Cues
             public AbilitySystem.Runtime.Abilities.AbilityDefinition GetAbilityByName(string name) => null;
             public AbilitySystem.Runtime.Effects.EffectDefinition GetEffectByName(string name) => null;
         }
+        #endregion
     }
 }

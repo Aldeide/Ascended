@@ -23,6 +23,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             "WeaponAttributeSet.ClipSize",
             "WeaponAttributeSet.CurrentClip",
             "WeaponAttributeSet.ReloadTime",
+            "WeaponAttributeSet.ReloadEnergyCost",
             "MetaAttributeSet.AbilityCooldown",
             "MetaAttributeSet.AbilityCost",
             "MetaAttributeSet.EffectDuration",

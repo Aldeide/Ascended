@@ -9,30 +9,29 @@ using UnityEngine;
 
 namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
 {
-    public class ApplyEffectToTargetNodeTests
+    /// <summary>
+    /// Tests for the ApplyEffectToTargetNode, focusing on server-only logic and cross-system effect application.
+    /// </summary>
+    public class ApplyEffectToTargetNodeTests : AbilitySystemTestBase
     {
         private GameObject _targetObj;
         private Mock<IAbilitySystem> _mockTargetSystem;
-        private Mock<IAbilitySystem> _mockSourceSystem;
         private ApplyEffectToTargetNode _node;
         private EffectDefinition _effectDef;
 
         [SetUp]
-        public void Setup()
+        public override void SetUp()
         {
+            base.SetUp();
+
             _targetObj = new GameObject("Target");
             // Since our system relies on GetComponents in Unity, we need a MonoBehaviour that implements IAbilitySystem.
-            // For testing, we can use an empty monobehaviour and manually mock the node's Process by mocking Owner.
-            // Wait, the node uses Target.GetComponent<IAbilitySystem>(). This requires a real MonoBehaviour.
-            // Let's create a dummy component.
             _targetObj.AddComponent<DummyAbilitySystemComponent>();
             var dummyTarget = _targetObj.GetComponent<DummyAbilitySystemComponent>();
 
             _mockTargetSystem = new Mock<IAbilitySystem>();
             dummyTarget.MockSystem = _mockTargetSystem.Object;
 
-            _mockSourceSystem = new Mock<IAbilitySystem>();
-            
             _effectDef = ScriptableObject.CreateInstance<EffectDefinition>();
 
             _node = new ApplyEffectToTargetNode
@@ -42,49 +41,43 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
                 Level = 1,
                 ServerOnly = true
             };
-            
-            var method = typeof(ApplyEffectToTargetNode).GetProperty("Owner", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-            // We can't set Owner directly because it's pulled from the Graph.
-            // We need to initialize the node via reflection or inject Owner.
         }
 
         [TearDown]
         public void Teardown()
         {
-            Object.DestroyImmediate(_targetObj);
-            Object.DestroyImmediate(_effectDef);
+            if (_targetObj != null) Object.DestroyImmediate(_targetObj);
+            if (_effectDef != null) Object.DestroyImmediate(_effectDef);
         }
 
+        /// <summary>
+        /// Validates that an ApplyEffect node with ServerOnly=true does NOT apply the effect when running on a client.
+        /// </summary>
         [Test]
-        public void Process_ServerOnlyTrue_ClientOwner_DoesNotApplyEffect()
+        public void ApplyEffectToTargetNodeTests_Process_ServerOnlyTrueClientOwner_DoesNotApplyEffect()
         {
-            _mockSourceSystem.Setup(x => x.IsServer()).Returns(false);
+            SourceMock.Setup(x => x.IsServer()).Returns(false);
             
-            var field = typeof(AbilityGraph.Runtime.Nodes.Base.AbilityNode).GetField("Owner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field.SetValue(_node, _mockSourceSystem.Object);
-
-            var method = typeof(ApplyEffectToTargetNode).GetMethod("Process", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            method.Invoke(_node, null);
+            AbilityGraphTestUtilities.InjectOwner(_node, Source);
+            AbilityGraphTestUtilities.InvokeProcess(_node);
 
             _mockTargetSystem.Verify(x => x.ApplyEffectToSelf(It.IsAny<Effect>()), Times.Never);
         }
 
+        /// <summary>
+        /// Validates that an ApplyEffect node with ServerOnly=true DOES apply the effect when running on the server.
+        /// </summary>
         [Test]
-        public void Process_ServerOnlyTrue_ServerOwner_AppliesEffect()
+        public void ApplyEffectToTargetNodeTests_Process_ServerOnlyTrueServerOwner_AppliesEffectToTarget()
         {
-            _mockSourceSystem.Setup(x => x.IsServer()).Returns(true);
-            _mockSourceSystem.Setup(x => x.MakeOutgoingEffect(It.IsAny<EffectDefinition>(), It.IsAny<int>(), It.IsAny<EffectContext>()))
+            SourceMock.Setup(x => x.IsServer()).Returns(true);
+            SourceMock.Setup(x => x.MakeOutgoingEffect(It.IsAny<EffectDefinition>(), It.IsAny<int>(), It.IsAny<EffectContext>()))
                 .Returns(new Effect(_effectDef));
             
-            var field = typeof(AbilityGraph.Runtime.Nodes.Base.AbilityNode).GetField("Owner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field.SetValue(_node, _mockSourceSystem.Object);
-
-            var method = typeof(ApplyEffectToTargetNode).GetMethod("Process", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            method.Invoke(_node, null);
+            AbilityGraphTestUtilities.InjectOwner(_node, Source);
+            AbilityGraphTestUtilities.InvokeProcess(_node);
 
             _mockTargetSystem.Verify(x => x.ApplyEffectToSelf(It.IsAny<Effect>()), Times.Once);
         }
     }
-
-
 }

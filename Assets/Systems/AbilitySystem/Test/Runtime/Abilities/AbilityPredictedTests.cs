@@ -1,32 +1,31 @@
-using System.Linq;
-using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Test.Utilities;
-using GameplayTags.Runtime;
 using NUnit.Framework;
-using UnityEngine;
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
-using static AbilitySystem.Test.Utilities.AbilityUtilities;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
-    public class AbilityPredictedTests
+    /// <summary>
+    /// Unit tests for client-side predicted abilities, ensuring they correctly initiate network synchronization.
+    /// </summary>
+    public class AbilityPredictedTests : AbilitySystemTestBase
     {
+        /// <summary>
+        /// Verifies that a client-predicted ability correctly triggers a server activation request when initiated by the client.
+        /// </summary>
         [Test]
-        public void AbilityPredictedTests_PredictedAbility_TriggersRequestOnServer()
+        public void AbilityPredictedTests_ClientActivation_DispatchesServerRequest()
         {
-            var clientAbilitySystem = CreateMockClientAbilitySystem().Object;
-            var abilityDefinition = CreatePredictedAbilityDefinition();
-            clientAbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
+            var clientSystemMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
+            var clientSystem = clientSystemMock.Object;
             
-            var eventDispatched = false;
-            clientAbilitySystem.ReplicationManager.OnServerAbilityActivationRequested += (abilityName, key, data) =>
-            {
-                eventDispatched = true;
-            };
+            var abilityDefinition = AbilityUtilities.CreatePredictedAbilityDefinition();
+            clientSystem.AbilityManager.GrantAbility(abilityDefinition);
             
-            clientAbilitySystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
+            bool requestDispatched = false;
+            clientSystem.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) => requestDispatched = true;
             
-            Assert.IsTrue(eventDispatched, "Predicted ability didn't call server.");
+            clientSystem.AbilityManager.TryActivateAbility(abilityDefinition.UniqueName);
+            
+            Assert.IsTrue(requestDispatched, "Predicted ability should have dispatched a server activation request");
         }
     }
 }

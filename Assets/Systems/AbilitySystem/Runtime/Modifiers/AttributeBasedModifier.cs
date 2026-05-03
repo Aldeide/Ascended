@@ -30,7 +30,8 @@ namespace AbilitySystem.Runtime.Modifiers
         public enum AttributeCaptureType
         {
             SnapshotOnCreation,
-            OnApplication
+            OnApplication,
+            Dynamic
         }
         
         public override void CaptureAttributes(Effect effect)
@@ -44,12 +45,26 @@ namespace AbilitySystem.Runtime.Modifiers
             if (attributeFromType == AttributeFrom.Source)
             {
                var attr = effect.Source.AttributeSetManager.GetAttribute(fromAttributeSetName, fromAttributeShortName);
-               effect.SourceCapturedAttributes[attributeFromName] = attr.CurrentValue;
+               if (attr != null)
+               {
+                   effect.SourceCapturedAttributes[attributeFromName] = attr.CurrentValue;
+               }
+               else
+               {
+                   Debug.LogError($"AttributeBasedModifier: Source attribute {attributeFromName} not found on {effect.Source}");
+               }
             }
             else
             {
                var attr = effect.Owner.AttributeSetManager.GetAttribute(fromAttributeSetName, fromAttributeShortName);
-               effect.OwnerCapturedAttributes[attributeFromName] = attr.CurrentValue;
+               if (attr != null)
+               {
+                   effect.OwnerCapturedAttributes[attributeFromName] = attr.CurrentValue;
+               }
+               else
+               {
+                   Debug.LogError($"AttributeBasedModifier: Target attribute {attributeFromName} not found on {effect.Owner}");
+               }
             }
         }
 
@@ -62,28 +77,38 @@ namespace AbilitySystem.Runtime.Modifiers
             {
                 if (captureType == AttributeCaptureType.SnapshotOnCreation)
                 {
-                    return effect.SourceCapturedAttributes[attributeFromName] * k + b;
+                    if (effect.SourceCapturedAttributes.TryGetValue(attributeFromName, out var val))
+                    {
+                        return val * k + b;
+                    }
+                    Debug.LogError($"AttributeBasedModifier: Source attribute {attributeFromName} was not captured!");
+                    return 0;
                 }
                 else
                 {
                     var attribute = effect.Source.AttributeSetManager.GetAttribute(fromAttributeSetName, fromAttributeShortName);
-                    return attribute.CurrentValue * k + b;
+                    return (attribute?.CurrentValue ?? 0) * k + b;
                 }
             }
 
             if (captureType == AttributeCaptureType.SnapshotOnCreation)
             {
-                return effect.OwnerCapturedAttributes[attributeFromName] * k + b;
+                if (effect.OwnerCapturedAttributes.TryGetValue(attributeFromName, out var val))
+                {
+                    return val * k + b;
+                }
+                Debug.LogError($"AttributeBasedModifier: Target attribute {attributeFromName} was not captured!");
+                return 0;
             }
             else
             {
                 var attribute = effect.Owner.AttributeSetManager.GetAttribute(fromAttributeSetName, fromAttributeShortName);
-                return attribute.CurrentValue * k + b;
+                return (attribute?.CurrentValue ?? 0) * k + b;
             }
         }
         public Attribute GetDynamicDependency(Effect effect)
         {
-            if (captureType == AttributeCaptureType.SnapshotOnCreation) return null;
+            if (captureType != AttributeCaptureType.Dynamic) return null;
             var split = attributeFromName.Split(".");
             return attributeFromType == AttributeFrom.Source 
                 ? effect.Source.AttributeSetManager.GetAttribute(split[0], split[1]) 

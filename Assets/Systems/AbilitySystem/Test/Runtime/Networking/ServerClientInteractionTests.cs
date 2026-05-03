@@ -1,80 +1,78 @@
 using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Test.Utilities;
-using NUnit.Framework;
 using Moq;
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
+using NUnit.Framework;
 
 namespace AbilitySystem.Test.Runtime.Networking
 {
-    public class ServerClientInteractionTests
+    /// <summary>
+    /// Unit tests for server-client interactions, verifying the core networking handshake during ability activation without relying on Unity Netcode.
+    /// </summary>
+    public class ServerClientInteractionTests : AbilitySystemTestBase
     {
-        [Test]
-        public void ServerClientInteraction_ClientTryActivateAbility_RequestsServerActivation()
+        [SetUp]
+        public override void SetUp()
         {
-            // Arrange: Create a simulated client ability system.
-            var clientSystem = CreateMockClientAbilitySystem();
+            // Specifically setup Source as Client and Target as Server for interaction tests
+            SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
+            TargetMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();
             
+            base.SetUp();
+        }
+
+        /// <summary>
+        /// Verifies that when a client attempts to activate a predicted ability, it correctly emits a server activation request via the ReplicationManager.
+        /// </summary>
+        [Test]
+        public void ServerClientInteractionTests_ClientActivation_RequestsServerActivationWithValidKey()
+        {
             var abilityDef = AbilityUtilities.CreateInstantAbilityDefinition();
             abilityDef.UniqueName = "Test.Ability.Interact";
             abilityDef.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
-            clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
+            Source.AbilityManager.GrantAbility(abilityDef);
 
-            // Variable to capture the event arguments emitted when the client calls TryActivateAbility.
             string requestedAbilityName = null;
-            AbilitySystem.Runtime.Networking.PredictionKey requestedPredictionKey = default;
+            PredictionKey requestedPredictionKey = default;
             
-            // Subscribe to the event that replaces the old direct RPC logic.
-            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
+            // Subscribe to the event that replaces direct RPC logic
+            Source.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
             {
                 requestedAbilityName = name;
                 requestedPredictionKey = key;
             };
 
-            // Act: Client attempts to activate the ability locally.
-            // Since it's a client, it should successfully predict locally and ask the server.
-            clientSystem.Object.AbilityManager.TryActivateAbility("Test.Ability.Interact", new AbilityData());
+            // Client attempts to activate locally
+            Source.AbilityManager.TryActivateAbility("Test.Ability.Interact", new AbilityData());
 
-            // Assert: Verify that the pure C# event was invoked for server activation, completely abstracted from Unity's RPCs!
-            Assert.AreEqual("Test.Ability.Interact", requestedAbilityName, "Client did not emit the correct ability name to the server request map.");
-            Assert.IsTrue(requestedPredictionKey.IsValidKey(), "Client did not generate a valid prediction key.");
+            Assert.AreEqual("Test.Ability.Interact", requestedAbilityName, "Client should have requested the specific ability name on the server");
+            Assert.IsTrue(requestedPredictionKey.IsValidKey(), "Client should have generated and sent a valid prediction key");
         }
 
+        /// <summary>
+        /// Verifies that a server correctly processes a client's activation request, leading to the activation of the authoritative ability on the server.
+        /// </summary>
         [Test]
-        public void ServerClientInteraction_ServerValidatesClientRequest_GrantsAndActivatesAbility()
+        public void ServerClientInteractionTests_ServerReceiveRequest_ActivatesAuthoritativeAbility()
         {
-            // Arrange
-            var serverSystem = CreateMockServerAbilitySystem();
-            var clientSystem = CreateMockClientAbilitySystem();
-
             var abilityDef = AbilityUtilities.CreateInstantAbilityDefinition();
             abilityDef.UniqueName = "Test.Ability.CrossSystem";
-            abilityDef.Cost = null; // No cost for simplicity
             abilityDef.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
             
-            clientSystem.Object.AbilityManager.GrantAbility(abilityDef);
-            serverSystem.Object.AbilityManager.GrantAbility(abilityDef);
+            Source.AbilityManager.GrantAbility(abilityDef);
+            Target.AbilityManager.GrantAbility(abilityDef);
 
-            // Connect the simulated systems directly without Netcode
-            clientSystem.Object.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
-            {
-                // This simulates the RPC flying across the network.
-                // The server receives the key and validation data from the client, running its own TryActivateAbility routine safely.
-                serverSystem.Object.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
-            };
+            // Connect the simulated systems
+            AbilitySystemUtilities.LinkAbilitySystems(SourceMock, TargetMock);
 
-            // Before activation: ability on the server should be inactive
-            Assert.IsFalse(serverSystem.Object.AbilityManager.Abilities["Test.Ability.CrossSystem"].IsActive, 
-                "Server ability should be inactive before client requests it.");
+            // Initial state check
+            Assert.IsFalse(Target.AbilityManager.Abilities["Test.Ability.CrossSystem"].IsActive, "Server ability should be inactive initially");
 
-            // Act: Fire the client activation
-            bool clientStartedPreidction = clientSystem.Object.AbilityManager.TryActivateAbility("Test.Ability.CrossSystem", new AbilityData());
+            // Client activates
+            bool clientPredictionStarted = Source.AbilityManager.TryActivateAbility("Test.Ability.CrossSystem", new AbilityData());
 
-            // Assert
-            Assert.IsTrue(clientStartedPreidction, "Client failed to initially predict the activation locally.");
-            
-            // The magic moment: Does the server's ability read as active after validating the client's RPC event payload?
-            Assert.IsTrue(serverSystem.Object.AbilityManager.Abilities["Test.Ability.CrossSystem"].IsActive, 
-                "Server ability did not activate after receiving the abstract client event invocation.");
+            Assert.IsTrue(clientPredictionStarted, "Client should have successfully started local prediction");
+            Assert.IsTrue(Target.AbilityManager.Abilities["Test.Ability.CrossSystem"].IsActive, "Server ability should have activated after processing the client request");
         }
     }
 }
