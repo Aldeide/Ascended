@@ -1,77 +1,72 @@
-using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
-    public class AbilityBlockingTests
+    /// <summary>
+    /// Unit tests for ability blocking logic, ensuring that active abilities can prevent others from starting based on tag-based rules.
+    /// </summary>
+    public class AbilityBlockingTests : AbilitySystemTestBase
     {
+        private static readonly Tag TargetBlockedTag = new Tag("Ability.Test.Blocked");
+
+        /// <summary>
+        /// Verifies that an active ability with 'BlockAbilityTags' correctly prevents the activation of any other ability that possesses one of those tags.
+        /// </summary>
         [Test]
-        public void AbilityBlocking_ActiveAbilityBlocksTaggedAbility_CannotActivate()
+        public void AbilityBlockingTests_ActiveBlocker_BlocksMatchingTaggedAbility()
         {
-            // Arrange
-            var owner = AbilitySystemUtilities.CreateMockServerAbilitySystem();
-            var tagManager = owner.Object.TagManager;
-            
-            var targetTag = new Tag("Ability.Test.Blocked");
-            
             // Ability that blocks "Ability.Test.Blocked"
             var blockerDef = AbilityUtilities.CreateInstantAbilityDefinition();
             blockerDef.UniqueName = "Blocker";
-            blockerDef.BlockAbilityTags = new[] { targetTag };
+            blockerDef.BlockAbilityTags = new[] { TargetBlockedTag };
             
             // Ability that IS "Ability.Test.Blocked"
             var blockedDef = AbilityUtilities.CreateInstantAbilityDefinition();
             blockedDef.UniqueName = "Blocked";
-            blockedDef.AssetTags = new[] { targetTag };
+            blockedDef.AssetTags = new[] { TargetBlockedTag };
             
-            owner.Object.AbilityManager.GrantAbility(blockerDef);
-            owner.Object.AbilityManager.GrantAbility(blockedDef);
+            Source.AbilityManager.GrantAbility(blockerDef);
+            Source.AbilityManager.GrantAbility(blockedDef);
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
             
-            // Act
-            var activated = owner.Object.AbilityManager.TryActivateAbility("Blocker");
+            // Activate blocker
+            bool blockerSuccess = Source.AbilityManager.TryActivateAbility("Blocker");
+            Assert.IsTrue(blockerSuccess, "Blocker ability should have activated");
+            Assert.IsTrue(Source.AbilityManager.Abilities["Blocker"].IsActive);
             
-            // Assert: Blocker is active
-            Assert.IsTrue(activated, "Blocker ability should have activated on the server.");
-            Assert.IsTrue(owner.Object.AbilityManager.Abilities["Blocker"].IsActive);
-            
-            // Act: Try activate blocked ability
-            var success = owner.Object.AbilityManager.TryActivateAbility("Blocked");
-            
-            // Assert: Activation failed
-            Assert.IsFalse(success, "Ability should have been blocked by the active 'Blocker' ability.");
+            // Try activate blocked ability
+            bool blockedSuccess = Source.AbilityManager.TryActivateAbility("Blocked");
+            Assert.IsFalse(blockedSuccess, "Ability should have been blocked by the active 'Blocker' ability");
         }
 
+        /// <summary>
+        /// Verifies that an ability that was previously blocked becomes available for activation once the blocking ability has ended.
+        /// </summary>
         [Test]
-        public void AbilityBlocking_BlockingAbilityEnds_AllowsActivation()
+        public void AbilityBlockingTests_BlockerEnded_AllowsPreviouslyBlockedAbilityToActivate()
         {
-            // Arrange
-            var owner = AbilitySystemUtilities.CreateMockServerAbilitySystem();
-            var targetTag = new Tag("Ability.Test.Blocked");
-            
             var blockerDef = AbilityUtilities.CreateInstantAbilityDefinition();
             blockerDef.UniqueName = "Blocker";
-            blockerDef.BlockAbilityTags = new[] { targetTag };
+            blockerDef.BlockAbilityTags = new[] { TargetBlockedTag };
             
             var blockedDef = AbilityUtilities.CreateInstantAbilityDefinition();
             blockedDef.UniqueName = "Blocked";
-            blockedDef.AssetTags = new[] { targetTag };
+            blockedDef.AssetTags = new[] { TargetBlockedTag };
             
-            owner.Object.AbilityManager.GrantAbility(blockerDef);
-            owner.Object.AbilityManager.GrantAbility(blockedDef);
+            Source.AbilityManager.GrantAbility(blockerDef);
+            Source.AbilityManager.GrantAbility(blockedDef);
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
             
-            // Act: Fire blocker then end it
-            var activated = owner.Object.AbilityManager.TryActivateAbility("Blocker");
-            Assert.IsTrue(activated, "Blocker should activate.");
-            owner.Object.AbilityManager.EndAbility("Blocker");
+            // Activate and then immediately end the blocker
+            Source.AbilityManager.TryActivateAbility("Blocker");
+            Source.AbilityManager.EndAbility("Blocker");
             
-            // Act: Try activate previously blocked ability
-            var success = owner.Object.AbilityManager.TryActivateAbility("Blocked");
+            // Try activate previously blocked ability
+            bool success = Source.AbilityManager.TryActivateAbility("Blocked");
             
-            // Assert: Activation succeeded
-            Assert.IsTrue(success, "Ability should be permitted to activate after the blocker has ended.");
+            Assert.IsTrue(success, "Ability should be permitted to activate after the blocker has ended");
         }
     }
 }

@@ -3,23 +3,27 @@ using System.Linq;
 using System.Reflection;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilityGraph.Runtime.Nodes.Logic;
-using AbilityGraph.Runtime.Nodes.Primitives;
+using AbilitySystem.Test.Utilities;
 using GraphProcessor;
 using Moq;
 using NUnit.Framework;
-using UnityEditorInternal;
 
 namespace AbilityGraph.Tests.Runtime.Nodes.Logic
 {
-    public class BranchNodeTests
+    /// <summary>
+    /// Tests for the BranchNode, validating execution path selection based on input conditions.
+    /// </summary>
+    public class BranchNodeTests : AbilitySystemTestBase
     {
         private BranchNode _branchNode;
         private Mock<ExecutableNode> _truePathNodeMock;
         private Mock<ExecutableNode> _falsePathNodeMock;
 
         [SetUp]
-        public void Setup()
+        public override void SetUp()
         {
+            base.SetUp();
+
             _branchNode = new BranchNode();
             
             _truePathNodeMock = new Mock<ExecutableNode>();
@@ -38,6 +42,7 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             var falsePort = (NodePort)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(NodePort));
             falsePort.fieldName = nameof(BranchNode.ExecutesIfFalse);
             typeof(NodePort).GetField("edges", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(falsePort, new List<SerializableEdge> { falseEdge });
+            
             var baseType = typeof(BaseNode);
             var outputPortsField = baseType.GetField("outputPorts", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -52,8 +57,11 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             outputPortsField.SetValue(_branchNode, portList);
         }
         
+        /// <summary>
+        /// Validates that GetExecutedNodes returns the true path node when the condition is true.
+        /// </summary>
         [Test]
-        public void GetExecutedNodes_ConditionIsTrue_ReturnsTruePathNode()
+        public void BranchNodeTests_GetExecutedNodes_ConditionIsTrue_ReturnsTruePathNode()
         {
             _branchNode.Condition = true;
             
@@ -64,8 +72,11 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             Assert.IsFalse(result.Contains(_falsePathNodeMock.Object), "The false-path node should not be returned.");
         }
         
+        /// <summary>
+        /// Validates that GetExecutedNodes returns the false path node when the condition is false.
+        /// </summary>
         [Test]
-        public void GetExecutedNodes_ConditionIsFalse_ReturnsFalsePathNode()
+        public void BranchNodeTests_GetExecutedNodes_ConditionIsFalse_ReturnsFalsePathNode()
         {
             _branchNode.Condition = false;
             
@@ -75,6 +86,5 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             Assert.Contains(_falsePathNodeMock.Object, result, "The false-path node should be returned.");
             Assert.IsFalse(result.Contains(_truePathNodeMock.Object), "The true-path node should not be returned.");
         }
-
     }
-}
+}

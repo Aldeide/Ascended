@@ -9,30 +9,37 @@ using Item.Runtime.Definition;
 using GameplayTags.Runtime;
 using System.Collections.Generic;
 using System.Linq;
+using AbilitySystem.Test.Utilities;
+using UnityEngine;
 
 namespace Systems.Item.Tests
 {
-    public class EquipmentTests
+    /// <summary>
+    /// Tests for the Equipment system, including item equipping, unequipping, and upgrade logic.
+    /// </summary>
+    public class EquipmentTests : AbilitySystemTestBase
     {
         private EquipmentManagerDefinition CreateMockDefinition(params string[] slots)
         {
-            var def = UnityEngine.ScriptableObject.CreateInstance<EquipmentManagerDefinition>();
+            var def = ScriptableObject.CreateInstance<EquipmentManagerDefinition>();
             def.EquipmentSlots = slots.Select(s => new Tag(s)).ToArray();
             def.Equipment = new EquipmentDefinition[0];
             return def;
         }
 
+        /// <summary>
+        /// Validates that equipping an item correctly updates the target slot and triggers the change event.
+        /// </summary>
         [Test]
-        public void Equipment_EquipItem_UpdatesSlotAndFiresEvent()
+        public void EquipmentTests_EquipItem_UpdatesSlotAndFiresEvent()
         {
-            var owner = new Mock<IAbilitySystem>();
-            owner.Setup(m => m.IsServer()).Returns(true);
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
             var inv = new Mock<IInventoryManager>();
-            inv.Setup(m => m.GetOwner()).Returns(owner.Object); // Setup GetOwner
+            inv.Setup(m => m.GetOwner()).Returns(Source); 
             
             var def = CreateMockDefinition("MainHand");
             
-            var manager = new EquipmentManager(owner.Object, inv.Object, def);
+            var manager = new EquipmentManager(Source, inv.Object, def);
             bool eventFired = false;
             manager.OnEquipmentChanged += () => eventFired = true;
 
@@ -44,17 +51,19 @@ namespace Systems.Item.Tests
             Assert.IsTrue(eventFired, "OnEquipmentChanged should have fired.");
         }
 
+        /// <summary>
+        /// Validates that unequipping an item correctly clears the target slot.
+        /// </summary>
         [Test]
-        public void Equipment_UnequipItem_ClearsSlot()
+        public void EquipmentTests_UnequipItem_ClearsSlot()
         {
-            var owner = new Mock<IAbilitySystem>();
-            owner.Setup(m => m.IsServer()).Returns(true);
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
             var inv = new Mock<IInventoryManager>();
-            inv.Setup(m => m.GetOwner()).Returns(owner.Object); // Setup GetOwner
+            inv.Setup(m => m.GetOwner()).Returns(Source); 
             
             var def = CreateMockDefinition("MainHand");
 
-            var manager = new EquipmentManager(owner.Object, inv.Object, def);
+            var manager = new EquipmentManager(Source, inv.Object, def);
             var item = TestItems.BasicEquipment("Sword", "MainHand");
             
             manager.Equip(new Tag("MainHand"), item);
@@ -64,16 +73,19 @@ namespace Systems.Item.Tests
             Assert.IsNull(manager.GetEquipment()[new Tag("MainHand")]);
         }
 
+        /// <summary>
+        /// Validates that upgrading equipment correctly increments its level and consumes required ingredients.
+        /// </summary>
         [Test]
-        public void Equipment_Upgrade_IncrementsLevelAndConsumesItems()
+        public void EquipmentTests_Upgrade_IncrementsLevelAndConsumesItems()
         {
             var inv = new Mock<IInventoryManager>();
-            var def = UnityEngine.ScriptableObject.CreateInstance<EquipmentDefinition>();
+            var def = ScriptableObject.CreateInstance<EquipmentDefinition>();
             def.Name = "Sword";
             def.MaxLevel = 5;
             def.ModSlots = new global::Item.Runtime.Modifiers.ModSlot[0];
             
-            var ingredient = UnityEngine.ScriptableObject.CreateInstance<EquipmentDefinition>();
+            var ingredient = ScriptableObject.CreateInstance<EquipmentDefinition>();
             ingredient.Name = "Iron";
 
             var equipment = new Equipment(inv.Object, def);
@@ -88,11 +100,14 @@ namespace Systems.Item.Tests
             inv.Verify(m => m.ConsumeItems(equipment.NextUpgradeCosts), Times.Once);
         }
 
+        /// <summary>
+        /// Validates the CanUpgrade method correctly reports upgrade eligibility based on level and ingredients.
+        /// </summary>
         [Test]
-        public void Equipment_CanUpgrade_ReturnsCorrectValue()
+        public void EquipmentTests_CanUpgrade_ReturnsCorrectStatus()
         {
             var inv = new Mock<IInventoryManager>();
-            var def = UnityEngine.ScriptableObject.CreateInstance<EquipmentDefinition>();
+            var def = ScriptableObject.CreateInstance<EquipmentDefinition>();
             def.Name = "Sword";
             def.MaxLevel = 5;
             def.ModSlots = new global::Item.Runtime.Modifiers.ModSlot[0];

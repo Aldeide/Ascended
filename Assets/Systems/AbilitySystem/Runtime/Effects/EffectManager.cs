@@ -4,6 +4,7 @@ using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
 using GameplayTags.Runtime;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Effects
 {
@@ -42,7 +43,6 @@ namespace AbilitySystem.Runtime.Effects
         public List<Effect> GetActiveEffects()
         {
             var activeEffects = Effects.Where(effect => effect.IsActive).ToList();
-    
             foreach (var effectList in PredictedEffects.Values)
             {
                 activeEffects.AddRange(effectList.Where(effect => effect.IsActive));

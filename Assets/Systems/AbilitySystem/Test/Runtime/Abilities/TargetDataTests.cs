@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities.Targeting;
 using NUnit.Framework;
 using Unity.Netcode;
@@ -6,10 +5,16 @@ using UnityEngine;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
+    /// <summary>
+    /// Unit tests for TargetData containers, verifying data persistence and network serialization integrity.
+    /// </summary>
     public class TargetDataTests
     {
+        /// <summary>
+        /// Verifies that TargetDataHandle correctly stores and retrieves multiple types of targeting information.
+        /// </summary>
         [Test]
-        public void TargetDataHandle_AddAndRetrieve_ReturnsCorrectData()
+        public void TargetDataTests_AddAndRetrieve_MaintainsDataIntegrity()
         {
             var handle = new TargetDataHandle();
             var location = new TargetDataLocation { Position = new Vector3(1, 2, 3) };
@@ -25,14 +30,23 @@ namespace AbilitySystem.Test.Runtime.Abilities
             Assert.AreEqual(12345, ((TargetDataActor)handle.Data[1]).NetworkObjectId);
         }
 
+        /// <summary>
+        /// Verifies that TargetDataHandle correctly serializes and deserializes its contents for network transmission.
+        /// </summary>
         [Test]
-        public void TargetDataHandle_NetworkSerialize_SerializesAndDeserializesCorrectly()
+        public void TargetDataTests_NetworkSerialization_MatchesOriginalData()
         {
             var originalHandle = new TargetDataHandle();
             originalHandle.Add(new TargetDataLocation { Position = new Vector3(1, 2, 3) });
             originalHandle.Add(new TargetDataActor { NetworkObjectId = 12345 });
-            originalHandle.Add(new TargetDataHitResult { Position = new Vector3(4, 5, 6), Normal = new Vector3(0, 1, 0), NetworkObjectId = 67890, ColliderIndex = 1 });
+            originalHandle.Add(new TargetDataHitResult { 
+                Position = new Vector3(4, 5, 6), 
+                Normal = new Vector3(0, 1, 0), 
+                NetworkObjectId = 67890, 
+                ColliderIndex = 1 
+            });
 
+            // Simulate network transmission
             using var writer = new FastBufferWriter(1024, Unity.Collections.Allocator.Temp);
             writer.WriteNetworkSerializable(in originalHandle);
 
@@ -41,12 +55,15 @@ namespace AbilitySystem.Test.Runtime.Abilities
 
             Assert.AreEqual(3, deserializedHandle.Data.Count);
 
+            // Verify Location Data
             Assert.IsInstanceOf<TargetDataLocation>(deserializedHandle.Data[0]);
             Assert.AreEqual(new Vector3(1, 2, 3), ((TargetDataLocation)deserializedHandle.Data[0]).Position);
 
+            // Verify Actor Data
             Assert.IsInstanceOf<TargetDataActor>(deserializedHandle.Data[1]);
             Assert.AreEqual(12345, ((TargetDataActor)deserializedHandle.Data[1]).NetworkObjectId);
 
+            // Verify Hit Result Data
             Assert.IsInstanceOf<TargetDataHitResult>(deserializedHandle.Data[2]);
             var hitResult = (TargetDataHitResult)deserializedHandle.Data[2];
             Assert.AreEqual(new Vector3(4, 5, 6), hitResult.Position);

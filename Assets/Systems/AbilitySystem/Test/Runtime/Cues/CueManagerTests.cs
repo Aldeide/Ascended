@@ -7,27 +7,32 @@ using Moq;
 
 namespace AbilitySystem.Test.Runtime.Cues
 {
-    public class CueManagerTests
+    /// <summary>
+    /// Unit tests for the CueManager, verifying that Gameplay Cues are correctly processed, 
+    /// played on clients, and ignored on pure servers.
+    /// </summary>
+    public class CueManagerTests : AbilitySystemTestBase
     {
-        private Mock<IAbilitySystem> _mockAbilitySystem;
         private Mock<IDataManager> _mockDataManager;
         private CueManager _cueManager;
 
         [SetUp]
-        public void Setup()
+        public override void SetUp()
         {
-            _mockAbilitySystem = AbilitySystemUtilities.CreateMockClientAbilitySystem();
+            base.SetUp();
             _mockDataManager = new Mock<IDataManager>();
-            _mockAbilitySystem.Setup(x => x.DataManager).Returns(_mockDataManager.Object);
-            _cueManager = new CueManager(_mockAbilitySystem.Object, _mockDataManager.Object);
-
+            SourceMock.Setup(x => x.DataManager).Returns(_mockDataManager.Object);
+            _cueManager = new CueManager(Source, _mockDataManager.Object);
         }
         
+        /// <summary>
+        /// Validates that cues are not played on the server (unless it's a host, which is tested elsewhere).
+        /// </summary>
         [Test]
-        public void CueManagerTests_ServerAbilitySystem_AddCuesDontPlay()
+        public void CueManagerTests_Server_IgnoresCues()
         {
-            _mockAbilitySystem.Setup(x => x.IsServer()).Returns(true);
-            _mockAbilitySystem.Setup(x => x.IsHost()).Returns(false);
+            SourceMock.Setup(x => x.IsServer()).Returns(true);
+            SourceMock.Setup(x => x.IsHost()).Returns(false);
             
             var onCueAddCalled = false;
             _cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
@@ -37,13 +42,16 @@ namespace AbilitySystem.Test.Runtime.Cues
             
             _cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
 
-            Assert.IsFalse(onCueAddCalled);
+            Assert.IsFalse(onCueAddCalled, "Server should not fire OnCueAdd event");
         }
         
+        /// <summary>
+        /// Validates that cues are correctly triggered and tracked on clients.
+        /// </summary>
         [Test]
-        public void CueManagerTests_ClientAbilitySystem_AddCuesPlay()
+        public void CueManagerTests_Client_PlaysAddedCues()
         {
-            _mockAbilitySystem.Setup(x => x.IsServer()).Returns(false);
+            SourceMock.Setup(x => x.IsServer()).Returns(false);
             var onCueAddCalled = false;
             _cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
             var tag = new Tag("Cue.Test.Add");
@@ -52,14 +60,17 @@ namespace AbilitySystem.Test.Runtime.Cues
             
             _cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
 
-            Assert.IsTrue(onCueAddCalled);
+            Assert.IsTrue(onCueAddCalled, "Client should fire OnCueAdd event");
             Assert.AreEqual(1, _cueManager.GetActiveCues().Count);
         }
 
+        /// <summary>
+        /// Validates that removing a cue correctly triggers the removal event and updates the active list.
+        /// </summary>
         [Test]
-        public void CueManagerTests_ClientAbilitySystem_RemoveCuesPlay()
+        public void CueManagerTests_Client_RemovesCuesCorrectly()
         {
-            _mockAbilitySystem.Setup(x => x.IsServer()).Returns(false);
+            SourceMock.Setup(x => x.IsServer()).Returns(false);
             var tag = new Tag("Cue.Test.Add");
             var cueDef = CueUtilities.CreateCueDefinitionWithTag(tag);
             _mockDataManager.Setup(x => x.GetCueByTag(tag)).Returns(cueDef);
@@ -69,14 +80,17 @@ namespace AbilitySystem.Test.Runtime.Cues
             _cueManager.OnCueRemove += (c, d) => onCueRemoveCalled = true;
             _cueManager.OnCueReceived(tag, CueAction.Remove, new CueData());
 
-            Assert.IsTrue(onCueRemoveCalled);
+            Assert.IsTrue(onCueRemoveCalled, "Client should fire OnCueRemove event");
             Assert.AreEqual(0, _cueManager.GetActiveCues().Count);
         }
 
+        /// <summary>
+        /// Validates that one-shot cues (Execute) are correctly triggered.
+        /// </summary>
         [Test]
-        public void CueManagerTests_ClientAbilitySystem_ExecuteCuesPlay()
+        public void CueManagerTests_Client_PlaysExecutedCues()
         {
-            _mockAbilitySystem.Setup(x => x.IsServer()).Returns(false);
+            SourceMock.Setup(x => x.IsServer()).Returns(false);
             var onCueExecuteCalled = false;
             _cueManager.OnCueExecute += (c, d) => onCueExecuteCalled = true;
             var tag = new Tag("Cue.Test.Execute");
@@ -85,13 +99,16 @@ namespace AbilitySystem.Test.Runtime.Cues
             
             _cueManager.OnCueReceived(tag, CueAction.Execute, new CueData());
 
-            Assert.IsTrue(onCueExecuteCalled);
+            Assert.IsTrue(onCueExecuteCalled, "Client should fire OnCueExecute event");
         }
         
+        /// <summary>
+        /// Validates that receiving a cue tag with no associated definition does not result in an active cue.
+        /// </summary>
         [Test]
-        public void CueManagerTests_ClientAbilitySystem_AddCueDefinitionNotFound_NoCueAdded()
+        public void CueManagerTests_Client_IgnoresCuesWithMissingDefinitions()
         {
-            _mockAbilitySystem.Setup(x => x.IsServer()).Returns(false);
+            SourceMock.Setup(x => x.IsServer()).Returns(false);
             var onCueAddCalled = false;
             _cueManager.OnCueAdd += (c, d) => onCueAddCalled = true;
             var tag = new Tag("Cue.Test.Add");
@@ -99,8 +116,8 @@ namespace AbilitySystem.Test.Runtime.Cues
             
             _cueManager.OnCueReceived(tag, CueAction.Add, new CueData());
 
-            Assert.IsFalse(onCueAddCalled);
-            Assert.AreEqual(0, _cueManager.GetActiveCues().Count, "Cues were added when no definition exists.");
+            Assert.IsFalse(onCueAddCalled, "Cue should not be added if definition is missing");
+            Assert.AreEqual(0, _cueManager.GetActiveCues().Count);
         }
     }
-}
+}

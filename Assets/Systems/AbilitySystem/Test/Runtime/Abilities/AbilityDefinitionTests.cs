@@ -1,17 +1,24 @@
-﻿using AbilitySystem.Runtime.Abilities.PassiveAbility;
+using AbilitySystem.Runtime.Abilities.PassiveAbility;
+using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
-using static AbilitySystem.Test.Utilities.AbilityUtilities;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
+    /// <summary>
+    /// Unit tests for the AbilityDefinition class and its subclasses, verifying correct metadata initialization and type mapping.
+    /// </summary>
     public class AbilityDefinitionTests
     {
+        /// <summary>
+        /// Verifies that an ability definition correctly reports its unique name, type name, and associated runtime class type.
+        /// </summary>
         [Test]
-        public void AbilityDefinitionTests_CreationDefault_HasCorrectValues()
+        public void AbilityDefinitionTests_Creation_HasCorrectMetadata()
         {
-            var abilityDefinition = CreatePassiveAbilityDefinition();
+            var abilityDefinition = AbilityUtilities.CreatePassiveAbilityDefinition();
+            abilityDefinition.UniqueName = "PassiveTest";
 
-            Assert.AreEqual("TestAbility", abilityDefinition.UniqueName);
+            Assert.AreEqual("PassiveTest", abilityDefinition.UniqueName);
             Assert.AreEqual("PassiveAbilityDefinition", abilityDefinition.TypeName);
             Assert.AreEqual(typeof(PassiveAbility), abilityDefinition.AbilityType());
             Assert.AreEqual("AbilitySystem.Runtime.Abilities.PassiveAbility.PassiveAbilityDefinition",

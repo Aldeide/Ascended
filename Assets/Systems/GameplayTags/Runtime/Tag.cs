@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -48,22 +48,22 @@ namespace GameplayTags.Runtime
         
         public static bool operator ==(Tag x, Tag y)
         {
-            return x.HashCode == y.HashCode;
+            return x.Equals(y);
         }
 
         public static bool operator !=(Tag x, Tag y)
         {
-            return x.HashCode != y.HashCode;
+            return !x.Equals(y);
         }
         
         public override bool Equals(object obj)
         {
-            return obj is Tag tag && this == tag;
+            return obj is Tag tag && Equals(tag);
         }
 
         public override int GetHashCode()
         {
-            return HashCode;
+            return Name != null ? Name.GetHashCode() : 0;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -101,7 +101,9 @@ namespace GameplayTags.Runtime
         
         public bool Equals(Tag other)
         {
-            return HashCode == other.HashCode;
+            if (Name == null || other.Name == null)
+                return Name == other.Name;
+            return Name.Equals(other.Name);
         }
     }
 }

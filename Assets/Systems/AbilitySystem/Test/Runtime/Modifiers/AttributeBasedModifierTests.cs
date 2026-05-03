@@ -1,35 +1,33 @@
-using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
 using UnityEngine;
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
 
 namespace AbilitySystem.Test.Runtime.Modifiers
 {
-    public class AttributeBasedModifierTests
+    /// <summary>
+    /// Unit tests for the AttributeBasedModifier, verifying correct attribute capture, calculation logic, and dynamic dependency tracking.
+    /// </summary>
+    public class AttributeBasedModifierTests : AbilitySystemTestBase
     {
-        private TestAttributeSet _sourceAttributes;
-        private TestAttributeSet _targetAttributes;
         private Effect _effect;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
-            var source = CreateMockAbilitySystem();
-            var target = CreateMockAbilitySystem();
-
-            _sourceAttributes = source.Object.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
-            _targetAttributes = target.Object.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
-
+            base.SetUp();
+            
             var effectDef = ScriptableObject.CreateInstance<EffectDefinition>();
             _effect = new Effect(effectDef);
-            _effect.Initialise(source.Object, target.Object);
+            _effect.Initialise(Source, Target);
         }
 
+        /// <summary>
+        /// Verifies that a modifier with 'SnapshotOnCreation' capture type correctly preserves the attribute value at the time of capture, ignoring subsequent changes.
+        /// </summary>
         [Test]
-        public void AttributeBasedModifier_SnapshotSource_CapturesValueAtCreation()
+        public void AttributeBasedModifierTests_SnapshotOnCreation_CapturesValueAtCreationTime()
         {
             var modifier = new AttributeBasedModifier
             {
@@ -40,20 +38,23 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 b = 0
             };
 
-            _sourceAttributes.Health.SetBaseValue(10);
-            _sourceAttributes.Health.SetCurrentValue(10);
+            SourceAttributes.Health.SetBaseValue(10f);
+            SourceAttributes.Health.SetCurrentValue(10f);
 
             modifier.CaptureAttributes(_effect);
             
             // Change source value after capture
-            _sourceAttributes.Health.SetCurrentValue(20);
+            SourceAttributes.Health.SetCurrentValue(20f);
 
             float result = modifier.Calculate(_effect);
-            Assert.AreEqual(10f, result, "Snapshot should use value at capture time");
+            Assert.AreEqual(10f, result, "Snapshot should use value at capture time, not the updated live value");
         }
 
+        /// <summary>
+        /// Verifies that a modifier with 'OnApplication' capture type correctly utilizes the live attribute value at the time of calculation.
+        /// </summary>
         [Test]
-        public void AttributeBasedModifier_OnApplicationSource_UsesLiveValue()
+        public void AttributeBasedModifierTests_OnApplication_UsesLiveValue()
         {
             var modifier = new AttributeBasedModifier
             {
@@ -64,32 +65,38 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 b = 0
             };
 
-            _sourceAttributes.Health.SetCurrentValue(10);
+            SourceAttributes.Health.SetCurrentValue(10f);
             Assert.AreEqual(10f, modifier.Calculate(_effect));
 
-            _sourceAttributes.Health.SetCurrentValue(20);
-            Assert.AreEqual(20f, modifier.Calculate(_effect), "OnApplication should use live value");
+            SourceAttributes.Health.SetCurrentValue(20f);
+            Assert.AreEqual(20f, modifier.Calculate(_effect), "OnApplication should always reflect the current live value");
         }
 
+        /// <summary>
+        /// Verifies that the modifier correctly applies the linear formula (Value * K + B) during calculation.
+        /// </summary>
         [Test]
-        public void AttributeBasedModifier_CalculationWithKAndB()
+        public void AttributeBasedModifierTests_CalculationCoefficients_AppliesKAndBCorrectly()
         {
             var modifier = new AttributeBasedModifier
             {
                 attributeFromType = AttributeBasedModifier.AttributeFrom.Target,
                 attributeFromName = "TestAttributeSet.Energy",
                 captureType = AttributeBasedModifier.AttributeCaptureType.OnApplication,
-                k = 2,
-                b = 5
+                k = 2f,
+                b = 5f
             };
 
-            _targetAttributes.Energy.SetCurrentValue(10);
-            // 10 * 2 + 5 = 25
+            TargetAttributes.Energy.SetCurrentValue(10f);
+            // Expected: (10 * 2) + 5 = 25
             Assert.AreEqual(25f, modifier.Calculate(_effect));
         }
 
+        /// <summary>
+        /// Verifies that modifiers using 'Dynamic' capture type correctly register their source attribute as a dynamic dependency.
+        /// </summary>
         [Test]
-        public void AttributeBasedModifier_DynamicMode_RegistersDependency()
+        public void AttributeBasedModifierTests_DynamicMode_RegistersDynamicDependency()
         {
             var modifier = new AttributeBasedModifier
             {
@@ -99,11 +106,14 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             };
 
             var dependency = modifier.GetDynamicDependency(_effect);
-            Assert.AreEqual(_targetAttributes.MovementSpeed, dependency);
+            Assert.AreEqual(TargetAttributes.MovementSpeed, dependency);
         }
 
+        /// <summary>
+        /// Verifies that modifiers using 'OnApplication' capture type do not register dynamic dependencies.
+        /// </summary>
         [Test]
-        public void AttributeBasedModifier_OnApplication_DoesNotRegisterDependency()
+        public void AttributeBasedModifierTests_OnApplication_DoesNotRegisterDependency()
         {
             var modifier = new AttributeBasedModifier
             {
@@ -115,10 +125,13 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             Assert.IsNull(modifier.GetDynamicDependency(_effect));
         }
 
+        /// <summary>
+        /// Verifies that an effect using a dynamic attribute-based modifier automatically updates its magnitude when the dependency attribute changes.
+        /// </summary>
         [Test]
-        public void AttributeBasedModifier_DynamicMode_UpdatesWhenAttributeChanges()
+        public void AttributeBasedModifierTests_DynamicMode_AutomaticallyRecalculatesOnDependencyChange()
         {
-            // Setup an effect that modifies Health based on Energy
+            // Setup an effect that modifies Health based on Energy dynamically
             var effectDef = ScriptableObject.CreateInstance<EffectDefinition>();
             effectDef.DurationType = EffectDurationType.Infinite;
             
@@ -127,30 +140,30 @@ namespace AbilitySystem.Test.Runtime.Modifiers
                 attributeFromType = AttributeBasedModifier.AttributeFrom.Target,
                 attributeFromName = "TestAttributeSet.Energy",
                 captureType = AttributeBasedModifier.AttributeCaptureType.Dynamic,
-                k = 1,
-                b = 0
+                k = 1f,
+                b = 0f
             };
             modifier.AttributeName = "TestAttributeSet.Health";
             modifier.Operation = EffectOperation.Additive;
             
             effectDef.Modifiers = new[] { modifier };
 
-            _targetAttributes.Health.SetBaseValue(100);
-            _targetAttributes.Health.SetCurrentValue(100);
-            _targetAttributes.Energy.SetCurrentValue(10);
+            TargetAttributes.Health.SetBaseValue(100f);
+            TargetAttributes.Health.SetCurrentValue(100f);
+            TargetAttributes.Energy.SetCurrentValue(10f);
 
             var effect = new Effect(effectDef);
-            effect.Initialise(_effect.Source, _effect.Owner);
-            _effect.Owner.ApplyEffectToSelf(effect);
+            effect.Initialise(Source, Target);
+            Target.ApplyEffectToSelf(effect);
 
             // Initially: 100 (base) + 10 (modifier) = 110
-            Assert.AreEqual(110f, _targetAttributes.Health.CurrentValue);
+            Assert.AreEqual(110f, TargetAttributes.Health.CurrentValue);
 
-            // Change Energy (dependency)
-            _targetAttributes.Energy.SetCurrentValue(50);
+            // Change Energy (the dynamic dependency)
+            TargetAttributes.Energy.SetCurrentValue(50f);
 
-            // Should update to: 100 (base) + 50 (modifier) = 150
-            Assert.AreEqual(150f, _targetAttributes.Health.CurrentValue, "Health should update automatically when Energy changes");
+            // Should automatically update to: 100 (base) + 50 (modifier) = 150
+            Assert.AreEqual(150f, TargetAttributes.Health.CurrentValue, "Target attribute should have updated automatically when the dependency attribute changed");
         }
     }
 }
