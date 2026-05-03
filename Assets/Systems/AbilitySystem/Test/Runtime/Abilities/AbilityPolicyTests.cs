@@ -1,24 +1,36 @@
 using AbilitySystem.Runtime.Abilities;
-using static AbilitySystem.Test.Utilities.AbilityUtilities;
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
-using NUnit.Framework;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Test.Utilities;
+using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
-    public class AbilityPolicyTests
+    /// <summary>
+    /// Exhaustive matrix tests for Ability Network and Security policies, verifying correct behavior across client-server interactions.
+    /// </summary>
+    public class AbilityPolicyTests : AbilitySystemTestBase
     {
-        private IAbilitySystem _clientAbilitySystem;
-        private IAbilitySystem _serverAbilitySystem;
         private AbilityDefinition _abilityDefinition;
+        private MockReplicationManager _clientRep;
+        private MockReplicationManager _serverRep;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
-            _clientAbilitySystem = CreateMockClientAbilitySystem().Object;
-            _serverAbilitySystem = CreateMockServerAbilitySystem().Object;
-            _abilityDefinition = CreateTestAbilityDefinition();
+            // We need explicit client/server roles for these tests
+            SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
+            TargetMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();
+            
+            base.SetUp();
+
+            _clientRep = (MockReplicationManager)Source.ReplicationManager;
+            _serverRep = (MockReplicationManager)Target.ReplicationManager;
+
+            _abilityDefinition = AbilityUtilities.CreateTestAbilityDefinition();
+            
+            // Link them for automatic communication
+            AbilitySystemUtilities.LinkAbilitySystems(SourceMock, TargetMock);
         }
 
         public struct NetTestCase
@@ -56,7 +68,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             else if (net == AbilityNetworkPolicy.ClientPredicted)
                             {
                                 tc.ExpectedActiveOnClient = canClientStart;
-                                tc.ExpectedActiveOnServer = canClientStart; // Assuming RPC succeeds
+                                tc.ExpectedActiveOnServer = canClientStart;
                                 tc.ExpectedRpcToServer = canClientStart;
                             }
                             else if (net == AbilityNetworkPolicy.Server)
@@ -68,7 +80,6 @@ namespace AbilitySystem.Test.Runtime.Abilities
                         }
                         else // From Server
                         {
-                            // Server can always start anything except ClientOnly (which it tells client to start)
                             if (net == AbilityNetworkPolicy.ClientOnly)
                             {
                                 tc.ExpectedActiveOnClient = true;
@@ -87,36 +98,26 @@ namespace AbilitySystem.Test.Runtime.Abilities
             }
         }
 
+        /// <summary>
+        /// Verifies the activation matrix for all combinations of NetworkPolicy, SecurityPolicy, and Initiator role.
+        /// </summary>
         [Test, TestCaseSource(nameof(ActivationCases))]
-        public void AbilityPolicy_Activation_Matrix(NetTestCase tc)
+        public void AbilityPolicyTests_ActivationMatrix_MatchesExpectedState(NetTestCase tc)
         {
             _abilityDefinition.NetworkPolicy = tc.NetPolicy;
             _abilityDefinition.NetworkSecurityPolicy = tc.SecurityPolicy;
-            _clientAbilitySystem.AbilityManager.GrantAbility(_abilityDefinition);
-            _serverAbilitySystem.AbilityManager.GrantAbility(_abilityDefinition);
+            Source.AbilityManager.GrantAbility(_abilityDefinition);
+            Target.AbilityManager.GrantAbility(_abilityDefinition);
 
             var rpcStarted = false;
-            _clientAbilitySystem.ReplicationManager.OnServerAbilityActivationRequested += (name, key, data) =>
-            {
-                rpcStarted = true;
-                // Simulate network bridge to server
-                _serverAbilitySystem.ReplicationManager.ProcessServerAbilityActivation(name, key, data);
-            };
-            _clientAbilitySystem.ReplicationManager.OnServerAbilityUnpredictedActivationRequested += (name, data) =>
-            {
-                rpcStarted = true;
-                _serverAbilitySystem.ReplicationManager.ProcessServerAbilityUnpredictedActivation(name, data);
-            };
-            _serverAbilitySystem.ReplicationManager.OnClientActivateAbility += (name, data) =>
-            {
-                 _clientAbilitySystem.ReplicationManager.ProcessClientActivateAbility(name, data);
-            };
+            _clientRep.OnServerAbilityActivationRequested += (name, key, data) => rpcStarted = true;
+            _clientRep.OnServerAbilityUnpredictedActivationRequested += (name, data) => rpcStarted = true;
 
-            var initiator = tc.RequestFromClient ? _clientAbilitySystem : _serverAbilitySystem;
+            var initiator = tc.RequestFromClient ? Source : Target;
             initiator.AbilityManager.TryActivateAbility(_abilityDefinition.UniqueName);
 
-            Assert.AreEqual(tc.ExpectedActiveOnClient, _clientAbilitySystem.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client Active Mismatch");
-            Assert.AreEqual(tc.ExpectedActiveOnServer, _serverAbilitySystem.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Server Active Mismatch");
+            Assert.AreEqual(tc.ExpectedActiveOnClient, Source.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client Active Mismatch");
+            Assert.AreEqual(tc.ExpectedActiveOnServer, Target.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Server Active Mismatch");
             if (tc.RequestFromClient)
             {
                 Assert.AreEqual(tc.ExpectedRpcToServer, rpcStarted, "RPC Dispatch Mismatch");
@@ -150,52 +151,37 @@ namespace AbilitySystem.Test.Runtime.Abilities
              }
         }
 
+        /// <summary>
+        /// Verifies the termination matrix for all combinations of policies and initiator roles.
+        /// </summary>
         [Test, TestCaseSource(nameof(TerminationCases))]
-        public void AbilityPolicy_Termination_Matrix(NetTestCase tc)
+        public void AbilityPolicyTests_TerminationMatrix_MatchesExpectedState(NetTestCase tc)
         {
             _abilityDefinition.NetworkPolicy = tc.NetPolicy;
             _abilityDefinition.NetworkSecurityPolicy = tc.SecurityPolicy;
-            _clientAbilitySystem.AbilityManager.GrantAbility(_abilityDefinition);
-            _serverAbilitySystem.AbilityManager.GrantAbility(_abilityDefinition);
+            Source.AbilityManager.GrantAbility(_abilityDefinition);
+            Target.AbilityManager.GrantAbility(_abilityDefinition);
 
-            // Setup: Both start it successfully (force it if needed to ignore activation security for this termination test)
-            _serverAbilitySystem.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
-            _clientAbilitySystem.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
+            // Force activation on both to test termination logic specifically
+            Target.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
+            Source.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
 
-            bool isProcessing = false;
-            _clientAbilitySystem.ReplicationManager.OnServerAbilityTerminationRequested += (name) =>
-            {
-                if (isProcessing) return;
-                isProcessing = true;
-                _serverAbilitySystem.ReplicationManager.ProcessServerAbilityTermination(name);
-                isProcessing = false;
-            };
-            _serverAbilitySystem.ReplicationManager.OnClientEndAbility += (name) =>
-            {
-                if (isProcessing) return;
-                isProcessing = true;
-                _clientAbilitySystem.ReplicationManager.ProcessClientEndAbility(name);
-                isProcessing = false;
-            };
-            _serverAbilitySystem.ReplicationManager.OnAbilityActivationResponded += (key, success) =>
-            {
-                if (success) _clientAbilitySystem.ReplicationManager.ProcessAbilityActivationConfirmed(key);
-                else _clientAbilitySystem.ReplicationManager.ProcessAbilityActivationDenied("", key);
-            };
-
-            var initiator = tc.RequestFromClient ? _clientAbilitySystem : _serverAbilitySystem;
+            var initiator = tc.RequestFromClient ? Source : Target;
             initiator.AbilityManager.EndAbility(_abilityDefinition.UniqueName);
 
-            Assert.AreEqual(tc.ExpectedActiveOnClient, _clientAbilitySystem.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client Active Mismatch after End");
-            Assert.AreEqual(tc.ExpectedActiveOnServer, _serverAbilitySystem.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Server Active Mismatch after End");
+            Assert.AreEqual(tc.ExpectedActiveOnClient, Source.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client Active Mismatch after End");
+            Assert.AreEqual(tc.ExpectedActiveOnServer, Target.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Server Active Mismatch after End");
         }
 
+        /// <summary>
+        /// Verifies that the host (Server + Local Client) does not attempt to send network RPCs to itself.
+        /// </summary>
         [Test]
-        public void AbilityPolicy_Host_DoesNotSendRpc()
+        public void AbilityPolicyTests_HostActivation_DoesNotSendRpcToSelf()
         {
-            var hostSystem = CreateMockServerAbilitySystem().Object; // Host is server
-            // In our mock, we need to mark it as local client too for this test
-            // Actually, we'll just check if RPC events are fired.
+            var hostSystemMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();
+            var hostSystem = hostSystemMock.Object;
+            hostSystemMock.Setup(x => x.IsLocalClient()).Returns(true);
             
             _abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
             hostSystem.AbilityManager.GrantAbility(_abilityDefinition);

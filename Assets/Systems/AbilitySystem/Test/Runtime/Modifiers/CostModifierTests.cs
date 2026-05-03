@@ -1,173 +1,158 @@
-﻿using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
+using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
 using NUnit.Framework;
 
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
-using static AbilitySystem.Test.Utilities.EffectUtilities;
-
 namespace AbilitySystem.Test.Runtime.Modifiers
 {
-    public class CostModifierTests
+    /// <summary>
+    /// Unit tests for the CostModifier, verifying how base costs are modified by active gameplay effects based on tag requirements.
+    /// </summary>
+    public class CostModifierTests : AbilitySystemTestBase
     {
+        private static readonly Tag AbilityCostTag = new Tag("Cost.Ability.TestAbility");
+        private static readonly Tag GeneralCostTag = new Tag("Cost.Ability");
+
+        /// <summary>
+        /// Verifies that CostModifier returns the base cost when no relevant cost-modifying effects are active on the system.
+        /// </summary>
         [Test]
-        public void CostModifierTests_CalculateWithNoRelevantEffect_ReturnsBaseCost()
+        public void CostModifierTests_NoRelevantEffects_ReturnsBaseCost()
         {
-            var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
                 CostMetaAttribute = "TestAttributeSet.AbilityCost",
-                BaseCost = 10,
-                ModifierTags = new Tag[] { new Tag("Cost.Ability.TestAbility") }
+                BaseCost = 10f,
+                ModifierTags = new[] { AbilityCostTag }
             };
 
-            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            abilitySystem.Object.EffectManager.AddEffect(effect);
+            var dummyEffect = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            Source.EffectManager.AddEffect(dummyEffect);
 
-            Assert.AreEqual(10, costModifier.Calculate(effect));
+            Assert.AreEqual(10f, costModifier.Calculate(dummyEffect));
         }
 
+        /// <summary>
+        /// Verifies that CostModifier correctly aggregates multiple operations (Add, Mul, Div, Sub) from a matching active effect.
+        /// </summary>
         [Test]
-        public void CostModifierTests_CalculateWithRelevantEffect_ReturnsModifierCost()
+        public void CostModifierTests_MatchingEffect_CalculatesModifiedCost()
         {
-            var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
                 CostMetaAttribute = "TestAttributeSet.AbilityCost",
-                BaseCost = 10,
-                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                BaseCost = 10f,
+                ModifierTags = new[] { AbilityCostTag }
             };
 
-            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            var additiveModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Additive,
-                ModifierMagnitude = 5
-            };
-            var subtractiveModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Subtractive,
-                ModifierMagnitude = 1
-            };
-            var multiplicativeModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Multiplicative,
-                ModifierMagnitude = 1.5f
-            };
-            var divisiveModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Divisive,
-                ModifierMagnitude = 2f
-            };
-            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
+            var effectToModify = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            
+            var modifyCostEffect = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            modifyCostEffect.Definition.AssetTags = new[] { AbilityCostTag };
             modifyCostEffect.Definition.Modifiers = new Modifier[]
-                { additiveModifier, multiplicativeModifier, divisiveModifier, subtractiveModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Cost.Ability.TestAbility") };
+            {
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Additive, ModifierMagnitude = 5f },
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Subtractive, ModifierMagnitude = 1f },
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Multiplicative, ModifierMagnitude = 1.5f },
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Divisive, ModifierMagnitude = 2f }
+            };
+            
             modifyCostEffect.Activate();
-            abilitySystem.Object.EffectManager.AddEffect(effect);
-            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+            Source.EffectManager.AddEffect(effectToModify);
+            Source.EffectManager.AddEffect(modifyCostEffect);
 
-            Assert.AreEqual(10.5f, costModifier.Calculate(effect));
+            // Calculation: ((10 + 5 - 1) * 1.5) / 2 = (14 * 1.5) / 2 = 21 / 2 = 10.5
+            Assert.AreEqual(10.5f, costModifier.Calculate(effectToModify));
         }
 
+        /// <summary>
+        /// Verifies that CostModifier respects tag hierarchy, correctly applying modifiers from effects with parent tags.
+        /// </summary>
         [Test]
-        public void CostModifierTests_CalculateWithRelevantAncestorEffect_ReturnsModifierCost()
+        public void CostModifierTests_ParentTagEffect_CalculatesModifiedCost()
         {
-            var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
                 CostMetaAttribute = "TestAttributeSet.AbilityCost",
-                BaseCost = 10,
-                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                BaseCost = 10f,
+                ModifierTags = new[] { AbilityCostTag }
             };
 
-            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            var additiveModifier = new FloatModifier()
+            var effectToModify = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            
+            var modifyCostEffect = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            modifyCostEffect.Definition.AssetTags = new[] { GeneralCostTag }; // Parent tag of AbilityCostTag
+            modifyCostEffect.Definition.Modifiers = new Modifier[]
             {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Additive,
-                ModifierMagnitude = 5
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Additive, ModifierMagnitude = 5f },
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Multiplicative, ModifierMagnitude = 1.5f }
             };
-            var multiplicativeModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Multiplicative,
-                ModifierMagnitude = 1.5f
-            };
-            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.Modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Cost.Ability") };
+            
             modifyCostEffect.Activate();
-            abilitySystem.Object.EffectManager.AddEffect(effect);
-            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+            Source.EffectManager.AddEffect(effectToModify);
+            Source.EffectManager.AddEffect(modifyCostEffect);
 
-            Assert.AreEqual(22.5f, costModifier.Calculate(effect));
+            // Calculation: (10 + 5) * 1.5 = 22.5
+            Assert.AreEqual(22.5f, costModifier.Calculate(effectToModify));
         }
 
+        /// <summary>
+        /// Verifies that CostModifier ignores active effects that do not have any matching tags from its 'ModifierTags' list.
+        /// </summary>
         [Test]
-        public void CostModifierTests_CalculateWithIrrelevantEffect_ReturnsBaseCost()
+        public void CostModifierTests_IrrelevantEffect_ReturnsBaseCost()
         {
-            var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
                 CostMetaAttribute = "TestAttributeSet.AbilityCost",
-                BaseCost = 10,
-                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                BaseCost = 10f,
+                ModifierTags = new[] { AbilityCostTag }
             };
 
-            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            var additiveModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Additive,
-                ModifierMagnitude = 5
-            };
-            var multiplicativeModifier = new FloatModifier()
-            {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Multiplicative,
-                ModifierMagnitude = 1.5f
-            };
-            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.Modifiers = new Modifier[] { additiveModifier, multiplicativeModifier };
+            var effectToModify = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            
+            var modifyCostEffect = EffectUtilities.CreateInfiniteEffect(Source, Source);
             modifyCostEffect.Definition.AssetTags = new[] { new Tag("Irrelevant.Tag") };
+            modifyCostEffect.Definition.Modifiers = new Modifier[]
+            {
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Additive, ModifierMagnitude = 500f }
+            };
+            
             modifyCostEffect.Activate();
-            abilitySystem.Object.EffectManager.AddEffect(effect);
-            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+            Source.EffectManager.AddEffect(effectToModify);
+            Source.EffectManager.AddEffect(modifyCostEffect);
 
-            Assert.AreEqual(10f, costModifier.Calculate(effect));
+            Assert.AreEqual(10f, costModifier.Calculate(effectToModify));
         }
 
+        /// <summary>
+        /// Verifies that an 'Override' operation correctly sets the cost to its magnitude, ignoring the base cost and other operations.
+        /// </summary>
         [Test]
-        public void CostModifierTests_CalculateWithOverride_ReturnsOverridenCost()
+        public void CostModifierTests_OverrideEffect_ReturnsOverrideMagnitude()
         {
-            var abilitySystem = CreateMockAbilitySystem();
             var costModifier = new CostModifier()
             {
                 CostMetaAttribute = "TestAttributeSet.AbilityCost",
-                BaseCost = 10,
-                ModifierTags = new[] { new Tag("Cost.Ability.TestAbility") }
+                BaseCost = 10f,
+                ModifierTags = new[] { AbilityCostTag }
             };
 
-            var effect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            var overrideModifier = new FloatModifier()
+            var effectToModify = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            
+            var modifyCostEffect = EffectUtilities.CreateInfiniteEffect(Source, Source);
+            modifyCostEffect.Definition.AssetTags = new[] { GeneralCostTag };
+            modifyCostEffect.Definition.Modifiers = new Modifier[]
             {
-                AttributeName = "TestAttributeSet.AbilityCost",
-                Operation = EffectOperation.Override,
-                ModifierMagnitude = 100f
+                new FloatModifier { AttributeName = "TestAttributeSet.AbilityCost", Operation = EffectOperation.Override, ModifierMagnitude = 100f }
             };
-            var modifyCostEffect = CreateInfiniteEffect(abilitySystem.Object, abilitySystem.Object);
-            modifyCostEffect.Definition.Modifiers = new Modifier[] { overrideModifier };
-            modifyCostEffect.Definition.AssetTags = new[] { new Tag("Cost.Ability") };
+            
             modifyCostEffect.Activate();
-            abilitySystem.Object.EffectManager.AddEffect(effect);
-            abilitySystem.Object.EffectManager.AddEffect(modifyCostEffect);
+            Source.EffectManager.AddEffect(effectToModify);
+            Source.EffectManager.AddEffect(modifyCostEffect);
 
-            Assert.AreEqual(100f, costModifier.Calculate(effect));
+            Assert.AreEqual(100f, costModifier.Calculate(effectToModify));
         }
     }
 }

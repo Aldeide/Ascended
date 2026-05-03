@@ -119,8 +119,8 @@ namespace AbilitySystem.Runtime.Abilities
             if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
             if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
             if (Owner.TagManager.IsAbilityBlocked(Definition.AssetTags)) return AbilityActivationResult.BlockedByAbility;
-            return IsOnCooldown() ? AbilityActivationResult.CooldownFailed :
-                AbilityActivationResult.Success;
+            if (IsOnCooldown()) return AbilityActivationResult.CooldownFailed;
+            return AbilityActivationResult.Success;
         }
 
         public bool CanAffordCost()
@@ -167,7 +167,6 @@ namespace AbilitySystem.Runtime.Abilities
         {
             AbilityArguments = data;
             var result = CanActivate();
-            Debug.Log("Trying to activate ability with prediction key: " + this.Definition.UniqueName + " as " + (Owner.IsServer() ? "server" : "client") + " result: " + result);
             var success = result == AbilityActivationResult.Success;
             if (success)
             {

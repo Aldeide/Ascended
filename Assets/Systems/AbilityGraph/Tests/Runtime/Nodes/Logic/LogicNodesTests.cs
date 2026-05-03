@@ -1,58 +1,69 @@
-using System.Linq;
 using AbilityGraph.Runtime.Nodes.Logic;
+using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
 using UnityEngine;
 
 namespace AbilityGraph.Tests.Runtime.Nodes.Logic
 {
-    public class LogicNodesTests
+    /// <summary>
+    /// Tests for general logic nodes in the Ability Graph (selection, flow control).
+    /// </summary>
+    public class LogicNodesTests : AbilitySystemTestBase
     {
+        /// <summary>
+        /// Validates that SelectFloatNode correctly chooses between two values based on a boolean condition.
+        /// </summary>
         [Test]
-        public void SelectFloatNode_ReturnsCorrectValue()
+        public void LogicNodesTests_SelectFloatNode_ReturnsCorrectValueBasedOnCondition()
         {
             var node = new SelectFloatNode();
             node.TrueValue = 10f;
             node.FalseValue = 5f;
 
             node.Condition = true;
-            node.OnProcess(); // AbilityNode calls Process in OnProcess
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(10f, node.Result);
 
             node.Condition = false;
-            node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(5f, node.Result);
         }
 
+        /// <summary>
+        /// Validates that SelectVector3Node correctly chooses between two vectors based on a boolean condition.
+        /// </summary>
         [Test]
-        public void SelectVector3Node_ReturnsCorrectValue()
+        public void LogicNodesTests_SelectVector3Node_ReturnsCorrectVectorBasedOnCondition()
         {
             var node = new SelectVector3Node();
             node.TrueValue = Vector3.one;
             node.FalseValue = Vector3.zero;
 
             node.Condition = true;
-            node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(Vector3.one, node.Result);
 
             node.Condition = false;
-            node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(Vector3.zero, node.Result);
         }
 
+        /// <summary>
+        /// Validates that TriggerOnceNode can be instantiated and reset. 
+        /// Note: Full execution path testing requires complex port mocking.
+        /// </summary>
         [Test]
-        public void TriggerOnceNode_TriggersOnlyOnce()
+        public void LogicNodesTests_TriggerOnceNode_ResetsCorrectly()
         {
-            // Note: TriggerOnceNode uses GetExecutedNodes which requires port mocking 
-            // for full verification, but we can verify its internal state.
             var node = new TriggerOnceNode();
             
             // First execution
             node.GetExecutedNodes(); 
-            // We can't easily check the return without ports, but we can check if it resets
+            
+            // Reset the trigger
             node.ResetTrigger();
-            // This is a minimal test of existence/compilation. 
-            // Real execution testing would require a GraphRunner or complex mocking.
-            Assert.Pass();
+            
+            Assert.Pass("TriggerOnceNode successfully instantiated and reset.");
         }
     }
 }

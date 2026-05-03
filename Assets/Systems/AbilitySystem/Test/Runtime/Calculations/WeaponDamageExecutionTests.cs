@@ -8,76 +8,79 @@ using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Tests.Runtime.Calculations
 {
-    public class WeaponDamageExecutionTests
+    /// <summary>
+    /// Tests for WeaponDamageExecution, verifying damage calculations including armor mitigation and critical hits.
+    /// </summary>
+    public class WeaponDamageExecutionTests : AbilitySystemTestBase
     {
-        private Mock<AbilitySystem.Runtime.Core.IAbilitySystem> _mockSource;
-        private Mock<AbilitySystem.Runtime.Core.IAbilitySystem> _mockTarget;
         private WeaponDamageExecution _execution;
         private Effect _effect;
 
-        private Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager> _mockSourceAttrMgr;
-        private Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager> _mockTargetAttrMgr;
-
         [SetUp]
-        public void Setup()
+        public override void SetUp()
         {
-            _mockSource = AbilitySystemUtilities.CreateMockAbilitySystem();
-            _mockTarget = AbilitySystemUtilities.CreateMockAbilitySystem();
+            base.SetUp();
             
-            var mockSourceAttrMgr = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(_mockSource.Object);
-            var mockTargetAttrMgr = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(_mockTarget.Object);
-            _mockSource.SetupGet(x => x.AttributeSetManager).Returns(mockSourceAttrMgr.Object);
-            _mockTarget.SetupGet(x => x.AttributeSetManager).Returns(mockTargetAttrMgr.Object);
-
-            // Store the mocks so they can be accessed in tests
-            _mockSourceAttrMgr = mockSourceAttrMgr;
-            _mockTargetAttrMgr = mockTargetAttrMgr;
-
             _execution = ScriptableObject.CreateInstance<WeaponDamageExecution>();
             
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             _effect = new Effect(def);
-            _effect.Initialise(_mockSource.Object, _mockTarget.Object);
+            _effect.Initialise(Source, Target);
         }
 
         [TearDown]
         public void Teardown()
         {
-            Object.DestroyImmediate(_execution);
+            if (_execution != null) Object.DestroyImmediate(_execution);
         }
 
+        /// <summary>
+        /// Validates that base damage is correctly applied to target health when no mitigation or modifiers are present.
+        /// </summary>
         [Test]
-        public void Execute_DealsBaseDamage_WhenNoCritOrArmor()
+        public void WeaponDamageExecutionTests_Execute_DealsBaseDamageCorrectly()
         {
             // Setup source
             var baseDmgAttr = new Attribute("WeaponDamage", null, 50f, 0f, 100f);
             var critAttr = new Attribute("CritChance", null, 0f, 0f, 1f); // 0% crit
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
+            
+            var sourceAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Source);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
+            SourceMock.SetupGet(x => x.AttributeSetManager).Returns(sourceAttrMgrMock.Object);
 
             // Setup target
             var healthAttr = new Attribute("Health", null, 100f, 0f, 100f);
             var armorAttr = new Attribute("Armor", null, 0f, 0f, 100f); // 0 armor
-            _mockTargetAttrMgr.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
-            _mockTargetAttrMgr.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
+            var targetAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Target);
+            targetAttrMgrMock.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
+            targetAttrMgrMock.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
+            TargetMock.SetupGet(x => x.AttributeSetManager).Returns(targetAttrMgrMock.Object);
 
             _execution.Execute(_effect);
 
             Assert.AreEqual(50f, healthAttr.BaseValue); // 100 - 50 = 50
         }
 
+        /// <summary>
+        /// Validates that armor correctly reduces the damage dealt to the target's health.
+        /// </summary>
         [Test]
-        public void Execute_AppliesArmorMitigation()
+        public void WeaponDamageExecutionTests_Execute_AppliesArmorMitigation()
         {
             var baseDmgAttr = new Attribute("WeaponDamage", null, 50f, 0f, 100f);
             var critAttr = new Attribute("CritChance", null, 0f, 0f, 1f);
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
+            var sourceAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Source);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
+            SourceMock.SetupGet(x => x.AttributeSetManager).Returns(sourceAttrMgrMock.Object);
 
             var healthAttr = new Attribute("Health", null, 100f, 0f, 100f);
             var armorAttr = new Attribute("Armor", null, 100f, 0f, 100f); // 100 armor = 50% reduction
-            _mockTargetAttrMgr.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
-            _mockTargetAttrMgr.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
+            var targetAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Target);
+            targetAttrMgrMock.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
+            targetAttrMgrMock.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
+            TargetMock.SetupGet(x => x.AttributeSetManager).Returns(targetAttrMgrMock.Object);
 
             _execution.Execute(_effect);
 
@@ -85,20 +88,27 @@ namespace AbilitySystem.Tests.Runtime.Calculations
             Assert.AreEqual(75f, healthAttr.BaseValue);
         }
 
+        /// <summary>
+        /// Validates that a critical hit correctly multiplies the damage dealt to the target's health.
+        /// </summary>
         [Test]
-        public void Execute_AppliesCritMultiplier()
+        public void WeaponDamageExecutionTests_Execute_AppliesCritMultiplier()
         {
             var baseDmgAttr = new Attribute("WeaponDamage", null, 50f, 0f, 100f);
             var critAttr = new Attribute("CritChance", null, 1f, 0f, 1f); // 100% crit
             var critMultAttr = new Attribute("CritMultiplier", null, 2f, 0f, 2f);
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
-            _mockSourceAttrMgr.Setup(x => x.GetAttribute("CritMultiplier")).Returns(critMultAttr);
+            var sourceAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Source);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
+            sourceAttrMgrMock.Setup(x => x.GetAttribute("CritMultiplier")).Returns(critMultAttr);
+            SourceMock.SetupGet(x => x.AttributeSetManager).Returns(sourceAttrMgrMock.Object);
 
             var healthAttr = new Attribute("Health", null, 100f, 0f, 100f);
             var armorAttr = new Attribute("Armor", null, 0f, 0f, 100f);
-            _mockTargetAttrMgr.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
-            _mockTargetAttrMgr.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
+            var targetAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Target);
+            targetAttrMgrMock.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
+            targetAttrMgrMock.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
+            TargetMock.SetupGet(x => x.AttributeSetManager).Returns(targetAttrMgrMock.Object);
 
             _execution.Execute(_effect);
 

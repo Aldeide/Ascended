@@ -1,31 +1,35 @@
-﻿using AbilitySystem.Runtime.Abilities.AbilityActivation;
+using AbilitySystem.Runtime.Abilities.AbilityActivation;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
 
-using static AbilitySystem.Test.Utilities.AbilityUtilities;
-using static AbilitySystem.Test.Utilities.AbilitySystemUtilities;
-
 namespace AbilitySystem.Test.Runtime.Abilities
 {
-    public class AbilityActivationTests
+    /// <summary>
+    /// Unit tests for ability activation triggers, ensuring that abilities correctly respond to various initiation methods.
+    /// </summary>
+    public class AbilityActivationTests : AbilitySystemTestBase
     {
+        /// <summary>
+        /// Verifies that an ability configured with an event-based activation trigger correctly activates when the specified gameplay event is fired.
+        /// </summary>
         [Test]
-        public void AbilityActivationTests_EventActivation_ActivatesOnEvent()
+        public void AbilityActivationTests_EventTrigger_ActivatesOnMatchingEvent()
         {
-            var abilitySystem = CreateMockServerAbilitySystem().Object;
-            var abilityDefinition = CreateInstantAbilityDefinition();
+            var abilityDefinition = AbilityUtilities.CreateInstantAbilityDefinition();
+            abilityDefinition.UniqueName = "EventAbility";
             var eventActivation = new OnEventActivation
             {
                 ActivationEvent = new TestGameplayEventType()
             };
             abilityDefinition.AbilityActivation = eventActivation;
-            abilitySystem.AbilityManager.GrantAbility(abilityDefinition);
-            var eventManager = abilitySystem.EventManager;
+            
+            Source.AbilityManager.GrantAbility(abilityDefinition);
+            
+            // Trigger the event through the system's event manager
             var eventArgs = new TestGameplayEventArgs();
+            Source.EventManager.TriggerEvent(new TestGameplayEvent(eventArgs));
             
-            eventManager.TriggerEvent(new TestGameplayEvent(eventArgs));
-            
-            Assert.IsTrue(abilitySystem.AbilityManager.Abilities[abilityDefinition.UniqueName].IsActive);
+            Assert.IsTrue(Source.AbilityManager.Abilities["EventAbility"].IsActive, "Ability should have activated in response to the gameplay event");
         }
     }
 }

@@ -6,14 +6,27 @@ using System.Linq;
 
 namespace AbilitySystem.Test.Runtime.Effects
 {
-    public class EffectStackingTests
+    /// <summary>
+    /// Unit tests for effect stacking, verifying aggregation types, stack limits, and overflow policies.
+    /// </summary>
+    public class EffectStackingTests : AbilitySystemTestBase
     {
-        [Test]
-        public void EffectStacking_AggregateByTarget_IncrementsStacks()
+        private EffectManager _manager;
+
+        [SetUp]
+        public override void SetUp()
         {
-            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
-            var manager = new EffectManager(mockSys.Object);
-            
+            base.SetUp();
+            _manager = new EffectManager(Source);
+        }
+
+        /// <summary>
+        /// Validates that effects with 'AggregateByTarget' stacking correctly increment 
+        /// the stack count on the existing effect instance.
+        /// </summary>
+        [Test]
+        public void EffectStackingTests_AggregateByTarget_IncrementsExistingEffectStacks()
+        {
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             def.name = "TestEffect";
             def.DurationType = EffectDurationType.Infinite;
@@ -24,26 +37,26 @@ namespace AbilitySystem.Test.Runtime.Effects
             };
             
             var effect1 = new Effect(def);
-            effect1.Initialise(mockSys.Object, mockSys.Object);
+            effect1.Initialise(Source, Target);
             
-            manager.AddEffect(effect1);
-            Assert.AreEqual(1, manager.Effects.Count);
-            Assert.AreEqual(1, manager.Effects[0].NumStacks);
+            _manager.AddEffect(effect1);
+            Assert.AreEqual(1, _manager.Effects.Count);
+            Assert.AreEqual(1, _manager.Effects[0].NumStacks);
             
             var effect2 = new Effect(def);
-            effect2.Initialise(mockSys.Object, mockSys.Object);
-            manager.AddEffect(effect2);
+            effect2.Initialise(Source, Target);
+            _manager.AddEffect(effect2);
             
-            Assert.AreEqual(1, manager.Effects.Count);
-            Assert.AreEqual(2, manager.Effects[0].NumStacks);
+            Assert.AreEqual(1, _manager.Effects.Count);
+            Assert.AreEqual(2, _manager.Effects[0].NumStacks);
         }
 
+        /// <summary>
+        /// Validates that the number of stacks cannot exceed the maximum specified in the effect definition.
+        /// </summary>
         [Test]
-        public void EffectStacking_MaxStacks_RespectsLimit()
+        public void EffectStackingTests_MaxStacks_ClampsStackCountAtLimit()
         {
-            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
-            var manager = new EffectManager(mockSys.Object);
-            
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             def.name = "TestEffect";
             def.DurationType = EffectDurationType.Infinite;
@@ -53,20 +66,21 @@ namespace AbilitySystem.Test.Runtime.Effects
                 MaxStacks = 2
             };
             
-            manager.AddEffect(new Effect(def).WithInitialise(mockSys.Object, mockSys.Object));
-            manager.AddEffect(new Effect(def).WithInitialise(mockSys.Object, mockSys.Object));
-            var result = manager.AddEffect(new Effect(def).WithInitialise(mockSys.Object, mockSys.Object));
+            _manager.AddEffect(new Effect(def).WithInitialise(Source, Target));
+            _manager.AddEffect(new Effect(def).WithInitialise(Source, Target));
+            _manager.AddEffect(new Effect(def).WithInitialise(Source, Target));
             
-            Assert.AreEqual(1, manager.Effects.Count);
-            Assert.AreEqual(2, manager.Effects[0].NumStacks);
+            Assert.AreEqual(1, _manager.Effects.Count);
+            Assert.AreEqual(2, _manager.Effects[0].NumStacks);
         }
 
+        /// <summary>
+        /// Validates that the DenyOverflow application result is returned when an effect 
+        /// exceeds its stack limit and the policy specifies denial.
+        /// </summary>
         [Test]
-        public void EffectStacking_DenyOverflow_ReturnsFailure()
+        public void EffectStackingTests_OverflowPolicyDeny_ReturnsOverflowDenyResult()
         {
-            var mockSys = AbilitySystemUtilities.CreateMockAbilitySystem();
-            var manager = new EffectManager(mockSys.Object);
-            
             var def = ScriptableObject.CreateInstance<EffectDefinition>();
             def.name = "TestEffect";
             def.DurationType = EffectDurationType.Infinite;
@@ -77,11 +91,11 @@ namespace AbilitySystem.Test.Runtime.Effects
                 EffectStackOverflowPolicy = new EffectStackOverflowPolicy { DenyOverflowApplication = true }
             };
             
-            manager.AddEffect(new Effect(def).WithInitialise(mockSys.Object, mockSys.Object));
-            var result = manager.AddEffect(new Effect(def).WithInitialise(mockSys.Object, mockSys.Object));
+            _manager.AddEffect(new Effect(def).WithInitialise(Source, Target));
+            var result = _manager.AddEffect(new Effect(def).WithInitialise(Source, Target));
             
             Assert.AreEqual(EffectApplicationResult.OverflowDeny, result);
-            Assert.AreEqual(1, manager.Effects[0].NumStacks);
+            Assert.AreEqual(1, _manager.Effects[0].NumStacks);
         }
     }
 

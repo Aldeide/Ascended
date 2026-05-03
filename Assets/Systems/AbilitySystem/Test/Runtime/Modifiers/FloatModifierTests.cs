@@ -1,22 +1,26 @@
-﻿using AbilitySystem.Runtime.Core;
-using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
-using Moq;
 using NUnit.Framework;
 
 namespace AbilitySystem.Test.Runtime.Modifiers
 {
+    /// <summary>
+    /// Unit tests for the FloatModifier, ensuring it correctly returns its constant magnitude.
+    /// </summary>
     public class FloatModifierTests
     {
+        /// <summary>
+        /// Verifies that a FloatModifier initialized with a specific magnitude correctly returns that value during calculation.
+        /// </summary>
         [Test]
-        public void FloatModifierTests_Calculate_HasCorrectModifier()
+        public void FloatModifierTests_Calculate_ReturnsConfiguredMagnitude()
         {
             var floatModifier = new FloatModifier
             {
-                ModifierMagnitude = 5
+                ModifierMagnitude = 5f
             };
 
-            Assert.AreEqual(5, floatModifier.Calculate(null));
+            // FloatModifier calculation is independent of the effect context
+            Assert.AreEqual(5f, floatModifier.Calculate(null));
         }
     }
 }

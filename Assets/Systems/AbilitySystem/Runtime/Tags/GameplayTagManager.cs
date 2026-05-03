@@ -7,6 +7,7 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
+using UnityEngine;
 
 namespace AbilitySystem.Runtime.Tags
 {
@@ -46,17 +47,19 @@ namespace AbilitySystem.Runtime.Tags
 
         public void AddEffectTags(Effect effect)
         {
-            if (effect.Definition.GrantedTags == null) return;
+            if (effect.Definition.GrantedTags == null || effect.Definition.GrantedTags.Length == 0) return;
             foreach (var tag in effect.Definition.GrantedTags)
             {
                 if (EffectTags.ContainsKey(tag))
                 {
                     EffectTags[tag].Add(effect);
-                    continue;
                 }
-
-                EffectTags[tag] = new List<Effect> { effect };
+                else
+                {
+                    EffectTags.Add(tag, new List<Effect> { effect });
+                }
             }
+            OnTagsChanged?.Invoke();
         }
 
         public void AddAbilityTags(Ability ability)

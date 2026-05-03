@@ -4,70 +4,72 @@ using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Tags;
+using AbilitySystem.Test.Utilities;
 using GameplayTags.Runtime;
 using Moq;
 using NUnit.Framework;
 
 namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
 {
-    public class AbilityNodesTests
+    /// <summary>
+    /// Tests for core Ability Graph nodes that interact with the Ability System (tags, levels, attributes).
+    /// </summary>
+    public class AbilityNodesTests : AbilitySystemTestBase
     {
-        private Mock<IAbilitySystem> _ownerMock;
-        private Mock<GameplayTagManager> _tagManagerMock;
-        private Mock<EffectManager> _effectManagerMock;
-        private Mock<AttributeSetManager> _attributeManagerMock;
         private Mock<Ability> _abilityMock;
 
         [SetUp]
-        public void Setup()
+        public override void SetUp()
         {
-            _ownerMock = new Mock<IAbilitySystem>();
-            
-            // EffectManager must be setup first because GameplayTagManager depends on it in its constructor
-            _effectManagerMock = new Mock<EffectManager>(_ownerMock.Object);
-            _ownerMock.Setup(o => o.EffectManager).Returns(_effectManagerMock.Object);
-
-            _tagManagerMock = new Mock<GameplayTagManager>(_ownerMock.Object);
-            _ownerMock.Setup(o => o.TagManager).Returns(_tagManagerMock.Object);
-
-            _attributeManagerMock = new Mock<AttributeSetManager>(_ownerMock.Object);
-            _ownerMock.Setup(o => o.AttributeSetManager).Returns(_attributeManagerMock.Object);
+            base.SetUp();
 
             _abilityMock = new Mock<Ability>();
-            _abilityMock.Setup(a => a.Owner).Returns(_ownerMock.Object);
+            _abilityMock.Setup(a => a.Owner).Returns(Source);
             _abilityMock.Setup(a => a.Level).Returns(5);
         }
 
+        /// <summary>
+        /// Validates that HasTagNode correctly identifies the presence or absence of a tag on the owner.
+        /// </summary>
         [Test]
-        public void HasTagNode_ReturnsCorrectValue()
+        public void AbilityNodesTests_HasTagNode_ReturnsCorrectTagStatus()
         {
             var node = new HasTagNode();
             node.Initialise(_abilityMock.Object);
             var tag = new Tag("Test.Tag");
             
-            node.Tag = tag;
-            _tagManagerMock.Setup(m => m.HasTag(tag)).Returns(true);
+            var tagManagerMock = new Mock<GameplayTagManager>(Source);
+            SourceMock.Setup(m => m.TagManager).Returns(tagManagerMock.Object);
             
-            node.OnProcess();
+            node.Tag = tag;
+            tagManagerMock.Setup(m => m.HasTag(tag)).Returns(true);
+            
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.IsTrue(node.HasTag);
             
-            _tagManagerMock.Setup(m => m.HasTag(tag)).Returns(false);
-            node.OnProcess();
+            tagManagerMock.Setup(m => m.HasTag(tag)).Returns(false);
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.IsFalse(node.HasTag);
         }
 
+        /// <summary>
+        /// Validates that GetAbilityLevelNode correctly retrieves the level of the associated ability.
+        /// </summary>
         [Test]
-        public void GetAbilityLevelNode_ReturnsCorrectLevel()
+        public void AbilityNodesTests_GetAbilityLevelNode_ReturnsCorrectAbilityLevel()
         {
             var node = new GetAbilityLevelNode();
             node.Initialise(_abilityMock.Object);
             
-            node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(5, node.Level);
         }
 
+        /// <summary>
+        /// Validates that ModifyAttributeBaseNode correctly applies modifications to an attribute's base value.
+        /// </summary>
         [Test]
-        public void ModifyAttributeBaseNode_AppliesChange()
+        public void AbilityNodesTests_ModifyAttributeBaseNode_AppliesValueModification()
         {
             var node = new ModifyAttributeBaseNode();
             node.Initialise(_abilityMock.Object);
@@ -78,9 +80,11 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
             var attrMock = new Mock<AbilitySystem.Runtime.Attributes.Attribute>();
             attrMock.Setup(a => a.BaseValue).Returns(100f);
             
-            _attributeManagerMock.Setup(m => m.GetAttribute("Stat.Health")).Returns(attrMock.Object);
+            var attributeManagerMock = new Mock<AttributeSetManager>(Source);
+            SourceMock.Setup(m => m.AttributeSetManager).Returns(attributeManagerMock.Object);
+            attributeManagerMock.Setup(m => m.GetAttribute("Stat.Health")).Returns(attrMock.Object);
 
-            node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(node);
             
             attrMock.Verify(a => a.SetBaseValue(110f), Times.Once);
         }

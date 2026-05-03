@@ -1,72 +1,77 @@
-using NUnit.Framework;
 using AbilityGraph.Runtime.Nodes.Logic;
+using AbilitySystem.Test.Utilities;
+using NUnit.Framework;
 using UnityEngine;
 
 namespace AbilityGraph.Tests.Runtime.Nodes.Logic
 {
-    public class SelectNodeTests
+    /// <summary>
+    /// Tests for the generic SelectNode, validating selection logic across different data types.
+    /// </summary>
+    public class SelectNodeTests : AbilitySystemTestBase
     {
         private SelectNode _node;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
+            base.SetUp();
             _node = new SelectNode();
         }
 
+        /// <summary>
+        /// Validates that SelectNode correctly picks the float value based on the condition.
+        /// </summary>
         [Test]
-        public void Process_WithFloatValue_PicksCorrectValue()
+        public void SelectNodeTests_Process_WithFloatValue_PicksCorrectValue()
         {
-            // Given
             _node.TrueValue = 10f;
             _node.FalseValue = 20f;
 
-            // When - Condition is true
             _node.Condition = true;
-            _node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(_node);
             Assert.AreEqual(10f, _node.Result);
 
-            // When - Condition is false
             _node.Condition = false;
-            _node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(_node);
             Assert.AreEqual(20f, _node.Result);
         }
 
+        /// <summary>
+        /// Validates that SelectNode correctly picks the Vector3 value based on the condition.
+        /// </summary>
         [Test]
-        public void Process_WithVector3Value_PicksCorrectValue()
+        public void SelectNodeTests_Process_WithVector3Value_PicksCorrectValue()
         {
-            // Given
             var truePos = new Vector3(1, 2, 3);
             var falsePos = new Vector3(4, 5, 6);
             _node.TrueValue = truePos;
             _node.FalseValue = falsePos;
 
-            // When - Condition is true
             _node.Condition = true;
-            _node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(_node);
             Assert.AreEqual(truePos, _node.Result);
 
-            // When - Condition is false
             _node.Condition = false;
-            _node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(_node);
             Assert.AreEqual(falsePos, _node.Result);
         }
 
+        /// <summary>
+        /// Validates that SelectNode correctly picks the integer value based on the condition.
+        /// </summary>
         [Test]
-        public void Process_WithIntValue_PicksCorrectValue()
+        public void SelectNodeTests_Process_WithIntValue_PicksCorrectValue()
         {
-            // Given
             _node.TrueValue = 100;
             _node.FalseValue = 200;
 
-            // When - Condition is true
             _node.Condition = true;
-            _node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(_node);
             Assert.AreEqual(100, _node.Result);
 
-            // When - Condition is false
             _node.Condition = false;
-            _node.OnProcess();
+            AbilityGraphTestUtilities.InvokeProcess(_node);
             Assert.AreEqual(200, _node.Result);
         }
     }
