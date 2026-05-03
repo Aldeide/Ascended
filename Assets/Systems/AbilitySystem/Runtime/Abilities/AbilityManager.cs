@@ -51,10 +51,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var ability in Abilities.Values)
             {
-                if (ability.IsActive)
-                {
-                    ability.Tick();
-                }
+                ability.Tick();
             }
         }
 
