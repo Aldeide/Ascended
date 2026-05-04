@@ -29,30 +29,19 @@ namespace Systems.Controllers
 
         public Vector3 GetTargetPosition()
         {
+            UpdateTargetPosition();
             return Target ? Target.transform.position : Vector3.zero;
         }
 
         public void Update()
         {
-            if (!IsLocalPlayer) return;
-            UpdateTargetPosition();
-        }
-
-        public void OnLook(InputAction.CallbackContext context)
-        {
-            // Since the rotation of the player isn't instantaneous, the target tends to move with the player even when
-            // no input is given. This is a problem when the player is looking at the target.
-            // TODO: Find a way to fix this so when don't have to update the target each frame.
-            /*
-            if (!IsLocalPlayer || context.phase != InputActionPhase.Performed)
-                return;
-            UpdateTargetPosition();
-            */
+            // Do not update target position every frame to prevent the target from moving with the player
+            // unintentionally when rotating. Target position is updated dynamically in GetTargetPosition().
         }
 
         private void UpdateTargetPosition()
         {
-            if (!_camera || !Target) return;
+            if (!IsLocalPlayer || !_camera || !Target) return;
 
             var ray = _camera.ViewportPointToRay(ScreenCenter);
 
