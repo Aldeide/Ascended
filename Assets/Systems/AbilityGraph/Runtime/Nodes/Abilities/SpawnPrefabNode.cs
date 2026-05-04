@@ -16,16 +16,32 @@ namespace AbilityGraph.Runtime.Nodes.Abilities
         public Transform Parent;
         [Input]
         public bool InstantiateInWorldSpace;
-        
+
+        [NonSerialized] private GameObject _cachedPrefab;
+        [NonSerialized] private NetworkObject _cachedPrefabNetworkObject;
+        [NonSerialized] private bool _prefabHasNetworkObjectCached;
+
         protected override void Process()
         {
             if (!Prefab || !Parent) return;
-            var instance = Object.Instantiate(Prefab, Parent, InstantiateInWorldSpace);
-            // TODO: cache component fetching when graph is built.
-            var instanceNetworkObject = instance.GetComponent<NetworkObject>();
-            if (instanceNetworkObject)
+
+            // If the prefab has changed (or hasn't been cached yet), update our cache.
+            if (_cachedPrefab != Prefab)
             {
+                _cachedPrefab = Prefab;
+                _cachedPrefabNetworkObject = Prefab.GetComponent<NetworkObject>();
+                _prefabHasNetworkObjectCached = _cachedPrefabNetworkObject != null;
+            }
+
+            if (_prefabHasNetworkObjectCached)
+            {
+                // Instantiate directly using the NetworkObject to avoid GetComponent on the clone
+                var instanceNetworkObject = Object.Instantiate(_cachedPrefabNetworkObject, Parent, InstantiateInWorldSpace);
                 instanceNetworkObject.Spawn();
+            }
+            else
+            {
+                Object.Instantiate(Prefab, Parent, InstantiateInWorldSpace);
             }
         }
     }
