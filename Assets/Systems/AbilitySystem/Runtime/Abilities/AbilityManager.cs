@@ -23,13 +23,14 @@ namespace AbilitySystem.Runtime.Abilities
             Abilities = new Dictionary<string, Ability>();
         }
 
-        public void GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
+        public Ability GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
         {
-            if (abilityDefinition == null) return;
-            if (Abilities.ContainsKey(abilityDefinition.UniqueName)) return;
+            if (abilityDefinition == null) return null;
+            if (Abilities.TryGetValue(abilityDefinition.UniqueName, out var existing)) return existing;
             var ability = abilityDefinition.ToAbility(_owner);
             ability.SetLevel(level);
             Abilities.Add(abilityDefinition.UniqueName, ability);
+            return ability;
         }
 
         public void RemoveAbility(string abilityName)
@@ -51,6 +52,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var ability in Abilities.Values)
             {
+                if (ability.IsActive) Debug.Log($"Ticking active ability: {ability.Definition.UniqueName}");
                 ability.Tick();
             }
         }
@@ -58,15 +60,16 @@ namespace AbilitySystem.Runtime.Abilities
         public string DebugString()
         {
             if (Abilities.Count == 0) return "No Abilities";
-            return string.Join("\n", Abilities.Select(kv => $"{kv.Key}: {(kv.Value.IsActive ? "Active" : "Inactive")} (Level: {kv.Value.Level})"));
+            return string.Join("\n", Abilities.Select(kv => $"{kv.Key}: {kv.Value.DebugString()}"));
         }
 
-        public void CancelAbilitiesWithTags(Tag[] tags)
+        public void CancelAbilitiesWithTags(Tag[] tags, Ability ignoreAbility = null)
         {
             if (tags == null || tags.Length == 0) return;
             
             foreach (var ability in Abilities.Values.ToList())
             {
+                if (ability == ignoreAbility) continue;
                 if (ability.Definition.AssetTags == null) continue;
                 if (ability.Definition.AssetTags.Any(at => tags.Any(t => t == at)))
                 {

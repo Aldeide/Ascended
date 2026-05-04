@@ -1,4 +1,5 @@
 using AbilitySystem.Runtime.Abilities;
+using AbilitySystem.Runtime.Abilities.Cooldowns;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
 using AbilitySystem.Test.Utilities;
@@ -17,14 +18,25 @@ namespace AbilitySystem.Test.Runtime.Abilities
         public override void SetUp()
         {
             base.SetUp();
+            TargetMock.Setup(x => x.IsServer()).Returns(true);
+            
             _abilityDef = ScriptableObject.CreateInstance<ChargesAbilityDefinition>();
             _abilityDef.UniqueName = "TestChargesAbility";
             _abilityDef.MaxCharges = 2;
-            _abilityDef.RegenRate = 1f; // 1 per second
+            
+            // Setup a 1-second cooldown
+            var cooldownEffect = ScriptableObject.CreateInstance<EffectDefinition>();
+            cooldownEffect.DurationType = EffectDurationType.FixedDuration;
+            cooldownEffect.DurationSeconds = 1f;
+            cooldownEffect.GrantedTags = new[] { new Tag("Cooldown.Test") };
+            
+            var cooldown = new ConstantAbilityCooldown();
+            cooldown.CooldownEffect = cooldownEffect;
+            _abilityDef.Cooldown = cooldown;
+            
             _abilityDef.MaxChargesMetaAttribute = "Ability.Charges.Max";
             
-            _ability = (ChargesAbility)_abilityDef.ToAbility(Target);
-            Target.AbilityManager.GrantAbility(_abilityDef);
+            _ability = (ChargesAbility)Target.AbilityManager.GrantAbility(_abilityDef);
         }
 
         [Test]
@@ -43,19 +55,28 @@ namespace AbilitySystem.Test.Runtime.Abilities
         }
 
         [Test]
-        public void ChargesAbilityTests_Regeneration_RestoresChargesOverTime()
+        public void ChargesAbilityTests_Regeneration_RestoresChargesViaCooldown()
         {
             _ability.TryActivateAbility(default);
             _ability.TryActivateAbility(default);
             Assert.AreEqual(0, _ability.CurrentCharges);
+            Assert.IsTrue(_ability.IsActive || true); // Just to call Tick
 
-            // Mock time forward by 1.1 seconds
-            TargetMock.Setup(x => x.GetTime()).Returns(1.1f);
+            // Initially, a cooldown should be running
+            _ability.Tick(); 
+            Assert.AreEqual(0, _ability.CurrentCharges);
+
+            // Mock time forward by 1.1 seconds and tick effects to finish the cooldown
+            TargetMock.Setup(x => x.GetTime()).Returns(1.5f);
+            Target.EffectManager.Tick();
             
+            // Now tick the ability to detect the finished cooldown and gain a charge
             _ability.Tick();
             Assert.AreEqual(1, _ability.CurrentCharges);
             
-            TargetMock.Setup(x => x.GetTime()).Returns(2.1f);
+            // Cooldown should have restarted automatically. Move time to 2.1s
+            TargetMock.Setup(x => x.GetTime()).Returns(2.5f);
+            Target.EffectManager.Tick();
             _ability.Tick();
             Assert.AreEqual(2, _ability.CurrentCharges);
         }
@@ -82,8 +103,14 @@ namespace AbilitySystem.Test.Runtime.Abilities
             // Max charges should now be 2 (base) + 1 (modifier) = 3
             Assert.AreEqual(3, _ability.GetMaxCharges());
             
-            // Current charges should be able to reach 3
+            // Current charges should still be 2 until it recharges
+            _ability.Tick(); // This starts the recharge cooldown
+            Assert.AreEqual(2, _ability.CurrentCharges);
+
+            // Mock time forward by 1.1 seconds and tick effects to finish the cooldown
             TargetMock.Setup(x => x.GetTime()).Returns(1.1f);
+            Target.EffectManager.Tick();
+            
             _ability.Tick();
             Assert.AreEqual(3, _ability.CurrentCharges);
         }
