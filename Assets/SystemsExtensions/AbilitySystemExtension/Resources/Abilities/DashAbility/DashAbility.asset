@@ -111,16 +111,23 @@ MonoBehaviour:
   UniqueName: DashAbility
   Cost: {fileID: 11400000, guid: eb99d6a0a26d54f42b1a92ccd35f4c6b, type: 2}
   Cooldown:
-    rid: -2
+    rid: 3328319641543508083
   AbilityActivation:
     rid: -2
   AssetTags:
-  - <Name>k__BackingField: Ability.Active
-    <HashCode>k__BackingField: 755603092
+  - <Name>k__BackingField: Ability.Active.Dash
+    <HashCode>k__BackingField: 673240806
     <AncestorsNames>k__BackingField:
     - Ability
-    <AncestorsHashCodes>k__BackingField: b84ed1e0
-  CancelAbilityTags: []
+    - Ability.Active
+    <AncestorsHashCodes>k__BackingField: b84ed1e09496092d
+  CancelAbilityTags:
+  - <Name>k__BackingField: Ability.Active.Dash
+    <HashCode>k__BackingField: 673240806
+    <AncestorsNames>k__BackingField:
+    - Ability
+    - Ability.Active
+    <AncestorsHashCodes>k__BackingField: b84ed1e09496092d
   BlockAbilityTags: []
   ActivationOwnedTags: []
   ActivationRequiredTags: []
@@ -130,10 +137,19 @@ MonoBehaviour:
     <AncestorsNames>k__BackingField:
     - Status
     <AncestorsHashCodes>k__BackingField: b0c3cf74
+  - <Name>k__BackingField: Status.Immobilised
+    <HashCode>k__BackingField: -525690558
+    <AncestorsNames>k__BackingField:
+    - Status
+    <AncestorsHashCodes>k__BackingField: b0c3cf74
   GrantedEffects: []
-  NetworkPolicy: 0
+  NetworkPolicy: 1
   NetworkSecurityPolicy: 0
   ActivationCues: []
+  MaxCharges: 3
+  MaxChargesMetaAttribute: MetaAttributeSet.AbilityCharges
+  AbilityChargesMetaAttribute: MetaAttributeSet.AbilityCharges
+  ModifierRequiredTags: []
   references:
     version: 2
     RefIds:
@@ -249,3 +265,7 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
+    - rid: 3328319641543508083
+      type: {class: ConstantAbilityCooldown, ns: AbilitySystem.Runtime.Abilities.Cooldowns, asm: AbilitySystem}
+      data:
+        CooldownEffect: {fileID: 11400000, guid: 251e781aaf147bb4ea03b112f5bb9da4, type: 2}

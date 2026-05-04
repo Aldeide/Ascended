@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AbilitySystemExtension.Runtime.Abilities
 {
-    public class DashAbility : Ability
+    public class DashAbility : ChargesAbility
     {
         private const float Duration = 0.3f;
         private const float Distance = 6;
@@ -26,6 +26,15 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
         protected override void ActivateAbility(AbilityData data)
         {
+            base.ActivateAbility(data);
+
+            if (_rigidbody == null || _playerMovementController == null)
+            {
+                Debug.LogError($"DashAbility: Missing components! Rigidbody: {_rigidbody != null}, MovementController: {_playerMovementController != null}");
+                TryEndAbility();
+                return;
+            }
+            
             _startPosition = _rigidbody.position;
             Vector3 direction;
             if (_playerMovementController.MovementDirection.magnitude > 0.01f)
@@ -41,13 +50,13 @@ namespace AbilitySystemExtension.Runtime.Abilities
             _startTime = Owner.GetTime();
             
             Owner.TagManager.AddTag(DashingTag);
-            
-            CommitCostAndCooldown();
         }
 
         protected override void AbilityTick()
         {
             float elapsed = Owner.GetTime() - _startTime;
+            // Debug.Log($"Dash elapsed: {elapsed}, StartTime: {_startTime}, CurrentTime: {Owner.GetTime()}");
+            
             if (elapsed >= Duration)
             {
                 TryEndAbility();

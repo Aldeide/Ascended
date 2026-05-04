@@ -6,7 +6,7 @@ using UnityEngine;
 namespace AbilitySystemExtension.Runtime.Abilities
 {
     [CreateAssetMenu(fileName = "DashAbility", menuName = "AbilitySystem/Abilities/DashAbility")]
-    public class DashAbilityDefinition : AbilityDefinition
+    public class DashAbilityDefinition : ChargesAbilityDefinition
     {
         public override Type AbilityType()
         {

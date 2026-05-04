@@ -2,6 +2,8 @@ using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using UnityEngine;
+using AbilitySystem.Runtime.Attributes;
+using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Runtime.Abilities
 {
@@ -16,7 +18,7 @@ namespace AbilitySystem.Runtime.Abilities
     public class ChargesAbility : Ability
     {
         public int CurrentCharges { get; private set; }
-        public float LastRegenTime { get; private set; }
+        private bool _wasOnCooldown;
         
         private ChargesAbilityDefinition ChargesDef => (ChargesAbilityDefinition)Definition;
 
@@ -24,7 +26,8 @@ namespace AbilitySystem.Runtime.Abilities
             : base(definition, owner, level)
         {
             CurrentCharges = GetMaxCharges();
-            LastRegenTime = owner.GetTime();
+            _wasOnCooldown = IsOnCooldown();
+            Debug.Log($"[ChargesAbility] Initialized {definition.UniqueName}. CurrentCharges: {CurrentCharges}");
         }
 
         public int GetMaxCharges()
@@ -36,20 +39,16 @@ namespace AbilitySystem.Runtime.Abilities
             return Mathf.FloorToInt(calculated);
         }
 
-        public float GetRegenRate()
-        {
-            var metaName = ChargesDef.RegenRateMetaAttribute;
-            if (string.IsNullOrEmpty(metaName)) return ChargesDef.RegenRate;
-            
-            return CalculateMetaAttributeValue(metaName, ChargesDef.RegenRate);
-        }
-
         public override AbilityActivationResult CanActivate()
         {
-            var baseResult = base.CanActivate();
-            if (baseResult != AbilityActivationResult.Success) return baseResult;
+            // We bypass the standard IsOnCooldown check because the cooldown timer 
+            // is used for charge regeneration, not for blocking activation.
+            if (!CanAffordCost()) return AbilityActivationResult.CostFailed;
+            if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
+            if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
+            if (Owner.TagManager.IsAbilityBlocked(Definition.AssetTags)) return AbilityActivationResult.BlockedByAbility;
 
-            if (CurrentCharges <= 0) return AbilityActivationResult.NoCharges;
+            if (GetCurrentCharges() <= 0) return AbilityActivationResult.NoCharges;
             
             return AbilityActivationResult.Success;
         }
@@ -57,36 +56,85 @@ namespace AbilitySystem.Runtime.Abilities
         protected override void ActivateAbility(AbilityData data)
         {
             CurrentCharges--;
-            // If we were at max charges, start the regen timer
-            if (CurrentCharges == GetMaxCharges() - 1)
-            {
-                LastRegenTime = Owner.GetTime();
-            }
+            Debug.Log($"[ChargesAbility] Consuming charge for {Definition.UniqueName}. New count: {CurrentCharges}");
+            // Cooldown is automatically activated by the Tick() logic when CurrentCharges < maxCharges
+        }
+
+        protected override bool ShouldActivateCooldownOnActivation() => false;
+
+        public int GetCurrentCharges()
+        {
+            var metaName = ChargesDef.AbilityChargesMetaAttribute;
+            if (string.IsNullOrEmpty(metaName)) return CurrentCharges;
+            
+            var calculated = CalculateMetaAttributeValue(metaName, CurrentCharges);
+            return Mathf.Max(0, Mathf.FloorToInt(calculated));
         }
 
         public override void Tick()
         {
-            base.Tick();
+            if (IsActive)
+            {
+                AbilityTick();
+            }
+
+            SyncWithMetaAttribute();
 
             var maxCharges = GetMaxCharges();
-            if (CurrentCharges >= maxCharges)
+            bool isOnCooldown = IsOnCooldown();
+            
+            if (Definition.UniqueName == "Dash" || Definition.UniqueName == "TestChargesAbility")
             {
-                LastRegenTime = Owner.GetTime();
-                return;
+                Debug.Log($"[ChargesAbility] Tick Start {Definition.UniqueName} - Current: {CurrentCharges}, Max: {maxCharges}, OnCooldown: {isOnCooldown}, WasOnCooldown: {_wasOnCooldown}");
             }
 
-            var regenRate = GetRegenRate();
-            if (regenRate <= 0) return;
-
-            var timeSinceLastRegen = Owner.GetTime() - LastRegenTime;
-            var regenInterval = 1f / regenRate;
-
-            if (timeSinceLastRegen >= regenInterval)
+            if (CurrentCharges < maxCharges)
             {
-                var chargesToRegen = Mathf.FloorToInt(timeSinceLastRegen / regenInterval);
-                CurrentCharges = Mathf.Min(maxCharges, CurrentCharges + chargesToRegen);
-                LastRegenTime += chargesToRegen * regenInterval;
+                // If a cooldown just finished, we gain a charge
+                if (_wasOnCooldown && !isOnCooldown)
+                {
+                    CurrentCharges++;
+                    Debug.Log($"[ChargesAbility] Charge gained for {Definition.UniqueName}. New count: {CurrentCharges}");
+                    
+                    // If we still need more charges, restart the cooldown immediately
+                    if (CurrentCharges < maxCharges)
+                    {
+                        Cooldown?.Activate(Owner);
+                        isOnCooldown = true;
+                    }
+                }
+                // If we are below max but no recharge is happening, start it
+                else if (!isOnCooldown)
+                {
+                    Cooldown?.Activate(Owner);
+                    isOnCooldown = true;
+                }
             }
+
+            if (Definition.UniqueName == "Dash" || Definition.UniqueName == "TestChargesAbility")
+            {
+                Debug.Log($"[ChargesAbility] Tick End {Definition.UniqueName} - Current: {CurrentCharges}, OnCooldown: {isOnCooldown}");
+            }
+
+            _wasOnCooldown = isOnCooldown;
+        }
+
+        private void SyncWithMetaAttribute()
+        {
+            var metaName = ChargesDef.AbilityChargesMetaAttribute;
+            if (string.IsNullOrEmpty(metaName)) return;
+
+            var splits = metaName.Split(".");
+            Attribute attr;
+            if (splits.Length == 2)
+            {
+                attr = Owner.AttributeSetManager.GetAttribute(splits[0], splits[1]);
+            }
+            else
+            {
+                attr = Owner.AttributeSetManager.GetAttribute(metaName);
+            }
+            attr?.SetBaseValue(CurrentCharges);
         }
 
         private float CalculateMetaAttributeValue(string metaAttributeName, float baseValue)
@@ -99,7 +147,6 @@ namespace AbilitySystem.Runtime.Abilities
             var activeEffects = Owner.EffectManager.GetActiveEffects();
             foreach (var effect in activeEffects)
             {
-                // If definition specifies required tags, check them
                 if (ChargesDef.ModifierRequiredTags != null && ChargesDef.ModifierRequiredTags.Length > 0)
                 {
                     if (!Owner.TagManager.HasAllTags(ChargesDef.ModifierRequiredTags)) continue;
@@ -132,6 +179,10 @@ namespace AbilitySystem.Runtime.Abilities
 
         public override void EndAbility()
         {
+        }
+        public override string DebugString()
+        {
+            return base.DebugString() + $" [Charges: {GetCurrentCharges()}/{GetMaxCharges()}]";
         }
     }
 }
