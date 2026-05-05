@@ -130,7 +130,7 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 var attribute = modifier.AttributeName.Split(".")[1];
                 var cost = modifier.Calculate(Definition.Cost.ToEffect(Owner, Owner));
-                if (Owner.AttributeSetManager.GetAttribute(attribute).CurrentValue < cost)
+                if (Owner.AttributeSetManager.GetAttribute(attribute)!.CurrentValue < cost)
                 {
                     return false;
                 }

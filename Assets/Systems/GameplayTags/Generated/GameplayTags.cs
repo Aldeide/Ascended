@@ -20,6 +20,17 @@ namespace GameplayTags.Generated
             public readonly Tag Passive = new Tag("Ability.Passive");
         }
         public static readonly __Ability_Group Ability = new __Ability_Group();
+        public class __Cooldown_Group
+        {
+            public static implicit operator Tag(__Cooldown_Group _) => new Tag("Cooldown");
+            public class __Cooldown_Ability_Group
+            {
+                public static implicit operator Tag(__Cooldown_Ability_Group _) => new Tag("Cooldown.Ability");
+                public readonly Tag Dash = new Tag("Cooldown.Ability.Dash");
+            }
+            public readonly __Cooldown_Ability_Group Ability = new __Cooldown_Ability_Group();
+        }
+        public static readonly __Cooldown_Group Cooldown = new __Cooldown_Group();
         public class __Cue_Group
         {
             public static implicit operator Tag(__Cue_Group _) => new Tag("Cue");
@@ -245,6 +256,7 @@ namespace GameplayTags.Generated
             new Tag("Ability.Active.Dash"),
             new Tag("Ability.Active.Test"),
             new Tag("Ability.Passive"),
+            new Tag("Cooldown.Ability.Dash"),
             new Tag("Cue.Animation"),
             new Tag("Cue.Animation.Parameter.Grounded"),
             new Tag("Cue.Animation.State.Death"),

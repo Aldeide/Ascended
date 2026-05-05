@@ -17,6 +17,7 @@ MonoBehaviour:
   - Ability.Active.Dash
   - Ability.Active.Test
   - Ability.Passive
+  - Cooldown.Ability.Dash
   - Cue.Animation
   - Cue.Animation.Parameter.Grounded
   - Cue.Animation.State.Death
