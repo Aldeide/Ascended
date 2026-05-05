@@ -25,6 +25,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             "WeaponAttributeSet.ReloadTime",
             "WeaponAttributeSet.ReloadEnergyCost",
             "MetaAttributeSet.AbilityCooldown",
+            "MetaAttributeSet.AbilityCharges",
             "MetaAttributeSet.AbilityCost",
             "MetaAttributeSet.EffectDuration",
             "MetaAttributeSet.DamageDone",

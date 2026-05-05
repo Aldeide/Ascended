@@ -13,6 +13,7 @@ namespace GameplayTags.Generated
             public class __Ability_Active_Group
             {
                 public static implicit operator Tag(__Ability_Active_Group _) => new Tag("Ability.Active");
+                public readonly Tag Dash = new Tag("Ability.Active.Dash");
                 public readonly Tag Test = new Tag("Ability.Active.Test");
             }
             public readonly __Ability_Active_Group Active = new __Ability_Active_Group();
@@ -238,6 +239,7 @@ namespace GameplayTags.Generated
         private static readonly List<Tag> AllTags = new List<Tag>
         {
             new Tag("Ability.Active"),
+            new Tag("Ability.Active.Dash"),
             new Tag("Ability.Active.Test"),
             new Tag("Ability.Passive"),
             new Tag("Cue.Animation"),

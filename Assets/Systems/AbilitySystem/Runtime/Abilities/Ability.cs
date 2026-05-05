@@ -72,7 +72,7 @@ namespace AbilitySystem.Runtime.Abilities
             }
         }
         
-        public void Tick()
+        public virtual void Tick()
         {
             if (!IsActive) return;
             AbilityTick();
@@ -143,7 +143,7 @@ namespace AbilitySystem.Runtime.Abilities
             Level = level;
         }
 
-        private bool IsOnCooldown()
+        protected bool IsOnCooldown()
         {
             return (Definition.Cooldown != null && !Definition.Cooldown.CanActivate(Owner));
         }
@@ -187,8 +187,8 @@ namespace AbilitySystem.Runtime.Abilities
                 
                 PredictionKey = key;
                 ApplyEffects();
-                Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags);
-                Cooldown?.Activate(Owner);
+                Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags, this);
+                if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner);
                 
                 ActivateAbility(AbilityArguments);
             }
@@ -196,6 +196,8 @@ namespace AbilitySystem.Runtime.Abilities
             _onActivateResult?.Invoke(result);
             return success;
         }
+
+        protected virtual bool ShouldActivateCooldownOnActivation() => true;
         
         public virtual void TryEndAbility()
         {
@@ -347,6 +349,11 @@ namespace AbilitySystem.Runtime.Abilities
             }
             return Definition.NetworkSecurityPolicy == AbilityNetworkSecurityPolicy.ServerOnlyTermination &&
                    Owner.IsLocalClient();
+        }
+
+        public virtual string DebugString()
+        {
+            return $"{(IsActive ? "Active" : "Inactive")} (Level: {Level})";
         }
     }
 }

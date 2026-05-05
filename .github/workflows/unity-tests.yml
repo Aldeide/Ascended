@@ -14,7 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          unityVersion: 6000.2.0b12
           lfs: true
 
       - name: Cache Library
@@ -28,11 +27,13 @@ jobs:
       - name: Run Tests
         uses: game-ci/unity-test-runner@v4
         env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          unityVersion: 6000.2.0b12
+          unityVersion: 6000.4.5f1
           projectPath: .
-          testMode: all # Runs both EditMode and PlayMode
+          testMode: EditMode # Runs both EditMode and PlayMode
           artifactsPath: artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: Unity Test Results

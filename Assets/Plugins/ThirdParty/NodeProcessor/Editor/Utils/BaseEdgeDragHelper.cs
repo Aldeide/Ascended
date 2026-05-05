@@ -41,6 +41,11 @@ namespace GraphProcessor
 
         public override Port draggedPort { get; set; }
 
+        public override void HandlePointerUp(PointerUpEvent evt)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Reset(bool didConnect = false)
         {
             if (compatiblePorts != null && graphView != null)
@@ -357,6 +362,16 @@ namespace GraphProcessor
             edgeCandidate = null;
             compatiblePorts.Clear();
             Reset(didConnect);
+        }
+
+        public override bool HandlePointerDown(PointerDownEvent evt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void HandlePointerMove(PointerMoveEvent evt)
+        {
+            throw new NotImplementedException();
         }
 
         Rect GetPortBounds(BaseNodeView nodeView, int index, List<PortView> portList)
