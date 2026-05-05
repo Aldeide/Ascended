@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using UnityEngine;
@@ -19,7 +20,13 @@ namespace AbilitySystem.Runtime.Abilities
     {
         public int CurrentCharges { get; private set; }
         private bool _wasOnCooldown;
+        private int _lastEffectiveCharges;
+        private int _lastMaxCharges;
         
+        public event Action<int, int> OnChargesChanged; // (current, max)
+        public event Action<float> OnCooldownStarted; // (duration)
+        public event Action<float> OnCooldownProgressChanged; // (0-1 progress)
+
         private ChargesAbilityDefinition ChargesDef => (ChargesAbilityDefinition)Definition;
 
         public ChargesAbility(AbilityDefinition definition, IAbilitySystem owner, int level = 1) 
@@ -27,6 +34,8 @@ namespace AbilitySystem.Runtime.Abilities
         {
             CurrentCharges = GetMaxCharges();
             _wasOnCooldown = IsOnCooldown();
+            _lastEffectiveCharges = GetCurrentCharges();
+            _lastMaxCharges = GetMaxCharges();
             Debug.Log($"[ChargesAbility] Initialized {definition.UniqueName}. CurrentCharges: {CurrentCharges}");
         }
 
@@ -57,6 +66,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             CurrentCharges--;
             Debug.Log($"[ChargesAbility] Consuming charge for {Definition.UniqueName}. New count: {CurrentCharges}");
+            NotifyChargesChanged();
             // Cooldown is automatically activated by the Tick() logic when CurrentCharges < maxCharges
         }
 
@@ -95,19 +105,25 @@ namespace AbilitySystem.Runtime.Abilities
                 {
                     CurrentCharges++;
                     Debug.Log($"[ChargesAbility] Charge gained for {Definition.UniqueName}. New count: {CurrentCharges}");
+                    NotifyChargesChanged();
                     
                     // If we still need more charges, restart the cooldown immediately
                     if (CurrentCharges < maxCharges)
                     {
-                        Cooldown?.Activate(Owner);
+                        StartCooldown(maxCharges);
                         isOnCooldown = true;
                     }
                 }
                 // If we are below max but no recharge is happening, start it
                 else if (!isOnCooldown)
                 {
-                    Cooldown?.Activate(Owner);
+                    StartCooldown(maxCharges);
                     isOnCooldown = true;
+                }
+
+                if (isOnCooldown)
+                {
+                    UpdateCooldownProgress();
                 }
             }
 
@@ -116,7 +132,48 @@ namespace AbilitySystem.Runtime.Abilities
                 Debug.Log($"[ChargesAbility] Tick End {Definition.UniqueName} - Current: {CurrentCharges}, OnCooldown: {isOnCooldown}");
             }
 
+            // Check if max charges changed via attributes
+            if (maxCharges != _lastMaxCharges)
+            {
+                _lastMaxCharges = maxCharges;
+                NotifyChargesChanged();
+            }
+
             _wasOnCooldown = isOnCooldown;
+        }
+
+        private void StartCooldown(int maxCharges)
+        {
+            if (Cooldown != null)
+            {
+                Cooldown.Activate(Owner);
+                OnCooldownStarted?.Invoke(Cooldown.Calculate(Owner));
+            }
+        }
+
+        private void UpdateCooldownProgress()
+        {
+            if (Cooldown == null) return;
+            var activeCooldownEffect = Owner.EffectManager.GetActiveEffects()
+                .FirstOrDefault(e => e.Definition.GrantedTags != null && 
+                                     Definition.Cooldown.CooldownEffect.GrantedTags != null &&
+                                     e.Definition.GrantedTags.Intersect(Definition.Cooldown.CooldownEffect.GrantedTags).Any());
+
+            if (activeCooldownEffect == null) return;
+            var duration = activeCooldownEffect.Duration;
+            if (!(duration > 0)) return;
+            var remaining = activeCooldownEffect.RemainingDuration();
+            var progress = 1f - (remaining / duration);
+            OnCooldownProgressChanged?.Invoke(progress);
+        }
+
+        private void NotifyChargesChanged()
+        {
+            var current = GetCurrentCharges();
+            var max = GetMaxCharges();
+            _lastEffectiveCharges = current;
+            _lastMaxCharges = max;
+            OnChargesChanged?.Invoke(current, max);
         }
 
         private void SyncWithMetaAttribute()
@@ -126,14 +183,7 @@ namespace AbilitySystem.Runtime.Abilities
 
             var splits = metaName.Split(".");
             Attribute attr;
-            if (splits.Length == 2)
-            {
-                attr = Owner.AttributeSetManager.GetAttribute(splits[0], splits[1]);
-            }
-            else
-            {
-                attr = Owner.AttributeSetManager.GetAttribute(metaName);
-            }
+            attr = splits.Length == 2 ? Owner.AttributeSetManager.GetAttribute(splits[0], splits[1]) : Owner.AttributeSetManager.GetAttribute(metaName);
             attr?.SetBaseValue(CurrentCharges);
         }
 
