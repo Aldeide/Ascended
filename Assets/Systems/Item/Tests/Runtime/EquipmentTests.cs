@@ -4,7 +4,9 @@ using Item.Runtime.Interface;
 using Item.Runtime.Modifiers;
 using NUnit.Framework;
 using Moq;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Effects;
 using Systems.Item.Tests.Utilities;
 using Item.Runtime.Interface.Core;
 using Item.Runtime.Definition;
@@ -153,6 +155,8 @@ namespace Systems.Item.Tests
             def.OwnedTags = new[] { ownedTag };
             def.ModifiableEquipmentTags = new[] { modifiableEquipmentTag };
             def.Recipe = new List<RecipeItem>();
+            def.GrantedAbilities = new AbilityDefinition[0];
+            def.GrantedEffects = new EffectDefinition[0];
             return def;
         }
 
@@ -229,6 +233,93 @@ namespace Systems.Item.Tests
             var mod = new Modifier(modDef, inv.Object);
 
             Assert.IsTrue(equipment.CanAddMod(slot, mod));
+        }
+
+        [Test]
+        public void CanAddMod_SlotDoesNotExistOnEquipment_ReturnsFalse()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var declaredSlot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), declaredSlot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            Assert.IsFalse(equipment.CanAddMod(new Tag("Mod.Slot.Passive.2"), mod));
+        }
+
+        [Test]
+        public void AddMod_InvalidMod_LeavesSlotEmpty()
+        {
+            var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(Source);
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            // Active mod placed in passive slot — CanAddMod should reject.
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Active"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            equipment.AddMod(slot, mod);
+
+            Assert.IsNull(equipment.Mods[slot], "Invalid mod must not populate the slot.");
+        }
+
+        [Test]
+        public void AddMod_ValidMod_PopulatesSlotAndAttachesMod()
+        {
+            var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(Source);
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+
+            equipment.AddMod(slot, mod);
+
+            Assert.AreSame(mod, equipment.Mods[slot], "Valid mod should occupy the slot.");
+        }
+
+        [Test]
+        public void RemoveMod_RemovesEntryFromMods()
+        {
+            var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(Source);
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+            equipment.AddMod(slot, mod);
+            Assert.AreSame(mod, equipment.Mods[slot]);
+
+            equipment.RemoveMod(slot, mod);
+
+            Assert.IsFalse(equipment.Mods.ContainsKey(slot),
+                "RemoveMod should drop the slot entry from the Mods dictionary.");
+        }
+
+        [Test]
+        public void Modifier_Properties_MirrorDefinitionTags()
+        {
+            var inv = new Mock<IInventoryManager>();
+            var ownedTag = new Tag("Item.Modifier.Active");
+            var modifiableTag = new Tag("Item.Equipment.EnergyCore");
+            var modDef = CreateModifierDef(ownedTag, modifiableTag);
+
+            var mod = new Modifier(modDef, inv.Object);
+
+            CollectionAssert.AreEqual(new[] { ownedTag }, mod.OwnedTags);
+            CollectionAssert.AreEqual(new[] { modifiableTag }, mod.ModifiableEquipmentTags);
         }
     }
 }
