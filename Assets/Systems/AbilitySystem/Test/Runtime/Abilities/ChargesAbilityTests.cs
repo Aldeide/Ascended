@@ -143,5 +143,56 @@ namespace AbilitySystem.Test.Runtime.Abilities
             Target.TagManager.AddTag(new Tag("Ability.Charges.Boost"));
             Assert.AreEqual(7, _ability.GetMaxCharges(), "Modifier should apply when required tag is present");
         }
+        [Test]
+        public void ChargesAbilityTests_Events_FiresOnActivation()
+        {
+            int callCount = 0;
+            _ability.OnChargesChanged += (curr, max) => callCount++;
+            
+            _ability.TryActivateAbility(default);
+            Assert.AreEqual(1, callCount);
+        }
+
+        [Test]
+        public void ChargesAbilityTests_Events_FiresOnRegeneration()
+        {
+            _ability.TryActivateAbility(default);
+            _ability.TryActivateAbility(default);
+            
+            // We must tick once to start the regeneration cooldown at Time = 0
+            _ability.Tick(); 
+            
+            int callCount = 0;
+            _ability.OnChargesChanged += (curr, max) => callCount++;
+            
+            // Fast forward and tick to gain a charge
+            TargetMock.Setup(x => x.GetTime()).Returns(1.1f);
+            Target.EffectManager.Tick();
+            _ability.Tick();
+            
+            Assert.AreEqual(1, callCount, "OnChargesChanged should fire when a charge is gained");
+        }
+
+        [Test]
+        public void ChargesAbilityTests_Events_FiresCooldownEvents()
+        {
+            _ability.TryActivateAbility(default);
+            
+            float durationFired = 0;
+            _ability.OnCooldownStarted += (dur) => durationFired = dur;
+            
+            float progressFired = -1;
+            _ability.OnCooldownProgressChanged += (prog) => progressFired = prog;
+            
+            // First tick should start the cooldown and fire start event
+            _ability.Tick();
+            Assert.AreEqual(1f, durationFired);
+            
+            // Mock 0.5s elapsed (50% progress)
+            TargetMock.Setup(x => x.GetTime()).Returns(0.5f);
+            _ability.Tick();
+            
+            Assert.That(progressFired, Is.InRange(0.49f, 0.51f), $"Progress should be 0.5, but was {progressFired}");
+        }
     }
 }
