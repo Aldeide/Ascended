@@ -116,32 +116,47 @@ namespace AbilitySystem.Test.Runtime.Abilities
         }
 
         [Test]
-        public void ChargesAbilityTests_TaggedModifier_OnlyAppliesIfTagsMatch()
+        public void ChargesAbilityTests_TagQuery_FiltersModifiers()
         {
-            _abilityDef.ModifierRequiredTags = new[] { new Tag("Ability.Charges.Boost") };
-            
-            // Create an effect that adds 1 to MaxChargesMetaAttribute
-            var effectDef = ScriptableObject.CreateInstance<EffectDefinition>();
-            effectDef.DurationType = EffectDurationType.Infinite;
-            
-            var modifier = new FloatModifier
-            {
-                AttributeName = "Ability.Charges.Max",
-                Operation = EffectOperation.Additive,
-                ModifierMagnitude = 5f
+            var boostTag = new Tag("Effect.Boost");
+            _abilityDef.MaxChargesModifiersTagQuery = new TagQuery 
+            { 
+                Condition = new[]
+                {
+                    new TagCondition 
+                    { 
+                        MatchType = TagMatchType.AnyOfPartial, 
+                        Tags = new[] { boostTag } 
+                    }
+                } 
             };
-            effectDef.Modifiers = new Modifier[] { modifier };
-
-            var effect = new Effect(effectDef);
-            effect.Initialise(Source, Target);
             
-            // 1. Apply without tag
-            Target.ApplyEffectToSelf(effect);
-            Assert.AreEqual(2, _ability.GetMaxCharges(), "Modifier should not apply without required tag");
+            // Effect 1: Has the tag (AssetTags)
+            var effectDef1 = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectDef1.name = "EffectBoost";
+            effectDef1.DurationType = EffectDurationType.Infinite;
+            effectDef1.AssetTags = new[] { boostTag };
+            var mod1 = new FloatModifier { AttributeName = "Ability.Charges.Max", Operation = EffectOperation.Additive, ModifierMagnitude = 1f };
+            effectDef1.Modifiers = new Modifier[] { mod1 };
+            
+            // Effect 2: Doesn't have the tag
+            var effectDef2 = ScriptableObject.CreateInstance<EffectDefinition>();
+            effectDef2.name = "EffectNoBoost";
+            effectDef2.DurationType = EffectDurationType.Infinite;
+            effectDef2.AssetTags = new Tag[0];
+            var mod2 = new FloatModifier { AttributeName = "Ability.Charges.Max", Operation = EffectOperation.Additive, ModifierMagnitude = 10f };
+            effectDef2.Modifiers = new Modifier[] { mod2 };
 
-            // 2. Add the required tag to the target
-            Target.TagManager.AddTag(new Tag("Ability.Charges.Boost"));
-            Assert.AreEqual(7, _ability.GetMaxCharges(), "Modifier should apply when required tag is present");
+            var effect1 = new Effect(effectDef1);
+            effect1.Initialise(Source, Target);
+            Target.ApplyEffectToSelf(effect1);
+            
+            var effect2 = new Effect(effectDef2);
+            effect2.Initialise(Source, Target);
+            Target.ApplyEffectToSelf(effect2);
+
+            // Only Effect 1 should apply (2 base + 1 boost = 3)
+            Assert.AreEqual(3, _ability.GetMaxCharges(), "Only the effect matching the TagQuery should apply");
         }
         [Test]
         public void ChargesAbilityTests_Events_FiresOnActivation()
