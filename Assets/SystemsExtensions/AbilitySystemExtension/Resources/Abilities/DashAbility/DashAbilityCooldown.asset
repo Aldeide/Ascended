@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e5f3d8cb9340e8b2782bb3dfb0979f, type: 3}
+  m_Name: DashAbilityCooldown
+  m_EditorClassIdentifier: AbilitySystem::AbilitySystem.Runtime.Effects.EffectDefinition
+  EffectName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  IsHidden: 1
+  Icon: {fileID: 0}
+  DurationType: 3
+  DurationSeconds: 3
+  Period: 0
+  PeriodicEffect: {fileID: 0}
+  AssetTags:
+  - <Name>k__BackingField: Cooldown.Ability.Dash
+    <HashCode>k__BackingField: -964271759
+    <AncestorsNames>k__BackingField:
+    - Cooldown
+    - Cooldown.Ability
+    <AncestorsHashCodes>k__BackingField: 1d66983da9a35ca7
+  GrantedTags:
+  - <Name>k__BackingField: Cooldown.Ability.Dash
+    <HashCode>k__BackingField: -964271759
+    <AncestorsNames>k__BackingField:
+    - Cooldown
+    - Cooldown.Ability
+    <AncestorsHashCodes>k__BackingField: 1d66983da9a35ca7
+  ApplicationRequiredTags: []
+  OngoingRequiredTags: []
+  RemoveGameplayEffectsWithTags: []
+  ApplicationImmunityTags: []
+  Modifiers: []
+  Executions: []
+  Cues: []
+  EffectStack:
+    EffectStackType: 0
+    MaxStacks: 0
+    EffectStackDurationPolicy: 0
+    EffectStackPeriodPolicy: 0
+    EffectStackExpirationPolicy: 0
+  references:
+    version: 2
+    RefIds: []
