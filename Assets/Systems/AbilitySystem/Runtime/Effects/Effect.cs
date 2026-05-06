@@ -35,6 +35,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Definition = definition;
             Duration = Definition.DurationSeconds;
+            NumStacks = 1;
             if (!Definition.IsInstant()) _effectTicker = new EffectTicker(this);
         }
 

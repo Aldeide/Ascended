@@ -4,6 +4,7 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using UnityEngine;
 using AbilitySystem.Runtime.Attributes;
+using GameplayTags.Runtime;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Runtime.Abilities
@@ -44,7 +45,7 @@ namespace AbilitySystem.Runtime.Abilities
             var metaName = ChargesDef.MaxChargesMetaAttribute;
             if (string.IsNullOrEmpty(metaName)) return ChargesDef.MaxCharges;
             
-            var calculated = CalculateMetaAttributeValue(metaName, ChargesDef.MaxCharges);
+            var calculated = CalculateMetaAttributeValue(metaName, ChargesDef.MaxCharges, ChargesDef.MaxChargesModifiersTagQuery);
             return Mathf.FloorToInt(calculated);
         }
 
@@ -77,7 +78,7 @@ namespace AbilitySystem.Runtime.Abilities
             var metaName = ChargesDef.AbilityChargesMetaAttribute;
             if (string.IsNullOrEmpty(metaName)) return CurrentCharges;
             
-            var calculated = CalculateMetaAttributeValue(metaName, CurrentCharges);
+            var calculated = CalculateMetaAttributeValue(metaName, CurrentCharges, ChargesDef.ChargesModifiersTagQuery);
             return Mathf.Max(0, Mathf.FloorToInt(calculated));
         }
 
@@ -187,7 +188,7 @@ namespace AbilitySystem.Runtime.Abilities
             attr?.SetBaseValue(CurrentCharges);
         }
 
-        private float CalculateMetaAttributeValue(string metaAttributeName, float baseValue)
+        private float CalculateMetaAttributeValue(string metaAttributeName, float baseValue, TagQuery tagQuery)
         {
             var additive = 0f;
             var multiplicative = 1f;
@@ -197,10 +198,7 @@ namespace AbilitySystem.Runtime.Abilities
             var activeEffects = Owner.EffectManager.GetActiveEffects();
             foreach (var effect in activeEffects)
             {
-                if (ChargesDef.ModifierRequiredTags != null && ChargesDef.ModifierRequiredTags.Length > 0)
-                {
-                    if (!Owner.TagManager.HasAllTags(ChargesDef.ModifierRequiredTags)) continue;
-                }
+                if (!tagQuery.MatchesTags(effect.Definition.AssetTags)) continue;
 
                 if (effect.Definition.Modifiers == null) continue;
                 foreach (var mod in effect.Definition.Modifiers)

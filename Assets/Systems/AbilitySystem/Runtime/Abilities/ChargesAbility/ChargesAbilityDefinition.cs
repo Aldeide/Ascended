@@ -23,16 +23,14 @@ namespace AbilitySystem.Runtime.Abilities
         [Tooltip("Meta-attribute name used to modify max charges via effects.")]
         [ValueDropdown("@DropdownValuesUtil.AttributeChoices", IsUniqueList = true)]
         public string MaxChargesMetaAttribute;
-
+        public TagQuery MaxChargesModifiersTagQuery;
+        
         [Tooltip("Meta-attribute name used to modify current charges via effects.")]
         [ValueDropdown("@DropdownValuesUtil.AttributeChoices", IsUniqueList = true)]
         public string AbilityChargesMetaAttribute;
+        public TagQuery ChargesModifiersTagQuery;
 
-        [Title("Modifier Constraints")]
-        [Tooltip("If set, only effects with these tags will be considered for modifying max charges.")]
-        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
-        public Tag[] ModifierRequiredTags = Array.Empty<Tag>();
-
+        
         public override Ability ToAbility(IAbilitySystem owner)
         {
             return new ChargesAbility(this, owner);
