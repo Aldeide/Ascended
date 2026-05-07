@@ -24,11 +24,6 @@ namespace AbilitySystem.Runtime.Abilities
         [ValueDropdown("@DropdownValuesUtil.AttributeChoices", IsUniqueList = true)]
         public string MaxChargesMetaAttribute;
         public TagQuery MaxChargesModifiersTagQuery;
-        
-        [Tooltip("Meta-attribute name used to modify current charges via effects.")]
-        [ValueDropdown("@DropdownValuesUtil.AttributeChoices", IsUniqueList = true)]
-        public string AbilityChargesMetaAttribute;
-        public TagQuery ChargesModifiersTagQuery;
 
         
         public override Ability ToAbility(IAbilitySystem owner)
