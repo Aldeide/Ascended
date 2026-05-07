@@ -1,3 +1,4 @@
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Scripts;
@@ -16,6 +17,7 @@ public class AbilitySystemDebugWindow : EditorWindow
     // Details panel
     private VisualElement _detailsContainer;
     private Effect _selectedEffect;
+    private Ability _selectedAbility;
 
     [MenuItem("Window/Ability System/Debug Window")]
     public static void ShowWindow()
@@ -205,6 +207,30 @@ public class AbilitySystemDebugWindow : EditorWindow
             }
         }
 
+        // Abilities Section
+        AddHeader(_localScroll, "Abilities");
+        var abilities = _inspectedComponent.AbilitySystem.AbilityManager.Abilities;
+        if (abilities.Count == 0)
+        {
+            _localScroll.Add(new Label("  (None)") { style = { color = Color.gray, marginLeft = 10 } });
+        }
+        foreach (var kvp in abilities)
+        {
+            var btn = new Button(() => SelectAbility(kvp.Value));
+            btn.text = $"{kvp.Key}: {kvp.Value.DebugString()}";
+            btn.style.unityTextAlign = TextAnchor.MiddleLeft;
+            btn.style.marginLeft = 5;
+            btn.style.marginRight = 5;
+            
+            if (kvp.Value == _selectedAbility)
+            {
+                btn.style.backgroundColor = new Color(0.2f, 0.4f, 0.7f);
+                btn.style.color = Color.white;
+            }
+            
+            _localScroll.Add(btn);
+        }
+
         // Tags Section
         AddHeader(_localScroll, "Gameplay Tags");
         var tagLabel = new Label(_inspectedComponent.AbilitySystem.TagManager.DebugString());
@@ -246,6 +272,14 @@ public class AbilitySystemDebugWindow : EditorWindow
     private void SelectEffect(Effect effect)
     {
         _selectedEffect = effect;
+        _selectedAbility = null;
+        UpdateDetails();
+    }
+
+    private void SelectAbility(Ability ability)
+    {
+        _selectedAbility = ability;
+        _selectedEffect = null;
         UpdateDetails();
     }
 
@@ -264,30 +298,42 @@ public class AbilitySystemDebugWindow : EditorWindow
             return;
         }
 
+        if (_selectedEffect != null)
+        {
+            UpdateEffectDetails(_selectedEffect);
+        }
+        else if (_selectedAbility != null)
+        {
+            UpdateAbilityDetails(_selectedAbility);
+        }
+    }
+
+    private void UpdateEffectDetails(Effect effect)
+    {
         var box = new VisualElement();
         box.style.paddingLeft = 10;
         box.style.paddingTop = 10;
 
-        box.Add(new Label($"Effect Name: {_selectedEffect.Definition.name}") { style = { unityFontStyleAndWeight = FontStyle.Bold, fontSize = 13 } });
-        box.Add(new Label($"Guid: {_selectedEffect.Guid}"));
-        box.Add(new Label($"Level: {_selectedEffect.Level}"));
-        box.Add(new Label($"Stacks: {_selectedEffect.NumStacks}"));
+        box.Add(new Label($"Effect Name: {effect.Definition.name}") { style = { unityFontStyleAndWeight = FontStyle.Bold, fontSize = 13 } });
+        box.Add(new Label($"Guid: {effect.Guid}"));
+        box.Add(new Label($"Level: {effect.Level}"));
+        box.Add(new Label($"Stacks: {effect.NumStacks}"));
         
-        string durationStr = _selectedEffect.Definition.IsInfinite() ? "Infinite" : $"{_selectedEffect.RemainingDuration():F2}s / {_selectedEffect.Duration:F2}s";
+        string durationStr = effect.Definition.IsInfinite() ? "Infinite" : $"{effect.RemainingDuration():F2}s / {effect.Duration:F2}s";
         box.Add(new Label($"Duration: {durationStr}"));
-        box.Add(new Label($"Is Predicted: {_selectedEffect.IsPredicted()}") { style = { color = _selectedEffect.IsPredicted() ? Color.yellow : Color.white } });
+        box.Add(new Label($"Is Predicted: {effect.IsPredicted()}") { style = { color = effect.IsPredicted() ? Color.yellow : Color.white } });
         
-        if (_selectedEffect.Context != null)
+        if (effect.Context != null)
         {
-            box.Add(new Label($"Source ID: {_selectedEffect.Source?.NetworkRole?.NetworkObjectId ?? 0}"));
+            box.Add(new Label($"Source ID: {effect.Source?.NetworkRole?.NetworkObjectId ?? 0}"));
         }
 
-        if (_selectedEffect.SetByCallerTagMagnitudes.Count > 0)
+        if (effect.SetByCallerTagMagnitudes.Count > 0)
         {
             var sbcHeader = new Label("\nSET BY CALLER DATA:");
             sbcHeader.style.unityFontStyleAndWeight = FontStyle.Bold;
             box.Add(sbcHeader);
-            foreach (var kvp in _selectedEffect.SetByCallerTagMagnitudes)
+            foreach (var kvp in effect.SetByCallerTagMagnitudes)
             {
                 box.Add(new Label($"  - {kvp.Key.Name}: {kvp.Value:F3}"));
             }
@@ -296,13 +342,67 @@ public class AbilitySystemDebugWindow : EditorWindow
         var tagsHeader = new Label("\nTAGS:");
         tagsHeader.style.unityFontStyleAndWeight = FontStyle.Bold;
         box.Add(tagsHeader);
-        if (_selectedEffect.Definition.AssetTags != null)
+        if (effect.Definition.AssetTags != null)
         {
-            foreach(var t in _selectedEffect.Definition.AssetTags) box.Add(new Label($"  - {t.Name} (Asset)"));
+            foreach(var t in effect.Definition.AssetTags) box.Add(new Label($"  - {t.Name} (Asset)"));
         }
-        if (_selectedEffect.Definition.GrantedTags != null)
+        if (effect.Definition.GrantedTags != null)
         {
-            foreach(var t in _selectedEffect.Definition.GrantedTags) box.Add(new Label($"  - {t.Name} (Granted)"));
+            foreach(var t in effect.Definition.GrantedTags) box.Add(new Label($"  - {t.Name} (Granted)"));
+        }
+
+        _detailsContainer.Add(box);
+    }
+
+    private void UpdateAbilityDetails(Ability ability)
+    {
+        var box = new VisualElement();
+        box.style.paddingLeft = 10;
+        box.style.paddingTop = 10;
+
+        box.Add(new Label($"Ability: {ability.Definition.UniqueName}") { style = { unityFontStyleAndWeight = FontStyle.Bold, fontSize = 13 } });
+        box.Add(new Label($"State: {(ability.IsActive ? "Active" : "Inactive")}"));
+        box.Add(new Label($"Level: {ability.Level}"));
+
+        if (ability is ChargesAbility chargesAbility)
+        {
+            var chargesHeader = new Label("\nCHARGES INFO:");
+            chargesHeader.style.unityFontStyleAndWeight = FontStyle.Bold;
+            box.Add(chargesHeader);
+            
+            box.Add(new Label($"  - Current Charges: {chargesAbility.GetCurrentCharges()}"));
+            box.Add(new Label($"  - Max Charges: {chargesAbility.GetMaxCharges()}"));
+            
+            var def = (ChargesAbilityDefinition)ability.Definition;
+            box.Add(new Label($"  - Base Max: {def.MaxCharges}"));
+            box.Add(new Label($"  - Meta Attr: {def.MaxChargesMetaAttribute ?? "None"}"));
+            
+            // Show contributing effects
+            var activeEffects = _inspectedComponent.AbilitySystem.EffectManager.GetActiveEffects();
+            var metaName = def.MaxChargesMetaAttribute;
+            if (!string.IsNullOrEmpty(metaName))
+            {
+                var modHeader = new Label("\nACTIVE MODIFIERS:");
+                modHeader.style.unityFontStyleAndWeight = FontStyle.Bold;
+                box.Add(modHeader);
+                
+                bool found = false;
+                foreach (var effect in activeEffects)
+                {
+                    if (effect.Definition.Modifiers == null) continue;
+                    if (!def.MaxChargesModifiersTagQuery.MatchesTags(effect.Definition.AssetTags)) continue;
+                    
+                    foreach (var mod in effect.Definition.Modifiers)
+                    {
+                        if (mod.AttributeName == metaName)
+                        {
+                            box.Add(new Label($"  - {effect.Definition.name}: {mod.Operation} {mod.Calculate(effect)} (x{effect.NumStacks})"));
+                            found = true;
+                        }
+                    }
+                }
+                if (!found) box.Add(new Label("  - (None)"));
+            }
         }
 
         _detailsContainer.Add(box);

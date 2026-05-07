@@ -56,7 +56,7 @@ namespace GameplayTags.Runtime
             {
                 return MatchType == TagMatchType.NoneOfExact || MatchType == TagMatchType.NoneOfPartial;
             }
-
+            // Does this need other types? AnyAncestorOf, AllAncestorOf?
             switch (MatchType)
             {
                 case TagMatchType.AnyOfExact:

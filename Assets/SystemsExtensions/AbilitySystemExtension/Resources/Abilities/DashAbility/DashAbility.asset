@@ -148,8 +148,21 @@ MonoBehaviour:
   ActivationCues: []
   MaxCharges: 3
   MaxChargesMetaAttribute: MetaAttributeSet.AbilityCharges
-  AbilityChargesMetaAttribute: MetaAttributeSet.AbilityCharges
-  ModifierRequiredTags: []
+  MaxChargesModifiersTagQuery:
+    Condition:
+    - MatchType: 0
+      Tags:
+      - <Name>k__BackingField: Ability.Active.Dash
+        <HashCode>k__BackingField: 673240806
+        <AncestorsNames>k__BackingField:
+        - Ability
+        - Ability.Active
+        <AncestorsHashCodes>k__BackingField: b84ed1e09496092d
+      - <Name>k__BackingField: Ability.Active
+        <HashCode>k__BackingField: 755603092
+        <AncestorsNames>k__BackingField:
+        - Ability
+        <AncestorsHashCodes>k__BackingField: b84ed1e0
   references:
     version: 2
     RefIds:

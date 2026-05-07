@@ -75,11 +75,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public int GetCurrentCharges()
         {
-            var metaName = ChargesDef.AbilityChargesMetaAttribute;
-            if (string.IsNullOrEmpty(metaName)) return CurrentCharges;
-            
-            var calculated = CalculateMetaAttributeValue(metaName, CurrentCharges, ChargesDef.ChargesModifiersTagQuery);
-            return Mathf.Max(0, Mathf.FloorToInt(calculated));
+            return CurrentCharges;
         }
 
         public override void Tick()
@@ -89,15 +85,8 @@ namespace AbilitySystem.Runtime.Abilities
                 AbilityTick();
             }
 
-            SyncWithMetaAttribute();
-
             var maxCharges = GetMaxCharges();
-            bool isOnCooldown = IsOnCooldown();
-            
-            if (Definition.UniqueName == "Dash" || Definition.UniqueName == "TestChargesAbility")
-            {
-                Debug.Log($"[ChargesAbility] Tick Start {Definition.UniqueName} - Current: {CurrentCharges}, Max: {maxCharges}, OnCooldown: {isOnCooldown}, WasOnCooldown: {_wasOnCooldown}");
-            }
+            var isOnCooldown = IsOnCooldown();
 
             if (CurrentCharges < maxCharges)
             {
@@ -105,7 +94,6 @@ namespace AbilitySystem.Runtime.Abilities
                 if (_wasOnCooldown && !isOnCooldown)
                 {
                     CurrentCharges++;
-                    Debug.Log($"[ChargesAbility] Charge gained for {Definition.UniqueName}. New count: {CurrentCharges}");
                     NotifyChargesChanged();
                     
                     // If we still need more charges, restart the cooldown immediately
@@ -128,11 +116,6 @@ namespace AbilitySystem.Runtime.Abilities
                 }
             }
 
-            if (Definition.UniqueName == "Dash" || Definition.UniqueName == "TestChargesAbility")
-            {
-                Debug.Log($"[ChargesAbility] Tick End {Definition.UniqueName} - Current: {CurrentCharges}, OnCooldown: {isOnCooldown}");
-            }
-
             // Check if max charges changed via attributes
             if (maxCharges != _lastMaxCharges)
             {
@@ -145,11 +128,9 @@ namespace AbilitySystem.Runtime.Abilities
 
         private void StartCooldown(int maxCharges)
         {
-            if (Cooldown != null)
-            {
-                Cooldown.Activate(Owner);
-                OnCooldownStarted?.Invoke(Cooldown.Calculate(Owner));
-            }
+            if (Cooldown == null) return;
+            Cooldown.Activate(Owner);
+            OnCooldownStarted?.Invoke(Cooldown.Calculate(Owner));
         }
 
         private void UpdateCooldownProgress()
@@ -177,17 +158,6 @@ namespace AbilitySystem.Runtime.Abilities
             OnChargesChanged?.Invoke(current, max);
         }
 
-        private void SyncWithMetaAttribute()
-        {
-            var metaName = ChargesDef.AbilityChargesMetaAttribute;
-            if (string.IsNullOrEmpty(metaName)) return;
-
-            var splits = metaName.Split(".");
-            Attribute attr;
-            attr = splits.Length == 2 ? Owner.AttributeSetManager.GetAttribute(splits[0], splits[1]) : Owner.AttributeSetManager.GetAttribute(metaName);
-            attr?.SetBaseValue(CurrentCharges);
-        }
-
         private float CalculateMetaAttributeValue(string metaAttributeName, float baseValue, TagQuery tagQuery)
         {
             var additive = 0f;
@@ -203,19 +173,19 @@ namespace AbilitySystem.Runtime.Abilities
                 if (effect.Definition.Modifiers == null) continue;
                 foreach (var mod in effect.Definition.Modifiers)
                 {
-                    if (mod.AttributeName == metaAttributeName)
+                    if (mod.AttributeName != metaAttributeName) continue;
+                    for (var i = 0; i < effect.NumStacks; i++)
                     {
-                        for (int i = 0; i < effect.NumStacks; i++)
+                        var val = mod.Calculate(effect);
+                        switch (mod.Operation)
                         {
-                            var val = mod.Calculate(effect);
-                            switch (mod.Operation)
-                            {
-                                case EffectOperation.Additive: additive += val; break;
-                                case EffectOperation.Subtractive: additive -= val; break;
-                                case EffectOperation.Multiplicative: multiplicative *= val; break;
-                                case EffectOperation.Divisive: if (val != 0) multiplicative /= val; break;
-                                case EffectOperation.Override: overrideValue = val; hasOverride = true; break;
-                            }
+                            case EffectOperation.Additive: additive += val; break;
+                            case EffectOperation.Subtractive: additive -= val; break;
+                            case EffectOperation.Multiplicative: multiplicative *= val; break;
+                            case EffectOperation.Divisive: if (val != 0) multiplicative /= val; break;
+                            case EffectOperation.Override: overrideValue = val; hasOverride = true; break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
                 }
