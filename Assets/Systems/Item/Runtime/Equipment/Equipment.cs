@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameplayTags.Runtime;
@@ -22,6 +23,15 @@ namespace Item.Runtime
         public Dictionary<ItemDefinition, int> NextUpgradeCosts { get; set; }
         public Dictionary<Tag, Modifier> Mods { get; }
         public UnityEngine.Sprite Icon { get; set; }
+
+        /// <summary>Raised after a mod is successfully added. (slot, mod)</summary>
+        public event Action<Tag, Modifier> OnModAdded;
+        /// <summary>Raised after a mod is removed. (slot, mod)</summary>
+        public event Action<Tag, Modifier> OnModRemoved;
+        /// <summary>Raised after a successful upgrade with the new level.</summary>
+        public event Action<int> OnUpgraded;
+
+        public EquipmentDefinition Definition => _definition;
 
         private readonly EquipmentDefinition _definition;
         private readonly IInventoryManager _manager;
@@ -115,12 +125,14 @@ namespace Item.Runtime
             if (!Mods.ContainsKey(modSlot)) return;
             Mods[modSlot] = mod;
             mod.Equip(this);
+            OnModAdded?.Invoke(modSlot, mod);
         }
 
         public void RemoveMod(Tag modSlot, Modifier mod)
         {
             Mods.Remove(modSlot);
             mod.Unequip(this);
+            OnModRemoved?.Invoke(modSlot, mod);
         }
 
         public bool CanAddMod(Tag modSlot, Modifier mod)
@@ -139,6 +151,7 @@ namespace Item.Runtime
             if (!CanUpgrade()) return;
             _manager.ConsumeItems(NextUpgradeCosts);
             Level++;
+            OnUpgraded?.Invoke(Level);
         }
 
         public bool CanUpgrade()

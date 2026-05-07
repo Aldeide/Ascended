@@ -22,7 +22,7 @@ namespace Systems.Item.Tests
         [Test]
         public void InventoryTests_AddItemOnServer_ItemIsAddedAndClientNotified()
         {
-            var mockReplicationManager = new Mock<IInventoryReplicationManager>();
+            var mockReplicationManager = new Mock<IItemReplicationManager>();
             mockReplicationManager.Setup(m => m.IsServer()).Returns(true);
             var inventory = new InventoryManager(Source, mockReplicationManager.Object);
             
@@ -30,7 +30,7 @@ namespace Systems.Item.Tests
             
             Assert.AreEqual(1, inventory.Items.Count);
             Assert.AreEqual("BasicItem", inventory.Items[0].Name);
-            mockReplicationManager.Verify(x => x.NotifyClientAddItem("BasicItem", 1), Times.Once);
+            mockReplicationManager.Verify(x => x.NotifyClientItemAdded("BasicItem", 1), Times.Once);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Systems.Item.Tests
         [Test]
         public void InventoryTests_RemoveItem_ItemIsRemovedFromInventory()
         {
-            var mockRepl = new Mock<IInventoryReplicationManager>();
+            var mockRepl = new Mock<IItemReplicationManager>();
             mockRepl.Setup(m => m.IsServer()).Returns(true);
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
@@ -57,7 +57,7 @@ namespace Systems.Item.Tests
         [Test]
         public void InventoryTests_AddItem_FiresOnInventoryChangedEvent()
         {
-            var mockRepl = new Mock<IInventoryReplicationManager>();
+            var mockRepl = new Mock<IItemReplicationManager>();
             mockRepl.Setup(m => m.IsServer()).Returns(true);
             var inventory = new InventoryManager(Source, mockRepl.Object);
             bool eventFired = false;
@@ -74,7 +74,7 @@ namespace Systems.Item.Tests
         [Test]
         public void InventoryTests_HasItemQuantity_ReturnsCorrectStatus()
         {
-            var mockRepl = new Mock<IInventoryReplicationManager>();
+            var mockRepl = new Mock<IItemReplicationManager>();
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
             
@@ -91,7 +91,7 @@ namespace Systems.Item.Tests
         [Test]
         public void InventoryTests_HasItems_ReturnsCorrectStatusForRequirements()
         {
-            var mockRepl = new Mock<IInventoryReplicationManager>();
+            var mockRepl = new Mock<IItemReplicationManager>();
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
             
@@ -114,7 +114,7 @@ namespace Systems.Item.Tests
         [Test]
         public void InventoryTests_ConsumeItems_RemovesCorrectQuantities()
         {
-            var mockRepl = new Mock<IInventoryReplicationManager>();
+            var mockRepl = new Mock<IItemReplicationManager>();
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
             
