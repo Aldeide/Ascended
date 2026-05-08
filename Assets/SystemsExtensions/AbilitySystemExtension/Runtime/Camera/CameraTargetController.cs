@@ -7,7 +7,7 @@ namespace Systems.Camera
         [SerializeField] private Transform player;
         [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, 0);
         
-        private void Update()
+        private void LateUpdate()
         {
             if (player == null) return;
             this.transform.position = player.transform.position + offset;
