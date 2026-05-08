@@ -13,6 +13,7 @@ public class AbilitySystemDebugWindow : EditorWindow
     private ScrollView _localScroll;
     private Label _localServerDebugText;
     private Label _objectNameLabel;
+    private float _lastRebuildTime;
     
     // Details panel
     private VisualElement _detailsContainer;
@@ -108,6 +109,7 @@ public class AbilitySystemDebugWindow : EditorWindow
             {
                 _inspectedComponent = component;
                 _objectNameLabel.text = $"Inspecting: {active.name}";
+                _lastRebuildTime = 0; // Force rebuild
                 Repaint();
             }
         }
@@ -134,7 +136,19 @@ public class AbilitySystemDebugWindow : EditorWindow
             ? "Waiting for server response..." 
             : _inspectedComponent.ServerDebugString;
 
-        // Update Local List
+        // We rebuild the list only periodically or if explicitly needed
+        // to avoid destroying buttons while they are being clicked.
+        if (Time.realtimeSinceStartup - _lastRebuildTime > 0.5f)
+        {
+            RebuildLocalList();
+            _lastRebuildTime = Time.realtimeSinceStartup;
+        }
+
+        UpdateDetails();
+    }
+
+    private void RebuildLocalList()
+    {
         _localScroll.Clear();
         
         // Network Section
@@ -237,8 +251,6 @@ public class AbilitySystemDebugWindow : EditorWindow
         tagLabel.style.fontSize = 10;
         tagLabel.style.paddingLeft = 10;
         _localScroll.Add(tagLabel);
-
-        UpdateDetails();
     }
 
     private void AddRow(VisualElement container, string label, string value)
@@ -288,9 +300,9 @@ public class AbilitySystemDebugWindow : EditorWindow
         _detailsContainer.Clear();
         _detailsContainer.Add(CreatePanelHeader("SELECTION DETAILS"));
 
-        if (_selectedEffect == null)
+        if (_selectedEffect == null && _selectedAbility == null)
         {
-            var noSel = new Label("Select an effect from the list to see details.");
+            var noSel = new Label("Select an effect or ability from the list to see details.");
             noSel.style.paddingTop = 20;
             noSel.style.unityTextAlign = TextAnchor.MiddleCenter;
             noSel.style.color = Color.gray;
