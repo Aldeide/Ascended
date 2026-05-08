@@ -32,6 +32,12 @@
       },
       "hash": "7db11915823c02c0199ab4f92bc7ffae7095e82e"
     },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.addressables": {
       "version": "2.9.1",
       "depth": 0,
