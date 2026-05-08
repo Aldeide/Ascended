@@ -39,6 +39,10 @@ namespace AbilitySystem.Runtime.Abilities
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
+
+        public event Action<AbilityActivationResult> OnActivateResult { add => _onActivateResult += value; remove => _onActivateResult -= value; }
+        public event Action OnEndAbility { add => _onEndAbility += value; remove => _onEndAbility -= value; }
+        public event Action OnCancelAbility { add => _onCancelAbility += value; remove => _onCancelAbility -= value; }
         
         protected Ability()
         {

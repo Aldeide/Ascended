@@ -62,8 +62,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             weaponSet.CurrentClip.SetCurrentValue(weaponSet.ClipSize.CurrentValue);
 
             
-            Debug.Log("Reload complete!");
-            EndAbility();
+            TryEndAbility();
         }
 
         protected override void CancelAbility()
