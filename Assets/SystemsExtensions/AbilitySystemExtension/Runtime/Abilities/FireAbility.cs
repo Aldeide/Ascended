@@ -46,7 +46,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
 
             // Consume ammo
-            weaponSet.CurrentClip.SetCurrentValue(weaponSet.CurrentClip.CurrentValue - 1);
+            weaponSet.CurrentClip.SetBaseValue(weaponSet.CurrentClip.BaseValue - 1);
 
             PlayActivationCues();
             

@@ -15,9 +15,11 @@ namespace AbilitySystem.Runtime.Attributes
         private readonly AttributeSet _attributeSet;
         private AttributeValue _value;
         private string _name;
+        private int _index = -1;
+        private AttributeSetManager _manager;
 
-        public virtual float BaseValue => _value.BaseValue;
-        public virtual float CurrentValue => _value.CurrentValue;
+        public virtual float BaseValue => _manager != null && _index >= 0 ? _manager.GetAttributeBaseValue(_index) : _value.BaseValue;
+        public virtual float CurrentValue => _manager != null && _index >= 0 ? _manager.GetAttributeCurrentValue(_index) : _value.CurrentValue;
 
         public Attribute()
         {
@@ -29,12 +31,21 @@ namespace AbilitySystem.Runtime.Attributes
         public Action<Attribute, float, float> OnAttributeCurrentValueChanged;
 
         public Attribute(string name, AttributeSet attributeSet, float baseValue,
-            float minValue = float.MinValue, float maxValue = float.MaxValue)
+            float minValue = float.MinValue, float maxValue = float.MaxValue, int index = -1)
         {
             _name = name;
             _attributeSet = attributeSet;
             _value = new AttributeValue(baseValue, minValue, maxValue);
+            _index = index;
         }
+
+        public void SetManager(AttributeSetManager manager, int index)
+        {
+            _manager = manager;
+            _index = index;
+        }
+
+        public int GetIndex() => _index;
 
         public string GetName()
         {
@@ -46,8 +57,23 @@ namespace AbilitySystem.Runtime.Attributes
             return _attributeSet.Name + "." + _name;
         }
 
+        public AttributeValue GetInternalValue()
+        {
+            return _value;
+        }
+
         public AttributeValue GetValue()
         {
+            if (_manager != null && _index >= 0)
+            {
+                return new AttributeValue
+                {
+                    BaseValue = _manager.GetAttributeBaseValue(_index),
+                    CurrentValue = _manager.GetAttributeCurrentValue(_index),
+                    MinValue = _manager.GetAttributeMinValue(_index),
+                    MaxValue = _manager.GetAttributeMaxValue(_index)
+                };
+            }
             return _value;
         }
 
@@ -58,17 +84,33 @@ namespace AbilitySystem.Runtime.Attributes
         /// <param name="value">The new base value to set for the attribute.</param>
         public virtual void SetBaseValue(float value)
         {
-            var previousValue = _value.BaseValue;
+            var previousValue = BaseValue;
             value = InvokePreBaseValueListeners(value);
-            _value.BaseValue = value;
-            _value.Clamp();
-            OnAttributeBaseValueChanged?.Invoke(this, previousValue, _value.BaseValue);
+            
+            if (_manager != null && _index >= 0)
+            {
+                _manager.SetAttributeBaseValue(_index, value);
+            }
+            else
+            {
+                _value.BaseValue = value;
+                _value.Clamp();
+            }
+            
+            OnAttributeBaseValueChanged?.Invoke(this, previousValue, BaseValue);
         }
         
         public void SetBaseValueNoEvent(float value)
         {
-            _value.BaseValue = value;
-            _value.Clamp();
+            if (_manager != null && _index >= 0)
+            {
+                _manager.SetAttributeBaseValueNoEvent(_index, value);
+            }
+            else
+            {
+                _value.BaseValue = value;
+                _value.Clamp();
+            }
         }
 
         /// <summary>
@@ -79,31 +121,56 @@ namespace AbilitySystem.Runtime.Attributes
         /// <param name="value">The new current value to set for the attribute.</param>
         public void SetCurrentValue(float value)
         {
-            var previousValue = _value.CurrentValue;
+            var previousValue = CurrentValue;
             value = InvokePreCurrentValueListeners(value);
-            _value.CurrentValue = value;
-            _value.Clamp();
-            OnAttributeCurrentValueChanged?.Invoke(this, previousValue, _value.CurrentValue);
+            
+            if (_manager != null && _index >= 0)
+            {
+                _manager.SetAttributeCurrentValue(_index, value);
+            }
+            else
+            {
+                _value.CurrentValue = value;
+                _value.Clamp();
+            }
+            
+            OnAttributeCurrentValueChanged?.Invoke(this, previousValue, CurrentValue);
         }
         
         public void SetCurrentValueNoEvent(float value)
         {
-            _value.CurrentValue = value;
+            if (_manager != null && _index >= 0)
+            {
+                _manager.SetAttributeCurrentValueNoEvent(_index, value);
+            }
+            else
+            {
+                _value.CurrentValue = value;
+            }
         }
 
         public void Restore(AttributeValue value)
         {
-            var previousBase = _value.BaseValue;
-            var previousCurrent = _value.CurrentValue;
+            var previousBase = BaseValue;
+            var previousCurrent = CurrentValue;
+
+            // Update the manager if present
+            if (_manager != null && _index >= 0)
+            {
+                _manager.SetAttributeBaseValueNoEvent(_index, value.BaseValue);
+                _manager.SetAttributeCurrentValueNoEvent(_index, value.CurrentValue);
+            }
+            
             _value = value;
             _value.Clamp();
-            if (!Mathf.Approximately(previousBase, _value.BaseValue))
+
+            if (!Mathf.Approximately(previousBase, BaseValue))
             {
-                OnAttributeBaseValueChanged?.Invoke(this, previousBase, _value.BaseValue);
+                OnAttributeBaseValueChanged?.Invoke(this, previousBase, BaseValue);
             }
-            if (!Mathf.Approximately(previousCurrent, _value.CurrentValue))
+            if (!Mathf.Approximately(previousCurrent, CurrentValue))
             {
-                OnAttributeCurrentValueChanged?.Invoke(this, previousCurrent, _value.CurrentValue);
+                OnAttributeCurrentValueChanged?.Invoke(this, previousCurrent, CurrentValue);
             }
         }
 

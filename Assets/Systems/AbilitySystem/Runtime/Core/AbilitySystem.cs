@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Core
 {
-    public class AbilitySystemManager : IAbilitySystem
+    public class AbilitySystemManager : IAbilitySystem, IDisposable
     {
         public INetworkRole NetworkRole { get; set; }
         public EffectManager EffectManager { get; set; }
@@ -41,6 +41,12 @@ namespace AbilitySystem.Runtime.Core
         {
             EffectManager.Tick();
             AbilityManager.Tick();
+            AttributeSetManager.UpdateAttributesJobified();
+        }
+
+        public void Dispose()
+        {
+            AttributeSetManager?.Dispose();
         }
 
         public float GetTime()

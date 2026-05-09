@@ -47,6 +47,14 @@ namespace AbilitySystem.Test.Utilities
         [TearDown]
         public virtual void TearDown()
         {
+            if (SourceMock != null && Source.AttributeSetManager != null)
+            {
+                Source.AttributeSetManager.Dispose();
+            }
+            if (TargetMock != null && Target.AttributeSetManager != null)
+            {
+                Target.AttributeSetManager.Dispose();
+            }
             SourceMock = null;
             TargetMock = null;
         }
