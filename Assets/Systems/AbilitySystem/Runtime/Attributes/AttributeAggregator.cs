@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
@@ -150,8 +151,10 @@ namespace AbilitySystem.Runtime.Attributes
 
         private void UpdateCurrentValue()
         {
-            var newValue = CalculateCurrentValue();
-            _attribute.SetCurrentValue(newValue);
+            if (_owner.AttributeSetManager is AttributeSetManager manager)
+            {
+                manager.MarkDirty();
+            }
         }
 
         private void OnDependencyChanged(Attribute attribute, float old, float newValue)

@@ -4,9 +4,13 @@ using System.Linq;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Modifiers;
 using JetBrains.Annotations;
 using UnityEngine;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
 
 namespace AbilitySystem.Runtime.AttributeSets
 {
@@ -14,7 +18,7 @@ namespace AbilitySystem.Runtime.AttributeSets
     /// Manages the lifecycle and operations of attribute sets and their values within an ability system.
     /// Provides functionality to add, retrieve, and manipulate attribute sets and their associated attributes.
     /// </summary>
-    public class AttributeSetManager
+    public class AttributeSetManager : IDisposable
     {
         public Action<Attribute, float, float> OnAnyAttributeBaseValueChanged;
         public Action<Attribute, float, float> OnAnyAttributeCurrentValueChanged;
@@ -23,6 +27,13 @@ namespace AbilitySystem.Runtime.AttributeSets
         public Dictionary<Type, AttributeSet> AttributeSets;
         private Dictionary<string, AttributeAggregator> _attributeAggregators;
         private Dictionary<string, Attribute> _attributeFullNameCache;
+        private List<Attribute> _allAttributesList = new List<Attribute>();
+
+        // Job related data
+        private NativeArray<AttributeState> _attributeStates;
+        private NativeArray<ModifierData> _allModifiers;
+        private NativeArray<int2> _modifierRanges;
+        private bool _isDirty = true;
 
         public AttributeSetManager(IAbilitySystem owner)
         {
@@ -38,6 +49,14 @@ namespace AbilitySystem.Runtime.AttributeSets
             {
                 attributeSet.Reset();
             }
+            _isDirty = true;
+        }
+
+        public void Dispose()
+        {
+            if (_attributeStates.IsCreated) _attributeStates.Dispose();
+            if (_allModifiers.IsCreated) _allModifiers.Dispose();
+            if (_modifierRanges.IsCreated) _modifierRanges.Dispose();
         }
 
         public virtual T GetAttributeSet<T>() where T : AttributeSet
@@ -60,10 +79,33 @@ namespace AbilitySystem.Runtime.AttributeSets
             {
                 attribute.OnAttributeBaseValueChanged += OnAttributeBaseValueChanged;
                 attribute.OnAttributeCurrentValueChanged += OnAttributeCurrentValueChanged;
+                
+                int index = _allAttributesList.Count;
+                attribute.SetManager(this, index);
+                _allAttributesList.Add(attribute);
+
                 var aggregator = new AttributeAggregator(attribute, _owner);
                 aggregator.Enable();
                 _attributeAggregators.Add(attribute.GetName(), aggregator);
                 _attributeFullNameCache.Add(attribute.GetFullName(), attribute);
+            }
+            ReallocateNativeData();
+            _isDirty = true;
+        }
+
+        private void ReallocateNativeData()
+        {
+            if (_attributeStates.IsCreated) _attributeStates.Dispose();
+            if (_modifierRanges.IsCreated) _modifierRanges.Dispose();
+
+            _attributeStates = new NativeArray<AttributeState>(_allAttributesList.Count, Allocator.Persistent);
+            _modifierRanges = new NativeArray<int2>(_allAttributesList.Count, Allocator.Persistent);
+
+            for (int i = 0; i < _allAttributesList.Count; i++)
+            {
+                var attr = _allAttributesList[i];
+                var val = attr.GetInternalValue();
+                _attributeStates[i] = new AttributeState(val.BaseValue, val.MinValue, val.MaxValue);
             }
         }
 
@@ -204,6 +246,120 @@ namespace AbilitySystem.Runtime.AttributeSets
         public AttributeAggregator GetAggregator(string attributeName)
         {
             return _attributeAggregators[attributeName];
+        }
+
+        public void MarkDirty() => _isDirty = true;
+
+        public void UpdateAttributesJobified()
+        {
+            if (!_isDirty) return;
+            _isDirty = false;
+            
+            // 1. Collect all modifiers from aggregators and capture old values
+            List<ModifierData> modsList = new List<ModifierData>();
+            float[] oldValues = new float[_allAttributesList.Count];
+            for (int i = 0; i < _allAttributesList.Count; i++)
+            {
+                oldValues[i] = _allAttributesList[i].CurrentValue;
+                var attr = _allAttributesList[i];
+                var aggregator = _attributeAggregators[attr.GetName()];
+                var mods = aggregator.GetModifiers();
+                
+                int start = modsList.Count;
+                foreach (var mod in mods)
+                {
+                    // For now, we only handle static magnitudes. 
+                    // Dynamic modifiers should be calculated on CPU and passed as static here.
+                    for (int stack = 0; stack < mod.Effect.NumStacks; stack++)
+                    {
+                        modsList.Add(new ModifierData(mod.Modifier.Calculate(mod.Effect), mod.Modifier.Operation));
+                    }
+                }
+                _modifierRanges[i] = new int2(start, modsList.Count - start);
+                
+                // Update base values in case they changed via SetBaseValue
+                var state = _attributeStates[i];
+                state.BaseValue = attr.BaseValue;
+                state.MinValue = attr.GetValue().MinValue;
+                state.MaxValue = attr.GetValue().MaxValue;
+                _attributeStates[i] = state;
+            }
+
+            if (_allModifiers.IsCreated) _allModifiers.Dispose();
+            _allModifiers = new NativeArray<ModifierData>(modsList.Count, Allocator.Persistent);
+            _allModifiers.CopyFrom(modsList.ToArray());
+
+            // 2. Schedule and Complete Job
+            var job = new AttributeRecalculationJob
+            {
+                States = _attributeStates,
+                AllModifiers = _allModifiers,
+                ModifierRanges = _modifierRanges
+            };
+
+            JobHandle handle = job.Schedule(_allAttributesList.Count, 64);
+            handle.Complete();
+
+            // 3. Compare and fire events
+            for (int i = 0; i < _allAttributesList.Count; i++)
+            {
+                var attr = _allAttributesList[i];
+                var newValue = _attributeStates[i].CurrentValue;
+                if (!Mathf.Approximately(oldValues[i], newValue))
+                {
+                    attr.SetCurrentValueNoEvent(newValue);
+                    attr.OnAttributeCurrentValueChanged?.Invoke(attr, oldValues[i], newValue);
+                    OnAnyAttributeCurrentValueChanged?.Invoke(attr, oldValues[i], newValue);
+                }
+            }
+
+        }
+
+        public float GetAttributeBaseValue(int index) => _attributeStates[index].BaseValue;
+        public float GetAttributeCurrentValue(int index)
+        {
+            if (_isDirty) UpdateAttributesJobified();
+            return _attributeStates[index].CurrentValue;
+        }
+
+        public float GetAttributeMinValue(int index) => _attributeStates[index].MinValue;
+        public float GetAttributeMaxValue(int index) => _attributeStates[index].MaxValue;
+
+        public void SetAttributeBaseValue(int index, float value)
+        {
+            var state = _attributeStates[index];
+            state.BaseValue = value;
+            // Clamping
+            state.BaseValue = math.clamp(state.BaseValue, state.MinValue, state.MaxValue);
+            state.CurrentValue = state.BaseValue;
+            _attributeStates[index] = state;
+            _isDirty = true;
+        }
+
+        public void SetAttributeCurrentValue(int index, float value)
+        {
+            var state = _attributeStates[index];
+            state.CurrentValue = value;
+            // Clamping
+            state.CurrentValue = math.clamp(state.CurrentValue, state.MinValue, state.MaxValue);
+            _attributeStates[index] = state;
+        }
+
+        public void SetAttributeBaseValueNoEvent(int index, float value)
+        {
+            var state = _attributeStates[index];
+            state.BaseValue = value;
+            state.BaseValue = math.clamp(state.BaseValue, state.MinValue, state.MaxValue);
+            state.CurrentValue = state.BaseValue;
+            _attributeStates[index] = state;
+        }
+
+        public void SetAttributeCurrentValueNoEvent(int index, float value)
+        {
+            var state = _attributeStates[index];
+            state.CurrentValue = value;
+            state.CurrentValue = math.clamp(state.CurrentValue, state.MinValue, state.MaxValue);
+            _attributeStates[index] = state;
         }
     }
 }

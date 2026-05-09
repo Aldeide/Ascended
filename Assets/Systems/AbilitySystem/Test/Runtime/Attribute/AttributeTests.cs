@@ -138,6 +138,9 @@ namespace AbilitySystem.Test.Runtime.Attribute
             bool isInvoked = false;
             attribute.OnAttributeCurrentValueChanged += (_, _, _) => isInvoked = true;
             
+            // Ensure clean state first so the manual override isn't immediate overwritten by lazy recalculation
+            _ = attribute.CurrentValue;
+            
             attribute.SetCurrentValueNoEvent(200f);
             
             Assert.AreEqual(200f, attribute.CurrentValue);
