@@ -87,9 +87,20 @@ namespace AbilitySystem.Runtime.Effects
             }
 
             // If that effect is already applied, check stacking behaviour.
-            if (Effects.Exists(e => e.Definition.name == effect.Definition.name))
+            var existingEffect = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name);
+            if (existingEffect != null)
             {
-                var existingEffect = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name);
+                // SPECIAL CASE: If we are on a client and we receive a REPLICATED effect 
+                // that matches an existing NON-REPLICATED effect, we replace it.
+                // This handles predicted effects (like cooldowns) that don't use formal prediction keys.
+                if (!_owner.IsServer() && effect.IsReplicated && !existingEffect.IsReplicated)
+                {
+                    RemoveEffect(existingEffect);
+                    Effects.Add(effect);
+                    OnEffectAdded?.Invoke(effect);
+                    return EffectApplicationResult.Success;
+                }
+
                 if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.None)
                 {
                     Effects.Add(effect);
@@ -152,7 +163,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void RemoveEffect(string effectName)
         {
-            var effectToRemove = Effects.FirstOrDefault(e=>e.Definition.name == effectName);
+            var effectToRemove = Effects.Where(e => e.Definition.name == effectName).OrderBy(e => e.ActivationTime).FirstOrDefault();
             if (effectToRemove != null)
             {
                 RemoveEffect(effectToRemove);
@@ -161,6 +172,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void AddEffectFromServer(Effect effect)
         {
+            effect.IsReplicated = true;
             effect.IsActive = true;
             AddEffect(effect);
         }
