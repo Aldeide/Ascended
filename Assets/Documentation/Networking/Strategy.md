@@ -43,7 +43,6 @@ Cues are replicated globally. To ensure local responsiveness:
 
 Inventory state is synchronized as separate delta updates rather than the entire list.
 - **NotifyClientAddItem**: Called on the server when a player picks up an item; triggers a local add on the target client.
-- **NotifyClientRemoveItem**: Ensures that consumed resources (e.g., used for upgrades) are removed from the client's local view immediately after server validation.
 
 ## 🛡️ Security & Validation
 All state-modifying requests (Granting items, Activating abilities) follow a **Request-Validation-Execution** flow:
