@@ -43,14 +43,18 @@ namespace AbilitySystemExtension.Scripts
         {
         }
 
+        private void Awake()
+        {
+            _animationController = GetComponent<AnimationController>();
+            _rigidbody = GetComponent<Rigidbody>();
+            _ikCueListener = GetComponent<IKCueListener>();
+        }
+
         public void Start()
         {
             _camera = Camera.main;
-            _animationController = GetComponent<AnimationController>();
-            _rigidbody = GetComponent<Rigidbody>();
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
             _abilitySystem.AttributeSetManager.RegisterOnAttributeChanged("MovementSpeed", OnMovementSpeedChanged);
-            _ikCueListener = GetComponent<IKCueListener>();
             _movementSpeed = _abilitySystem.AttributeSetManager.GetAttributeSet<CharacteristicsAttributeSet>()
                 .MovementSpeed.CurrentValue;
         }
@@ -65,13 +69,16 @@ namespace AbilitySystemExtension.Scripts
             UpdateGrounded();
 
             // Temp
-            if (IsInAimingState())
+            if (_ikCueListener != null)
             {
-                _ikCueListener.EnableAimIK();
-            }
-            else
-            {
-                _ikCueListener.DisableAimIK();
+                if (IsInAimingState())
+                {
+                    _ikCueListener.EnableAimIK();
+                }
+                else
+                {
+                    _ikCueListener.DisableAimIK();
+                }
             }
 
             var targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +

@@ -51,22 +51,24 @@ namespace AbilitySystemExtension.Scripts
         
         public void DisableAimIK()
         {
+            if (_aimIK == null || _aimIK.solver == null) return;
             _aimIK.solver.IKPositionWeight = 0;
         }
         
         public void EnableAimIK()
         {
+            if (_aimIK == null || _aimIK.solver == null) return;
             _aimIK.solver.IKPositionWeight = 1;
         }
 
         public void DisableFeetIK()
         {
-            _legsAnimator.enabled = false;
+            if (_legsAnimator != null) _legsAnimator.enabled = false;
         }
         
         public void EnableFeetIK()
         {
-            _legsAnimator.enabled = true;
+            if (_legsAnimator != null) _legsAnimator.enabled = true;
         }
     }
 }
