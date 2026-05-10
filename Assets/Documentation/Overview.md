@@ -40,6 +40,7 @@ The project follows a strict **modular architecture** designed to separate reusa
 - **Netcode for GameObjects (NGO)**: Used for state synchronization and RPCs.
 - **Gameplay Ability System (GAS)**: A custom-built, tag-driven system for abilities, effects, and attributes.
 - **ScriptableObjects**: Extensively used for "Definitions" (Item definitions, Ability definitions) to ensure a data-driven workflow.
+- **Jobified Attribute System**: A high-performance recalculation pipeline using Burst and the Job System to handle 100+ entities with minimal frame impact.
 
 ## 🔄 Core Workflows
 
