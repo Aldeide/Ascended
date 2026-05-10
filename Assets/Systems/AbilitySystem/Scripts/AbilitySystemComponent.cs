@@ -84,6 +84,14 @@ namespace AbilitySystem.Scripts
             }
         }
 
+        private void OnDestroy()
+        {
+            if (AbilitySystem != null)
+            {
+                ((AbilitySystemManager)AbilitySystem).Dispose();
+            }
+        }
+
         private void OnClientConnected(ulong clientId)
         {
             // When a new client connects, we need to catch them up with the current state.
@@ -164,6 +172,7 @@ namespace AbilitySystem.Scripts
 
         public void Initialise()
         {
+            if (IsInitialized) return;
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
             var abilitySystemManager = new AbilitySystemManager(DataLibrary.Instance);

@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,34 +9,26 @@ namespace SystemsExtensions.AbilitySystemExtension.Runtime.Controllers
         [SerializeField] private NetworkManager _networkManager;
         private void Awake()
         {
-            this._networkManager = GetComponent<NetworkManager>();
+            _networkManager = GetComponent<NetworkManager>();
         }
         
         
         public void OnSpawnHost(InputAction.CallbackContext context)
         {
-            Debug.Log("OnSpawnHost");
-            if (context.phase == InputActionPhase.Performed)
-            {
-                Debug.Log("OnSpawnHostCalled");
-                _networkManager.StartHost();
-            }
+            if (context.phase != InputActionPhase.Performed) return;
+            _networkManager.StartHost();
         }
 
         public void OnSpawnClient(InputAction.CallbackContext context)
         {
-            if (context.phase == InputActionPhase.Performed)
-            {
-                _networkManager.StartClient();
-            }
+            if (context.phase != InputActionPhase.Performed) return;
+            _networkManager.StartClient();
         }
 
         public void OnSpawnServer(InputAction.CallbackContext context)
         {
-            if (context.phase == InputActionPhase.Performed)
-            {
-                _networkManager.StartServer();
-            }
+            if (context.phase != InputActionPhase.Performed) return;
+            _networkManager.StartServer();
         }
     }
 }
