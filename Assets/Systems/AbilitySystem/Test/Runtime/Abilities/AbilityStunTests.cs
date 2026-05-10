@@ -52,7 +52,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         }
 
         [TearDown]
-        public void TearDown()
+        public new void TearDown()
         {
             if (_targetGameObject != null)
             {

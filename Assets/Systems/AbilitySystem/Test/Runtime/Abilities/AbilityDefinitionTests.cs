@@ -20,7 +20,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
             Assert.AreEqual("PassiveTest", abilityDefinition.UniqueName);
             Assert.AreEqual("PassiveAbilityDefinition", abilityDefinition.TypeName);
             Assert.AreEqual(typeof(PassiveAbility), abilityDefinition.AbilityType());
-            Assert.AreEqual("AbilitySystem.Runtime.Abilities.PassiveAbility.PassiveAbilityDefinition",
+            Assert.AreEqual("AbilitySystem.Runtime.Abilities.PassiveAbilityDefinition",
                 abilityDefinition.TypeFullName);
         }
     }
