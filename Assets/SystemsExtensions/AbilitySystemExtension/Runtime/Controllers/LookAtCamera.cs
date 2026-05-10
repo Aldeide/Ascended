@@ -29,11 +29,13 @@ namespace Systems.Controllers
                 return;
             }
             
-            RectangleTransform.anchoredPosition = new Vector2(Mathf.RoundToInt(screenPosition.x), Mathf.RoundToInt(screenPosition.y));
+            // In Screen Space Overlay, we don't need to rotate (it's always screen-facing).
+            // But we do need to handle the offset from the screen center if anchors are at (0.5, 0.5).
+            // Here we assume anchors are at (0,0) or we convert to local space.
             
-            // Billboard the unitframe.
-            transform.LookAt(RectangleTransform.position - _camera.transform.rotation * Vector3.forward, _camera.transform.rotation * Vector3.up);
-            //transform.forward = _camera.transform.forward * _camera.transform.rotation;
+            // To make it easy, we'll just set the anchoredPosition.
+            // If the canvas is 1:1 with pixels (Overlay usually is), we can just use screenPosition.
+            RectangleTransform.position = screenPosition;
         }
     }
 }

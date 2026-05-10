@@ -83,24 +83,32 @@ namespace AbilitySystemExtension.Scripts
 
             var targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
                               _camera.transform.eulerAngles.y;
-            var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
+            _targetAngle = targetAngle; // Store for FixedUpdate
+            
+            _currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
                 turnSmoothTime);
+
+            ComputeMovementDirection(targetAngle);
+            UpdateAnimator();
+        }
+
+        private float _targetAngle;
+        private float _currentAngle;
+
+        public void FixedUpdate()
+        {
+            if (!IsLocalPlayer) return;
+            if (!CanMove()) return;
+
             if (IsInAimingState() || _movementInput.magnitude > 0.01f)
             {
-                _rigidbody.MoveRotation(ComputeRotation(angle));
+                _rigidbody.MoveRotation(ComputeRotation(_currentAngle));
             }
-            
-            ComputeMovementDirection(targetAngle);
-            if (_movementInput.magnitude <= 0.01f)
+
+            if (_movementInput.magnitude > 0.01f)
             {
-                UpdateAnimator();
-                MovementDirection = Vector3.zero;
-                return;
+                _rigidbody.MovePosition(_rigidbody.position + MovementDirection * (Time.fixedDeltaTime * _movementSpeed));
             }
-
-            _rigidbody.MovePosition(_rigidbody.position + MovementDirection * (Time.deltaTime * _movementSpeed));
-
-            UpdateAnimator();
         }
 
         public bool IsGrounded()
