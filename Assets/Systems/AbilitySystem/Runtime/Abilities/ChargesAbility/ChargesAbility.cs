@@ -37,7 +37,6 @@ namespace AbilitySystem.Runtime.Abilities
             _wasOnCooldown = IsOnCooldown();
             _lastEffectiveCharges = GetCurrentCharges();
             _lastMaxCharges = GetMaxCharges();
-            Debug.Log($"[ChargesAbility] Initialized {definition.UniqueName}. CurrentCharges: {CurrentCharges}");
         }
 
         public int GetMaxCharges()
@@ -66,7 +65,6 @@ namespace AbilitySystem.Runtime.Abilities
         protected override void ActivateAbility(AbilityData data)
         {
             CurrentCharges--;
-            Debug.Log($"[ChargesAbility] Consuming charge for {Definition.UniqueName}. New count: {CurrentCharges}");
             NotifyChargesChanged();
             // Cooldown is automatically activated by the Tick() logic when CurrentCharges < maxCharges
         }

@@ -42,8 +42,6 @@ namespace AbilitySystemExtension.Runtime.Abilities
             CommitCostAndCooldown();
             float reloadTime = weaponSet.ReloadTime.CurrentValue;
 
-            Debug.Log($"Reloading weapon... Time: {reloadTime}s");
-            
             var waitTask = WaitDelayTask.CreateWaitDelay(this, reloadTime);
             waitTask.OnFinished += OnReloadFinished;
             waitTask.ReadyForActivation();

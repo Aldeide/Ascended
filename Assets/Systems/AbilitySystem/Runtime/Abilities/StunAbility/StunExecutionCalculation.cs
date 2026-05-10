@@ -22,8 +22,6 @@ namespace AbilitySystem.Runtime.Abilities.StunAbility
             // 2. We could calculate a chance to stun based on attributes here
             // e.g. float stunChance = source.AttributeSetManager.GetAttributeValue("StunChance");
             
-            Debug.Log($"Executing Stun Calculation from {source.NetworkRole.NetworkObjectId} to {target.NetworkRole.NetworkObjectId}");
-
             // 3. For this example, we'll just ensure the stun effect is applied
             // (The stun effect already applies tags via GrantedTags, but we could add more here)
         }
