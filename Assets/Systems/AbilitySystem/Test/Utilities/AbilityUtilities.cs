@@ -1,6 +1,4 @@
 ﻿using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Abilities.InstantAbility;
-using AbilitySystem.Runtime.Abilities.PassiveAbility;
 using GameplayTags.Runtime;
 using static AbilitySystem.Test.Utilities.EffectUtilities;
 using UnityEngine;

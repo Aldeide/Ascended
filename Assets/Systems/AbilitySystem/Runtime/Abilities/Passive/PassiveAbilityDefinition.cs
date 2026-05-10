@@ -2,7 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
-namespace AbilitySystem.Runtime.Abilities.PassiveAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     [CreateAssetMenu(fileName = "PassiveAbility", menuName = "AbilitySystem/Abilities/PassiveAbility")]
     public class PassiveAbilityDefinition : AbilityDefinition

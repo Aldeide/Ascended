@@ -1,4 +1,3 @@
-using AbilitySystem.Runtime.Abilities.PassiveAbility;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
 

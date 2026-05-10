@@ -3,7 +3,7 @@ using AbilitySystem.Runtime.Core;
 using GameplayTags.Runtime;
 using UnityEngine;
 
-namespace AbilitySystem.Runtime.Abilities.StunAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     public class StunAbility : Ability
     {

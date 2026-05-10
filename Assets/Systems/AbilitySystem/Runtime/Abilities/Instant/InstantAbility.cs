@@ -1,7 +1,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
 
-namespace AbilitySystem.Runtime.Abilities.InstantAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     public class InstantAbility : Ability
     {
