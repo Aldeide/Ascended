@@ -35,6 +35,7 @@ namespace AbilitySystem.Runtime.Core
             CueManager = new CueManager(this);
             ReplicationManager = new ReplicationManager(this);
             ReplicationManager.DataManager = dataManager;
+            Debug.Log($"[AbilitySystemManager] Created Instance {GetHashCode()}");
         }
         
         public void Tick()

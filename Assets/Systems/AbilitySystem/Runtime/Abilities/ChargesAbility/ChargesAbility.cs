@@ -37,6 +37,21 @@ namespace AbilitySystem.Runtime.Abilities
             _wasOnCooldown = IsOnCooldown();
             _lastEffectiveCharges = GetCurrentCharges();
             _lastMaxCharges = GetMaxCharges();
+            Debug.Log($"[ChargesAbility] Initialized {definition.UniqueName} on server={owner.IsServer()} (Hash:{GetHashCode()}). CurrentCharges: {CurrentCharges}");
+
+            // On clients, fire OnCooldownStarted when the cooldown effect arrives from the server.
+            // The server fires it directly in StartCooldown().
+            if (!owner.IsServer())
+            {
+                owner.EffectManager.OnEffectAdded += OnEffectAddedHandler;
+            }
+        }
+
+        private void OnEffectAddedHandler(Effect effect)
+        {
+            if (Cooldown == null) return;
+            if (effect.Definition != Definition.Cooldown?.CooldownEffect) return;
+            OnCooldownStarted?.Invoke(effect.Duration);
         }
 
         public int GetMaxCharges()
@@ -65,6 +80,7 @@ namespace AbilitySystem.Runtime.Abilities
         protected override void ActivateAbility(AbilityData data)
         {
             CurrentCharges--;
+            Debug.Log($"[ChargesAbility] Consuming charge for {Definition.UniqueName} on server={Owner.IsServer()} (Hash:{GetHashCode()}). New count: {CurrentCharges}");
             NotifyChargesChanged();
             // Cooldown is automatically activated by the Tick() logic when CurrentCharges < maxCharges
         }
@@ -76,9 +92,10 @@ namespace AbilitySystem.Runtime.Abilities
             return CurrentCharges;
         }
 
-        public void SetCharges(int charges)
+        public void SetCharges(int current, int max = -1)
         {
-            CurrentCharges = charges;
+            CurrentCharges = current;
+            if (max != -1) _lastMaxCharges = max;
             NotifyChargesChanged();
         }
 
@@ -100,14 +117,16 @@ namespace AbilitySystem.Runtime.Abilities
                     CurrentCharges++;
                     NotifyChargesChanged();
                     
-                    // If we still need more charges, restart the cooldown immediately
-                    if (CurrentCharges < maxCharges)
+                    // Only the server restarts the cooldown for the next charge.
+                    // Clients rely on server-replicated effects — starting a local cooldown
+                    // here would block future regen by keeping IsOnCooldown() true.
+                    if (Owner.IsServer() && CurrentCharges < maxCharges)
                     {
                         StartCooldown(maxCharges);
                         isOnCooldown = true;
                     }
                 }
-                // If we are below max but no recharge is happening, start it
+                // If we are below max but no recharge is happening, start it (server only)
                 else if (!isOnCooldown && Owner.IsServer())
                 {
                     StartCooldown(maxCharges);
@@ -141,9 +160,11 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (Cooldown == null) return;
             var activeCooldownEffect = Owner.EffectManager.GetActiveEffects()
-                .FirstOrDefault(e => e.Definition.GrantedTags != null && 
-                                     Definition.Cooldown.CooldownEffect.GrantedTags != null &&
-                                     e.Definition.GrantedTags.Intersect(Definition.Cooldown.CooldownEffect.GrantedTags).Any());
+                .Where(e => e.Definition.GrantedTags != null && 
+                            Definition.Cooldown.CooldownEffect.GrantedTags != null &&
+                            e.Definition.GrantedTags.Intersect(Definition.Cooldown.CooldownEffect.GrantedTags).Any())
+                .OrderByDescending(e => e.ActivationTime)
+                .FirstOrDefault();
 
             if (activeCooldownEffect == null) return;
             var duration = activeCooldownEffect.Duration;
@@ -159,6 +180,12 @@ namespace AbilitySystem.Runtime.Abilities
             var max = GetMaxCharges();
             _lastEffectiveCharges = current;
             _lastMaxCharges = max;
+            
+            if (Owner.IsServer())
+            {
+                Owner.ReplicationManager.NotifyClientsAbilityChargesChanged(Definition.UniqueName, current, max);
+            }
+            
             OnChargesChanged?.Invoke(current, max);
         }
 

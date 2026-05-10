@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.Networking
         public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
         public Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
         public Action<string> OnNotifyClientsEffectRemoved { get; set; }
+        public Action<string, int, int> OnNotifyClientsAbilityChargesChanged { get; set; }
 
         public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
         public Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
@@ -76,6 +77,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void ReceivedPlayCue(Tag cueTag, CueAction cueAction, CueData cueData)
         {
+            Debug.Log("Received Cue: " + cueTag.Name + " / " + cueAction + " / " + cueData + " /");
             _owner.CueManager.OnCueReceived(cueTag, cueAction, cueData);
         }
 
@@ -87,8 +89,10 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
+            if (!_owner.IsServer()) return;
             OnNotifyClientAbilityRemoved?.Invoke(abilityDefinition);
         }
+
 
         // Tags
         public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags)
@@ -126,6 +130,7 @@ namespace AbilitySystem.Runtime.Networking
             else
                 data.SourceId = _owner.NetworkRole.NetworkObjectId;
 
+            Debug.Log($"[ReplicationManager] NotifyClientsEffectAdded: {data.EffectName} on server={_owner.IsServer()}");
             OnNotifyClientsEffectAdded?.Invoke(data);
         }
 
@@ -135,10 +140,57 @@ namespace AbilitySystem.Runtime.Networking
             OnNotifyClientsEffectRemoved?.Invoke(effect.Definition.name);
         }
 
+        public void NotifyClientsAbilityChargesChanged(string abilityName, int current, int max)
+        {
+            if (!_owner.IsServer()) return;
+            OnNotifyClientsAbilityChargesChanged?.Invoke(abilityName, current, max);
+        }
+
+        public void ProcessClientAbilityChargesChanged(string abilityName, int current, int max)
+        {
+            Debug.Log($"[ReplicationManager] ProcessClientAbilityChargesChanged for {abilityName}: {current}/{max} on server={_owner.IsServer()}");
+            if (_owner.AbilityManager.Abilities.TryGetValue(abilityName, out var ability) && ability is ChargesAbility chargesAbility)
+            {
+                chargesAbility.SetCharges(current, max);
+            }
+        }
+
+        public void ProcessClientEffectAdded(EffectSyncData data)
+        {
+            Debug.Log($"[ReplicationManager] ProcessClientEffectAdded: {data.EffectName} on server={_owner.IsServer()}");
+            var def = DataManager.GetEffectByName(data.EffectName);
+            if (def == null) 
+            {
+                Debug.LogWarning($"[ReplicationManager] Could not find effect definition for {data.EffectName}");
+                return;
+            }
+            
+            // source resolution might be tricky in mocks, but usually _owner is safe if source not found
+            var effect = def.ToEffect(_owner, _owner); 
+            effect.ActivationTime = data.ActivationTime;
+            effect.PredictionKey = data.PredictionKey;
+            effect.Level = data.Level;
+            effect.NumStacks = data.NumStacks;
+            
+            if (data.SetByCallerTags != null)
+            {
+                for (int i = 0; i < data.SetByCallerTags.Length; i++)
+                    effect.SetSetByCallerMagnitude(data.SetByCallerTags[i], data.SetByCallerValues[i]);
+            }
+            
+            _owner.EffectManager.AddEffectFromServer(effect);
+        }
+
+        public void ProcessClientEffectRemoved(string effectName)
+        {
+            _owner.EffectManager.RemoveEffect(effectName);
+        }
+
         // --- Ability Networking ---
 
         public void RequestAbilityActivation(string name, PredictionKey key, AbilityData data)
         {
+            Debug.Log($"[ReplicationManager] RequestAbilityActivation for {name} on server={_owner.IsServer()}. Has listener: {OnServerAbilityActivationRequested != null}");
             OnServerAbilityActivationRequested?.Invoke(name, key, data);
         }
 
@@ -164,6 +216,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void ProcessServerAbilityActivation(string name, PredictionKey key, AbilityData data)
         {
+            Debug.Log($"[ReplicationManager] ProcessServerAbilityActivation for {name} on server={_owner.IsServer()}");
             if (!_owner.IsServer()) return;
 
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||

@@ -21,6 +21,7 @@ namespace AbilitySystem.Test.Utilities
         public Action<AbilityTagSyncData> OnNotifyClientsAbilityTagsRemoved { get; set; }
         public Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
         public Action<string> OnNotifyClientsEffectRemoved { get; set; }
+        public Action<string, int, int> OnNotifyClientsAbilityChargesChanged { get; set; }
         public Action<string[]> OnNotifyClientsSyncTags { get; set; }
 
         public Action<Attribute, float, float> NotifyClientsAttributeBaseValueChangedCallback { get; set; }
@@ -115,6 +116,34 @@ namespace AbilitySystem.Test.Utilities
         public void NotifyClientsEffectRemoved(Effect effect)
         {
             OnNotifyClientsEffectRemoved?.Invoke(effect.Definition.name);
+        }
+
+        public void NotifyClientsAbilityChargesChanged(string abilityName, int current, int max)
+        {
+            OnNotifyClientsAbilityChargesChanged?.Invoke(abilityName, current, max);
+        }
+
+        public void ProcessClientEffectAdded(EffectSyncData data)
+        {
+            var def = DataManager.GetEffectByName(data.EffectName);
+            if (def == null) return;
+            var effect = def.ToEffect(_owner, _owner);
+            effect.ActivationTime = data.ActivationTime;
+            effect.PredictionKey = data.PredictionKey;
+            _owner.EffectManager.AddEffectFromServer(effect);
+        }
+
+        public void ProcessClientEffectRemoved(string effectName)
+        {
+            _owner.EffectManager.RemoveEffect(effectName);
+        }
+
+        public void ProcessClientAbilityChargesChanged(string abilityName, int current, int max)
+        {
+            if (_owner.AbilityManager.Abilities.TryGetValue(abilityName, out var ability) && ability is ChargesAbility chargesAbility)
+            {
+                chargesAbility.SetCharges(current, max);
+            }
         }
 
         public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }

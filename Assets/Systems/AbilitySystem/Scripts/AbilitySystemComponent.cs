@@ -84,14 +84,6 @@ namespace AbilitySystem.Scripts
             }
         }
 
-        private void OnDestroy()
-        {
-            if (AbilitySystem != null)
-            {
-                ((AbilitySystemManager)AbilitySystem).Dispose();
-            }
-        }
-
         private void OnClientConnected(ulong clientId)
         {
             // When a new client connects, we need to catch them up with the current state.
@@ -168,29 +160,10 @@ namespace AbilitySystem.Scripts
                 }
                 SyncEffectsClientRpc(effectSyncData, clientRpcParams);
             }
-
-            // Sync Abilities
-            var abilities = AbilitySystem.AbilityManager.Abilities.Values.ToList();
-            if (abilities.Count > 0)
-            {
-                var abilitySyncData = new AbilitySyncData[abilities.Count];
-                for (int k = 0; k < abilities.Count; k++)
-                {
-                    var ability = abilities[k];
-                    abilitySyncData[k] = new AbilitySyncData
-                    {
-                        AbilityName = ability.Definition.UniqueName,
-                        Level = ability.Level,
-                        Charges = ability is ChargesAbility charges ? charges.GetCurrentCharges() : 0
-                    };
-                }
-                SyncAbilitiesClientRpc(abilitySyncData, clientRpcParams);
-            }
         }
 
         public void Initialise()
         {
-            if (IsInitialized) return;
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
             var abilitySystemManager = new AbilitySystemManager(DataLibrary.Instance);
@@ -204,11 +177,13 @@ namespace AbilitySystem.Scripts
             repl.OnNotifyClientsPlayCue += (tag, act, data) => NotifyClientsPlayCueRpc(tag, act, data);
             repl.OnNotifyClientAbilityGranted += (def) => NotifyClientAbilityGrantedRpc(def.UniqueName);
             repl.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
-            
+
+            repl.OnNotifyClientsAbilityChargesChanged +=
+                (name, current, max) => NotifyClientsAbilityChargesChangedRpc(name, current, max);
             repl.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
             repl.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
-            repl.OnNotifyClientsEffectAdded += (data) => NotifyClientsEffectAddedRpc(data);
-            repl.OnNotifyClientsEffectRemoved += (name) => NotifyClientsEffectRemovedRpc(name);
+            repl.OnNotifyClientsEffectAdded += (data) => NotifyOwnerEffectAddedRpc(data);
+            repl.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
             
             // New Ability Networking bindings
             repl.OnServerAbilityActivationRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
@@ -219,8 +194,8 @@ namespace AbilitySystem.Scripts
                 if (success) NotifyAbilityActivationSucceededRpc(key);
                 else NotifyAbilityActivationFailedRpc("", key);
             };
-            repl.OnClientActivateAbility += (name, data) => NotifyClientsActivateAbilityRpc(name, data);
-            repl.OnClientEndAbility += (name) => NotifyClientsEndAbilityRpc(name);
+            repl.OnClientActivateAbility += (name, data) => NotifyOwnerActivateAbilityRpc(name, data);
+            repl.OnClientEndAbility += (name) => NotifyOwnerEndAbilityRpc(name);
             abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
             {
                 // If it's predicted and we are the owner, play it locally immediately.
@@ -254,6 +229,7 @@ namespace AbilitySystem.Scripts
         public void Update()
         {
             AbilitySystem.Tick();
+            AbilitySystem.AttributeSetManager.UpdateAttributesJobified();
         }
         
         public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
@@ -307,14 +283,14 @@ namespace AbilitySystem.Scripts
             AbilitySystem.ReplicationManager.ProcessServerAbilityTermination(abilityName);
         }
 
-        [Rpc(SendTo.NotServer)]
-        public void NotifyClientsActivateAbilityRpc(string abilityName, AbilityData data)
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerActivateAbilityRpc(string abilityName, AbilityData data)
         {
             AbilitySystem.ReplicationManager.ProcessClientActivateAbility(abilityName, data);
         }
 
-        [Rpc(SendTo.NotServer)]
-        public void NotifyClientsEndAbilityRpc(string abilityName)
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEndAbilityRpc(string abilityName)
         {
             AbilitySystem.ReplicationManager.ProcessClientEndAbility(abilityName);
         }
@@ -356,8 +332,8 @@ namespace AbilitySystem.Scripts
 
         // These are now handled via ReplicationManager bridge in Initialise()
 
-        [Rpc(SendTo.NotServer)]
-        public void NotifyClientsEffectAddedRpc(EffectSyncData data)
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectAddedRpc(EffectSyncData data)
         {
             if (IsServer) return;
             var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
@@ -408,8 +384,8 @@ namespace AbilitySystem.Scripts
             return AbilitySystem;
         }
         
-        [Rpc(SendTo.NotServer)]
-        public void NotifyClientsEffectRemovedRpc(string effectName)
+        [Rpc(SendTo.Owner)]
+        public void NotifyOwnerEffectRemovedRpc(string effectName)
         {
             AbilitySystem.EffectManager.RemoveEffect(effectName);
         }
@@ -468,22 +444,6 @@ namespace AbilitySystem.Scripts
         }
 
         [ClientRpc]
-        public void SyncAbilitiesClientRpc(AbilitySyncData[] syncData, ClientRpcParams clientRpcParams = default)
-        {
-            foreach (var data in syncData)
-            {
-                if (AbilitySystem.AbilityManager.Abilities.TryGetValue(data.AbilityName, out var ability))
-                {
-                    ability.SetLevel(data.Level);
-                    if (ability is ChargesAbility chargesAbility)
-                    {
-                        chargesAbility.SetCharges(data.Charges);
-                    }
-                }
-            }
-        }
-
-        [ClientRpc]
         public void SyncEffectsClientRpc(EffectSyncData[] syncData, ClientRpcParams clientRpcParams = default)
         {
             foreach (var data in syncData)
@@ -509,6 +469,12 @@ namespace AbilitySystem.Scripts
         public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
             AbilitySystem.AbilityManager.RemoveAbility(abilityName);
+        }
+
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsAbilityChargesChangedRpc(string abilityName, int current, int max)
+        {
+            AbilitySystem.ReplicationManager.ProcessClientAbilityChargesChanged(abilityName, current, max);
         }
         
         [Rpc(SendTo.NotServer)]
