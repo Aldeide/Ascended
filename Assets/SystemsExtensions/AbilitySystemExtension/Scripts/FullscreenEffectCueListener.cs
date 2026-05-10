@@ -16,7 +16,7 @@ namespace AbilitySystemExtension.Scripts
     {
         public override void Start()
         {
-
+            base.Start();
         }
 
         public override void OnExecuteCue(CueDefinition definition, CueData cueData)

@@ -377,7 +377,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 359.92, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 9041, y: -536}
+  m_AnchoredPosition: {x: 8813, y: -521}
   m_SizeDelta: {x: 120, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27816427
@@ -2439,9 +2439,9 @@ RectTransform:
   - {fileID: 656900629}
   m_Father: {fileID: 450305593}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 40, y: 32}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 90, y: 80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &450305590
@@ -5340,8 +5340,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1294071011}
+  - component: {fileID: 1294071014}
   - component: {fileID: 1294071013}
   - component: {fileID: 1294071012}
+  - component: {fileID: 1294071015}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -5437,6 +5439,136 @@ MonoBehaviour:
     OldPrefabList: []
   RunInBackground: 1
   LogLevel: 1
+--- !u!114 &1294071014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294071009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: c4228e6d20a6be34997b44adaa15be5a, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 77c34336-4a48-41a0-a45a-ef9139a35a77
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1fb549a7-de0d-4511-b29e-f264184feb75
+    m_ActionName: 'Player/Look[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 305a54bb-ce67-4c4c-a93a-5969403edde9
+    m_ActionName: 'Player/MouseDelta[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8167c9d9-4a65-4a02-8938-0aa763a40aca
+    m_ActionName: 'Player/Aim[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 44a00069-6f3e-4b74-b4a9-0ed20eb2af72
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4353d761-b734-41f5-90ae-e63c00617e48
+    m_ActionName: 'Player/Dash[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f6040634-aea9-45c8-9c67-544096d00c53
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 484ff4eb-7df2-453d-baa4-a88a0f45f9bc
+    m_ActionName: 'Player/Inventory[/Keyboard/i]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f78a8da7-b939-4276-93df-ba10da1f1e32
+    m_ActionName: 'Player/Reload[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1294071015}
+        m_TargetAssemblyTypeName: SystemsExtensions.AbilitySystemExtension.Runtime.Controllers.NetworkManagerBindings,
+          AbilitySystemExtension
+        m_MethodName: OnSpawnHost
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 040ef326-c83f-443a-a600-d1ffa4750ed9
+    m_ActionName: 'Player/SpawnHost[/Keyboard/f1]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1294071015}
+        m_TargetAssemblyTypeName: SystemsExtensions.AbilitySystemExtension.Runtime.Controllers.NetworkManagerBindings,
+          AbilitySystemExtension
+        m_MethodName: OnSpawnClient
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cc2599d1-e667-4908-9988-1e21a90e7908
+    m_ActionName: 'Player/SpawnClient[/Keyboard/f2]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1294071015}
+        m_TargetAssemblyTypeName: SystemsExtensions.AbilitySystemExtension.Runtime.Controllers.NetworkManagerBindings,
+          AbilitySystemExtension
+        m_MethodName: OnSpawnServer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bf198baa-e80b-470d-b2f1-b2649ac10496
+    m_ActionName: 'Player/SpawnServer[/Keyboard/f3]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &1294071015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294071009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dff410b88074d31b1c6061d8b43f544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AbilitySystemExtension::SystemsExtensions.AbilitySystemExtension.Runtime.Controllers.NetworkManagerBindings
+  _networkManager: {fileID: 0}
 --- !u!1001 &1307335922
 PrefabInstance:
   m_ObjectHideFlags: 0
