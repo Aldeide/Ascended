@@ -1,5 +1,4 @@
 using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Abilities.StunAbility;
 using AbilitySystem.Runtime.Abilities.Targeting;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;

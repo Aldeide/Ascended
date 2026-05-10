@@ -2,7 +2,7 @@
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
-namespace AbilitySystem.Runtime.Abilities.InstantAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     [CreateAssetMenu(fileName = "InstantAbility", menuName = "AbilitySystem/Abilities/InstantAbility")]
     public class InstantAbilityDefinition : AbilityDefinition

@@ -1,7 +1,7 @@
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
-namespace AbilitySystem.Runtime.Abilities.PassiveAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     public class PassiveAbility : Ability
     {
