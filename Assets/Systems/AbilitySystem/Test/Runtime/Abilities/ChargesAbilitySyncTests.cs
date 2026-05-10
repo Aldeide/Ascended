@@ -49,7 +49,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         }
 
         [Test]
-        public void OwnerActivation_ChargesDropLocallyAndSync()
+        public void ChargesAbilitySyncTests_OwnerActivation_ChargesDropLocallyAndSync()
         {
             var clientAbility = (ChargesAbility)ClientSystem.AbilityManager.Abilities[_abilityDef.UniqueName];
             int chargesChangedCount = 0;
@@ -68,7 +68,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         }
 
         [Test]
-        public void ChargeRegeneration_SyncsFromServerToClient()
+        public void ChargesAbilitySyncTests_ChargeRegeneration_SyncsFromServerToClient()
         {
             var clientAbility = (ChargesAbility)ClientSystem.AbilityManager.Abilities[_abilityDef.UniqueName];
             var serverAbility = (ChargesAbility)ServerSystem.AbilityManager.Abilities[_abilityDef.UniqueName];
@@ -100,7 +100,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         }
 
         [Test]
-        public void LateJoiner_SyncsInitialCharges()
+        public void ChargesAbilitySyncTests_LateJoiner_SyncsInitialCharges()
         {
             // 1. Server drops charges
             var serverAbility = (ChargesAbility)ServerSystem.AbilityManager.Abilities[_abilityDef.UniqueName];
@@ -117,7 +117,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         
         // We need to decide what is replicated to observers.
         [Test]
-        public void Observer_SeesOtherPlayerActivation()
+        public void ChargesAbilitySyncTests_Observer_SeesOtherPlayerActivation()
         {
             // Setup a second client (Observer) - must set DataManager so ProcessClientEffectAdded can resolve definitions
             var observerSystem = new AbilitySystemManager(DataManager);
@@ -145,7 +145,7 @@ namespace AbilitySystem.Test.Runtime.Networking
             Assert.IsTrue(observerSystem.TagManager.HasTag(_cooldownTag), "Observer should see cooldown start after server Tick");
         }
         [Test]
-        public void CooldownUIEvents_FireOnClient()
+        public void ChargesAbilitySyncTests_CooldownUIEvents_FireOnClient()
         {
             var clientAbility = (ChargesAbility)ClientSystem.AbilityManager.Abilities[_abilityDef.UniqueName];
             var cooldownStarted = false;
