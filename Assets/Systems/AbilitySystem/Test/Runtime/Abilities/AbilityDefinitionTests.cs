@@ -1,3 +1,4 @@
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
 
