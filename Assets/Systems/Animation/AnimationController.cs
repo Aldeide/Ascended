@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Systems.Animation
 {
@@ -19,7 +19,7 @@ namespace Systems.Animation
         private static readonly int MovementX = Animator.StringToHash("MovementX");
         private static readonly int MovementY = Animator.StringToHash("MovementY");
         
-        private void Start()
+        private void Awake()
         {
             _animator = GetComponent<Animator>();
         }
@@ -30,7 +30,7 @@ namespace Systems.Animation
         /// <param name="isFiring">A boolean indicating whether the character is firing (true) or not (false).</param>
         public void SetIsFiring(bool isFiring)
         {
-            _animator.SetBool(IsFiring, isFiring);
+            if (_animator != null) _animator.SetBool(IsFiring, isFiring);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Systems.Animation
         /// <param name="isMoving">A boolean indicating whether the character is moving (true) or stationary (false).</param>
         public void SetIsMoving(bool isMoving)
         {
-            _animator.SetBool(IsMoving, isMoving);
+            if (_animator != null) _animator.SetBool(IsMoving, isMoving);
         }
 
         /// <summary>
@@ -54,8 +54,11 @@ namespace Systems.Animation
         public void SetMoveForward()
         {
             SetIsMoving(true);
-            _animator.SetFloat(MovementX, 0);
-            _animator.SetFloat(MovementY, 1);
+            if (_animator != null)
+            {
+                _animator.SetFloat(MovementX, 0);
+                _animator.SetFloat(MovementY, 1);
+            }
         }
 
         /// <summary>
@@ -66,8 +69,11 @@ namespace Systems.Animation
         public void SetMovement(float x, float y)
         {
             SetIsMoving(Mathf.Abs(x) + Mathf.Abs(y) >= 0.001);
-            _animator.SetFloat(MovementX, x);
-            _animator.SetFloat(MovementY, y);
+            if (_animator != null)
+            {
+                _animator.SetFloat(MovementX, x);
+                _animator.SetFloat(MovementY, y);
+            }
         }
 
         /// <summary>
@@ -80,8 +86,11 @@ namespace Systems.Animation
         public void SetMovement(float x, float y, float dampTime, float deltaTime)
         {
             SetIsMoving(Mathf.Abs(x) + Mathf.Abs(y) >= 0.001);
-            _animator.SetFloat(MovementX, x, dampTime, deltaTime);
-            _animator.SetFloat(MovementY, y, dampTime, deltaTime);
+            if (_animator != null)
+            {
+                _animator.SetFloat(MovementX, x, dampTime, deltaTime);
+                _animator.SetFloat(MovementY, y, dampTime, deltaTime);
+            }
         }
 
         /// <summary>
