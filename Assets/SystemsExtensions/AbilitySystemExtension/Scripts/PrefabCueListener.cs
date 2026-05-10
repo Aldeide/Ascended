@@ -35,14 +35,32 @@ namespace AbilitySystemExtension.Scripts
             
         }
 
+        private readonly System.Collections.Generic.Dictionary<CueDefinition, GameObject> _activeInstances = new();
+
         public override void OnPlayCue(CueDefinition definition, CueData cueData)
         {
-            throw new System.NotImplementedException();
+            if (TagQuery.MatchesTag(definition.CueTag) == false) return;
+            var prefab = (definition as CuePrefabDefinition)?.Prefab;
+            if (!prefab) return;
+
+            var position = cueData.VectorData[0];
+            var muzzle = cueData.VectorData[1];
+            var normal = cueData.VectorData[2];
+
+            // For durational cues, we might want to parent it to the muzzle or this transform
+            var instance = Instantiate(prefab, muzzle, Quaternion.LookRotation(normal, Vector3.up));
+            instance.transform.SetParent(transform);
+            
+            _activeInstances[definition] = instance;
         }
 
         public override void OnStopCue(CueDefinition definition, CueData cueData)
         {
-            throw new System.NotImplementedException();
+            if (_activeInstances.TryGetValue(definition, out var instance))
+            {
+                Destroy(instance);
+                _activeInstances.Remove(definition);
+            }
         }
     }
 }

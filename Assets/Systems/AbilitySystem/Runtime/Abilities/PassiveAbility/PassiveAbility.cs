@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
 namespace AbilitySystem.Runtime.Abilities.PassiveAbility
@@ -14,7 +14,6 @@ namespace AbilitySystem.Runtime.Abilities.PassiveAbility
 
         protected override void ActivateAbility(AbilityData data)
         {
-            Debug.Log("Passive ability activated.");
         }
 
         protected override void CancelAbility()

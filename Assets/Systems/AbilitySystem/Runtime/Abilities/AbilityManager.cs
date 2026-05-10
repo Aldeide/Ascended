@@ -52,7 +52,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var ability in Abilities.Values)
             {
-                if (ability.IsActive) Debug.Log($"Ticking active ability: {ability.Definition.UniqueName}");
+                // if (ability.IsActive) Debug.Log($"Ticking active ability: {ability.Definition.UniqueName}");
                 ability.Tick();
             }
         }

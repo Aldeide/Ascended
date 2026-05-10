@@ -16,7 +16,6 @@ namespace AbilitySystemExtension.Runtime.Abilities
         protected override void ActivateAbility(AbilityData data)
         {
             _currentTimer = 0;
-            Debug.Log("Death ability activated");
             
             PlayActivationCues();
             /*
@@ -50,7 +49,6 @@ namespace AbilitySystemExtension.Runtime.Abilities
             Owner.PlayCue("Cue.Animation.State.Idle", test, false);
             Owner.PlayCue("Cue.IK.Feet.Enable", test, false);
             Owner.PlayCue("Cue.IK.Arms.Enable", test, false);
-            Debug.Log("Death ability ended");
         }
     }
 }
