@@ -30,6 +30,8 @@ The project follows a strict **modular architecture** designed to separate reusa
 | `Assets/Gameplay` | High-level game rules, controllers, and lobby logic. |
 | `Assets/Interface` | UI Toolkit assets (UXML, USS) and C# Controllers. |
 | `Assets/SystemsExtensions` | Game-specific implementations (e.g., "Player" ability). |
+| `Assets/Systems/EternityCommon` | Common and editor utilities. |
+| `Assets/Systems/GameplayModifier` | System for modifying gameplay rules. |
 | `Assets/Systems/GameplayTags` | Hierarchical tagging system for logic and identification. |
 | `Assets/Systems/ScalableFloat` | Data-driven mathematical scaling for designer values. |
 | `Assets/Localisation` | Multi-language support for UI and game data. |

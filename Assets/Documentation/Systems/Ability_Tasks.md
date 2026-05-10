@@ -20,10 +20,10 @@ To use an Ability Task inside an `Ability`, you instantiate it, bind delegates t
 protected override void ActivateAbility(AbilityData data)
 {
     // 1. Instantiate the task
-    var delayTask = WaitDelayTask.CreateWaitDelayTask(this, 2.0f);
+    var delayTask = WaitDelayTask.CreateWaitDelay(this, 2.0f);
     
     // 2. Bind to its completion event
-    delayTask.OnDelayFinished += OnMyDelayFinished;
+    delayTask.OnFinished += OnMyDelayFinished;
     
     // 3. Activate the task
     delayTask.ReadyForActivation();
@@ -63,7 +63,7 @@ public class MyCustomTask : AbilityTask
     public static MyCustomTask CreateCustomTask(Ability owningAbility, float duration)
     {
         var task = new MyCustomTask();
-        task.InitTask(owningAbility);
+        task.Initialize(owningAbility);
         task._duration = duration;
         return task;
     }
@@ -71,13 +71,13 @@ public class MyCustomTask : AbilityTask
     protected override void Activate()
     {
         // Setup logic goes here.
-        // For tasks that require Tick(), register it here.
-        OwnerAbility.OnTick += Tick;
     }
 
-    private void Tick(float deltaTime)
+    public override void TickTask()
     {
-        _timer += deltaTime;
+        // Since TickTask is called automatically by the framework when Active:
+        // Use OwnerSystem.GetTime() or Time.deltaTime for delta
+        _timer += UnityEngine.Time.deltaTime; // Assuming typical delta approach
         if (_timer >= _duration)
         {
             // Always call your delegates before EndTask()
@@ -86,13 +86,10 @@ public class MyCustomTask : AbilityTask
         }
     }
 
-    public override void EndTask()
+    protected override void OnDestroy()
     {
         // Cleanup logic goes here.
-        OwnerAbility.OnTick -= Tick;
-        
-        // Always call base.EndTask() at the end
-        base.EndTask();
+        OnTaskCompleted = null;
     }
 }
 ```
