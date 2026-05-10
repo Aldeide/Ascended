@@ -1,13 +1,15 @@
 {
-    "name": "AbilityGraph",
+    "name": "AbilitySystem.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:fd228ffb3c18f7343b2fddb130915e28",
-        "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:f9c18cb9c0eed9d449c8e38d555810d9"
+        "AbilitySystem",
+        "GameplayTags",
+        "com.alelievr.NodeGraphProcessor.Runtime",
+        "Unity.Netcode.Runtime"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

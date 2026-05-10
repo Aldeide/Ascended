@@ -47,7 +47,7 @@ Light:
   m_Intensity: 2017.2485
   m_Range: 10
   m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 1
@@ -93,7 +93,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShapeRadius: 0
+  m_ShapeRadius: 0.025
   m_ShadowAngle: 0
   m_LightUnit: 0
   m_LuxAtDistance: 1
@@ -117,12 +117,12 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 0
-  m_InnerSpotPercent: 0
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
-  m_ShapeRadius: 0.025
-  m_Version: 13
+  m_ShapeRadius: -1
+  m_Version: 15
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -3965,7 +3965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1198471492
+  GlobalObjectIdHash: 2027218909
   InScenePlacedSourceGlobalObjectIdHash: 1198471492
   DeferredDespawnTick: 0
   Ownership: 1
@@ -4249,7 +4249,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!136 &2961370621045967617
@@ -5443,7 +5443,7 @@ MonoBehaviour:
   AnimationFloorLevel: 0.001
   _Editor_Foldout_Setup_LegsList: 1
   _Editor_EnsureCount: 0
-  _Editor_OnValidateTrigger: 0
+  _Editor_OnValidateTrigger: 1
   _EditorAllowAutoUpdateFeetParams: 1
   _EditorCategory: 0
   _EditorSetupCategory: 0
@@ -5464,7 +5464,7 @@ MonoBehaviour:
   baseTransform: {fileID: 3431953994317972873}
   Hips: {fileID: 6024721926596410489}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.928916
+  finalScaleReference: 0.92891586
   finalScaleReferenceSqrt: 0.9328631
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0

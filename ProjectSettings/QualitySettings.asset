@@ -275,6 +275,7 @@ QualitySettings:
   m_PerPlatformDefaultQuality:
     GameCoreScarlett: 2
     GameCoreXboxOne: 3
+    Nintendo Switch 2: 4
     PS4: 3
     PS5: 2
     Server: 3

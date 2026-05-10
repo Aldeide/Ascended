@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
@@ -20,8 +20,16 @@ namespace Systems.Camera
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;
-            //mouseDelta = context.ReadValue<Vector2>();
-            UpdateCamera(context.ReadValue<Vector2>());
+            mouseDelta = context.ReadValue<Vector2>();
+        }
+
+        private void Update()
+        {
+            if (mouseDelta.sqrMagnitude > 0.01f)
+            {
+                UpdateCamera(mouseDelta);
+                mouseDelta = Vector2.zero; // Clear after use or keep if using continuous input
+            }
         }
 
         private void UpdateCamera(Vector2 mouseInput)
@@ -32,8 +40,9 @@ namespace Systems.Camera
             cinemachineTargetPitch =
                 UpdateRotation(cinemachineTargetPitch, mouseY, bottomAngleClamp, topAngleClamp, true);
             cinemachineTargetYaw = UpdateRotation(cinemachineTargetYaw, mouseX, float.MinValue, float.MaxValue, false);
+            
             followTarget.rotation =
-                Quaternion.Euler(cinemachineTargetPitch, cinemachineTargetYaw, followTarget.eulerAngles.z);
+                Quaternion.Euler(cinemachineTargetPitch, cinemachineTargetYaw, 0f);
         }
 
         private float UpdateRotation(float currentRotation, float input, float min, float max, bool isXAxis)

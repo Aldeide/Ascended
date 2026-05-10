@@ -1,11 +1,9 @@
 {
-    "name": "AbilityGraph",
+    "name": "Interface",
     "rootNamespace": "",
     "references": [
-        "GUID:fd228ffb3c18f7343b2fddb130915e28",
-        "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:f9c18cb9c0eed9d449c8e38d555810d9"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:e09cdb2b5c8364549b2f0a717e652c08"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
