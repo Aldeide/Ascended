@@ -27,14 +27,11 @@ namespace Systems.Controllers
         public void Update()
         {
             if (!IsLocalPlayer) return;
-
-            if (_combatStanceTimer > 0)
+            if (!(_combatStanceTimer > 0)) return;
+            _combatStanceTimer -= Time.deltaTime;
+            if (_combatStanceTimer <= 0)
             {
-                _combatStanceTimer -= Time.deltaTime;
-                if (_combatStanceTimer <= 0)
-                {
-                    _movementController.SetCombatStance(false);
-                }
+                _movementController.SetCombatStance(false);
             }
         }
 
@@ -47,11 +44,9 @@ namespace Systems.Controllers
                 _asc.TryActivateAbility("AimCameraAbility");
             }
 
-            if (context.phase == InputActionPhase.Canceled)
-            {
-                _movementController.SetManualAiming(false);
-                _asc.EndAbility("AimCameraAbility");
-            }
+            if (context.phase != InputActionPhase.Canceled) return;
+            _movementController.SetManualAiming(false);
+            _asc.EndAbility("AimCameraAbility");
         }
 
         public void OnFire(InputAction.CallbackContext context)
@@ -81,28 +76,22 @@ namespace Systems.Controllers
         public void OnDash(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
-            if (context.phase == InputActionPhase.Performed)
-            {
-                _asc.TryActivateAbility("DashAbility");
-            }
+            if (context.phase != InputActionPhase.Performed) return;
+            _asc.TryActivateAbility("DashAbility");
         }
 
         public void OnJump(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
-            if (context.phase == InputActionPhase.Performed)
-            {
-                _asc.TryActivateAbility("JumpAbility");
-            }
+            if (context.phase != InputActionPhase.Performed) return;
+            _asc.TryActivateAbility("JumpAbility");
         }
 
         public void OnReload(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
-            if (context.phase == InputActionPhase.Performed)
-            {
-                _asc.TryActivateAbility("ReloadWeaponAbility");
-            }
+            if (context.phase != InputActionPhase.Performed) return;
+            _asc.TryActivateAbility("ReloadWeaponAbility");
         }
     }
 }

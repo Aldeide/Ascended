@@ -55,8 +55,8 @@ namespace AbilitySystem.Runtime.AttributeSets
         public void Dispose()
         {
             if (_attributeStates.IsCreated) _attributeStates.Dispose();
-            if (_allModifiers.IsCreated) _allModifiers.Dispose();
             if (_modifierRanges.IsCreated) _modifierRanges.Dispose();
+            if (_allModifiers.IsCreated) _allModifiers.Dispose();
         }
 
         public virtual T GetAttributeSet<T>() where T : AttributeSet
