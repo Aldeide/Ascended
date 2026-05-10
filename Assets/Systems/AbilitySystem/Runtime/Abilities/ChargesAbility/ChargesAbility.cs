@@ -76,6 +76,12 @@ namespace AbilitySystem.Runtime.Abilities
             return CurrentCharges;
         }
 
+        public void SetCharges(int charges)
+        {
+            CurrentCharges = charges;
+            NotifyChargesChanged();
+        }
+
         public override void Tick()
         {
             if (IsActive)
@@ -102,7 +108,7 @@ namespace AbilitySystem.Runtime.Abilities
                     }
                 }
                 // If we are below max but no recharge is happening, start it
-                else if (!isOnCooldown)
+                else if (!isOnCooldown && Owner.IsServer())
                 {
                     StartCooldown(maxCharges);
                     isOnCooldown = true;

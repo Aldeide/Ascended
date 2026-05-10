@@ -67,4 +67,18 @@ namespace AbilitySystem.Runtime.Networking
             serializer.SerializeValue(ref Tags);
         }
     }
+
+    public struct AbilitySyncData : INetworkSerializable
+    {
+        public string AbilityName;
+        public int Level;
+        public int Charges;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref AbilityName);
+            serializer.SerializeValue(ref Level);
+            serializer.SerializeValue(ref Charges);
+        }
+    }
 }
