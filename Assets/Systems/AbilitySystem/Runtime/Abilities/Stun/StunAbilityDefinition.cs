@@ -2,7 +2,7 @@ using System;
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
-namespace AbilitySystem.Runtime.Abilities.StunAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     [CreateAssetMenu(fileName = "StunAbility", menuName = "AbilitySystem/Abilities/Stun")]
     public class StunAbilityDefinition : AbilityDefinition

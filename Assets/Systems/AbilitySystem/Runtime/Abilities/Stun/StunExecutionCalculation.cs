@@ -3,7 +3,7 @@ using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
 using UnityEngine;
 
-namespace AbilitySystem.Runtime.Abilities.StunAbility
+namespace AbilitySystem.Runtime.Abilities
 {
     /// <summary>
     /// Example ExecutionCalculation that handles complex stun logic.

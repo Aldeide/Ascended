@@ -1,6 +1,5 @@
 ﻿using System;
 using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Abilities.PassiveAbility;
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
