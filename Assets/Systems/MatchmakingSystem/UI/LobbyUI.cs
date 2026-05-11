@@ -135,6 +135,13 @@ namespace MatchmakingSystem.UI
             {
                 Debug.Log($"[LobbyUI] Subscribing to LobbyPlayers list. Current count: {NetworkLobbyState.Instance.LobbyPlayers.Count}");
                 NetworkLobbyState.Instance.LobbyPlayers.OnListChanged += OnLobbyPlayersChanged;
+                
+                // Tell the server our Steam name
+                if (Steamworks.SteamClient.IsValid)
+                {
+                    NetworkLobbyState.Instance.UpdatePlayerNameServerRpc(Steamworks.SteamClient.Name);
+                }
+
                 RefreshPlayerList(); // Initial draw
             }
             else

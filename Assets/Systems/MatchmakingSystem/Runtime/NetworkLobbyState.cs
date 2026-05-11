@@ -1,4 +1,5 @@
 using System;
+using Steamworks;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -94,8 +95,16 @@ namespace MatchmakingSystem.Runtime
                 if (p.ClientId == clientId) return; // Already exists
             }
 
-            // By default, just use "Player X". A real game would query SteamFriends.GetFriendPersonaName.
-            var playerName = $"Player {clientId}"; 
+            string playerName = $"Player {clientId}";
+            
+            // If this is the host adding themselves, we can get the name immediately
+            if (IsServer && clientId == NetworkManager.Singleton.LocalClientId)
+            {
+                if (SteamClient.IsValid)
+                {
+                    playerName = SteamClient.Name;
+                }
+            }
 
             LobbyPlayers.Add(new LobbyPlayerState
             {
@@ -104,7 +113,24 @@ namespace MatchmakingSystem.Runtime
                 IsReady = false
             });
 
-            Debug.Log($"[NetworkLobbyState] Added player {clientId} to list. Total players: {LobbyPlayers.Count}");
+            Debug.Log($"[NetworkLobbyState] Added player {clientId} to list. Name: {playerName}");
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void UpdatePlayerNameServerRpc(FixedString64Bytes name, ServerRpcParams rpcParams = default)
+        {
+            ulong clientId = rpcParams.Receive.SenderClientId;
+            for (int i = 0; i < LobbyPlayers.Count; i++)
+            {
+                if (LobbyPlayers[i].ClientId == clientId)
+                {
+                    var playerState = LobbyPlayers[i];
+                    playerState.PlayerName = name;
+                    LobbyPlayers[i] = playerState;
+                    Debug.Log($"[NetworkLobbyState] Updated player {clientId} name to: {name}");
+                    break;
+                }
+            }
         }
 
         private void RemovePlayerFromList(ulong clientId)

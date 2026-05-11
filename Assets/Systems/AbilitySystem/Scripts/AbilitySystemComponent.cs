@@ -234,7 +234,7 @@ namespace AbilitySystem.Scripts
         
         public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            if (IsServer && ! IsHost)
+            if (IsServer)
             {
                 NotifyClientsBaseValueChangedRpc(attribute.GetName(), newValue);
             }
@@ -242,7 +242,7 @@ namespace AbilitySystem.Scripts
         
         public void OnAttributeBaseCurrentChanged(Attribute attribute, float oldValue, float newValue)
         {
-            if (IsServer && ! IsHost)
+            if (IsServer)
             {
                 NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
             }
