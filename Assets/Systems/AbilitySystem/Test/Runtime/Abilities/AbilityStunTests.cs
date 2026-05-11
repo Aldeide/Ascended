@@ -1,5 +1,4 @@
 using AbilitySystem.Runtime.Abilities;
-using AbilitySystem.Runtime.Abilities.StunAbility;
 using AbilitySystem.Runtime.Abilities.Targeting;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
@@ -53,7 +52,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         }
 
         [TearDown]
-        public void TearDown()
+        public new void TearDown()
         {
             if (_targetGameObject != null)
             {
