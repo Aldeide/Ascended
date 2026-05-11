@@ -96,13 +96,20 @@ namespace MatchmakingSystem.Runtime
             }
 
             string playerName = $"Player {clientId}";
-            
-            // If this is the host adding themselves, we can get the name immediately
-            if (IsServer && clientId == NetworkManager.Singleton.LocalClientId)
+
+            if (SteamClient.IsValid)
             {
-                if (SteamClient.IsValid)
+                // With FacepunchTransport, the ClientId IS the SteamId.
+                // In Facepunch.Steamworks, we get the name via a Friend struct.
+                playerName = new Friend(clientId).Name;
+                
+                // If Steam doesn't know the name yet, fallback to SteamClient.Name for local player
+                if (string.IsNullOrEmpty(playerName) || playerName == "[unknown]")
                 {
-                    playerName = SteamClient.Name;
+                    if (clientId == NetworkManager.Singleton.LocalClientId)
+                    {
+                        playerName = SteamClient.Name;
+                    }
                 }
             }
 
