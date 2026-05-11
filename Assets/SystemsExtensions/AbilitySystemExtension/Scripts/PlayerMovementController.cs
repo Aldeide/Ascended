@@ -65,6 +65,12 @@ namespace AbilitySystemExtension.Scripts
             if (!IsLocalPlayer) return;
             if (!CanMove()) return;
 
+            if (_camera == null)
+            {
+                _camera = Camera.main;
+                if (_camera == null) return; // Prevent MissingReferenceException if no camera is present (e.g. in Lobby)
+            }
+
             // Update grounded state.
             UpdateGrounded();
 
@@ -186,7 +192,7 @@ namespace AbilitySystemExtension.Scripts
 
         private Quaternion ComputeRotation(float angle)
         {
-            if (!IsInAimingState()) return Quaternion.Euler(0f, angle, 0f);
+            if (!IsInAimingState() || _camera == null) return Quaternion.Euler(0f, angle, 0f);
             var target = transform.position + _camera.transform.forward;
             var actualTarget = new Vector3(target.x, transform.position.y, target.z);
             return Quaternion.LookRotation(actualTarget - transform.position);

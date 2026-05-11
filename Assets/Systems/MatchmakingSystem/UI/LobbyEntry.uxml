@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; background-color: rgb(50, 50, 50); padding: 10px; margin-bottom: 5px; border-radius: 5px;">
+        <ui:Label name="LobbyNameLabel" text="Player's Lobby (1/4)" style="font-size: 16px; color: rgb(255, 255, 255);" />
+        <ui:Button name="JoinButton" text="Join" style="width: 80px; height: 30px;" />
+    </ui:VisualElement>
+</ui:UXML>

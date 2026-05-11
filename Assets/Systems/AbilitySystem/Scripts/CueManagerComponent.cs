@@ -18,17 +18,35 @@ namespace AbilitySystem.Scripts
         public void Start()
         {
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
-            _cueLibrary = GameObject.Find("DataManager").GetComponent<CueDefinitionLibrary>();
+            TryFindLibrary();
+        }
+
+        private void TryFindLibrary()
+        {
+            if (_cueLibrary == null)
+            {
+                var dataManager = GameObject.Find("DataManager");
+                if (dataManager != null)
+                {
+                    _cueLibrary = dataManager.GetComponent<CueDefinitionLibrary>();
+                }
+            }
         }
 
         public void PlayCue(string cueTag)
         {
+            TryFindLibrary();
+            if (_cueLibrary == null) return;
+
             CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
             OnCueAdded?.Invoke(cueTag, cue);
         }
 
         public void PlayCue(string cueTag, CueData data)
         {
+            TryFindLibrary();
+            if (_cueLibrary == null) return;
+
             CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
             if (cue == null) return;
             

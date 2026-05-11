@@ -1,4 +1,4 @@
-﻿using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Core;
 using AbilitySystem.Scripts;
 using Systems.Camera;
 using Unity.Netcode;
@@ -9,6 +9,26 @@ namespace Systems.Controllers
     public class PlayerController : NetworkBehaviour
     {
         private InterfaceController _interfaceController;
+
+        private void OnEnable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            if (IsSpawned && IsLocalPlayer)
+            {
+                this.transform.position = new Vector3(0, 10, 0);
+                SetupCamera();
+                SetupInterface();
+            }
+        }
 
         public override void OnNetworkSpawn()
         {
@@ -26,7 +46,11 @@ namespace Systems.Controllers
 
         private void SetupCamera()
         {
-            GameObject.Find("CameraTarget").GetComponent<CameraTargetController>().SetTarget(this.transform);
+            var cameraTarget = GameObject.Find("CameraTarget");
+            if (cameraTarget != null)
+            {
+                cameraTarget.GetComponent<CameraTargetController>()?.SetTarget(this.transform);
+            }
         }
 
         private void SetupAsc()
@@ -36,8 +60,12 @@ namespace Systems.Controllers
 
         private void SetupInterface()
         {
-            _interfaceController = GameObject.Find("Interface").GetComponent<InterfaceController>();
-            _interfaceController.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
+            var interfaceObj = GameObject.Find("Interface");
+            if (interfaceObj != null)
+            {
+                _interfaceController = interfaceObj.GetComponent<InterfaceController>();
+                _interfaceController?.Initialise(GetComponent<AbilitySystemComponent>().AbilitySystem as AbilitySystemManager);
+            }
         }
     }
 }

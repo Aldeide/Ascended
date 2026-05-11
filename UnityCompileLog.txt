@@ -1,0 +1,19 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.4/staging' branch; Version is '6000.4.5f1 (cc83ebd631f8) revision 13403115'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Core' Language: 'fr' Physical Memory: 130916 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Anthony" at "2026-05-10T20:38:23.4644251Z"
+System  architecture: x64
+Process architecture: x64
+Date: 2026-05-10T20:38:23Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe
+-quit
+-batchmode
+-executeMethod
+UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation
+-logFile
+C:\Users\Anthony\Desktop\Ascended\Ascended\UnityCompileLog.txt
+C:/Users/Anthony/Desktop/Ascended/Ascended
+Exiting without the bug reporter. Application will terminate with return code 1
