@@ -31,7 +31,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             AddAttribute(MaxEnergy);
             AddAttribute(MovementSpeed);
 
-            //Health.OnAttributeBaseValuePreChange += OnHealthChange;
+            Health.OnAttributeBaseValuePreChange += OnHealthChange;
             Health.OnAttributeCurrentValuePreChange += OnHealthChange;
             MaxHealth.OnAttributeCurrentValueChanged += OnMaxHealthChange;
             
