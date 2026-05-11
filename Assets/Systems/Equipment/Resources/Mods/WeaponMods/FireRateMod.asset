@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451da021f54444549c2ed271d4c22371, type: 3}
+  m_Name: FireRateMod
+  m_EditorClassIdentifier:
+  Name: FireRate
+  DisplayName:
+    m_TableReference:
+      m_TableCollectionName:
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Description:
+    m_TableReference:
+      m_TableCollectionName:
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Icon: {fileID: 0}
+  OwnedTags:
+  - <Name>k__BackingField: Item.Modifier.Passive
+    <HashCode>k__BackingField: -1913498623
+    <AncestorsNames>k__BackingField:
+    - Item
+    - Item.Modifier
+    <AncestorsHashCodes>k__BackingField: 952fdcbc08953be7
+  ModifiableEquipmentTags:
+  - <Name>k__BackingField: Item.Equipment.Weapon
+    <HashCode>k__BackingField: 0
+    <AncestorsNames>k__BackingField:
+    - Item
+    - Item.Equipment
+    <AncestorsHashCodes>k__BackingField: 952fdcbc3da58dd5
+  MaxLevel: 5
+  Recipe: []
+  GrantedAbilities: []
+  GrantedEffects: []
+  GrantedTags: []
+  references:
+    version: 2
+    RefIds: []
