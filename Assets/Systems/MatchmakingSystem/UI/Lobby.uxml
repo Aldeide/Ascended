@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <ui:VisualElement style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgb(20, 20, 30);">
+        <ui:Label text="GAME LOBBY" style="font-size: 36px; -unity-font-style: bold; color: rgb(255, 255, 255); margin-bottom: 20px;" />
+        
+        <ui:VisualElement style="flex-direction: row; justify-content: space-between; width: 50%; margin-bottom: 10px;">
+            <ui:Label text="Players:" style="font-size: 18px; color: rgb(200, 200, 200);" />
+        </ui:VisualElement>
+        
+        <ui:ScrollView name="PlayerListContainer" style="width: 50%; height: 300px; background-color: rgb(40, 40, 50); border-radius: 5px; padding: 10px; margin-bottom: 20px;" />
+
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:Button name="ReadyButton" text="Ready Up" style="width: 150px; height: 40px; margin-right: 10px; font-size: 16px; background-color: rgb(50, 150, 50); color: white;" />
+            <ui:Button name="StartGameButton" text="Start Game" style="width: 150px; height: 40px; margin-right: 10px; font-size: 16px; background-color: rgb(150, 50, 50); color: white;" />
+            <ui:Button name="LeaveButton" text="Leave Lobby" style="width: 150px; height: 40px; font-size: 16px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

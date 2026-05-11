@@ -14,6 +14,7 @@
     "com.unity.multiplayer.center": "1.0.1",
     "com.unity.multiplayer.playmode": "2.0.2",
     "com.unity.netcode.gameobjects": "2.11.0",
+    "com.community.netcode.transport.facepunch": "file:com.community.netcode.transport.facepunch",
     "com.unity.nuget.newtonsoft-json": "3.2.2",
     "com.unity.render-pipelines.high-definition": "17.4.0",
     "com.unity.rendering.denoising": "1.0.5",

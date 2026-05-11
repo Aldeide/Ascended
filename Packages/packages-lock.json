@@ -23,6 +23,14 @@
         "com.unity.ugui": "1.0.0"
       }
     },
+    "com.community.netcode.transport.facepunch": {
+      "version": "file:com.community.netcode.transport.facepunch",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.netcode.gameobjects": "1.0.0-pre.4"
+      }
+    },
     "com.crashkonijn.goap": {
       "version": "https://github.com/crashkonijn/GOAP.git?path=/Package#3.0.33",
       "depth": 0,
