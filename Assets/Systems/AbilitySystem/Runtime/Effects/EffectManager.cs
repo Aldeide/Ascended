@@ -207,6 +207,7 @@ namespace AbilitySystem.Runtime.Effects
                 foreach (var effect in retractedEffects)
                 {
                     effect.IsActive = false;
+                    Effects.Remove(effect);
                     OnEffectRetracted?.Invoke(effect);
                     OnEffectRemoved?.Invoke(effect);
                 }

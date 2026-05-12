@@ -1,6 +1,7 @@
 using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Networking;
 
 namespace AbilitySystem.Runtime.Abilities.Cooldowns
 {
@@ -25,11 +26,16 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
             return !owner.TagManager.HasAnyTags(CooldownEffect.GrantedTags);
         }
 
-        public virtual bool Activate(IAbilitySystem owner)
+        public virtual bool Activate(IAbilitySystem owner, PredictionKey key = default)
         {
             if (!CanActivate(owner)) return false;
             
             var effect = owner.MakeOutgoingEffect(CooldownEffect);
+            if (key.IsValidKey())
+            {
+                effect.PredictionKey = key;
+            }
+            
             owner.ApplyEffectToSelf(effect);
             return true;
         }

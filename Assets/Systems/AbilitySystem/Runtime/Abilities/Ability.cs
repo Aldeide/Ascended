@@ -192,7 +192,7 @@ namespace AbilitySystem.Runtime.Abilities
                 PredictionKey = key;
                 ApplyEffects();
                 Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags, this);
-                if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner);
+                if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner, PredictionKey);
                 
                 ActivateAbility(AbilityArguments);
             }
@@ -253,9 +253,16 @@ namespace AbilitySystem.Runtime.Abilities
 
         public virtual void CommitCostAndCooldown()
         {
-            if (Definition.Cost == null) return;
-            var costEffect = MakeOutgoingEffect(Definition.Cost);
-            ApplyEffectToSelf(costEffect);
+            if (Definition.Cost != null)
+            {
+                var costEffect = MakeOutgoingEffect(Definition.Cost);
+                ApplyEffectToSelf(costEffect);
+            }
+            
+            if (Cooldown != null && !ShouldActivateCooldownOnActivation())
+            {
+                Cooldown.Activate(Owner, PredictionKey);
+            }
         }
         
         public virtual void Dispose()

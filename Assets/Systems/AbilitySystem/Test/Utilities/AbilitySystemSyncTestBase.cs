@@ -24,9 +24,11 @@ namespace AbilitySystem.Test.Utilities
             
             ServerSystem = new AbilitySystemManager(DataManager);
             ServerSystem.NetworkRole = new MockNetworkRole(true, true, 1);
+            ServerSystem.ReplicationManager = new MockReplicationManager(ServerSystem) { DataManager = DataManager };
             
             ClientSystem = new AbilitySystemManager(DataManager);
             ClientSystem.NetworkRole = new MockNetworkRole(false, true, 1);
+            ClientSystem.ReplicationManager = new MockReplicationManager(ClientSystem) { DataManager = DataManager };
 
             LinkSystems();
         }
