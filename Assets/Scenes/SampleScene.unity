@@ -393,7 +393,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 5755.514, y: -346.63}
+  m_AnchoredPosition: {x: 4763.776, y: -282.46143}
   m_SizeDelta: {x: 120, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27816427
@@ -7717,8 +7717,8 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 2
-  BlendUpdateMethod: 1
+  UpdateMethod: 0
+  BlendUpdateMethod: 0
   LensModeOverride:
     Enabled: 1
     DefaultMode: 2
