@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
@@ -6,6 +7,7 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
+using UnityEngine;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Test.Utilities
@@ -22,104 +24,114 @@ namespace AbilitySystem.Test.Utilities
         public Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
         public Action<string> OnNotifyClientsEffectRemoved { get; set; }
         public Action<string, int, int> OnNotifyClientsAbilityChargesChanged { get; set; }
-        public Action<string[]> OnNotifyClientsSyncTags { get; set; }
 
-        public Action<Attribute, float, float> NotifyClientsAttributeBaseValueChangedCallback { get; set; }
+        public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
+        public Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
+        public Action<string> OnServerAbilityTerminationRequested { get; set; }
+        public Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
+        public Action<string, AbilityData> OnClientActivateAbility { get; set; }
+        public Action<string> OnClientEndAbility { get; set; }
+        public IDataManager DataManager { get; set; }
 
-        private IAbilitySystem _owner;
-        
-        public MockReplicationManager(IAbilitySystem abilitySystem)
+        private readonly IAbilitySystem _owner;
+
+        public MockReplicationManager(IAbilitySystem owner)
         {
-            _owner = abilitySystem;
-            if (_owner.IsServer())
-            {
-                _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
-            }
+            _owner = owner;
+
+            _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
+            _owner.AttributeSetManager.OnAnyAttributeCurrentValueChanged += NotifyClientsAttributeCurrentValueChanged;
         }
+
         public void NotifyClientsAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            NotifyClientsAttributeBaseValueChangedCallback?.Invoke(attribute, oldValue, newValue);
+            if (!_owner.IsServer()) return;
+            OnNotifyClientsAttributeBaseValueChanged?.Invoke(attribute.GetName(), newValue);
         }
 
         public void OnAttributeBaseValueChanged(string attributeName, float newValue)
         {
-            
+            _owner.AttributeSetManager.GetAttribute(attributeName)?.SetBaseValue(newValue);
         }
 
         public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            throw new NotImplementedException();
+            if (!_owner.IsServer()) return;
+            OnNotifyClientsAttributeCurrentValueChanged?.Invoke(attribute.GetName(), oldValue, newValue);
         }
 
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
         {
-            throw new NotImplementedException();
+            _owner.AttributeSetManager.GetAttribute(attributeName)?.SetCurrentValue(newValue);
         }
 
         public void NotifyClientsPlayCue(Tag cueTag, CueAction action, CueData data)
         {
-            throw new NotImplementedException();
+            OnNotifyClientsPlayCue?.Invoke(cueTag, action, data);
         }
 
         public void ReceivedPlayCue(Tag cueTag, CueAction action, CueData data)
         {
-            throw new NotImplementedException();
+            _owner.CueManager.OnCueReceived(cueTag, action, data);
         }
 
         public void NotifyClientAbilityGranted(AbilityDefinition abilityDefinition)
         {
-            throw new NotImplementedException();
+            OnNotifyClientAbilityGranted?.Invoke(abilityDefinition);
         }
 
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
-            throw new NotImplementedException();
+            if (!_owner.IsServer()) return;
+            OnNotifyClientAbilityRemoved?.Invoke(abilityDefinition);
         }
 
         public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags)
         {
             OnNotifyClientsAbilityTagsAdded?.Invoke(abilityTags);
         }
-        
+
         public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags)
         {
             OnNotifyClientsAbilityTagsRemoved?.Invoke(abilityTags);
         }
 
-        public void NotifyClientsAbilityTagsAdded(Tuple<string, Tag[]> abilityTags)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void NotifyClientsSyncTags(string[] tagNames)
-        {
-            throw new NotImplementedException();
-        }
-
         public void NotifyClientsEffectAdded(Effect effect)
         {
+            if (!_owner.IsServer()) return;
+
             var data = new EffectSyncData
             {
                 EffectName = effect.Definition.name,
                 ActivationTime = effect.ActivationTime,
-                PredictionKey = effect.PredictionKey
+                PredictionKey = effect.PredictionKey,
+                Level = effect.Level,
+                NumStacks = effect.NumStacks
             };
-            
+
+            if (effect.SetByCallerTagMagnitudes.Count > 0)
+            {
+                data.SetByCallerTags = effect.SetByCallerTagMagnitudes.Keys.ToArray();
+                data.SetByCallerValues = effect.SetByCallerTagMagnitudes.Values.ToArray();
+            }
+
             if (effect.Source != null && effect.Source.NetworkRole != null)
                 data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
             else
-                data.SourceId = 0;
-                
+                data.SourceId = _owner.NetworkRole.NetworkObjectId;
+
             OnNotifyClientsEffectAdded?.Invoke(data);
         }
 
         public void NotifyClientsEffectRemoved(Effect effect)
         {
+            if (!_owner.IsServer()) return;
             OnNotifyClientsEffectRemoved?.Invoke(effect.Definition.name);
         }
 
         public void NotifyClientsAbilityChargesChanged(string abilityName, int current, int max)
         {
+            if (!_owner.IsServer()) return;
             OnNotifyClientsAbilityChargesChanged?.Invoke(abilityName, current, max);
         }
 
@@ -127,10 +139,28 @@ namespace AbilitySystem.Test.Utilities
         {
             var def = DataManager.GetEffectByName(data.EffectName);
             if (def == null) return;
-            var effect = def.ToEffect(_owner, _owner);
+            
+            var effect = def.ToEffect(_owner, _owner); 
             effect.ActivationTime = data.ActivationTime;
             effect.PredictionKey = data.PredictionKey;
-            _owner.EffectManager.AddEffectFromServer(effect);
+            effect.Level = data.Level;
+            effect.NumStacks = data.NumStacks;
+            
+            if (data.SetByCallerTags != null)
+            {
+                for (int i = 0; i < data.SetByCallerTags.Length; i++)
+                    effect.SetSetByCallerMagnitude(data.SetByCallerTags[i], data.SetByCallerValues[i]);
+            }
+            
+            if (data.PredictionKey.IsValidKey())
+            {
+                _owner.AbilityManager.NotifyServerResponse(data.PredictionKey, true);
+                _owner.EffectManager.ReconcilePredictedEffect(data.PredictionKey, effect);
+            }
+            else
+            {
+                _owner.EffectManager.AddEffectFromServer(effect);
+            }
         }
 
         public void ProcessClientEffectRemoved(string effectName)
@@ -145,14 +175,6 @@ namespace AbilitySystem.Test.Utilities
                 chargesAbility.SetCharges(current, max);
             }
         }
-
-        public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
-        public Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
-        public Action<string> OnServerAbilityTerminationRequested { get; set; }
-        public Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
-        public Action<string, AbilityData> OnClientActivateAbility { get; set; }
-        public Action<string> OnClientEndAbility { get; set; }
-        public IDataManager DataManager { get; set; }
 
         public void RequestAbilityActivation(string name, PredictionKey key, AbilityData data)
         {
@@ -181,13 +203,10 @@ namespace AbilitySystem.Test.Utilities
 
         public void ProcessServerAbilityActivation(string name, PredictionKey key, AbilityData data)
         {
-            // Logic moved here for simulation in tests if needed
-            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability))
-            {
-                OnAbilityActivationResponded?.Invoke(key, false);
-                return;
-            }
-            if (!AbilityManager.HasAuthorityToActivate(ability, true))
+            if (!_owner.IsServer()) return;
+
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
+                !AbilityManager.HasAuthorityToActivate(ability, true))
             {
                 OnAbilityActivationResponded?.Invoke(key, false);
                 return;
@@ -205,13 +224,16 @@ namespace AbilitySystem.Test.Utilities
 
         public void ProcessServerAbilityUnpredictedActivation(string name, AbilityData data)
         {
+            if (!_owner.IsServer()) return;
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
             if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
+
             _owner.AbilityManager.TryActivateAbility(name, data);
         }
 
         public void ProcessServerAbilityTermination(string name)
         {
+            if (!_owner.IsServer()) return;
             _owner.AbilityManager.EndAbility(name);
         }
 
