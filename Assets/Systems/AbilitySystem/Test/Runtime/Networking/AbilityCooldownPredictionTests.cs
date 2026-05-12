@@ -70,6 +70,7 @@ namespace AbilitySystem.Test.Runtime.Networking
             public override Ability ToAbility(IAbilitySystem owner) => new TestAbility(this, owner);
         }
 
+        // TODO(Jules): I'm sure we already have this somewhere, but I'm not sure where.
         public class TestAbility : Ability
         {
             public TestAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner) { }
