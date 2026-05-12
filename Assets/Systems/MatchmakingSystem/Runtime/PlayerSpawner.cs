@@ -18,17 +18,9 @@ namespace MatchmakingSystem.Runtime
         {
             if (IsServer)
             {
-                // Hook into the scene loading event
+                // Hook into the scene loading event. 
+                // This is the safest place to spawn because it ensures the client is ready.
                 NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
-                
-                // As a fallback for the Host or anyone who already loaded the scene before this script spawned
-                foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-                {
-                    if (client.PlayerObject == null)
-                    {
-                        SpawnPlayerForClient(client.ClientId);
-                    }
-                }
             }
         }
 
