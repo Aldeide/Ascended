@@ -16,6 +16,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
         private readonly PlayerMovementController _playerMovementController;
         private readonly Rigidbody _rigidbody;
         private static readonly Tag DashingTag = new Tag("Status.Dashing");
+        private static readonly int EnvironmentLayerMask = LayerMask.GetMask("Environment");
         
         public DashAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
@@ -81,7 +82,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
                 // This allows us to "see over" stairs and small obstacles (usually < 0.3m)
                 // but still hit walls and large obstacles.
                 Vector3 castOrigin = currentPos + Vector3.up * 0.6f;
-                int environmentLayer = LayerMask.GetMask("Environment");
+                int environmentLayer = EnvironmentLayerMask;
                 
                 if (Physics.SphereCast(castOrigin, 0.3f, moveDelta.normalized, out var hit, moveDist, environmentLayer))
                 {
@@ -98,7 +99,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
             
             // Finally, handle the vertical adjustment for stairs and slopes
-            if (Physics.Raycast(nextPos + Vector3.up * 2.0f, Vector3.down, out var groundHit, 4.0f, LayerMask.GetMask("Environment")))
+            if (Physics.Raycast(nextPos + Vector3.up * 2.0f, Vector3.down, out var groundHit, 4.0f, EnvironmentLayerMask))
             {
                 nextPos.y = groundHit.point.y;
             }
