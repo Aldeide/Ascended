@@ -140,7 +140,13 @@ namespace AbilitySystem.Test.Utilities
             var def = DataManager.GetEffectByName(data.EffectName);
             if (def == null) return;
             
-            var effect = def.ToEffect(_owner, _owner); 
+            IAbilitySystem source = _owner;
+            if (data.SourceId != 0 && _owner.NetworkRole is InteractionMockNetworkRole interactionRole)
+            {
+                source = interactionRole.GetSystemFromNetworkId(data.SourceId) ?? _owner;
+            }
+            
+            var effect = def.ToEffect(source, _owner); 
             effect.ActivationTime = data.ActivationTime;
             effect.PredictionKey = data.PredictionKey;
             effect.Level = data.Level;
