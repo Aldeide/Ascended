@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project
 
 - **Language:** C# / .NET
-- **Engine:** Unity 6000.2.0b12
+- **Engine:** Unity 6000.4.5f1
 - **Type:** Third-person sci-fi co-op roguelite (multiplayer)
 
 ## Key Priorities
@@ -17,10 +17,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Open `Ascended.sln` in Rider or Visual Studio. Unity handles incremental C# compilation automatically.
 - Run tests via **Window > Testing > Test Runner** in the Unity Editor.
+- Alternatively, run tests locally via PowerShell: `.\run_tests.ps1`.
+  - The script executes the tests in batch mode and outputs `UnityLog_Script.txt` and `Results_Script.xml` in the repository root.
+  - **Note:** Ensure your `$unityPath` in `run_tests.ps1` matches your local Unity installation path (`6000.4.5f1`).
 - To run a single test: select it in the Test Runner and click **Run Selected**.
 - **Always run all tests before committing.**
 - Test assemblies use NUnit + Moq and live alongside their system under `Assets/Systems/[SystemName]/Test/`.
 - Test naming convention: `MethodOrFeature_Scenario_ExpectedResult`.
+
+## Integrations
+
+- **Steam Integration:** The project uses `Facepunch.Steamworks`. The Steam AppID is defined in `steam_appid.txt` in the root directory. This is required for network lobby systems to function properly.
 
 ## Documentation
 
