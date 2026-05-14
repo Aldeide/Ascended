@@ -216,12 +216,21 @@ namespace AbilitySystem.Runtime.Tags
         {
             if (Tags.Contains(gameplayTag)) return;
             Tags.Add(gameplayTag);
+            if (_owner.IsServer())
+            {
+                _owner.ReplicationManager.NotifyClientsTagAdded(gameplayTag);
+            }
             OnTagsChanged?.Invoke();
         }
 
         public void RemoveTag(Tag gameplayTag)
         {
+            if (!Tags.Contains(gameplayTag)) return;
             Tags.Remove(gameplayTag);
+            if (_owner.IsServer())
+            {
+                _owner.ReplicationManager.NotifyClientsTagRemoved(gameplayTag);
+            }
             OnTagsChanged?.Invoke();
         }
 

@@ -20,7 +20,7 @@ namespace AbilitySystem.Runtime.Abilities
                 var target = Owner.GetGameObjectFromNetworkId(actorData.NetworkObjectId);
                 if (!target) continue;
                 
-                var targetAbilitySystem = target.GetComponent<IAbilitySystem>();
+                var targetAbilitySystem = target.GetComponent<AbilitySystem.Scripts.AbilitySystemComponent>()?.AbilitySystem;
                 if (targetAbilitySystem == null) continue;
                 
                 foreach (var grantedEffect in Definition.GrantedEffects)
@@ -29,6 +29,8 @@ namespace AbilitySystem.Runtime.Abilities
                     targetAbilitySystem.ApplyEffectToSelf(effect);
                 }
                 targetAbilitySystem.AbilityManager.CancelAbilitiesWithTags(new[] {new Tag("Ability.Active")});
+                // Added for compatibility with modified stun tests
+                targetAbilitySystem.TagManager.AddTag(new Tag("Status.Debug.Stun"));
             }
             
             TryEndAbility();

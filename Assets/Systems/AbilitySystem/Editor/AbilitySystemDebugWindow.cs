@@ -5,6 +5,7 @@ using AbilitySystem.Scripts;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Unity.Netcode;
 
 public class AbilitySystemDebugWindow : EditorWindow
 {
@@ -47,7 +48,7 @@ public class AbilitySystemDebugWindow : EditorWindow
         _objectNameLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
         header.Add(_objectNameLabel);
 
-        var refreshBtn = new Button(() => { if(_inspectedComponent) _inspectedComponent.RequestUpdateFromServer(); });
+        var refreshBtn = new Button(() => { if(_inspectedComponent != null) _inspectedComponent.RequestUpdateFromServer(); });
         refreshBtn.text = "Force Server Sync";
         refreshBtn.style.marginLeft = 20;
         header.Add(refreshBtn);

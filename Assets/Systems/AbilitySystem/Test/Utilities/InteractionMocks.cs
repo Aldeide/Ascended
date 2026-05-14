@@ -4,6 +4,7 @@ using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
+using AbilitySystem.Scripts;
 using UnityEngine;
 
 namespace AbilitySystem.Test.Utilities
@@ -35,7 +36,18 @@ namespace AbilitySystem.Test.Utilities
             _registry = registry;
         }
 
-        public GameObject GetGameObjectFromNetworkId(ulong networkId) => null;
+        public GameObject GetGameObjectFromNetworkId(ulong networkId)
+        {
+            var system = GetSystemFromNetworkId(networkId);
+            if (system == null) return null;
+
+            var go = new GameObject($"MockPlayer_{networkId}");
+            var asc = go.AddComponent<AbilitySystemComponent>();
+
+            asc.AbilitySystem = system;
+
+            return go;
+        }
         
         public IAbilitySystem GetSystemFromNetworkId(ulong networkId)
         {
@@ -43,7 +55,7 @@ namespace AbilitySystem.Test.Utilities
         }
     }
 
-    public class MockDataManager : IDataManager
+    public class InteractionMockDataManager : IDataManager
     {
         public Dictionary<string, AbilityDefinition> Abilities = new();
         public Dictionary<string, EffectDefinition> Effects = new();

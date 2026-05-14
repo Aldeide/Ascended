@@ -234,6 +234,12 @@ namespace GameplayTags.Generated
             public static implicit operator Tag(__Status_Group _) => new Tag("Status");
             public readonly Tag Aiming = new Tag("Status.Aiming");
             public readonly Tag Dead = new Tag("Status.Dead");
+            public class __Status_Debuff_Group
+            {
+                public static implicit operator Tag(__Status_Debuff_Group _) => new Tag("Status.Debuff");
+                public readonly Tag Stun = new Tag("Status.Debuff.Stun");
+            }
+            public readonly __Status_Debuff_Group Debuff = new __Status_Debuff_Group();
             public readonly Tag Immobilised = new Tag("Status.Immobilised");
         }
         public static readonly __Status_Group Status = new __Status_Group();
@@ -291,6 +297,7 @@ namespace GameplayTags.Generated
             new Tag("Slot.Hip.Right"),
             new Tag("Status.Aiming"),
             new Tag("Status.Dead"),
+            new Tag("Status.Debuff.Stun"),
             new Tag("Status.Immobilised"),
             new Tag("Test.Test"),
             new Tag("Unit.Player"),

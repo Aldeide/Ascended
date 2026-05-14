@@ -162,20 +162,27 @@ namespace AbilitySystem.Runtime.Abilities
             return Owner.TagManager.HasAnyTags(Definition.ActivationBlockedTags);
         }
         
-        public virtual bool TryActivateAbility(AbilityData data)
+        public virtual bool TryActivateAbility(AbilityData data, bool force = false)
         {
-            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), data); 
+            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), data, force); 
         }
         
-        public virtual bool TryActivateAbility(PredictionKey key, AbilityData data)
+        public virtual bool TryActivateAbility(PredictionKey key, AbilityData data, bool force = false)
         {
             AbilityArguments = data;
-            var result = CanActivate();
-            var success = result == AbilityActivationResult.Success;
-            if (success)
+            if (!force)
             {
-                IsActive = true;
-                ActiveCount++;
+                var result = CanActivate();
+                var success = result == AbilityActivationResult.Success;
+                if (!success)
+                {
+                    _onActivateResult?.Invoke(result);
+                    return false;
+                }
+            }
+
+            IsActive = true;
+            ActiveCount++;
 
                 
                 if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
@@ -195,10 +202,8 @@ namespace AbilitySystem.Runtime.Abilities
                 if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner, PredictionKey);
                 
                 ActivateAbility(AbilityArguments);
-            }
-
-            _onActivateResult?.Invoke(result);
-            return success;
+            if (!force) _onActivateResult?.Invoke(AbilityActivationResult.Success);
+            return true;
         }
 
         protected virtual bool ShouldActivateCooldownOnActivation() => true;

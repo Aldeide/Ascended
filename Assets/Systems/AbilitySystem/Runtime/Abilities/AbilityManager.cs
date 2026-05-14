@@ -36,6 +36,12 @@ namespace AbilitySystem.Runtime.Abilities
             var ability = abilityDefinition.ToAbility(_owner);
             ability.SetLevel(level);
             Abilities.Add(abilityDefinition.UniqueName, ability);
+
+            if (_owner.IsServer())
+            {
+                _owner.ReplicationManager.NotifyClientAbilityGranted(abilityDefinition);
+            }
+
             return ability;
         }
 
@@ -43,8 +49,14 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (Abilities.TryGetValue(abilityName, out var ability))
             {
+                var def = ability.Definition;
                 if (ability.IsActive) ability.TryEndAbility();
                 Abilities.Remove(abilityName);
+
+                if (_owner.IsServer())
+                {
+                    _owner.ReplicationManager.NotifyClientAbilityRemoved(def);
+                }
             }
         }
 
@@ -121,7 +133,9 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 if (isServerRequest)
                 {
-                    return ability.TryActivateAbility(data);
+                    var success = ability.TryActivateAbility(data);
+                    if (success) _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    return success;
                 }
                 else if (isClientRequest)
                 {
@@ -136,7 +150,9 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 if (isServerRequest)
                 {
-                    return ability.TryActivateAbility(data);
+                    var success = ability.TryActivateAbility(data);
+                    if (success) _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    return success;
                 }
                 else if (isClientRequest)
                 {
@@ -230,7 +246,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (Abilities.TryGetValue(abilityName, out var ability))
             {
-                ability.TryActivateAbility(data);
+                ability.TryActivateAbility(data, true);
             }
         }
 
