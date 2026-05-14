@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7567ca580aaa9ce4e955487c813123a9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/FabricCoarseWeave_DarkBrown.mat
+  uploadId: 292299

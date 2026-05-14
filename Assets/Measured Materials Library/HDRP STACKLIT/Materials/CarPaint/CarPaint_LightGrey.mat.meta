@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b3de6896d07fd04c817e3e400ea3caa
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/CarPaint/CarPaint_LightGrey.mat
+  uploadId: 292299

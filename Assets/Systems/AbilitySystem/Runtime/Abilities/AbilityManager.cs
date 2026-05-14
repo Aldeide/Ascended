@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AbilitySystem.Runtime.Core;
-using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
+using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Networking;
 using GameplayTags.Runtime;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace AbilitySystem.Runtime.Abilities
     {
         private readonly IAbilitySystem _owner;
         public Dictionary<string, Ability> Abilities { get; private set; }
-        
+
         private readonly Dictionary<int, Dictionary<string, AttributeValue>> _predictionAttributeSnapshots = new();
 
         public AbilityManager(IAbilitySystem owner)
@@ -27,7 +27,7 @@ namespace AbilitySystem.Runtime.Abilities
         public Ability GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
         {
             if (abilityDefinition == null) return null;
-            if (Abilities.TryGetValue(abilityDefinition.UniqueName, out var existing)) 
+            if (Abilities.TryGetValue(abilityDefinition.UniqueName, out var existing))
             {
                 Debug.Log($"[AbilityManager] Already has ability {abilityDefinition.UniqueName} on server={_owner.IsServer()}");
                 return existing;
@@ -84,7 +84,7 @@ namespace AbilitySystem.Runtime.Abilities
         public void CancelAbilitiesWithTags(Tag[] tags, Ability ignoreAbility = null)
         {
             if (tags == null || tags.Length == 0) return;
-            
+
             foreach (var ability in Abilities.Values.ToList())
             {
                 if (ability == ignoreAbility) continue;
@@ -110,7 +110,7 @@ namespace AbilitySystem.Runtime.Abilities
 
             var isClientRequest = _owner.IsLocalClient() && !_owner.IsServer();
             var isServerRequest = _owner.IsServer();
-            
+
             if (!HasAuthorityToActivate(ability, isClientRequest)) return false;
 
             // Case 1: ClientOnly ability
@@ -134,7 +134,11 @@ namespace AbilitySystem.Runtime.Abilities
                 if (isServerRequest)
                 {
                     var success = ability.TryActivateAbility(data);
-                    if (success) _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    // On Host, we don't need to request client activation as it already happened above
+                    if (success && !_owner.IsLocalClient())
+                    {
+                        _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    }
                     return success;
                 }
                 else if (isClientRequest)
@@ -151,7 +155,11 @@ namespace AbilitySystem.Runtime.Abilities
                 if (isServerRequest)
                 {
                     var success = ability.TryActivateAbility(data);
-                    if (success) _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    // On Host, we don't need to request client activation as it already happened above
+                    if (success && !_owner.IsLocalClient())
+                    {
+                        _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    }
                     return success;
                 }
                 else if (isClientRequest)
@@ -229,8 +237,8 @@ namespace AbilitySystem.Runtime.Abilities
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
                 .ToList();
-            
-            foreach(var kv in abilitiesToEnd)
+
+            foreach (var kv in abilitiesToEnd)
             {
                 kv.Value.TryEndAbility();
             }
@@ -263,9 +271,9 @@ namespace AbilitySystem.Runtime.Abilities
                     _owner.AttributeSetManager.Restore(snapshot);
                     _predictionAttributeSnapshots.Remove(key.currentKey);
                 }
-                
+
                 var abilitiesToEnd = Abilities.Where(kv => kv.Value.PredictionKey.currentKey == key.currentKey).ToList();
-                foreach(var kv in abilitiesToEnd)
+                foreach (var kv in abilitiesToEnd)
                 {
                     kv.Value.TryCancelAbility();
                 }

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bb22e2e79cf932c46be6aaa4afa5bd91
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Rubber_Caliper_CarbonFiber_Reflector/Reflector.mat
+  uploadId: 292299

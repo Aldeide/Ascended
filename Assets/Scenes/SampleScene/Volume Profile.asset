@@ -386,6 +386,9 @@ MonoBehaviour:
   directionalLightsOnly:
     m_OverrideState: 0
     m_Value: 0
+  volumetricLightingDensityCutoff:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &-662597396952029876
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -465,7 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f077503be6ae942a1e1245dbd53ea9, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -643,6 +646,25 @@ MonoBehaviour:
   m_Name: VolumetricClouds
   m_EditorClassIdentifier: 
   active: 0
+  m_Version: 3
+  localClouds:
+    m_OverrideState: 0
+    m_Value: 0
+  m_ObsoleteWindSpeed:
+    m_OverrideState: 0
+    m_Value: 1
+  m_ObsoleteOrientation:
+    m_OverrideState: 0
+    m_Value: 0
+  m_ObsoleteShapeOffsetX:
+    m_OverrideState: 0
+    m_Value: 0
+  m_ObsoleteShapeOffsetY:
+    m_OverrideState: 0
+    m_Value: 0
+  m_ObsoleteShapeOffsetZ:
+    m_OverrideState: 0
+    m_Value: 0
   enable:
     m_OverrideState: 1
     m_Value: 0
@@ -927,25 +949,6 @@ MonoBehaviour:
   shadowOpacityFallback:
     m_OverrideState: 0
     m_Value: 0
-  m_Version: 3
-  localClouds:
-    m_OverrideState: 0
-    m_Value: 0
-  m_ObsoleteWindSpeed:
-    m_OverrideState: 0
-    m_Value: 1
-  m_ObsoleteOrientation:
-    m_OverrideState: 0
-    m_Value: 0
-  m_ObsoleteShapeOffsetX:
-    m_OverrideState: 0
-    m_Value: 0
-  m_ObsoleteShapeOffsetY:
-    m_OverrideState: 0
-    m_Value: 0
-  m_ObsoleteShapeOffsetZ:
-    m_OverrideState: 0
-    m_Value: 0
 --- !u!114 &2636866878975737697
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -989,6 +992,19 @@ MonoBehaviour:
   includeSunInBaking:
     m_OverrideState: 0
     m_Value: 0
+  m_SkyVersion: 1
+  enableDistortion:
+    m_OverrideState: 0
+    m_Value: 0
+  procedural:
+    m_OverrideState: 0
+    m_Value: 1
+  scrollDirection:
+    m_OverrideState: 0
+    m_Value: 0
+  m_ObsoleteScrollSpeed:
+    m_OverrideState: 0
+    m_Value: 1
   hdriSky:
     m_OverrideState: 0
     m_Value: {fileID: 8900000, guid: 54a3a0570aebe8949bec4966f1376581, type: 3}
@@ -1060,19 +1076,6 @@ MonoBehaviour:
   rectLightShadow:
     m_OverrideState: 0
     m_Value: 0
-  m_SkyVersion: 1
-  enableDistortion:
-    m_OverrideState: 0
-    m_Value: 0
-  procedural:
-    m_OverrideState: 0
-    m_Value: 1
-  scrollDirection:
-    m_OverrideState: 0
-    m_Value: 0
-  m_ObsoleteScrollSpeed:
-    m_OverrideState: 0
-    m_Value: 1
 --- !u!114 &3201325825509484392
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1130,6 +1133,7 @@ MonoBehaviour:
   m_Name: VisualEnvironment
   m_EditorClassIdentifier: 
   active: 1
+  m_Version: 1
   skyType:
     m_OverrideState: 1
     m_Value: 0
@@ -1160,7 +1164,6 @@ MonoBehaviour:
   fogType:
     m_OverrideState: 0
     m_Value: 0
-  m_Version: 1
 --- !u!114 &6029016006247250098
 MonoBehaviour:
   m_ObjectHideFlags: 3

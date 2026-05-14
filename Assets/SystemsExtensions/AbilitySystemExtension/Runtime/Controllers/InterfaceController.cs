@@ -14,6 +14,9 @@ namespace Systems.Controllers
     public class InterfaceController : MonoBehaviour
     {
         [SerializeField] private Slider healthSlider;
+        [SerializeField] private Slider healthGhostSlider;
+        [SerializeField] private float ghostDelay = 1.0f;
+        [SerializeField] private float ghostSpeed = 2.0f;
         [SerializeField] private Slider _energySlider;
         [SerializeField] private Text _ammoCount;
         [SerializeField] private GameObject _dash;
@@ -32,6 +35,9 @@ namespace Systems.Controllers
         private float _reloadDuration;
         private bool _isReloading;
         private float _reloadFadeTime;
+        
+        private float _ghostTimer;
+        private bool _isGhostCatchingUp;
 
         public void Initialise(AbilitySystemManager owner)
         {
@@ -43,6 +49,7 @@ namespace Systems.Controllers
             _asc.AttributeSetManager.RegisterOnAttributeChanged("ClipSize", OnAmmoChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("CurrentClip", OnAmmoChanged);
             healthSlider.value = 1;
+            if (healthGhostSlider != null) healthGhostSlider.value = 1;
             UpdateHealth();
 
             SetupDashUI();
@@ -97,6 +104,25 @@ namespace Systems.Controllers
             {
                 _reload.SetActive(false);
                 _reloadFadeTime = 0;
+            }
+
+            UpdateGhostBar();
+        }
+
+        private void UpdateGhostBar()
+        {
+            if (healthGhostSlider == null) return;
+
+            if (Time.time > _ghostTimer)
+            {
+                if (healthGhostSlider.value > healthSlider.value)
+                {
+                    healthGhostSlider.value = Mathf.MoveTowards(healthGhostSlider.value, healthSlider.value, ghostSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    healthGhostSlider.value = healthSlider.value;
+                }
             }
         }
 
@@ -199,7 +225,21 @@ namespace Systems.Controllers
         {
             var maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
             var health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
-            healthSlider.value = health / maxHealth;
+            
+            float targetValue = health / maxHealth;
+            
+            // If we took damage
+            if (targetValue < healthSlider.value)
+            {
+                _ghostTimer = Time.time + ghostDelay;
+            }
+            // If we healed
+            else if (targetValue > healthSlider.value)
+            {
+                if (healthGhostSlider != null) healthGhostSlider.value = targetValue;
+            }
+
+            healthSlider.value = targetValue;
         }
         
         private void UpdateEnergy()

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3840dd0372fd9784d82568dd0d68ad47
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Aluminum_Chrome_Metal/Metal.mat
+  uploadId: 292299

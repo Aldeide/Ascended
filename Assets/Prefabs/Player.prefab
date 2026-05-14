@@ -44,7 +44,7 @@ Light:
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 0, g: 0.94610643, b: 1, a: 1}
-  m_Intensity: 2017.2485
+  m_Intensity: 9.062086
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 0
@@ -1759,8 +1759,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
+  - {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3663,7 +3663,6 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5f67442769f24394080706370dc0dfbf, type: 2}
-  - {fileID: -754948241883851481, guid: 558f37c8206979d40892010355969fb9, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

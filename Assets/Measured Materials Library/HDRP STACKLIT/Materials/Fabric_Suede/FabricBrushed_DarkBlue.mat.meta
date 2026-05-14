@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7e91c9b9f92ae2d479a08646c1296720
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/FabricBrushed_DarkBlue.mat
+  uploadId: 292299
