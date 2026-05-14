@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2a1bb54bb37cd004fa93017d0f4630c8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/SuedeCoarse_Brown.mat
+  uploadId: 292299

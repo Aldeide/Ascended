@@ -393,7 +393,9 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Everyone)]
         public void ObserversPlayCueRpc(string cueTag, CueData data, bool isPredicted = false)
         {
-            if (isPredicted && IsOwner && !IsServer) return;
+            // If it's a predicted cue and I am the owner, I already played it locally in OnPlayCueRequested.
+            if (isPredicted && IsOwner) return;
+            
             var gameplayTag = new Tag(cueTag);
             AbilitySystem.CueManager.OnCueReceived(gameplayTag, CueAction.Execute, data);
             _cueManagerComponent.PlayCue(cueTag);
@@ -402,7 +404,9 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Everyone)]
         public void ObserversPlayCueWithDataRpc(string cueTag, CueData data, bool isPredicted = false)
         {
-            if (isPredicted && IsOwner && !IsServer) return;
+            // If it's a predicted cue and I am the owner, I already played it locally in OnPlayCueRequested.
+            if (isPredicted && IsOwner) return;
+
             _cueManagerComponent.PlayCue(cueTag, data);
         }
         
