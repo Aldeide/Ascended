@@ -20,7 +20,7 @@ namespace AbilitySystemExtension.Scripts
         // Offset for grounded checks.
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
         private static readonly Tag DashingTag = new Tag("Status.Dashing");
-        private static readonly int EnvironmentLayerMask = LayerMask.GetMask("Environment");
+        private static int _environmentLayerMask = 0;
         [ShowInInspector] [SerializeField] private Vector3 _movementInput = new Vector3(0, 0, 0);
 
         [FormerlySerializedAs("cameraTarget")] [SerializeField]
@@ -50,6 +50,7 @@ namespace AbilitySystemExtension.Scripts
             _animationController = GetComponent<AnimationController>();
             _rigidbody = GetComponent<Rigidbody>();
             _ikCueListener = GetComponent<IKCueListener>();
+            _environmentLayerMask = LayerMask.GetMask("Environment");
         }
 
         public void Start()
@@ -122,7 +123,7 @@ namespace AbilitySystemExtension.Scripts
         public bool IsGrounded()
         {
             return _rigidbody.linearVelocity.y <= 0.01 && Physics.Raycast(transform.position + Offset, Vector3.down, 1f,
-                EnvironmentLayerMask);
+                _environmentLayerMask);
         }
 
         private void Rotate(Vector3 newPosition)

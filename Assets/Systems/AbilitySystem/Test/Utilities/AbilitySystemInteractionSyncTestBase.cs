@@ -9,20 +9,20 @@ using UnityEngine;
 
 namespace AbilitySystem.Test.Utilities
 {
-    public abstract class AbilitySystemInteractionSyncTestBase
+    public abstract class AbilitySystemInteractionSyncTestBase : INetworkSystemRegistry
     {
         protected AbilitySystemManager SourceServer;
         protected AbilitySystemManager SourceClient;
         protected AbilitySystemManager TargetServer;
         protected AbilitySystemManager TargetClient;
         
-        protected MockDataManager DataManager;
+        protected InteractionMockDataManager DataManager;
         protected Dictionary<ulong, AbilitySystemManager> NetworkRegistry = new();
 
         [SetUp]
         public virtual void Setup()
         {
-            DataManager = new MockDataManager();
+            DataManager = new InteractionMockDataManager();
             NetworkRegistry.Clear();
 
             // Setup Source
@@ -37,6 +37,14 @@ namespace AbilitySystem.Test.Utilities
             LinkPair(TargetServer, TargetClient);
         }
 
+        public void TickAll()
+        {
+            SourceServer.Tick();
+            SourceClient.Tick();
+            TargetServer.Tick();
+            TargetClient.Tick();
+        }
+        
         private AbilitySystemManager CreateSystem(bool isServer, bool isLocalPlayer, ulong networkId)
         {
             var manager = new AbilitySystemManager(DataManager);
@@ -74,65 +82,55 @@ namespace AbilitySystem.Test.Utilities
             serverRepl.OnNotifyClientAbilityGranted += (def) => 
                 client.AbilityManager.GrantAbility(def);
 
+            serverRepl.OnNotifyClientAbilityRemoved += (def) => 
+                client.AbilityManager.RemoveAbility(def.UniqueName);
+
             serverRepl.OnClientActivateAbility += (name, data) => 
                 client.AbilityManager.ForceActivateAbility(name, data);
 
             serverRepl.OnClientEndAbility += (name) => 
                 client.AbilityManager.ForceEndAbility(name);
 
+            serverRepl.OnNotifyClientsAbilityChargesChanged += (name, curr, max) =>
+                client.ReplicationManager.ProcessClientAbilityChargesChanged(name, curr, max);
+
+            // Link Cues
+            serverRepl.OnNotifyClientsPlayCue += (tag, act, data) =>
+                client.ReplicationManager.ReceivedPlayCue(tag, act, data);
+
+            // Link Tags
+            serverRepl.OnNotifyClientsAbilityTagsAdded += (tags) =>
+                client.TagManager.AddAbilityTags(tags);
+
+            serverRepl.OnNotifyClientsAbilityTagsRemoved += (tags) =>
+                client.TagManager.RemoveAbilityTags(tags);
+
+            serverRepl.OnNotifyClientsTagAdded += (tag) =>
+                client.TagManager.AddTag(tag);
+
+            serverRepl.OnNotifyClientsTagRemoved += (tag) =>
+                client.TagManager.RemoveTag(tag);
+
             // Client to Server Requests
             clientRepl.OnServerAbilityActivationRequested += (name, key, data) => 
                 serverRepl.ProcessServerAbilityActivation(name, key, data);
 
+            clientRepl.OnServerAbilityUnpredictedActivationRequested += (name, data) =>
+                serverRepl.ProcessServerAbilityUnpredictedActivation(name, data);
+
             clientRepl.OnServerAbilityTerminationRequested += (name) => 
                 serverRepl.ProcessServerAbilityTermination(name);
+            
+            clientRepl.OnAbilityActivationResponded += (key, success) =>
+            {
+                if (success) clientRepl.ProcessAbilityActivationConfirmed(key);
+                else clientRepl.ProcessAbilityActivationDenied("", key); // Name is not strictly used in current implementation
+            };
         }
 
-        protected class InteractionMockNetworkRole : INetworkRole
+        public IAbilitySystem GetSystemFromNetworkId(ulong networkId)
         {
-            public bool IsServer { get; }
-            public bool IsClient => !IsServer;
-            public bool IsHost => IsServer && IsLocalPlayer;
-            public bool IsOwner => IsLocalPlayer;
-            public bool IsLocalPlayer { get; }
-            public bool HasAuthority { get; }
-            public double Time => UnityEngine.Time.timeAsDouble;
-            public ulong NetworkObjectId { get; }
-            
-            private readonly AbilitySystemInteractionSyncTestBase _owner;
-
-            public InteractionMockNetworkRole(bool isServer, bool isLocalPlayer, ulong networkObjectId, AbilitySystemInteractionSyncTestBase owner)
-            {
-                IsServer = isServer;
-                IsLocalPlayer = isLocalPlayer;
-                NetworkObjectId = networkObjectId;
-                HasAuthority = isServer || isLocalPlayer;
-                _owner = owner;
-            }
-
-            public GameObject GetGameObjectFromNetworkId(ulong networkId)
-            {
-                // In tests, we don't usually have GameObjects, but we can return null 
-                // or a dummy if needed. The important part is being able to find the AbilitySystem.
-                return null;
-            }
-            
-            // Helper for testing to resolve the system directly
-            public IAbilitySystem GetSystemFromNetworkId(ulong networkId)
-            {
-                return _owner.NetworkRegistry.TryGetValue(networkId, out var system) ? system : null;
-            }
-        }
-
-        protected class MockDataManager : IDataManager
-        {
-            public Dictionary<string, AbilityDefinition> Abilities = new();
-            public Dictionary<string, EffectDefinition> Effects = new();
-
-            public AbilityDefinition GetAbilityByName(string name) => Abilities.TryGetValue(name, out var def) ? def : null;
-            public EffectDefinition GetEffectByName(string name) => Effects.TryGetValue(name, out var def) ? def : null;
-            public CueDefinition GetCueByTag(GameplayTags.Runtime.Tag tag) => null;
-            public CueDefinition GetCueByTag(string tag) => null;
+            return NetworkRegistry.TryGetValue(networkId, out var system) ? system : null;
         }
     }
 }

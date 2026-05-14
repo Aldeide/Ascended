@@ -18,7 +18,7 @@ namespace AbilitySystem.Scripts
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
-        public IAbilitySystem AbilitySystem { get; private set; }
+        public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;

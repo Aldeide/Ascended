@@ -52,6 +52,7 @@ MonoBehaviour:
   - Slot.Hip.Right
   - Status.Aiming
   - Status.Dead
+  - Status.Debuff.Stun
   - Status.Immobilised
   - Test.Test
   - Unit.Player

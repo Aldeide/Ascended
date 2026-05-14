@@ -9,9 +9,9 @@ namespace AbilitySystem.Runtime.Abilities
         {
         }
 
-        public override bool TryActivateAbility(PredictionKey key, AbilityData data)
+        public override bool TryActivateAbility(PredictionKey key, AbilityData data, bool force = false)
         {
-            return base.TryActivateAbility(key, data);
+            return base.TryActivateAbility(key, data, force);
         }
 
         protected override void ActivateAbility(AbilityData data)

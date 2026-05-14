@@ -22,6 +22,8 @@ namespace AbilitySystem.Runtime.Networking
         Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
         Action<string> OnNotifyClientsEffectRemoved { get; set; }
         Action<string, int, int> OnNotifyClientsAbilityChargesChanged { get; set; }
+        Action<Tag> OnNotifyClientsTagAdded { get; set; }
+        Action<Tag> OnNotifyClientsTagRemoved { get; set; }
 
         // --- Ability Networking (New) ---
         
@@ -49,6 +51,8 @@ namespace AbilitySystem.Runtime.Networking
         // Tags.
         public void NotifyClientsAbilityTagsAdded(AbilityTagSyncData abilityTags);
         public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags);
+        public void NotifyClientsTagAdded(Tag tag);
+        public void NotifyClientsTagRemoved(Tag tag);
 
         // Effects.
         public void NotifyClientsEffectAdded(Effect effect);

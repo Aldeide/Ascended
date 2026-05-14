@@ -29,6 +29,8 @@ namespace AbilitySystem.Runtime.Networking
         public Action<EffectSyncData> OnNotifyClientsEffectAdded { get; set; }
         public Action<string> OnNotifyClientsEffectRemoved { get; set; }
         public Action<string, int, int> OnNotifyClientsAbilityChargesChanged { get; set; }
+        public Action<Tag> OnNotifyClientsTagAdded { get; set; }
+        public Action<Tag> OnNotifyClientsTagRemoved { get; set; }
 
         public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
         public Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
@@ -103,6 +105,16 @@ namespace AbilitySystem.Runtime.Networking
         public void NotifyClientsAbilityTagsRemoved(AbilityTagSyncData abilityTags)
         {
             OnNotifyClientsAbilityTagsRemoved?.Invoke(abilityTags);
+        }
+
+        public void NotifyClientsTagAdded(Tag tag)
+        {
+            OnNotifyClientsTagAdded?.Invoke(tag);
+        }
+
+        public void NotifyClientsTagRemoved(Tag tag)
+        {
+            OnNotifyClientsTagRemoved?.Invoke(tag);
         }
 
         public void NotifyClientsEffectAdded(Effect effect)

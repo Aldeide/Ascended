@@ -1,8 +1,8 @@
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Test.Utilities;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace AbilitySystem.Test.Runtime.Abilities
 {
@@ -21,15 +21,17 @@ namespace AbilitySystem.Test.Runtime.Abilities
             // We need explicit client/server roles for these tests
             SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             TargetMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();
-            
+
+
             base.SetUp();
 
             _clientRep = (MockReplicationManager)Source.ReplicationManager;
             _serverRep = (MockReplicationManager)Target.ReplicationManager;
 
             _abilityDefinition = AbilityUtilities.CreateTestAbilityDefinition();
-            
+
             // Link them for automatic communication
+
             AbilitySystemUtilities.LinkAbilitySystems(SourceMock, TargetMock);
         }
 
@@ -54,7 +56,8 @@ namespace AbilitySystem.Test.Runtime.Abilities
                     foreach (var fromClient in new[] { true, false })
                     {
                         bool canClientStart = (sec == AbilityNetworkSecurityPolicy.ClientOrServer || sec == AbilityNetworkSecurityPolicy.ServerOnlyTermination);
-                        
+
+
                         var tc = new NetTestCase { NetPolicy = net, SecurityPolicy = sec, RequestFromClient = fromClient };
 
                         if (fromClient)
@@ -126,15 +129,16 @@ namespace AbilitySystem.Test.Runtime.Abilities
 
         public static IEnumerable<NetTestCase> TerminationCases()
         {
-             foreach (var net in new[] { AbilityNetworkPolicy.ClientPredicted, AbilityNetworkPolicy.Server })
-             {
+            foreach (var net in new[] { AbilityNetworkPolicy.ClientPredicted, AbilityNetworkPolicy.Server })
+            {
                 foreach (var sec in new[] { AbilityNetworkSecurityPolicy.ClientOrServer, AbilityNetworkSecurityPolicy.ServerOnlyExecution, AbilityNetworkSecurityPolicy.ServerOnlyTermination, AbilityNetworkSecurityPolicy.ServerOnly })
                 {
                     foreach (var fromClient in new[] { true, false })
                     {
                         bool canClientEnd = (sec == AbilityNetworkSecurityPolicy.ClientOrServer || sec == AbilityNetworkSecurityPolicy.ServerOnlyExecution);
                         var tc = new NetTestCase { NetPolicy = net, SecurityPolicy = sec, RequestFromClient = fromClient };
-                        
+
+
                         if (fromClient)
                         {
                             tc.ExpectedActiveOnClient = !canClientEnd;
@@ -148,7 +152,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                         yield return tc;
                     }
                 }
-             }
+            }
         }
 
         /// <summary>
@@ -182,7 +186,8 @@ namespace AbilitySystem.Test.Runtime.Abilities
             var hostSystemMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();
             var hostSystem = hostSystemMock.Object;
             hostSystemMock.Setup(x => x.IsLocalClient()).Returns(true);
-            
+
+
             _abilityDefinition.NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
             hostSystem.AbilityManager.GrantAbility(_abilityDefinition);
 
