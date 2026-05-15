@@ -90,7 +90,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             }
                             else
                             {
-                                tc.ExpectedActiveOnClient = false;
+                                tc.ExpectedActiveOnClient = true; // Replicates back to client
                                 tc.ExpectedActiveOnServer = true;
                             }
                             tc.ExpectedRpcToServer = false;
