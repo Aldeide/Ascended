@@ -13,10 +13,10 @@ namespace Systems.Controllers
 {
     public class InterfaceController : MonoBehaviour
     {
-        [SerializeField] private Slider healthSlider;
-        [SerializeField] private Slider healthGhostSlider;
-        [SerializeField] private float ghostDelay = 1.0f;
-        [SerializeField] private float ghostSpeed = 2.0f;
+        [SerializeField] private Slider _healthSlider;
+        [SerializeField] private Slider _healthGhostSlider;
+        [SerializeField] private float _ghostDelay = 1.0f;
+        [SerializeField] private float _ghostSpeed = 2.0f;
         [SerializeField] private Slider _energySlider;
         [SerializeField] private Text _ammoCount;
         [SerializeField] private GameObject _dash;
@@ -28,14 +28,12 @@ namespace Systems.Controllers
         private List<UIChargeController> _chargeControllers = new List<UIChargeController>();
         private int _currentDashCharges;
         private int _maxDashCharges;
-
         private Ability _reloadAbility;
         private UIChargeController _reloadController;
         private float _reloadStartTime;
         private float _reloadDuration;
         private bool _isReloading;
         private float _reloadFadeTime;
-        
         private float _ghostTimer;
 
         public void Initialise(AbilitySystemManager owner)
@@ -47,10 +45,9 @@ namespace Systems.Controllers
             _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxEnergy", OnEnergyChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("ClipSize", OnAmmoChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("CurrentClip", OnAmmoChanged);
-            healthSlider.value = 1;
-            if (healthGhostSlider != null) healthGhostSlider.value = 1;
+            _healthSlider.value = 1;
+            if (_healthGhostSlider) _healthGhostSlider.value = 1;
             UpdateHealth();
-
             SetupDashUI();
             SetupReloadUI();
         }
@@ -59,35 +56,27 @@ namespace Systems.Controllers
         {
             _reloadController = _reload.GetComponent<UIChargeController>();
             _reload.SetActive(false);
-
-            if (_asc.AbilityManager.Abilities.TryGetValue("ReloadWeaponAbility", out _reloadAbility))
-            {
-                _reloadAbility.OnActivateResult += OnReloadActivateResult;
-                _reloadAbility.OnEndAbility += OnReloadEnded;
-                _reloadAbility.OnCancelAbility += OnReloadEnded;
-            }
+            if (!_asc.AbilityManager.Abilities.TryGetValue("ReloadWeaponAbility", out _reloadAbility)) return;
+            _reloadAbility.OnActivateResult += OnReloadActivateResult;
+            _reloadAbility.OnEndAbility += OnReloadEnded;
+            _reloadAbility.OnCancelAbility += OnReloadEnded;
         }
 
         private void OnReloadActivateResult(AbilityActivationResult result)
         {
-            if (result == AbilityActivationResult.Success)
-            {
-                _isReloading = true;
-                _reload.SetActive(true);
-                _reloadStartTime = Time.time;
-                _reloadFadeTime = 0;
-
-                var weaponSet = _asc.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
-                _reloadDuration = weaponSet != null ? weaponSet.ReloadTime.CurrentValue : 1.0f;
-
-                if (_reloadController) _reloadController.SetFill(0f);
-            }
+            if (result != AbilityActivationResult.Success) return;
+            _isReloading = true;
+            _reload.SetActive(true);
+            _reloadStartTime = Time.time;
+            _reloadFadeTime = 0;
+            var weaponSet = _asc.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
+            _reloadDuration = weaponSet != null ? weaponSet.ReloadTime.CurrentValue : 1.0f;
+            if (_reloadController) _reloadController.SetFill(0f);
         }
 
         private void OnReloadEnded()
         {
             _isReloading = false;
-            // Start fading out after a short delay or immediately
             _reloadFadeTime = Time.time + 0.2f;
         }
 
@@ -95,8 +84,8 @@ namespace Systems.Controllers
         {
             if (_isReloading && _reloadController != null)
             {
-                float elapsed = Time.time - _reloadStartTime;
-                float progress = Mathf.Clamp01(elapsed / _reloadDuration);
+                var elapsed = Time.time - _reloadStartTime;
+                var progress = Mathf.Clamp01(elapsed / _reloadDuration);
                 _reloadController.SetFill(progress);
             }
             else if (_reloadFadeTime > 0 && Time.time > _reloadFadeTime)
@@ -110,29 +99,22 @@ namespace Systems.Controllers
 
         private void UpdateGhostBar()
         {
-            if (healthGhostSlider == null) return;
-
-            if (Time.time > _ghostTimer)
-            {
-                if (healthGhostSlider.value > healthSlider.value)
-                {
-                    healthGhostSlider.value = Mathf.MoveTowards(healthGhostSlider.value, healthSlider.value, ghostSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    healthGhostSlider.value = healthSlider.value;
-                }
-            }
+            if (!_healthGhostSlider) return;
+            if (!(Time.time > _ghostTimer)) return;
+            _healthGhostSlider.value = _healthGhostSlider.value > _healthSlider.value
+                ? Mathf.MoveTowards(_healthGhostSlider.value, _healthSlider.value, _ghostSpeed * Time.deltaTime)
+                : _healthSlider.value;
         }
 
         private void SetupDashUI()
         {
-            if (_asc == null || _asc.AbilityManager == null) return;
+            if (_asc?.AbilityManager == null) return;
 
             if (!_asc.AbilityManager.Abilities.TryGetValue("Dash", out var ability))
             {
                 // Fallback: try to find any ChargesAbility if "Dash" specifically isn't found
-                ability = _asc.AbilityManager.Abilities.Values.FirstOrDefault(a => a is DashAbility || a.Definition.UniqueName.Contains("Dash"));
+                ability = _asc.AbilityManager.Abilities.Values.FirstOrDefault(a =>
+                    a is DashAbility || a.Definition.UniqueName.Contains("Dash"));
                 if (ability == null) return;
             }
 
@@ -146,17 +128,18 @@ namespace Systems.Controllers
             {
                 Destroy(child.gameObject);
             }
+
             _chargeControllers.Clear();
 
             // Spawn charges
-            for (int i = 0; i < _maxDashCharges; i++)
+            for (var i = 0; i < _maxDashCharges; i++)
             {
                 var go = Instantiate(_chargePrefab, _dash.transform);
                 go.name = $"Charge_{i}";
                 go.SetActive(true);
 
                 var rect = go.GetComponent<RectTransform>();
-                if (rect != null)
+                if (rect)
                 {
                     rect.anchorMin = new Vector2(0, 0);
                     rect.anchorMax = new Vector2(0, 0);
@@ -166,11 +149,9 @@ namespace Systems.Controllers
                 }
 
                 var controller = go.GetComponent<UIChargeController>();
-                if (controller != null)
-                {
-                    _chargeControllers.Add(controller);
-                    controller.SetFill(i < _currentDashCharges ? 1f : 0f);
-                }
+                if (!controller) continue;
+                _chargeControllers.Add(controller);
+                controller.SetFill(i < _currentDashCharges ? 1f : 0f);
             }
 
             dashAbility.OnChargesChanged += OnDashChargesChanged;
@@ -182,14 +163,13 @@ namespace Systems.Controllers
             _currentDashCharges = current;
             _maxDashCharges = max;
 
-            // Re-spawn if max charges changed
             if (max != _chargeControllers.Count)
             {
                 SetupDashUI();
                 return;
             }
 
-            for (int i = 0; i < _chargeControllers.Count; i++)
+            for (var i = 0; i < _chargeControllers.Count; i++)
             {
                 _chargeControllers[i].SetFill(i < current ? 1f : 0f);
             }
@@ -222,31 +202,32 @@ namespace Systems.Controllers
 
         private void UpdateHealth()
         {
-            var maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
+            var maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth")
+                .CurrentValue;
             var health = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Health").CurrentValue;
-            
-            float targetValue = health / maxHealth;
-            
-            if (targetValue < healthSlider.value)
+
+            var targetValue = health / maxHealth;
+
+            if (targetValue < _healthSlider.value)
             {
                 // Damage taken: Start/Reset ghost timer
-                _ghostTimer = Time.time + ghostDelay;
+                _ghostTimer = Time.time + _ghostDelay;
             }
-            else if (targetValue > healthSlider.value)
+            else if (targetValue > _healthSlider.value)
             {
                 // Healed: Snap ghost bar immediately
-                if (healthGhostSlider != null) healthGhostSlider.value = targetValue;
+                if (_healthGhostSlider) _healthGhostSlider.value = targetValue;
             }
 
-            healthSlider.value = targetValue;
+            _healthSlider.value = targetValue;
         }
 
         private void UpdateEnergy()
         {
-            var maxEnergy = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxEnergy").CurrentValue;
+            var maxEnergy = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxEnergy")
+                .CurrentValue;
             var energy = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Energy").CurrentValue;
             _energySlider.value = energy / maxEnergy;
         }
-
     }
 }
