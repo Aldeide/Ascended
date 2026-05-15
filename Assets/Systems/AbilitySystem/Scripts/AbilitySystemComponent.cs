@@ -25,6 +25,7 @@ namespace AbilitySystem.Scripts
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
+        private float _lastServerDebugRequestTime;
 
         public void RequestUpdateFromServer()
         {
@@ -42,6 +43,9 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Server)]
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
+            if (UnityEngine.Time.time - _lastServerDebugRequestTime < 0.5f) return;
+            _lastServerDebugRequestTime = UnityEngine.Time.time;
+
             var debugInfo = CalculateFullDebugInfo();
             NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
         }
