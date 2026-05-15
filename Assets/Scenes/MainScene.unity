@@ -393,7 +393,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 9505.649, y: -577.5167}
+  m_AnchoredPosition: {x: 9703.65, y: -577.5167}
   m_SizeDelta: {x: 120, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27816427
@@ -2716,6 +2716,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 625610738}
+  healthGhostSlider: {fileID: 177733824}
+  ghostDelay: 1
+  ghostSpeed: 2
   _energySlider: {fileID: 79234004}
   _ammoCount: {fileID: 618191589}
   _dash: {fileID: 441503187}
