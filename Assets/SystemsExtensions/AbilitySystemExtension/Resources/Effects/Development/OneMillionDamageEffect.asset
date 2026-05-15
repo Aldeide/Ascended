@@ -43,7 +43,7 @@ MonoBehaviour:
   RemoveGameplayEffectsWithTags: []
   ApplicationImmunityTags: []
   Modifiers:
-  - rid: 2200808207853551775
+  - rid: 3328319912160526642
   Executions: []
   Cues: []
   EffectStack:
@@ -55,9 +55,15 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 2200808207853551775
-      type: {class: FloatModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
+    - rid: 3328319912160526642
+      type: {class: SetByCallerModifier, ns: AbilitySystem.Runtime.Modifiers, asm: AbilitySystem}
       data:
         AttributeName: CharacteristicsAttributeSet.Health
         Operation: 1
-        ModifierMagnitude: 1000000
+        DataTag:
+          <Name>k__BackingField: Data.Effect.Damage
+          <HashCode>k__BackingField: 367979848
+          <AncestorsNames>k__BackingField:
+          - Data
+          - Data.Effect
+          <AncestorsHashCodes>k__BackingField: 0efe270045671f4f

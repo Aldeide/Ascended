@@ -135,6 +135,17 @@ namespace GameplayTags.Generated
             public readonly __Cue_VisualEffect_Group VisualEffect = new __Cue_VisualEffect_Group();
         }
         public static readonly __Cue_Group Cue = new __Cue_Group();
+        public class __Data_Group
+        {
+            public static implicit operator Tag(__Data_Group _) => new Tag("Data");
+            public class __Data_Effect_Group
+            {
+                public static implicit operator Tag(__Data_Effect_Group _) => new Tag("Data.Effect");
+                public readonly Tag Damage = new Tag("Data.Effect.Damage");
+            }
+            public readonly __Data_Effect_Group Effect = new __Data_Effect_Group();
+        }
+        public static readonly __Data_Group Data = new __Data_Group();
         public class __Effect_Group
         {
             public static implicit operator Tag(__Effect_Group _) => new Tag("Effect");
@@ -280,6 +291,7 @@ namespace GameplayTags.Generated
             new Tag("Cue.Prefab.Trail.A"),
             new Tag("Cue.VisualEffect.Dev.Loop"),
             new Tag("Cue.VisualEffect.Muzzle.A"),
+            new Tag("Data.Effect.Damage"),
             new Tag("Effect.Cost.Ability.Dash"),
             new Tag("Effect.Modifier.Damage"),
             new Tag("Effect.Modifier.Damage.Kinetic"),
