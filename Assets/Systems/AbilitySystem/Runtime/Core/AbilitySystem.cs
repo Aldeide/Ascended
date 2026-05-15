@@ -94,7 +94,7 @@ namespace AbilitySystem.Runtime.Core
 
         public void PlayCue(string cueTag, CueData data, bool isPredicted = false)
         {
-            if (isPredicted && !IsServer())
+            if (isPredicted && IsLocalClient())
             {
                 CueManager.MarkCueAsPredicted(cueTag, data.PredictionKey);
             }

@@ -1,4 +1,5 @@
 using AbilitySystem.Runtime.Cues;
+using UnityEngine;
 using UnityEngine.VFX;
 
 namespace AbilitySystemExtension.Scripts
@@ -16,6 +17,7 @@ namespace AbilitySystemExtension.Scripts
         public override void OnExecuteCue(CueDefinition definition, CueData cueData)
         {
             if (!TagQuery.MatchesTag(definition.CueTag)) return;
+            Debug.Log("Execute Visual Effect Cue");
             VisualEffect.Play();
         }
 
