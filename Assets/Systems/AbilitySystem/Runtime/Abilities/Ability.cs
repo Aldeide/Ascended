@@ -39,7 +39,6 @@ namespace AbilitySystem.Runtime.Abilities
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
-
         public event Action<AbilityActivationResult> OnActivateResult { add => _onActivateResult += value; remove => _onActivateResult -= value; }
         public event Action OnEndAbility { add => _onEndAbility += value; remove => _onEndAbility -= value; }
         public event Action OnCancelAbility { add => _onCancelAbility += value; remove => _onCancelAbility -= value; }
@@ -58,13 +57,10 @@ namespace AbilitySystem.Runtime.Abilities
             _activatedEffects = new List<Effect>();
             _activeTasks = new List<AbilityTask>();
 
-            if (Definition.AbilityActivation != null)
+            if (Definition.AbilityActivation is OnEventActivation activation)
             {
-                if (Definition.AbilityActivation is OnEventActivation activation)
-                {
-                    var eventType = activation.ActivationEvent.EventType;
-                    owner.EventManager?.Subscribe(eventType, OnActivationEvent);
-                }
+                var eventType = activation.ActivationEvent.EventType;
+                owner.EventManager?.Subscribe(eventType, OnActivationEvent);
             }
             
             if (Definition.Cooldown != null)
@@ -84,7 +80,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         protected virtual void AbilityTick()
         {
-            for (int i = _activeTasks.Count - 1; i >= 0; i--)
+            for (var i = _activeTasks.Count - 1; i >= 0; i--)
             {
                 _activeTasks[i].TickTask();
             }
@@ -123,11 +119,10 @@ namespace AbilitySystem.Runtime.Abilities
             if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
             if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
             if (Owner.TagManager.IsAbilityBlocked(Definition.AssetTags)) return AbilityActivationResult.BlockedByAbility;
-            if (IsOnCooldown()) return AbilityActivationResult.CooldownFailed;
-            return AbilityActivationResult.Success;
+            return IsOnCooldown() ? AbilityActivationResult.CooldownFailed : AbilityActivationResult.Success;
         }
 
-        public bool CanAffordCost()
+        protected bool CanAffordCost()
         {
             if (Definition.Cost == null) return true;
             foreach (var modifier in Definition.Cost.Modifiers)
@@ -166,7 +161,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), data, force); 
         }
-        
+
         public virtual bool TryActivateAbility(PredictionKey key, AbilityData data, bool force = false)
         {
             AbilityArguments = data;
@@ -183,25 +178,20 @@ namespace AbilitySystem.Runtime.Abilities
 
             IsActive = true;
             ActiveCount++;
+            
+            if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
+                Owner.TagManager.AddAbilityTagsAndNotify(this);
+            else
+                Owner.TagManager.AddAbilityTags(this);
+            Owner.TagManager.AddAbilityBlockingTags(this);
 
-                
-                if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
-                {
-                    Owner.TagManager.AddAbilityTagsAndNotify(this);
-                }
-                else
-                {
-                    Owner.TagManager.AddAbilityTags(this);
-                }
-                Owner.TagManager.AddAbilityBlockingTags(this);
-                
-                
-                PredictionKey = key;
-                ApplyEffects();
-                Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags, this);
-                if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner, PredictionKey);
-                
-                ActivateAbility(AbilityArguments);
+
+            PredictionKey = key;
+            ApplyEffects();
+            Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags, this);
+            if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner, PredictionKey);
+
+            ActivateAbility(AbilityArguments);
             if (!force) _onActivateResult?.Invoke(AbilityActivationResult.Success);
             return true;
         }

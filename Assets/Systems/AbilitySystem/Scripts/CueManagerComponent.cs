@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Cues;
 using Unity.Netcode;
@@ -23,32 +23,30 @@ namespace AbilitySystem.Scripts
 
         private void TryFindLibrary()
         {
-            if (_cueLibrary == null)
+            if (_cueLibrary) return;
+            var dataManager = GameObject.Find("DataManager");
+            if (dataManager)
             {
-                var dataManager = GameObject.Find("DataManager");
-                if (dataManager != null)
-                {
-                    _cueLibrary = dataManager.GetComponent<CueDefinitionLibrary>();
-                }
+                _cueLibrary = dataManager.GetComponent<CueDefinitionLibrary>();
             }
         }
 
         public void PlayCue(string cueTag)
         {
             TryFindLibrary();
-            if (_cueLibrary == null) return;
+            if (!_cueLibrary) return;
 
-            CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
+            var cue = _cueLibrary.GetCueByTag(cueTag);
             OnCueAdded?.Invoke(cueTag, cue);
         }
 
         public void PlayCue(string cueTag, CueData data)
         {
             TryFindLibrary();
-            if (_cueLibrary == null) return;
+            if (!_cueLibrary) return;
 
-            CueDefinition cue = _cueLibrary.GetCueByTag(cueTag);
-            if (cue == null) return;
+            var cue = _cueLibrary.GetCueByTag(cueTag);
+            if (!cue) return;
             
             OnCueAdded?.Invoke(cueTag, cue);
             

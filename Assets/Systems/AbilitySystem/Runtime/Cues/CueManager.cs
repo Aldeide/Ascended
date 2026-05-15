@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Runtime.Networking;
-using AbilitySystem.Scripts;
 using GameplayTags.Runtime;
 using UnityEngine;
 
@@ -66,7 +65,7 @@ namespace AbilitySystem.Runtime.Cues
                 return;
             }
 
-            // Debug.Log("Processing Received Cue: " + cueTag.Name + " / " + cueAction.ToString());
+            Debug.Log("Processing Received Cue: " + cueTag.Name + " / " + cueAction.ToString());
 
             var cueDefinition = _dataManager.GetCueByTag(cueTag);
             if (!cueDefinition)
