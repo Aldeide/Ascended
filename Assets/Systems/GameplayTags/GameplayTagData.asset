@@ -35,6 +35,7 @@ MonoBehaviour:
   - Cue.Prefab.Trail.A
   - Cue.VisualEffect.Dev.Loop
   - Cue.VisualEffect.Muzzle.A
+  - Data.Effect.Damage
   - Effect.Cost.Ability.Dash
   - Effect.Modifier.Damage
   - Effect.Modifier.Damage.Kinetic

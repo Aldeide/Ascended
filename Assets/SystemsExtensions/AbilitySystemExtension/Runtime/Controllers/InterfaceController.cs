@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.Core;
 using AbilitySystemExtension.Runtime.Abilities;
 using AbilitySystemExtension.Runtime.AttributeSets;
-using System.Collections.Generic;
-using System.Linq;
 using SystemsExtensions.AbilitySystemExtension.Runtime.Controllers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +28,7 @@ namespace Systems.Controllers
         private List<UIChargeController> _chargeControllers = new List<UIChargeController>();
         private int _currentDashCharges;
         private int _maxDashCharges;
-        
+
         private Ability _reloadAbility;
         private UIChargeController _reloadController;
         private float _reloadStartTime;
@@ -37,7 +37,6 @@ namespace Systems.Controllers
         private float _reloadFadeTime;
         
         private float _ghostTimer;
-        private bool _isGhostCatchingUp;
 
         public void Initialise(AbilitySystemManager owner)
         {
@@ -77,10 +76,10 @@ namespace Systems.Controllers
                 _reload.SetActive(true);
                 _reloadStartTime = Time.time;
                 _reloadFadeTime = 0;
-                
+
                 var weaponSet = _asc.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
                 _reloadDuration = weaponSet != null ? weaponSet.ReloadTime.CurrentValue : 1.0f;
-                
+
                 if (_reloadController) _reloadController.SetFill(0f);
             }
         }
@@ -165,7 +164,7 @@ namespace Systems.Controllers
                     rect.anchoredPosition = new Vector2(i * 18, 0);
                     rect.localScale = Vector3.one;
                 }
-                
+
                 var controller = go.GetComponent<UIChargeController>();
                 if (controller != null)
                 {
@@ -208,7 +207,7 @@ namespace Systems.Controllers
         {
             UpdateHealth();
         }
-        
+
         public void OnEnergyChanged(Attribute attribute, float oldValue, float newValue)
         {
             UpdateEnergy();
@@ -220,7 +219,7 @@ namespace Systems.Controllers
             var max = _asc.AttributeSetManager.GetAttributeValue<WeaponAttributeSet>("ClipSize").CurrentValue;
             _ammoCount.text = $"{current}/{max}";
         }
-        
+
         private void UpdateHealth()
         {
             var maxHealth = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxHealth").CurrentValue;
@@ -228,20 +227,20 @@ namespace Systems.Controllers
             
             float targetValue = health / maxHealth;
             
-            // If we took damage
             if (targetValue < healthSlider.value)
             {
+                // Damage taken: Start/Reset ghost timer
                 _ghostTimer = Time.time + ghostDelay;
             }
-            // If we healed
             else if (targetValue > healthSlider.value)
             {
+                // Healed: Snap ghost bar immediately
                 if (healthGhostSlider != null) healthGhostSlider.value = targetValue;
             }
 
             healthSlider.value = targetValue;
         }
-        
+
         private void UpdateEnergy()
         {
             var maxEnergy = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxEnergy").CurrentValue;

@@ -8,7 +8,7 @@ namespace AbilitySystem.Scripts
     public class ServerEffectApplicator : NetworkBehaviour
     {
         public EffectDefinition effectDefinition;
-
+        
         private void OnTriggerEnter(Collider other)
         {
             if (!IsServer) return;
