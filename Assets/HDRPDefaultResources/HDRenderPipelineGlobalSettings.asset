@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 2b7005ba3a4d8474b8cdc34141ad766e, type: 2}
+  - {fileID: 0}
   specularFade: 0
   rendererListCulling: 0
   m_ObsoleteDefaultVolumeProfile: {fileID: 0}
@@ -202,28 +202,7 @@ MonoBehaviour:
       - rid: 3328319640639897601
       - rid: 3328319640639897602
     m_RuntimeSettings:
-      m_List:
-      - rid: 1913512190798987264
-      - rid: 1913512190798987265
-      - rid: 1913512190798987267
-      - rid: 1913512190798987269
-      - rid: 1913512190798987270
-      - rid: 1913512190798987272
-      - rid: 1913512190798987273
-      - rid: 1913512190798987274
-      - rid: 1913512190798987276
-      - rid: 1913512190798987277
-      - rid: 1913512190798987278
-      - rid: 1913512190798987279
-      - rid: 1913512190798987282
-      - rid: 1913512190798987284
-      - rid: 1913512190798987288
-      - rid: 1913512190798987289
-      - rid: 1913512190798987292
-      - rid: 1913512190798987294
-      - rid: 1913512190798987295
-      - rid: 5120009340386803713
-      - rid: 5120009340386803714
+      m_List: []
   renderingLayerNames:
   - Light LayerDefault
   - InteriorOnly

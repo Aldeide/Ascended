@@ -76,7 +76,11 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             }
                             else if (net == AbilityNetworkPolicy.Server)
                             {
-                                tc.ExpectedActiveOnClient = false;
+                                tc.ExpectedActiveOnClient = true;
+                                if (sec is AbilityNetworkSecurityPolicy.ServerOnly or AbilityNetworkSecurityPolicy.ServerOnlyExecution)
+                                {
+                                    tc.ExpectedActiveOnClient = false;
+                                }
                                 tc.ExpectedActiveOnServer = canClientStart;
                                 tc.ExpectedRpcToServer = canClientStart;
                             }
@@ -90,7 +94,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             }
                             else
                             {
-                                tc.ExpectedActiveOnClient = false;
+                                tc.ExpectedActiveOnClient = true;
                                 tc.ExpectedActiveOnServer = true;
                             }
                             tc.ExpectedRpcToServer = false;
