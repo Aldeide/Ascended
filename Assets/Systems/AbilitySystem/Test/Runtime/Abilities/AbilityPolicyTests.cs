@@ -76,7 +76,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             }
                             else if (net == AbilityNetworkPolicy.Server)
                             {
-                                tc.ExpectedActiveOnClient = false;
+                                tc.ExpectedActiveOnClient = canClientStart;
                                 tc.ExpectedActiveOnServer = canClientStart;
                                 tc.ExpectedRpcToServer = canClientStart;
                             }
