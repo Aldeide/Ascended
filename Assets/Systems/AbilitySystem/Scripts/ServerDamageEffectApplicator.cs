@@ -13,6 +13,10 @@ namespace AbilitySystem.Scripts
         public EffectDefinition EffectDefinition;
         public float DamageAmount;
         
+        // Cache the Tag instantiation to avoid GC allocation and string parsing
+        // overhead during high-frequency physics callbacks like OnTriggerEnter.
+        private static readonly Tag DamageTag = new Tag("Data.Effect.Damage");
+
         private void OnTriggerEnter(Collider other)
         {
             if (!IsServer) return;
@@ -20,7 +24,7 @@ namespace AbilitySystem.Scripts
             var abilitySystem = other.GetComponent<AbilitySystemComponent>();
             if (!abilitySystem) return;
             var effect = EffectDefinition.ToEffect(abilitySystem.AbilitySystem, abilitySystem.AbilitySystem);
-            effect.SetSetByCallerMagnitude(new Tag("Data.Effect.Damage"), DamageAmount);
+            effect.SetSetByCallerMagnitude(DamageTag, DamageAmount);
             abilitySystem.AbilitySystem.EffectManager.AddEffect(effect);
         }
     }
