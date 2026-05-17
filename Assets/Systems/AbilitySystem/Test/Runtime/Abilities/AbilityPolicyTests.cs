@@ -76,11 +76,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             }
                             else if (net == AbilityNetworkPolicy.Server)
                             {
-                                tc.ExpectedActiveOnClient = true;
-                                if (sec is AbilityNetworkSecurityPolicy.ServerOnly or AbilityNetworkSecurityPolicy.ServerOnlyExecution)
-                                {
-                                    tc.ExpectedActiveOnClient = false;
-                                }
+                                tc.ExpectedActiveOnClient = false;
                                 tc.ExpectedActiveOnServer = canClientStart;
                                 tc.ExpectedRpcToServer = canClientStart;
                             }
@@ -94,7 +90,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
                             }
                             else
                             {
-                                tc.ExpectedActiveOnClient = true;
+                                tc.ExpectedActiveOnClient = (net != AbilityNetworkPolicy.Server);
                                 tc.ExpectedActiveOnServer = true;
                             }
                             tc.ExpectedRpcToServer = false;
@@ -172,12 +168,22 @@ namespace AbilitySystem.Test.Runtime.Abilities
 
             // Force activation on both to test termination logic specifically
             Target.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
-            Source.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
+            if (tc.NetPolicy != AbilityNetworkPolicy.Server)
+            {
+                Source.AbilityManager.ForceActivateAbility(_abilityDefinition.UniqueName);
+            }
 
             var initiator = tc.RequestFromClient ? Source : Target;
             initiator.AbilityManager.EndAbility(_abilityDefinition.UniqueName);
 
-            Assert.AreEqual(tc.ExpectedActiveOnClient, Source.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client Active Mismatch after End");
+            if (tc.NetPolicy != AbilityNetworkPolicy.Server)
+            {
+                Assert.AreEqual(tc.ExpectedActiveOnClient, Source.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client Active Mismatch after End");
+            }
+            else
+            {
+                Assert.IsFalse(Source.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Client should never have active server-only ability");
+            }
             Assert.AreEqual(tc.ExpectedActiveOnServer, Target.AbilityManager.Abilities[_abilityDefinition.UniqueName].IsActive, "Server Active Mismatch after End");
         }
 

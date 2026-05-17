@@ -35,6 +35,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             SetupAbilityWithCooldown();
             Source.AbilityManager.TryActivateAbility("TestAbility");
+            Source.AbilityManager.EndAbility("TestAbility");
             
             bool secondActivation = Source.AbilityManager.TryActivateAbility("TestAbility");
             
@@ -49,6 +50,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         {
             SetupAbilityWithCooldown();
             Source.AbilityManager.TryActivateAbility("TestAbility");
+            Source.AbilityManager.EndAbility("TestAbility");
             
             // Advance time beyond the 100s cooldown
             SourceMock.Setup(m => m.GetTime()).Returns(101f);

@@ -115,6 +115,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         public virtual AbilityActivationResult CanActivate()
         {
+            if (IsActive) return AbilityActivationResult.BlockedByAbility;
             if (!CanAffordCost()) return AbilityActivationResult.CostFailed;
             if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
             if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;

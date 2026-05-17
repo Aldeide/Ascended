@@ -34,6 +34,7 @@ MonoBehaviour:
   nodeInspectorReference: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
   scale: {x: 1, y: 1, z: 1}
+  UniqueName: EnergyRegenAbility
   Description:
     m_TableReference:
       m_TableCollectionName: 
@@ -53,7 +54,6 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   Icon: {fileID: 0}
-  UniqueName: EnergyRegenAbility
   Cost: {fileID: 0}
   Cooldown:
     rid: -2
@@ -72,8 +72,8 @@ MonoBehaviour:
   ActivationBlockedTags: []
   GrantedEffects:
   - {fileID: 11400000, guid: 49d0b57e211dc314981a48c6f255394d, type: 2}
-  NetworkPolicy: 0
-  NetworkSecurityPolicy: 0
+  NetworkPolicy: 2
+  NetworkSecurityPolicy: 3
   ActivationCues: []
   references:
     version: 2

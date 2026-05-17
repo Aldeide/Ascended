@@ -135,6 +135,20 @@ To ensure consistent results during prediction and server-driven logic, `Gamepla
 - **Level & Stacks**: The server replicates the current effect level and stack count to ensure logic parity.
 - **Late-Joiners**: Effects are synced via a catch-up RPC on client connection, including all dynamic magnitudes.
 
+### 4. Ability Network Policies
+Abilities support different replication and execution models via the `AbilityNetworkPolicy` enum:
+- **`ClientOnly`**: The ability is executed locally on the client only. Used primarily for purely cosmetic or client-side interactions.
+- **`ClientPredicted`**: The client executes the ability locally immediately to provide a highly responsive feel, and sends an activation request to the server. The server verifies and either confirms or rolls back the client's state.
+- **`Server` (Server-Only)**: The ability runs and executes **exclusively** on the server.
+    - **Replication Trust**: Because the ability only runs on the server, the client does *not* execute the ability locally or receive activation/termination RPC requests.
+    - Instead, the client trusts the authoritative replication layer to automatically synchronize the resulting active `GameplayEffects`, `GameplayTags`, and `GameplayCues` applied by the server-side ability execution. This prevents duplicate client-side activations and matching replication bugs.
+
+### 5. Robust Activation Safeguards & Idempotency
+To prevent duplicate execution and duplicate effect applications (especially when running as a Host acting as both server and client), the system implements several layers of runtime guards:
+- **Initialization Idempotency**: `AbilitySystemComponent.Initialise()` checks if the Ability System has already been created and initialized. If so, it exits early to prevent destroying existing instances and leaving orphaned event bindings.
+- **Activation Blockers**: The base class `Ability.CanActivate()` automatically checks `IsActive`. If the ability is already running on the manager, it prevents duplicate concurrent activations and returns `AbilityActivationResult.BlockedByAbility`. Subclasses can customize this by overriding `CanActivate()`.
+- **Controller-level Safeguards**: Spawning/initializing systems (such as `AiController`) utilize local execution flags (`_isAscSetup`) to prevent duplicate manual initializations and activation calls in redundant Unity lifecycles (e.g., `OnNetworkSpawn` and `Start`).
+
 ---
 
 ## 🏷️ Gameplay Cues & Audio-Visual Feedback

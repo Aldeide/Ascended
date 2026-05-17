@@ -133,13 +133,7 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 if (isServerRequest)
                 {
-                    var success = ability.TryActivateAbility(data);
-                    // On Host, we don't need to request client activation as it already happened above
-                    if (success && !_owner.IsLocalClient())
-                    {
-                        _owner.ReplicationManager.RequestClientActivateAbility(name, data);
-                    }
-                    return success;
+                    return ability.TryActivateAbility(data);
                 }
                 else if (isClientRequest)
                 {
@@ -227,7 +221,10 @@ namespace AbilitySystem.Runtime.Abilities
             else if (isServerRequest)
             {
                 ability.TryEndAbility();
-                _owner.ReplicationManager.RequestClientEndAbility(abilityName);
+                if (ability.Definition.NetworkPolicy != AbilityNetworkPolicy.Server)
+                {
+                    _owner.ReplicationManager.RequestClientEndAbility(abilityName);
+                }
             }
         }
 

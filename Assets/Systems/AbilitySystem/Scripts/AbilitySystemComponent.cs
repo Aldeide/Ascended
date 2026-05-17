@@ -162,6 +162,7 @@ namespace AbilitySystem.Scripts
 
         public void Initialise()
         {
+            if (IsInitialized) return;
             _cueManagerComponent = GetComponent<CueManagerComponent>();
             
             var abilitySystemManager = new AbilitySystemManager(DataLibrary.Instance);
@@ -284,24 +285,28 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerActivateAbilityRpc(string abilityName, AbilityData data)
         {
+            if (IsServer) return;
             AbilitySystem.ReplicationManager.ProcessClientActivateAbility(abilityName, data);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEndAbilityRpc(string abilityName)
         {
+            if (IsServer) return;
             AbilitySystem.ReplicationManager.ProcessClientEndAbility(abilityName);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationSucceededRpc(PredictionKey key)
         {
+            if (IsServer) return;
             AbilitySystem.ReplicationManager.ProcessAbilityActivationConfirmed(key);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationFailedRpc(string abilityName, PredictionKey key)
         {
+            if (IsServer) return;
             AbilitySystem.ReplicationManager.ProcessAbilityActivationDenied(abilityName, key);
         }
 
@@ -385,6 +390,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectRemovedRpc(string effectName)
         {
+            if (IsServer) return;
             AbilitySystem.EffectManager.RemoveEffect(effectName);
         }
 
@@ -416,6 +422,7 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void AddCuesClientRpc(Tag cueTag, CueData cueData = default, ClientRpcParams clientRpcParams = default)
         {
+            if (IsServer) return;
             var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
             AbilitySystem.CueManager.AddCue(cueDefinition, cueData);
         }
@@ -423,6 +430,7 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void AddCuesBatchClientRpc(Tag[] cueTags, CueData[] cueDatas, ClientRpcParams clientRpcParams = default)
         {
+            if (IsServer) return;
             for (var i = 0; i < cueTags.Length; i++)
             {
                 var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTags[i]);
@@ -433,6 +441,7 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void SyncAttributesClientRpc(AttributeSyncData[] syncData, ClientRpcParams clientRpcParams = default)
         {
+            if (IsServer) return;
             foreach (var data in syncData)
             {
                 var attribute = AbilitySystem.AttributeSetManager.GetAttribute(data.AttributeName);
@@ -445,6 +454,7 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void SyncEffectsClientRpc(EffectSyncData[] syncData, ClientRpcParams clientRpcParams = default)
         {
+            if (IsServer) return;
             foreach (var data in syncData)
             {
                 var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
@@ -460,6 +470,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.NotServer)]
         public void NotifyClientAbilityGrantedRpc(string abilityName)
         {
+            if (IsServer) return;
             var abilityDefinition = DataLibrary.Instance.GetAbilityByName(abilityName);
             AbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
         }
@@ -467,6 +478,7 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.NotServer)]
         public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
+            if (IsServer) return;
             AbilitySystem.AbilityManager.RemoveAbility(abilityName);
         }
 
