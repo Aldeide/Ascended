@@ -18,11 +18,15 @@ namespace Systems.Controllers
         [SerializeField] private float _ghostDelay = 1.0f;
         [SerializeField] private float _ghostSpeed = 2.0f;
         [SerializeField] private Slider _energySlider;
+        [SerializeField] private GameObject _energyContainer;
         [SerializeField] private Text _ammoCount;
         [SerializeField] private GameObject _dash;
         [SerializeField] private GameObject _chargePrefab;
         [SerializeField] private Image[] _dashCharges;
         [SerializeField] private GameObject _reload;
+        [SerializeField] private Slider _shieldSlider;
+        [SerializeField] private Slider _shieldGhostSlider;
+        [SerializeField] private GameObject _shieldContainer;
 
         private AbilitySystemManager _asc;
         private List<UIChargeController> _chargeControllers = new List<UIChargeController>();
@@ -35,6 +39,10 @@ namespace Systems.Controllers
         private bool _isReloading;
         private float _reloadFadeTime;
         private float _ghostTimer;
+        private float _shieldGhostTimer;
+        private Vector2 _energyOriginalAnchoredPosition;
+        private Vector2 _ammoOriginalAnchoredPosition;
+        private bool _positionsCached;
 
         public void Initialise(AbilitySystemManager owner)
         {
@@ -45,9 +53,29 @@ namespace Systems.Controllers
             _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxEnergy", OnEnergyChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("ClipSize", OnAmmoChanged);
             _asc.AttributeSetManager.RegisterOnAttributeChanged("CurrentClip", OnAmmoChanged);
+            _asc.AttributeSetManager.RegisterOnAttributeChanged("Shield", OnShieldChanged);
+            _asc.AttributeSetManager.RegisterOnAttributeChanged("MaxShield", OnShieldChanged);
+
+            if (!_positionsCached)
+            {
+                if (_energySlider != null)
+                {
+                    _energyOriginalAnchoredPosition = _energyContainer.GetComponent<RectTransform>().anchoredPosition;
+                }
+                if (_ammoCount != null)
+                {
+                    _ammoOriginalAnchoredPosition = _ammoCount.GetComponent<RectTransform>().anchoredPosition;
+                }
+                _positionsCached = true;
+            }
+
             _healthSlider.value = 1;
             if (_healthGhostSlider) _healthGhostSlider.value = 1;
+            if (_shieldSlider) _shieldSlider.value = 0;
+            if (_shieldGhostSlider) _shieldGhostSlider.value = 0;
+
             UpdateHealth();
+            UpdateShield();
             SetupDashUI();
             SetupReloadUI();
         }
@@ -82,7 +110,7 @@ namespace Systems.Controllers
 
         private void Update()
         {
-            if (_isReloading && _reloadController != null)
+            if (_isReloading && _reloadController)
             {
                 var elapsed = Time.time - _reloadStartTime;
                 var progress = Mathf.Clamp01(elapsed / _reloadDuration);
@@ -99,11 +127,19 @@ namespace Systems.Controllers
 
         private void UpdateGhostBar()
         {
-            if (!_healthGhostSlider) return;
-            if (!(Time.time > _ghostTimer)) return;
-            _healthGhostSlider.value = _healthGhostSlider.value > _healthSlider.value
-                ? Mathf.MoveTowards(_healthGhostSlider.value, _healthSlider.value, _ghostSpeed * Time.deltaTime)
-                : _healthSlider.value;
+            if (_healthGhostSlider && Time.time > _ghostTimer)
+            {
+                _healthGhostSlider.value = _healthGhostSlider.value > _healthSlider.value
+                    ? Mathf.MoveTowards(_healthGhostSlider.value, _healthSlider.value, _ghostSpeed * Time.deltaTime)
+                    : _healthSlider.value;
+            }
+
+            if (_shieldGhostSlider && _shieldSlider && Time.time > _shieldGhostTimer)
+            {
+                _shieldGhostSlider.value = _shieldGhostSlider.value > _shieldSlider.value
+                    ? Mathf.MoveTowards(_shieldGhostSlider.value, _shieldSlider.value, _ghostSpeed * Time.deltaTime)
+                    : _shieldSlider.value;
+            }
         }
 
         private void SetupDashUI()
@@ -228,6 +264,65 @@ namespace Systems.Controllers
                 .CurrentValue;
             var energy = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Energy").CurrentValue;
             _energySlider.value = energy / maxEnergy;
+        }
+
+        public void OnShieldChanged(Attribute attribute, float oldValue, float newValue)
+        {
+            UpdateShield();
+        }
+
+        private void UpdateShield()
+        {
+            var maxShield = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("MaxShield").CurrentValue;
+            var shield = _asc.AttributeSetManager.GetAttributeValue<CharacteristicsAttributeSet>("Shield").CurrentValue;
+ 
+            var showShield = maxShield > 0f;
+
+            if (_shieldContainer)
+            {
+                _shieldContainer.SetActive(showShield);
+            }
+            else
+            {
+                if (_shieldSlider) _shieldSlider.gameObject.SetActive(showShield);
+                if (_shieldGhostSlider) _shieldGhostSlider.gameObject.SetActive(showShield);
+            }
+
+            UpdateElementPositions(showShield);
+
+            if (!showShield) return;
+
+            var targetValue = maxShield > 0f ? shield / maxShield : 0f;
+
+            if (!_shieldSlider) return;
+            if (targetValue < _shieldSlider.value)
+            {
+                _shieldGhostTimer = Time.time + _ghostDelay;
+            }
+            else if (targetValue > _shieldSlider.value)
+            {
+                if (_shieldGhostSlider) _shieldGhostSlider.value = targetValue;
+            }
+            _shieldSlider.value = targetValue;
+        }
+
+        private void UpdateElementPositions(bool showShield)
+        {
+            if (!_positionsCached) return;
+
+            var offset = showShield ? 0f : -10f;
+
+            if (_energyContainer)
+            {
+                var rect = _energyContainer.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(_energyOriginalAnchoredPosition.x, _energyOriginalAnchoredPosition.y + offset);
+            }
+
+            if (!_ammoCount) return;
+            {
+                var rect = _ammoCount.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(_ammoOriginalAnchoredPosition.x, _ammoOriginalAnchoredPosition.y + offset);
+            }
         }
     }
 }

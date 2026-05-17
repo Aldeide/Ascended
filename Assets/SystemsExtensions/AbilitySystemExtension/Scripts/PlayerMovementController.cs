@@ -20,6 +20,7 @@ namespace AbilitySystemExtension.Scripts
         // Offset for grounded checks.
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
         private static readonly Tag DashingTag = new Tag("Status.Dashing");
+        private static readonly Tag StunnedTag = new Tag("Status.Debuff.Stun");
         private static int _environmentLayerMask = 0;
         [ShowInInspector] [SerializeField] private Vector3 _movementInput = new Vector3(0, 0, 0);
 
@@ -177,6 +178,7 @@ namespace AbilitySystemExtension.Scripts
         public bool CanMove()
         {
             return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Immobilised) &&
+                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Debuff.Stun) &&
                    !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Dead) &&
                    !_abilitySystem.TagManager.HasTag(DashingTag);
         }

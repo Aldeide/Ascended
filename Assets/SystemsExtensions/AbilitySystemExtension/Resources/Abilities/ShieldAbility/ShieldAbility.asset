@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f5ef4217e0f9844285114a912e01ff6, type: 3}
-  m_Name: ReloadWeaponAbility
-  m_EditorClassIdentifier: AbilitySystemExtension::AbilitySystemExtension.Runtime.Abilities.ReloadWeaponAbilityDefinition
+  m_Script: {fileID: 11500000, guid: 1e82ceadccd84b888e806947253ff8ad, type: 3}
+  m_Name: ShieldAbility
+  m_EditorClassIdentifier: AbilitySystem::AbilitySystem.Runtime.Abilities.PassiveAbilityDefinition
   serializedNodes: []
   nodes: []
   edges: []
@@ -24,6 +24,7 @@ MonoBehaviour:
   nodeInspectorReference: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
   scale: {x: 1, y: 1, z: 1}
+  UniqueName: ShieldAbility
   Description:
     m_TableReference:
       m_TableCollectionName: 
@@ -35,40 +36,35 @@ MonoBehaviour:
     m_LocalVariables: []
   DisplayName:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:da5770c1f6efb234a90b959a9f2b4328
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18066604032
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   Icon: {fileID: 0}
-  UniqueName: ReloadWeaponAbility
-  Cost: {fileID: 11400000, guid: 2cd87854e5279774e9f811207546f4bc, type: 2}
+  Cost: {fileID: 0}
   Cooldown:
     rid: -2
   AbilityActivation:
     rid: -2
   AssetTags:
-  - <Name>k__BackingField: Status.Debuff.Stun
-    <HashCode>k__BackingField: -712063834
+  - <Name>k__BackingField: Ability.Passive.Shield
+    <HashCode>k__BackingField: 513915998
     <AncestorsNames>k__BackingField:
-    - Status
-    - Status.Debuff
-    <AncestorsHashCodes>k__BackingField: b0c3cf74a846b920
-  - <Name>k__BackingField: Status.Dead
-    <HashCode>k__BackingField: -124510100
-    <AncestorsNames>k__BackingField:
-    - Status
-    <AncestorsHashCodes>k__BackingField: b0c3cf74
+    - Ability
+    - Ability.Passive
+    <AncestorsHashCodes>k__BackingField: b84ed1e0db1bf0b7
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTags: []
   ActivationRequiredTags: []
   ActivationBlockedTags: []
-  GrantedEffects: []
-  NetworkPolicy: 1
-  NetworkSecurityPolicy: 0
+  GrantedEffects:
+  - {fileID: 11400000, guid: 45c68642023d0a447a92ba4e1eb93631, type: 2}
+  NetworkPolicy: 2
+  NetworkSecurityPolicy: 3
   ActivationCues: []
   references:
     version: 2
