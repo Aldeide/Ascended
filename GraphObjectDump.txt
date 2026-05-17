@@ -1,7 +1,0 @@
-=== Graph Constructors ===
-ctor: .ctor()
-
-=== GraphModelImp Constructors ===
-ctor: .ctor()
-
-=== Graph Methods ===

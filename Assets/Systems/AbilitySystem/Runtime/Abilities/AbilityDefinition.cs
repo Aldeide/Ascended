@@ -18,8 +18,13 @@ namespace AbilitySystem.Runtime.Abilities
     {
         public abstract Type AbilityType();
 
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
+        public string UniqueName;
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
         public LocalizedString Description;
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
         public LocalizedString DisplayName;
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
         public Sprite Icon;
 
         [Sirenix.OdinInspector.ShowInInspector]
@@ -27,34 +32,45 @@ namespace AbilitySystem.Runtime.Abilities
 
         [Sirenix.OdinInspector.ShowInInspector] public string TypeName => GetType().Name;
         [Sirenix.OdinInspector.ShowInInspector] public string TypeFullName => GetType().FullName;
+        
+        
         [Sirenix.OdinInspector.ShowInInspector] public string[] InheritanceChain => GetType().GetInheritanceChain().Reverse().ToArray();
-        public string UniqueName;
+        
 
         [Space]
         [Title("Cost and Cooldown")]
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
         public EffectDefinition Cost;
         [SerializeReference]
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
         public AbilityCooldown Cooldown;
 
         [SerializeReference]
+        [TabGroup("tab1", "General", SdfIconType.ImageAlt, TextColor = "green")]
         public AbilityActivation.AbilityActivation AbilityActivation;
         
+        [TabGroup("tab1", "Tags", SdfIconType.ImageAlt, TextColor = "blue")]
         [Title("Tags")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] AssetTags = Array.Empty<Tag>();
 
+        [TabGroup("tab1", "Tags", SdfIconType.ImageAlt, TextColor = "blue")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] CancelAbilityTags = Array.Empty<Tag>();
 
+        [TabGroup("tab1", "Tags", SdfIconType.ImageAlt, TextColor = "blue")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] BlockAbilityTags = Array.Empty<Tag>();
 
+        [TabGroup("tab1", "Tags", SdfIconType.ImageAlt, TextColor = "blue")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] ActivationOwnedTags = Array.Empty<Tag>();
 
+        [TabGroup("tab1", "Tags", SdfIconType.ImageAlt, TextColor = "blue")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] ActivationRequiredTags = Array.Empty<Tag>();
 
+        [TabGroup("tab1", "Tags", SdfIconType.ImageAlt, TextColor = "blue")]
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] ActivationBlockedTags = Array.Empty<Tag>();
 

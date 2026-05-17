@@ -17,12 +17,14 @@ MonoBehaviour:
   - Ability.Active.Dash
   - Ability.Active.Test
   - Ability.Passive
+  - Ability.Passive.Shield
   - Cooldown.Ability.Dash
   - Cue.Animation
   - Cue.Animation.Parameter.Grounded
   - Cue.Animation.State.Death
   - Cue.Animation.State.Idle
   - Cue.Animation.State.Jump.Start
+  - Cue.Animation.State.Stunned
   - Cue.Audio.Gun.B
   - Cue.IK
   - Cue.IK.Arms.Disable

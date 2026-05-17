@@ -142,6 +142,12 @@ MonoBehaviour:
     <AncestorsNames>k__BackingField:
     - Status
     <AncestorsHashCodes>k__BackingField: b0c3cf74
+  - <Name>k__BackingField: Status.Debuff.Stun
+    <HashCode>k__BackingField: -712063834
+    <AncestorsNames>k__BackingField:
+    - Status
+    - Status.Debuff
+    <AncestorsHashCodes>k__BackingField: b0c3cf74a846b920
   GrantedEffects: []
   NetworkPolicy: 1
   NetworkSecurityPolicy: 0

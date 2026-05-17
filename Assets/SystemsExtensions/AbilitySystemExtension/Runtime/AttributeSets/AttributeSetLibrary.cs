@@ -20,6 +20,8 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             "CharacteristicsAttributeSet.EnergyRegen",
             "CharacteristicsAttributeSet.MaxEnergy",
             "CharacteristicsAttributeSet.MovementSpeed",
+            "CharacteristicsAttributeSet.Shield",
+            "CharacteristicsAttributeSet.MaxShield",
             "WeaponAttributeSet.ClipSize",
             "WeaponAttributeSet.CurrentClip",
             "WeaponAttributeSet.ReloadTime",
