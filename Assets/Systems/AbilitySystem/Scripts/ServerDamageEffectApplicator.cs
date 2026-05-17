@@ -10,6 +10,9 @@ namespace AbilitySystem.Scripts
 {
     public class ServerDamageEffectApplicator : NetworkBehaviour
     {
+        // Cache Tag instantiation to prevent GC allocation in high-frequency physics callbacks
+        private static readonly Tag DamageTag = new Tag("Data.Effect.Damage");
+
         public EffectDefinition EffectDefinition;
         public float DamageAmount;
         
@@ -20,7 +23,7 @@ namespace AbilitySystem.Scripts
             var abilitySystem = other.GetComponent<AbilitySystemComponent>();
             if (!abilitySystem) return;
             var effect = EffectDefinition.ToEffect(abilitySystem.AbilitySystem, abilitySystem.AbilitySystem);
-            effect.SetSetByCallerMagnitude(new Tag("Data.Effect.Damage"), DamageAmount);
+            effect.SetSetByCallerMagnitude(DamageTag, DamageAmount);
             abilitySystem.AbilitySystem.EffectManager.AddEffect(effect);
         }
     }
