@@ -128,6 +128,21 @@ namespace AbilitySystem.Runtime.Effects
 
                 if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.AggregateByTarget)
                 {
+                    if (!_owner.IsServer() && effect.IsReplicated && existingEffect.IsReplicated)
+                    {
+                        var oldStacks = existingEffect.NumStacks;
+                        existingEffect.NumStacks = effect.NumStacks;
+                        if (existingEffect.Definition.EffectStack.EffectStackDurationPolicy == EffectStackDurationPolicy.RefreshOnNewApplication)
+                        {
+                            existingEffect.RefreshDuration();
+                        }
+                        if (oldStacks != existingEffect.NumStacks)
+                        {
+                            OnEffectStacksChanged?.Invoke(existingEffect, oldStacks, existingEffect.NumStacks);
+                        }
+                        return EffectApplicationResult.Success;
+                    }
+
                     existingEffect.AddStack();
                     return EffectApplicationResult.Success;
                 }
@@ -137,6 +152,21 @@ namespace AbilitySystem.Runtime.Effects
                     var existingEffectFromSource = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name && e.Source == effect.Source);
                     if (existingEffectFromSource != null)
                     {
+                        if (!_owner.IsServer() && effect.IsReplicated && existingEffectFromSource.IsReplicated)
+                        {
+                            var oldStacks = existingEffectFromSource.NumStacks;
+                            existingEffectFromSource.NumStacks = effect.NumStacks;
+                            if (existingEffectFromSource.Definition.EffectStack.EffectStackDurationPolicy == EffectStackDurationPolicy.RefreshOnNewApplication)
+                            {
+                                existingEffectFromSource.RefreshDuration();
+                            }
+                            if (oldStacks != existingEffectFromSource.NumStacks)
+                            {
+                                OnEffectStacksChanged?.Invoke(existingEffectFromSource, oldStacks, existingEffectFromSource.NumStacks);
+                            }
+                            return EffectApplicationResult.Success;
+                        }
+
                         existingEffectFromSource.AddStack();
                         return EffectApplicationResult.Success;
                     }

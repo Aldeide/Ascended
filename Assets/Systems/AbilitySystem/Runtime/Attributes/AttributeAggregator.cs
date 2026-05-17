@@ -67,6 +67,7 @@ namespace AbilitySystem.Runtime.Attributes
             _owner.EffectManager.OnEffectSuspended += ProcessEffectRemoved;
             _owner.EffectManager.OnEffectResumed += ProcessEffectAdded;
             _owner.EffectManager.OnEffectRetracted += ProcessEffectRemoved;
+            _owner.EffectManager.OnEffectStacksChanged += ProcessEffectStacksChanged;
             _attribute.OnAttributeBaseValueChanged += HandleBaseValueChanged;
         }
 
@@ -77,6 +78,7 @@ namespace AbilitySystem.Runtime.Attributes
             _owner.EffectManager.OnEffectSuspended -= ProcessEffectRemoved;
             _owner.EffectManager.OnEffectResumed -= ProcessEffectAdded;
             _owner.EffectManager.OnEffectRetracted -= ProcessEffectRemoved;
+            _owner.EffectManager.OnEffectStacksChanged -= ProcessEffectStacksChanged;
             _attribute.OnAttributeBaseValueChanged -= HandleBaseValueChanged;
         }
 
@@ -97,6 +99,12 @@ namespace AbilitySystem.Runtime.Attributes
         {
             if (!IsEffectRelevantToAttribute(removedEffect)) return;
             RemoveModifiersFromEffectCache(removedEffect);
+            UpdateCurrentValue();
+        }
+
+        private void ProcessEffectStacksChanged(Effect effect, int oldStacks, int newStacks)
+        {
+            if (!IsEffectRelevantToAttribute(effect)) return;
             UpdateCurrentValue();
         }
 

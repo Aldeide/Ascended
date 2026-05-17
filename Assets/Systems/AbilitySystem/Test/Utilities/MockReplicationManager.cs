@@ -43,6 +43,13 @@ namespace AbilitySystem.Test.Utilities
 
             _owner.AttributeSetManager.OnAnyAttributeBaseValueChanged += NotifyClientsAttributeBaseValueChanged;
             _owner.AttributeSetManager.OnAnyAttributeCurrentValueChanged += NotifyClientsAttributeCurrentValueChanged;
+            _owner.EffectManager.OnEffectStacksChanged += HandleEffectStacksChanged;
+        }
+
+        private void HandleEffectStacksChanged(Effect effect, int oldStacks, int newStacks)
+        {
+            if (!_owner.IsServer()) return;
+            NotifyClientsEffectAdded(effect);
         }
 
         public void NotifyClientsAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
