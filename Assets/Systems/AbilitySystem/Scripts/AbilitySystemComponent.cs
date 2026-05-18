@@ -329,6 +329,8 @@ namespace AbilitySystem.Scripts
 
         public void ExecuteEffect(EffectDefinition effectDefinition, IAbilitySystem source)
         {
+            // Instant effects aren't predicted and are only run on the server.
+            if (!IsServer) return;
             var effect = effectDefinition.ToEffect(source, AbilitySystem);
             effect.Execute();
         }

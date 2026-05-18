@@ -8,6 +8,7 @@ using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
 using UnityEngine;
 using NUnit.Framework;
+using UnityEditor.PackageManager;
 
 namespace AbilitySystem.Test.Utilities
 {
@@ -70,6 +71,16 @@ namespace AbilitySystem.Test.Utilities
                 {
                     ability.TryEndAbility();
                 }
+            };
+            
+            // Link Tags.
+            serverRepl.OnNotifyClientsAbilityTagsAdded += (tags) =>
+            {
+                ClientSystem.TagManager.AddAbilityTags(tags);
+            };
+            serverRepl.OnNotifyClientsAbilityTagsRemoved += (tags) =>
+            {
+                ClientSystem.TagManager.RemoveAbilityTags(tags);
             };
 
             // Client to Server Requests

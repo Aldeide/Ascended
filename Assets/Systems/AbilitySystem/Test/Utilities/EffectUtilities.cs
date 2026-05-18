@@ -21,6 +21,19 @@ namespace AbilitySystem.Test.Utilities
             return asset.ToEffect(source, target);
         }
         
+        public static Effect CreateDurationalEffectWithTag(IAbilitySystem source, IAbilitySystem target)
+        {
+            var asset = ScriptableObject.CreateInstance<EffectDefinition>();
+            asset.name = "TestEffectWithTag";
+            asset.DurationType = EffectDurationType.FixedDuration;
+            asset.AssetTags = Array.Empty<Tag>();
+            asset.ApplicationImmunityTags = Array.Empty<Tag>();
+            asset.GrantedTags = new[] { new Tag("Tag.Test.GrantedTag") };
+            asset.ApplicationRequiredTags = Array.Empty<Tag>();
+            asset.DurationSeconds = 100;
+            return asset.ToEffect(source, target);
+        }
+        
         public static Effect CreateInstantEffect(IAbilitySystem source, IAbilitySystem target)
         {
             var asset = ScriptableObject.CreateInstance<EffectDefinition>();
