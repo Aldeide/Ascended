@@ -17,9 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Open `Ascended.sln` in Rider or Visual Studio. Unity handles incremental C# compilation automatically.
 - Run tests via **Window > Testing > Test Runner** in the Unity Editor.
-- Alternatively, run tests locally via PowerShell: `.\run_tests.ps1`.
-  - The script executes the tests in batch mode and outputs `UnityLog_Script.txt` and `Results_Script.xml` in the repository root.
-  - **Note:** Ensure your `$unityPath` in `run_tests.ps1` matches your local Unity installation path (`6000.4.5f1`).
+- Alternatively, run tests locally via PowerShell using `.\run_tests.ps1` (see the **Local Testing** section in `README.md` for environment setup and usage instructions).
 - To run a single test: select it in the Test Runner and click **Run Selected**.
 - **Always run all tests before committing.**
 - Test assemblies use NUnit + Moq and live alongside their system under `Assets/Systems/[SystemName]/Test/`.
