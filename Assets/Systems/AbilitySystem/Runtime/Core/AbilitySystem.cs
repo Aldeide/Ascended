@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace AbilitySystem.Runtime.Core
 {
-    public class AbilitySystemManager : IAbilitySystem
+    public class AbilitySystemManager : IAbilitySystem, IDisposable
     {
         public INetworkRole NetworkRole { get; set; }
         public EffectManager EffectManager { get; set; }
@@ -35,12 +35,19 @@ namespace AbilitySystem.Runtime.Core
             CueManager = new CueManager(this);
             ReplicationManager = new ReplicationManager(this);
             ReplicationManager.DataManager = dataManager;
+            Debug.Log($"[AbilitySystemManager] Created Instance {GetHashCode()}");
         }
         
         public void Tick()
         {
             EffectManager.Tick();
             AbilityManager.Tick();
+            AttributeSetManager.UpdateAttributesJobified();
+        }
+
+        public void Dispose()
+        {
+            AttributeSetManager?.Dispose();
         }
 
         public float GetTime()
@@ -87,7 +94,7 @@ namespace AbilitySystem.Runtime.Core
 
         public void PlayCue(string cueTag, CueData data, bool isPredicted = false)
         {
-            if (isPredicted && !IsServer())
+            if (isPredicted && IsLocalClient())
             {
                 CueManager.MarkCueAsPredicted(cueTag, data.PredictionKey);
             }

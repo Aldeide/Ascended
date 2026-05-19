@@ -87,9 +87,20 @@ namespace AbilitySystem.Runtime.Effects
             }
 
             // If that effect is already applied, check stacking behaviour.
-            if (Effects.Exists(e => e.Definition.name == effect.Definition.name))
+            var existingEffect = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name);
+            if (existingEffect != null)
             {
-                var existingEffect = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name);
+                // SPECIAL CASE: If we are on a client and we receive a REPLICATED effect 
+                // that matches an existing NON-REPLICATED effect, we replace it.
+                // This handles predicted effects (like cooldowns) that don't use formal prediction keys.
+                if (!_owner.IsServer() && effect.IsReplicated && !existingEffect.IsReplicated)
+                {
+                    RemoveEffect(existingEffect);
+                    Effects.Add(effect);
+                    OnEffectAdded?.Invoke(effect);
+                    return EffectApplicationResult.Success;
+                }
+
                 if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.None)
                 {
                     Effects.Add(effect);
@@ -117,6 +128,21 @@ namespace AbilitySystem.Runtime.Effects
 
                 if (existingEffect.Definition.EffectStack.EffectStackType == EffectStackType.AggregateByTarget)
                 {
+                    if (!_owner.IsServer() && effect.IsReplicated && existingEffect.IsReplicated)
+                    {
+                        var oldStacks = existingEffect.NumStacks;
+                        existingEffect.NumStacks = effect.NumStacks;
+                        if (existingEffect.Definition.EffectStack.EffectStackDurationPolicy == EffectStackDurationPolicy.RefreshOnNewApplication)
+                        {
+                            existingEffect.RefreshDuration();
+                        }
+                        if (oldStacks != existingEffect.NumStacks)
+                        {
+                            OnEffectStacksChanged?.Invoke(existingEffect, oldStacks, existingEffect.NumStacks);
+                        }
+                        return EffectApplicationResult.Success;
+                    }
+
                     existingEffect.AddStack();
                     return EffectApplicationResult.Success;
                 }
@@ -126,6 +152,21 @@ namespace AbilitySystem.Runtime.Effects
                     var existingEffectFromSource = Effects.FirstOrDefault(e => e.Definition.name == effect.Definition.name && e.Source == effect.Source);
                     if (existingEffectFromSource != null)
                     {
+                        if (!_owner.IsServer() && effect.IsReplicated && existingEffectFromSource.IsReplicated)
+                        {
+                            var oldStacks = existingEffectFromSource.NumStacks;
+                            existingEffectFromSource.NumStacks = effect.NumStacks;
+                            if (existingEffectFromSource.Definition.EffectStack.EffectStackDurationPolicy == EffectStackDurationPolicy.RefreshOnNewApplication)
+                            {
+                                existingEffectFromSource.RefreshDuration();
+                            }
+                            if (oldStacks != existingEffectFromSource.NumStacks)
+                            {
+                                OnEffectStacksChanged?.Invoke(existingEffectFromSource, oldStacks, existingEffectFromSource.NumStacks);
+                            }
+                            return EffectApplicationResult.Success;
+                        }
+
                         existingEffectFromSource.AddStack();
                         return EffectApplicationResult.Success;
                     }
@@ -152,7 +193,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void RemoveEffect(string effectName)
         {
-            var effectToRemove = Effects.FirstOrDefault(e=>e.Definition.name == effectName);
+            var effectToRemove = Effects.Where(e => e.Definition.name == effectName).OrderBy(e => e.ActivationTime).FirstOrDefault();
             if (effectToRemove != null)
             {
                 RemoveEffect(effectToRemove);
@@ -161,6 +202,7 @@ namespace AbilitySystem.Runtime.Effects
 
         public void AddEffectFromServer(Effect effect)
         {
+            effect.IsReplicated = true;
             effect.IsActive = true;
             AddEffect(effect);
         }
@@ -195,6 +237,7 @@ namespace AbilitySystem.Runtime.Effects
                 foreach (var effect in retractedEffects)
                 {
                     effect.IsActive = false;
+                    Effects.Remove(effect);
                     OnEffectRetracted?.Invoke(effect);
                     OnEffectRemoved?.Invoke(effect);
                 }

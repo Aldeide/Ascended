@@ -1,0 +1,21 @@
+{
+    "name": "AbilitySystem.Editor",
+    "rootNamespace": "",
+    "references": [
+        "AbilitySystem",
+        "GameplayTags",
+        "com.alelievr.NodeGraphProcessor.Runtime",
+        "Unity.Netcode.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

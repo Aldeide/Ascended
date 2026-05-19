@@ -39,6 +39,9 @@ namespace AbilitySystem.Runtime.Abilities
         protected event Action<AbilityActivationResult> _onActivateResult;
         protected event Action _onEndAbility;
         protected event Action _onCancelAbility;
+        public event Action<AbilityActivationResult> OnActivateResult { add => _onActivateResult += value; remove => _onActivateResult -= value; }
+        public event Action OnEndAbility { add => _onEndAbility += value; remove => _onEndAbility -= value; }
+        public event Action OnCancelAbility { add => _onCancelAbility += value; remove => _onCancelAbility -= value; }
         
         protected Ability()
         {
@@ -54,13 +57,10 @@ namespace AbilitySystem.Runtime.Abilities
             _activatedEffects = new List<Effect>();
             _activeTasks = new List<AbilityTask>();
 
-            if (Definition.AbilityActivation != null)
+            if (Definition.AbilityActivation is OnEventActivation activation)
             {
-                if (Definition.AbilityActivation is OnEventActivation activation)
-                {
-                    var eventType = activation.ActivationEvent.EventType;
-                    owner.EventManager?.Subscribe(eventType, OnActivationEvent);
-                }
+                var eventType = activation.ActivationEvent.EventType;
+                owner.EventManager?.Subscribe(eventType, OnActivationEvent);
             }
             
             if (Definition.Cooldown != null)
@@ -80,7 +80,7 @@ namespace AbilitySystem.Runtime.Abilities
 
         protected virtual void AbilityTick()
         {
-            for (int i = _activeTasks.Count - 1; i >= 0; i--)
+            for (var i = _activeTasks.Count - 1; i >= 0; i--)
             {
                 _activeTasks[i].TickTask();
             }
@@ -119,18 +119,17 @@ namespace AbilitySystem.Runtime.Abilities
             if (!OwnerHasRequiredTags()) return AbilityActivationResult.MissingRequiredTag;
             if (OwnerHasBlockingTag()) return AbilityActivationResult.BlockedByTag;
             if (Owner.TagManager.IsAbilityBlocked(Definition.AssetTags)) return AbilityActivationResult.BlockedByAbility;
-            if (IsOnCooldown()) return AbilityActivationResult.CooldownFailed;
-            return AbilityActivationResult.Success;
+            return IsOnCooldown() ? AbilityActivationResult.CooldownFailed : AbilityActivationResult.Success;
         }
 
-        public bool CanAffordCost()
+        protected bool CanAffordCost()
         {
             if (Definition.Cost == null) return true;
             foreach (var modifier in Definition.Cost.Modifiers)
             {
                 var attribute = modifier.AttributeName.Split(".")[1];
                 var cost = modifier.Calculate(Definition.Cost.ToEffect(Owner, Owner));
-                if (Owner.AttributeSetManager.GetAttribute(attribute).CurrentValue < cost)
+                if (Owner.AttributeSetManager.GetAttribute(attribute)!.CurrentValue < cost)
                 {
                     return false;
                 }
@@ -158,43 +157,43 @@ namespace AbilitySystem.Runtime.Abilities
             return Owner.TagManager.HasAnyTags(Definition.ActivationBlockedTags);
         }
         
-        public virtual bool TryActivateAbility(AbilityData data)
+        public virtual bool TryActivateAbility(AbilityData data, bool force = false)
         {
-            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), data); 
+            return TryActivateAbility(PredictionKey.CreateInvalidPredictionKey(), data, force); 
         }
-        
-        public virtual bool TryActivateAbility(PredictionKey key, AbilityData data)
+
+        public virtual bool TryActivateAbility(PredictionKey key, AbilityData data, bool force = false)
         {
             AbilityArguments = data;
-            var result = CanActivate();
-            var success = result == AbilityActivationResult.Success;
-            if (success)
+            if (!force)
             {
-                IsActive = true;
-                ActiveCount++;
-
-                
-                if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
+                var result = CanActivate();
+                var success = result == AbilityActivationResult.Success;
+                if (!success)
                 {
-                    Owner.TagManager.AddAbilityTagsAndNotify(this);
+                    _onActivateResult?.Invoke(result);
+                    return false;
                 }
-                else
-                {
-                    Owner.TagManager.AddAbilityTags(this);
-                }
-                Owner.TagManager.AddAbilityBlockingTags(this);
-                
-                
-                PredictionKey = key;
-                ApplyEffects();
-                Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags, this);
-                if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner);
-                
-                ActivateAbility(AbilityArguments);
             }
 
-            _onActivateResult?.Invoke(result);
-            return success;
+            IsActive = true;
+            ActiveCount++;
+            
+            if (Definition.NetworkPolicy == AbilityNetworkPolicy.Server && Owner.IsServer())
+                Owner.TagManager.AddAbilityTagsAndNotify(this);
+            else
+                Owner.TagManager.AddAbilityTags(this);
+            Owner.TagManager.AddAbilityBlockingTags(this);
+
+
+            PredictionKey = key;
+            ApplyEffects();
+            Owner.AbilityManager.CancelAbilitiesWithTags(Definition.CancelAbilityTags, this);
+            if (ShouldActivateCooldownOnActivation()) Cooldown?.Activate(Owner, PredictionKey);
+
+            ActivateAbility(AbilityArguments);
+            if (!force) _onActivateResult?.Invoke(AbilityActivationResult.Success);
+            return true;
         }
 
         protected virtual bool ShouldActivateCooldownOnActivation() => true;
@@ -249,9 +248,16 @@ namespace AbilitySystem.Runtime.Abilities
 
         public virtual void CommitCostAndCooldown()
         {
-            if (Definition.Cost == null) return;
-            var costEffect = MakeOutgoingEffect(Definition.Cost);
-            ApplyEffectToSelf(costEffect);
+            if (Definition.Cost != null)
+            {
+                var costEffect = MakeOutgoingEffect(Definition.Cost);
+                ApplyEffectToSelf(costEffect);
+            }
+            
+            if (Cooldown != null && !ShouldActivateCooldownOnActivation())
+            {
+                Cooldown.Activate(Owner, PredictionKey);
+            }
         }
         
         public virtual void Dispose()

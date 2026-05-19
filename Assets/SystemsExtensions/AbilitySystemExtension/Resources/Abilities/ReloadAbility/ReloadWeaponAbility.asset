@@ -49,7 +49,18 @@ MonoBehaviour:
     rid: -2
   AbilityActivation:
     rid: -2
-  AssetTags: []
+  AssetTags:
+  - <Name>k__BackingField: Status.Debuff.Stun
+    <HashCode>k__BackingField: -712063834
+    <AncestorsNames>k__BackingField:
+    - Status
+    - Status.Debuff
+    <AncestorsHashCodes>k__BackingField: b0c3cf74a846b920
+  - <Name>k__BackingField: Status.Dead
+    <HashCode>k__BackingField: -124510100
+    <AncestorsNames>k__BackingField:
+    - Status
+    <AncestorsHashCodes>k__BackingField: b0c3cf74
   CancelAbilityTags: []
   BlockAbilityTags: []
   ActivationOwnedTags: []

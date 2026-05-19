@@ -5,8 +5,7 @@ using Moq;
 using NUnit.Framework;
 using UnityEngine;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
-
-namespace AbilitySystem.Tests.Runtime.Calculations
+namespace AbilitySystem.Test.Runtime.Calculations
 {
     /// <summary>
     /// Tests for WeaponDamageExecution, verifying damage calculations including armor mitigation and critical hits.
@@ -41,8 +40,8 @@ namespace AbilitySystem.Tests.Runtime.Calculations
         public void WeaponDamageExecutionTests_Execute_DealsBaseDamageCorrectly()
         {
             // Setup source
-            var baseDmgAttr = new Attribute("WeaponDamage", null, 50f, 0f, 100f);
-            var critAttr = new Attribute("CritChance", null, 0f, 0f, 1f); // 0% crit
+            var baseDmgAttr = new AbilitySystem.Runtime.Attributes.Attribute("WeaponDamage", null, 50f, 0f, 100f);
+            var critAttr = new AbilitySystem.Runtime.Attributes.Attribute("CritChance", null, 0f, 0f, 1f); // 0% crit
             
             var sourceAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Source);
             sourceAttrMgrMock.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
@@ -50,8 +49,8 @@ namespace AbilitySystem.Tests.Runtime.Calculations
             SourceMock.SetupGet(x => x.AttributeSetManager).Returns(sourceAttrMgrMock.Object);
 
             // Setup target
-            var healthAttr = new Attribute("Health", null, 100f, 0f, 100f);
-            var armorAttr = new Attribute("Armor", null, 0f, 0f, 100f); // 0 armor
+            var healthAttr = new AbilitySystem.Runtime.Attributes.Attribute("Health", null, 100f, 0f, 100f);
+            var armorAttr = new AbilitySystem.Runtime.Attributes.Attribute("Armor", null, 0f, 0f, 100f); // 0 armor
             var targetAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Target);
             targetAttrMgrMock.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
             targetAttrMgrMock.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
@@ -68,15 +67,15 @@ namespace AbilitySystem.Tests.Runtime.Calculations
         [Test]
         public void WeaponDamageExecutionTests_Execute_AppliesArmorMitigation()
         {
-            var baseDmgAttr = new Attribute("WeaponDamage", null, 50f, 0f, 100f);
-            var critAttr = new Attribute("CritChance", null, 0f, 0f, 1f);
+            var baseDmgAttr = new AbilitySystem.Runtime.Attributes.Attribute("WeaponDamage", null, 50f, 0f, 100f);
+            var critAttr = new AbilitySystem.Runtime.Attributes.Attribute("CritChance", null, 0f, 0f, 1f);
             var sourceAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Source);
             sourceAttrMgrMock.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
             sourceAttrMgrMock.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
             SourceMock.SetupGet(x => x.AttributeSetManager).Returns(sourceAttrMgrMock.Object);
 
-            var healthAttr = new Attribute("Health", null, 100f, 0f, 100f);
-            var armorAttr = new Attribute("Armor", null, 100f, 0f, 100f); // 100 armor = 50% reduction
+            var healthAttr = new AbilitySystem.Runtime.Attributes.Attribute("Health", null, 100f, 0f, 100f);
+            var armorAttr = new AbilitySystem.Runtime.Attributes.Attribute("Armor", null, 100f, 0f, 100f); // 100 armor = 50% reduction
             var targetAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Target);
             targetAttrMgrMock.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
             targetAttrMgrMock.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);
@@ -94,17 +93,17 @@ namespace AbilitySystem.Tests.Runtime.Calculations
         [Test]
         public void WeaponDamageExecutionTests_Execute_AppliesCritMultiplier()
         {
-            var baseDmgAttr = new Attribute("WeaponDamage", null, 50f, 0f, 100f);
-            var critAttr = new Attribute("CritChance", null, 1f, 0f, 1f); // 100% crit
-            var critMultAttr = new Attribute("CritMultiplier", null, 2f, 0f, 2f);
+            var baseDmgAttr = new AbilitySystem.Runtime.Attributes.Attribute("WeaponDamage", null, 50f, 0f, 100f);
+            var critAttr = new AbilitySystem.Runtime.Attributes.Attribute("CritChance", null, 1f, 0f, 1f); // 100% crit
+            var critMultAttr = new AbilitySystem.Runtime.Attributes.Attribute("CritMultiplier", null, 2f, 0f, 2f);
             var sourceAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Source);
             sourceAttrMgrMock.Setup(x => x.GetAttribute("WeaponDamage")).Returns(baseDmgAttr);
             sourceAttrMgrMock.Setup(x => x.GetAttribute("CritChance")).Returns(critAttr);
             sourceAttrMgrMock.Setup(x => x.GetAttribute("CritMultiplier")).Returns(critMultAttr);
             SourceMock.SetupGet(x => x.AttributeSetManager).Returns(sourceAttrMgrMock.Object);
 
-            var healthAttr = new Attribute("Health", null, 100f, 0f, 100f);
-            var armorAttr = new Attribute("Armor", null, 0f, 0f, 100f);
+            var healthAttr = new AbilitySystem.Runtime.Attributes.Attribute("Health", null, 100f, 0f, 100f);
+            var armorAttr = new AbilitySystem.Runtime.Attributes.Attribute("Armor", null, 0f, 0f, 100f);
             var targetAttrMgrMock = new Mock<AbilitySystem.Runtime.AttributeSets.AttributeSetManager>(Target);
             targetAttrMgrMock.Setup(x => x.GetAttribute("Health")).Returns(healthAttr);
             targetAttrMgrMock.Setup(x => x.GetAttribute("Armor")).Returns(armorAttr);

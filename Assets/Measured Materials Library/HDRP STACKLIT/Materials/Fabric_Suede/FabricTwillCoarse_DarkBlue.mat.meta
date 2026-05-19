@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0e056d32170b2f94e856e7d95e3b62c2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/FabricTwillCoarse_DarkBlue.mat
+  uploadId: 292299

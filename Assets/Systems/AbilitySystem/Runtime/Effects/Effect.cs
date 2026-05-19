@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.Effects
         public float Period { get; set; }
         public Effect PeriodicEffect { get; private set; }
         public PredictionKey PredictionKey { get; set; }
+        public bool IsReplicated { get; set; }
         public Guid Guid;
         
         private readonly EffectTicker _effectTicker;
@@ -35,6 +36,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Definition = definition;
             Duration = Definition.DurationSeconds;
+            NumStacks = 1;
             if (!Definition.IsInstant()) _effectTicker = new EffectTicker(this);
         }
 

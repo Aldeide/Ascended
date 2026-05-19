@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0fdb62d59ffacbd40be66f2bf0e37eb6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Editor/HDRPVersionChecker.cs
+  uploadId: 292299

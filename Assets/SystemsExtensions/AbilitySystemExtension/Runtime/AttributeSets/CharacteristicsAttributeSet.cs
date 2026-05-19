@@ -13,6 +13,8 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         public Attribute EnergyRegen { get; private set; }
         public Attribute MaxEnergy { get; private set; }
         public Attribute MovementSpeed { get; private set; }
+        public Attribute Shield { get; private set; }
+        public Attribute MaxShield { get; private set; }
         
         public CharacteristicsAttributeSet(IAbilitySystem owner) : base(owner)
         {
@@ -23,21 +25,29 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             EnergyRegen = new Attribute("EnergyRegen", this,4);
             MaxEnergy = new Attribute("MaxEnergy", this,1000);
             MovementSpeed = new Attribute("MovementSpeed", this,4);
-            
+            Shield = new Attribute("Shield", this,0);
+            MaxShield = new Attribute("MaxShield", this,0);
+
             AddAttribute(Health);
             AddAttribute(MaxHealth);
             AddAttribute(Energy);
             AddAttribute(EnergyRegen);
             AddAttribute(MaxEnergy);
             AddAttribute(MovementSpeed);
-
-            //Health.OnAttributeBaseValuePreChange += OnHealthChange;
+            AddAttribute(Shield);
+            AddAttribute(MaxShield);
+            
+            Health.OnAttributeBaseValuePreChange += OnHealthChange;
             Health.OnAttributeCurrentValuePreChange += OnHealthChange;
             MaxHealth.OnAttributeCurrentValueChanged += OnMaxHealthChange;
             
             Energy.OnAttributeBaseValuePreChange += OnEnergyChange;
             Energy.OnAttributeCurrentValuePreChange += OnEnergyChange;
             MaxEnergy.OnAttributeCurrentValueChanged += OnMaxEnergyChange;
+            
+            Shield.OnAttributeBaseValuePreChange += OnShieldChange;
+            Shield.OnAttributeCurrentValuePreChange += OnShieldChange;
+            MaxShield.OnAttributeCurrentValueChanged += OnMaxShieldChange;
         }
 
         private float OnHealthChange(Attribute attribute, float nextValue)
@@ -46,7 +56,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             {
                 _owner.AbilityManager.TryActivateAbility("DeathAbility");
             }
-            float maxHealth = MaxHealth.CurrentValue;
+            var maxHealth = MaxHealth.CurrentValue;
             return Mathf.Min(nextValue, maxHealth);
         }
         
@@ -58,7 +68,7 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
         
         private float OnEnergyChange(Attribute attribute, float nextValue)
         {
-            float maxEnergy = MaxEnergy.CurrentValue;
+            var maxEnergy = MaxEnergy.CurrentValue;
             return Mathf.Min(nextValue, maxEnergy);
         }
         
@@ -67,6 +77,18 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             if (Energy.CurrentValue > nextValue) Energy.SetCurrentValueNoEvent(nextValue);
             if (Energy.BaseValue > nextValue) Energy.SetBaseValueNoEvent(nextValue);
         }
+        
+        private float OnShieldChange(Attribute attribute, float nextValue)
+        {
+            var maxShield = MaxShield.CurrentValue;
+            return Mathf.Min(nextValue, maxShield);
+        }
+        
+        private void OnMaxShieldChange(Attribute attribute, float previousValue, float nextValue)
+        {
+            if (Shield.CurrentValue > nextValue) Shield.SetCurrentValueNoEvent(nextValue);
+            if (Shield.BaseValue > nextValue) Shield.SetBaseValueNoEvent(nextValue);
+        }
 
         public override void Reset()
         {
@@ -74,6 +96,8 @@ namespace AbilitySystemExtension.Runtime.AttributeSets
             Health.SetCurrentValue(MaxHealth.BaseValue);
             Energy.SetBaseValue(MaxEnergy.BaseValue);
             Energy.SetCurrentValue(MaxEnergy.BaseValue);
+            Shield.SetBaseValue(MaxShield.BaseValue);
+            Shield.SetCurrentValue(MaxShield.BaseValue);
         }
     }
 }

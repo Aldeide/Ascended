@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c43dbd3267a63934aa872b8552be2c7a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/FabricStriped_Parchment.mat
+  uploadId: 292299

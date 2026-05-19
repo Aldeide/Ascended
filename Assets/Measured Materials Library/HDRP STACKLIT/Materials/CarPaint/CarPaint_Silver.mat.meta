@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cdb73f2b507325342b09fd801919fd05
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/CarPaint/CarPaint_Silver.mat
+  uploadId: 292299

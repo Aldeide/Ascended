@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
+>
+    <ui:VisualElement style="flex-grow: 1; align-items: center; justify-content: center; background-color: rgb(30, 30, 30);">
+        <ui:Label text="MAIN MENU" style="font-size: 36px; -unity-font-style: bold; color: rgb(255, 255, 255); margin-bottom: 20px;" />
+        
+        <ui:VisualElement style="flex-direction: row; margin-bottom: 20px;">
+            <ui:Button name="HostButton" text="Host Game" style="width: 150px; height: 40px; margin-right: 10px; font-size: 16px;" />
+            <ui:Button name="FetchLobbiesButton" text="Fetch Lobbies" style="width: 150px; height: 40px; font-size: 16px;" />
+        </ui:VisualElement>
+
+        <ui:Label text="Available Lobbies:" style="font-size: 18px; color: rgb(200, 200, 200); margin-bottom: 5px; align-self: flex-start; margin-left: 25%;" />
+        
+        <ui:ScrollView name="LobbyListContainer" style="width: 50%; height: 300px; background-color: rgb(40, 40, 40); border-radius: 5px; padding: 10px;" />
+    </ui:VisualElement>
+</ui:UXML>

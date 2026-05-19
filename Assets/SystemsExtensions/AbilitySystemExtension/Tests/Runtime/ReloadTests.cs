@@ -95,8 +95,8 @@ namespace AbilitySystemExtension.Tests.Runtime
         public void ReloadTests_FireAbility_ConsumesAmmo()
         {
             AbilitySystemUtilities.LinkAbilitySystems(SourceMock, TargetMock);
-            _clientWeaponSet.CurrentClip.SetCurrentValue(30);
-            _serverWeaponSet.CurrentClip.SetCurrentValue(30);
+            _clientWeaponSet.CurrentClip.SetBaseValue(30);
+            _serverWeaponSet.CurrentClip.SetBaseValue(30);
             
             bool success = Source.AbilityManager.TryActivateAbility("FireAbility");
             Assert.IsTrue(success);
@@ -111,10 +111,10 @@ namespace AbilitySystemExtension.Tests.Runtime
         public void ReloadTests_FireAbility_TriggersReloadWhenAmmoEmpty()
         {
             AbilitySystemUtilities.LinkAbilitySystems(SourceMock, TargetMock);
-            _clientCharSet.Energy.SetCurrentValue(100);
-            _serverCharSet.Energy.SetCurrentValue(100);
-            _clientWeaponSet.CurrentClip.SetCurrentValue(1);
-            _serverWeaponSet.CurrentClip.SetCurrentValue(1);
+            _clientCharSet.Energy.SetBaseValue(100);
+            _serverCharSet.Energy.SetBaseValue(100);
+            _clientWeaponSet.CurrentClip.SetBaseValue(1);
+            _serverWeaponSet.CurrentClip.SetBaseValue(1);
             
             bool success = Source.AbilityManager.TryActivateAbility("FireAbility");
             Assert.IsTrue(success, "FireAbility should activate");
@@ -129,7 +129,7 @@ namespace AbilitySystemExtension.Tests.Runtime
         [Test]
         public void ReloadTests_ReloadMMC_CalculatesCorrectCost()
         {
-            _clientWeaponSet.CurrentClip.SetCurrentValue(50); // 50 missing
+            _clientWeaponSet.CurrentClip.SetBaseValue(50); // 50 missing
             _clientWeaponSet.ClipSize.SetBaseValue(100);
             _clientWeaponSet.ReloadEnergyCost.SetBaseValue(10);
             
@@ -150,14 +150,10 @@ namespace AbilitySystemExtension.Tests.Runtime
         {
             // Setup: Client thinks it has enough energy, server knows it doesn't
             _clientCharSet.Energy.SetBaseValue(100);
-            _clientCharSet.Energy.SetCurrentValue(100);
             _serverCharSet.Energy.SetBaseValue(0); 
-            _serverCharSet.Energy.SetCurrentValue(0); 
 
             _clientWeaponSet.CurrentClip.SetBaseValue(0);
-            _clientWeaponSet.CurrentClip.SetCurrentValue(0);
             _serverWeaponSet.CurrentClip.SetBaseValue(0);
-            _serverWeaponSet.CurrentClip.SetCurrentValue(0);
             
             _clientWeaponSet.ReloadEnergyCost.SetBaseValue(50);
             _serverWeaponSet.ReloadEnergyCost.SetBaseValue(50);
@@ -197,8 +193,8 @@ namespace AbilitySystemExtension.Tests.Runtime
         public void ReloadTests_FirePrediction_RollsBackWhenServerDenies()
         {
             // Setup: Client thinks it has ammo, server knows it doesn't
-            _clientWeaponSet.CurrentClip.SetCurrentValue(1);
-            _serverWeaponSet.CurrentClip.SetCurrentValue(0);
+            _clientWeaponSet.CurrentClip.SetBaseValue(1);
+            _serverWeaponSet.CurrentClip.SetBaseValue(0);
 
             PredictionKey capturedKey = default;
             bool serverSuccess = false;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
@@ -6,6 +6,7 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Modifiers;
 using GameplayTags.Runtime;
 using Sirenix.OdinInspector;
+using AbilitySystem.Runtime.Networking;
 
 namespace AbilitySystem.Runtime.Abilities.Cooldowns
 {
@@ -26,11 +27,15 @@ namespace AbilitySystem.Runtime.Abilities.Cooldowns
         
         private readonly List<Tuple<Effect, Modifier>> _relevantModifiers = new();
 
-        public override bool Activate(IAbilitySystem owner)
+        public override bool Activate(IAbilitySystem owner, PredictionKey key = default)
         {
             if (!CanActivate(owner)) return false;
             
             var effect = CooldownEffect.ToEffect(owner, owner);
+            if (key.IsValidKey())
+            {
+                effect.PredictionKey = key;
+            }
             effect.Activate();
             effect.Duration = Calculate(owner);
             owner.EffectManager.AddEffect(effect);

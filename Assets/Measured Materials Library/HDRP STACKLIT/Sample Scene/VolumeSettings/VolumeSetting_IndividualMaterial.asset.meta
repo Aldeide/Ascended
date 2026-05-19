@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ff4438c04d0b0f34ea0b31663c361d7f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Sample Scene/VolumeSettings/VolumeSetting_IndividualMaterial.asset
+  uploadId: 292299

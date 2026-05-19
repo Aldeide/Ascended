@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f5e58a97c3e7f254e8f91c7b78f4910a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/FabricStriped_White.mat
+  uploadId: 292299

@@ -19,6 +19,9 @@ namespace AbilitySystemExtension.Scripts
     {
         // Offset for grounded checks.
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
+        private static readonly Tag DashingTag = new Tag("Status.Dashing");
+        private static readonly Tag StunnedTag = new Tag("Status.Debuff.Stun");
+        private static int _environmentLayerMask = 0;
         [ShowInInspector] [SerializeField] private Vector3 _movementInput = new Vector3(0, 0, 0);
 
         [FormerlySerializedAs("cameraTarget")] [SerializeField]
@@ -43,14 +46,19 @@ namespace AbilitySystemExtension.Scripts
         {
         }
 
+        private void Awake()
+        {
+            _animationController = GetComponent<AnimationController>();
+            _rigidbody = GetComponent<Rigidbody>();
+            _ikCueListener = GetComponent<IKCueListener>();
+            _environmentLayerMask = LayerMask.GetMask("Environment");
+        }
+
         public void Start()
         {
             _camera = Camera.main;
-            _animationController = GetComponent<AnimationController>();
-            _rigidbody = GetComponent<Rigidbody>();
             _abilitySystem = GetComponent<AbilitySystemComponent>().AbilitySystem;
             _abilitySystem.AttributeSetManager.RegisterOnAttributeChanged("MovementSpeed", OnMovementSpeedChanged);
-            _ikCueListener = GetComponent<IKCueListener>();
             _movementSpeed = _abilitySystem.AttributeSetManager.GetAttributeSet<CharacteristicsAttributeSet>()
                 .MovementSpeed.CurrentValue;
         }
@@ -61,45 +69,62 @@ namespace AbilitySystemExtension.Scripts
             if (!IsLocalPlayer) return;
             if (!CanMove()) return;
 
+            if (_camera == null)
+            {
+                _camera = Camera.main;
+                if (_camera == null) return; // Prevent MissingReferenceException if no camera is present (e.g. in Lobby)
+            }
+
             // Update grounded state.
             UpdateGrounded();
 
             // Temp
-            if (IsInAimingState())
+            if (_ikCueListener != null)
             {
-                _ikCueListener.EnableAimIK();
-            }
-            else
-            {
-                _ikCueListener.DisableAimIK();
+                if (IsInAimingState())
+                {
+                    _ikCueListener.EnableAimIK();
+                }
+                else
+                {
+                    _ikCueListener.DisableAimIK();
+                }
             }
 
             var targetAngle = Mathf.Atan2(_movementInput.x, _movementInput.z) * Mathf.Rad2Deg +
                               _camera.transform.eulerAngles.y;
-            var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
+            _targetAngle = targetAngle; // Store for FixedUpdate
+            
+            _currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity,
                 turnSmoothTime);
+
+            ComputeMovementDirection(targetAngle);
+            UpdateAnimator();
+        }
+
+        private float _targetAngle;
+        private float _currentAngle;
+
+        public void FixedUpdate()
+        {
+            if (!IsLocalPlayer) return;
+            if (!CanMove()) return;
+
             if (IsInAimingState() || _movementInput.magnitude > 0.01f)
             {
-                _rigidbody.MoveRotation(ComputeRotation(angle));
+                _rigidbody.MoveRotation(ComputeRotation(_currentAngle));
             }
-            
-            ComputeMovementDirection(targetAngle);
-            if (_movementInput.magnitude <= 0.01f)
+
+            if (_movementInput.magnitude > 0.01f)
             {
-                UpdateAnimator();
-                MovementDirection = Vector3.zero;
-                return;
+                _rigidbody.MovePosition(_rigidbody.position + MovementDirection * (Time.fixedDeltaTime * _movementSpeed));
             }
-
-            _rigidbody.MovePosition(_rigidbody.position + MovementDirection * (Time.deltaTime * _movementSpeed));
-
-            UpdateAnimator();
         }
 
         public bool IsGrounded()
         {
             return _rigidbody.linearVelocity.y <= 0.01 && Physics.Raycast(transform.position + Offset, Vector3.down, 1f,
-                LayerMask.GetMask("Environment"));
+                _environmentLayerMask);
         }
 
         private void Rotate(Vector3 newPosition)
@@ -153,8 +178,9 @@ namespace AbilitySystemExtension.Scripts
         public bool CanMove()
         {
             return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Immobilised) &&
+                   !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Debuff.Stun) &&
                    !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Dead) &&
-                   !_abilitySystem.TagManager.HasTag(new Tag("Status.Dashing"));
+                   !_abilitySystem.TagManager.HasTag(DashingTag);
         }
 
         private void ComputeMovementDirection(float targetAngle)
@@ -171,7 +197,7 @@ namespace AbilitySystemExtension.Scripts
 
         private Quaternion ComputeRotation(float angle)
         {
-            if (!IsInAimingState()) return Quaternion.Euler(0f, angle, 0f);
+            if (!IsInAimingState() || _camera == null) return Quaternion.Euler(0f, angle, 0f);
             var target = transform.position + _camera.transform.forward;
             var actualTarget = new Vector3(target.x, transform.position.y, target.z);
             return Quaternion.LookRotation(actualTarget - transform.position);

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3b549185869940d45a98659f366cc87c
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Sample Scene/IndividualMaterialScene.unity
+  uploadId: 292299

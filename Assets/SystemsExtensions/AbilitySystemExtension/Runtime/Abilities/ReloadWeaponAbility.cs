@@ -42,8 +42,6 @@ namespace AbilitySystemExtension.Runtime.Abilities
             CommitCostAndCooldown();
             float reloadTime = weaponSet.ReloadTime.CurrentValue;
 
-            Debug.Log($"Reloading weapon... Time: {reloadTime}s");
-            
             var waitTask = WaitDelayTask.CreateWaitDelay(this, reloadTime);
             waitTask.OnFinished += OnReloadFinished;
             waitTask.ReadyForActivation();
@@ -52,18 +50,11 @@ namespace AbilitySystemExtension.Runtime.Abilities
         private void OnReloadFinished()
         {
             var weaponSet = Owner.AttributeSetManager.GetAttributeSet<WeaponAttributeSet>();
-            if (Owner.IsServer())
-            {
-                // Refill clip base value
-                weaponSet.CurrentClip.SetBaseValue(weaponSet.ClipSize.CurrentValue);
-            }
-            
-            // Set current value immediately for both client and server
-            weaponSet.CurrentClip.SetCurrentValue(weaponSet.ClipSize.CurrentValue);
+            // Refill clip base value
+            weaponSet.CurrentClip.SetBaseValue(weaponSet.ClipSize.CurrentValue);
 
             
-            Debug.Log("Reload complete!");
-            EndAbility();
+            TryEndAbility();
         }
 
         protected override void CancelAbility()

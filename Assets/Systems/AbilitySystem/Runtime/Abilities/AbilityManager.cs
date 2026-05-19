@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AbilitySystem.Runtime.Core;
-using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Attributes;
 using AbilitySystem.Runtime.AttributeSets;
+using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Networking;
 using GameplayTags.Runtime;
 using UnityEngine;
 
@@ -14,22 +14,34 @@ namespace AbilitySystem.Runtime.Abilities
     {
         private readonly IAbilitySystem _owner;
         public Dictionary<string, Ability> Abilities { get; private set; }
-        
+
         private readonly Dictionary<int, Dictionary<string, AttributeValue>> _predictionAttributeSnapshots = new();
 
         public AbilityManager(IAbilitySystem owner)
         {
             _owner = owner;
             Abilities = new Dictionary<string, Ability>();
+            Debug.Log($"[AbilityManager] Created for System {owner.GetHashCode()}");
         }
 
         public Ability GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
         {
             if (abilityDefinition == null) return null;
-            if (Abilities.TryGetValue(abilityDefinition.UniqueName, out var existing)) return existing;
+            if (Abilities.TryGetValue(abilityDefinition.UniqueName, out var existing))
+            {
+                Debug.Log($"[AbilityManager] Already has ability {abilityDefinition.UniqueName} on server={_owner.IsServer()}");
+                return existing;
+            }
+            Debug.Log($"[AbilityManager] Granting {abilityDefinition.UniqueName} to server={_owner.IsServer()}");
             var ability = abilityDefinition.ToAbility(_owner);
             ability.SetLevel(level);
             Abilities.Add(abilityDefinition.UniqueName, ability);
+
+            if (_owner.IsServer())
+            {
+                _owner.ReplicationManager.NotifyClientAbilityGranted(abilityDefinition);
+            }
+
             return ability;
         }
 
@@ -37,8 +49,14 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (Abilities.TryGetValue(abilityName, out var ability))
             {
+                var def = ability.Definition;
                 if (ability.IsActive) ability.TryEndAbility();
                 Abilities.Remove(abilityName);
+
+                if (_owner.IsServer())
+                {
+                    _owner.ReplicationManager.NotifyClientAbilityRemoved(def);
+                }
             }
         }
 
@@ -52,7 +70,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             foreach (var ability in Abilities.Values)
             {
-                if (ability.IsActive) Debug.Log($"Ticking active ability: {ability.Definition.UniqueName}");
+                // if (ability.IsActive) Debug.Log($"Ticking active ability: {ability.Definition.UniqueName}");
                 ability.Tick();
             }
         }
@@ -66,7 +84,7 @@ namespace AbilitySystem.Runtime.Abilities
         public void CancelAbilitiesWithTags(Tag[] tags, Ability ignoreAbility = null)
         {
             if (tags == null || tags.Length == 0) return;
-            
+
             foreach (var ability in Abilities.Values.ToList())
             {
                 if (ability == ignoreAbility) continue;
@@ -92,7 +110,7 @@ namespace AbilitySystem.Runtime.Abilities
 
             var isClientRequest = _owner.IsLocalClient() && !_owner.IsServer();
             var isServerRequest = _owner.IsServer();
-            
+
             if (!HasAuthorityToActivate(ability, isClientRequest)) return false;
 
             // Case 1: ClientOnly ability
@@ -115,7 +133,13 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 if (isServerRequest)
                 {
-                    return ability.TryActivateAbility(data);
+                    var success = ability.TryActivateAbility(data);
+                    // On Host, we don't need to request client activation as it already happened above
+                    if (success && !_owner.IsLocalClient())
+                    {
+                        _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    }
+                    return success;
                 }
                 else if (isClientRequest)
                 {
@@ -130,7 +154,13 @@ namespace AbilitySystem.Runtime.Abilities
             {
                 if (isServerRequest)
                 {
-                    return ability.TryActivateAbility(data);
+                    var success = ability.TryActivateAbility(data);
+                    // On Host, we don't need to request client activation as it already happened above
+                    if (success && !_owner.IsLocalClient())
+                    {
+                        _owner.ReplicationManager.RequestClientActivateAbility(name, data);
+                    }
+                    return success;
                 }
                 else if (isClientRequest)
                 {
@@ -207,8 +237,8 @@ namespace AbilitySystem.Runtime.Abilities
                     kv.Value.PredictionKey.BaseKey == key.currentKey ||
                     kv.Value.PredictionKey.currentKey == key.currentKey)
                 .ToList();
-            
-            foreach(var kv in abilitiesToEnd)
+
+            foreach (var kv in abilitiesToEnd)
             {
                 kv.Value.TryEndAbility();
             }
@@ -224,7 +254,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             if (Abilities.TryGetValue(abilityName, out var ability))
             {
-                ability.TryActivateAbility(data);
+                ability.TryActivateAbility(data, true);
             }
         }
 
@@ -241,12 +271,26 @@ namespace AbilitySystem.Runtime.Abilities
                     _owner.AttributeSetManager.Restore(snapshot);
                     _predictionAttributeSnapshots.Remove(key.currentKey);
                 }
-                
+
                 var abilitiesToEnd = Abilities.Where(kv => kv.Value.PredictionKey.currentKey == key.currentKey).ToList();
-                foreach(var kv in abilitiesToEnd)
+                foreach (var kv in abilitiesToEnd)
                 {
                     kv.Value.TryCancelAbility();
                 }
+            }
+        }
+
+        public void UpdateAbilityCharges(string abilityName, int charges)
+        {
+            if (Abilities.TryGetValue(abilityName, out var ability))
+            {
+                if (ability is not ChargesAbility)
+                {
+                    Debug.Log("[AbilityManager] Attempting to update charges for a non-charge ability: " + abilityName);
+                    return;
+                }
+
+                ((ChargesAbility)ability).SetCharges(charges);
             }
         }
     }

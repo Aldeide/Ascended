@@ -30,6 +30,8 @@ The project follows a strict **modular architecture** designed to separate reusa
 | `Assets/Gameplay` | High-level game rules, controllers, and lobby logic. |
 | `Assets/Interface` | UI Toolkit assets (UXML, USS) and C# Controllers. |
 | `Assets/SystemsExtensions` | Game-specific implementations (e.g., "Player" ability). |
+| `Assets/Systems/EternityCommon` | Common and editor utilities. |
+| `Assets/Systems/GameplayModifier` | System for modifying gameplay rules. |
 | `Assets/Systems/GameplayTags` | Hierarchical tagging system for logic and identification. |
 | `Assets/Systems/ScalableFloat` | Data-driven mathematical scaling for designer values. |
 | `Assets/Localisation` | Multi-language support for UI and game data. |
@@ -40,6 +42,7 @@ The project follows a strict **modular architecture** designed to separate reusa
 - **Netcode for GameObjects (NGO)**: Used for state synchronization and RPCs.
 - **Gameplay Ability System (GAS)**: A custom-built, tag-driven system for abilities, effects, and attributes.
 - **ScriptableObjects**: Extensively used for "Definitions" (Item definitions, Ability definitions) to ensure a data-driven workflow.
+- **Jobified Attribute System**: A high-performance recalculation pipeline using Burst and the Job System to handle 100+ entities with minimal frame impact.
 
 ## 🔄 Core Workflows
 

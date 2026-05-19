@@ -18,7 +18,7 @@ namespace AbilitySystem.Scripts
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
-        public IAbilitySystem AbilitySystem { get; private set; }
+        public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
@@ -99,7 +99,7 @@ namespace AbilitySystem.Scripts
             {
                 var cueTags = new Tag[activeCues.Count];
                 var cueDatas = new CueData[activeCues.Count];
-                int i = 0;
+                var i = 0;
                 foreach (var cue in activeCues)
                 {
                     cueTags[i] = cue.Key;
@@ -130,36 +130,34 @@ namespace AbilitySystem.Scripts
 
             // Sync Effects
             var activeEffects = AbilitySystem.EffectManager.GetActiveEffects();
-            if (activeEffects.Count > 0)
+            if (activeEffects.Count <= 0) return;
+            var effectSyncData = new EffectSyncData[activeEffects.Count];
+            for (var k = 0; k < activeEffects.Count; k++)
             {
-                var effectSyncData = new EffectSyncData[activeEffects.Count];
-                for (int k = 0; k < activeEffects.Count; k++)
+                var effect = activeEffects[k];
+                var data = new EffectSyncData
                 {
-                    var effect = activeEffects[k];
-                    var data = new EffectSyncData
-                    {
-                        EffectName = effect.Definition.name,
-                        ActivationTime = effect.ActivationTime,
-                        PredictionKey = effect.PredictionKey,
-                        Level = effect.Level,
-                        NumStacks = effect.NumStacks
-                    };
+                    EffectName = effect.Definition.name,
+                    ActivationTime = effect.ActivationTime,
+                    PredictionKey = effect.PredictionKey,
+                    Level = effect.Level,
+                    NumStacks = effect.NumStacks
+                };
 
-                    if (effect.SetByCallerTagMagnitudes.Count > 0)
-                    {
-                        data.SetByCallerTags = effect.SetByCallerTagMagnitudes.Keys.ToArray();
-                        data.SetByCallerValues = effect.SetByCallerTagMagnitudes.Values.ToArray();
-                    }
-                    
-                    if (effect.Source != null && effect.Source.NetworkRole != null)
-                        data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
-                    else
-                        data.SourceId = NetworkObjectId;
-                        
-                    effectSyncData[k] = data;
+                if (effect.SetByCallerTagMagnitudes.Count > 0)
+                {
+                    data.SetByCallerTags = effect.SetByCallerTagMagnitudes.Keys.ToArray();
+                    data.SetByCallerValues = effect.SetByCallerTagMagnitudes.Values.ToArray();
                 }
-                SyncEffectsClientRpc(effectSyncData, clientRpcParams);
+                    
+                if (effect.Source != null && effect.Source.NetworkRole != null)
+                    data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
+                else
+                    data.SourceId = NetworkObjectId;
+                        
+                effectSyncData[k] = data;
             }
+            SyncEffectsClientRpc(effectSyncData, clientRpcParams);
         }
 
         public void Initialise()
@@ -177,7 +175,9 @@ namespace AbilitySystem.Scripts
             repl.OnNotifyClientsPlayCue += (tag, act, data) => NotifyClientsPlayCueRpc(tag, act, data);
             repl.OnNotifyClientAbilityGranted += (def) => NotifyClientAbilityGrantedRpc(def.UniqueName);
             repl.OnNotifyClientAbilityRemoved += (def) => NotifyClientAbilityRemovedRpc(def.UniqueName);
-            
+
+            repl.OnNotifyClientsAbilityChargesChanged +=
+                (name, current, max) => NotifyClientsAbilityChargesChangedRpc(name, current, max);
             repl.OnNotifyClientsAbilityTagsAdded += (tags) => NotifyClientsAbilityTagsAddedRpc(tags);
             repl.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
             repl.OnNotifyClientsEffectAdded += (data) => NotifyOwnerEffectAddedRpc(data);
@@ -227,11 +227,12 @@ namespace AbilitySystem.Scripts
         public void Update()
         {
             AbilitySystem.Tick();
+            AbilitySystem.AttributeSetManager.UpdateAttributesJobified();
         }
         
         public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            if (IsServer && ! IsHost)
+            if (IsServer)
             {
                 NotifyClientsBaseValueChangedRpc(attribute.GetName(), newValue);
             }
@@ -239,7 +240,7 @@ namespace AbilitySystem.Scripts
         
         public void OnAttributeBaseCurrentChanged(Attribute attribute, float oldValue, float newValue)
         {
-            if (IsServer && ! IsHost)
+            if (IsServer)
             {
                 NotifyClientsCurrentValueChangedRpc(attribute.GetName(), oldValue, newValue);
             }
@@ -390,7 +391,9 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Everyone)]
         public void ObserversPlayCueRpc(string cueTag, CueData data, bool isPredicted = false)
         {
-            if (isPredicted && IsOwner && !IsServer) return;
+            // If it's a predicted cue and I am the owner, I already played it locally in OnPlayCueRequested.
+            if (isPredicted && IsOwner) return;
+            
             var gameplayTag = new Tag(cueTag);
             AbilitySystem.CueManager.OnCueReceived(gameplayTag, CueAction.Execute, data);
             _cueManagerComponent.PlayCue(cueTag);
@@ -399,7 +402,8 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Everyone)]
         public void ObserversPlayCueWithDataRpc(string cueTag, CueData data, bool isPredicted = false)
         {
-            if (isPredicted && IsOwner && !IsServer) return;
+            // If it's a predicted cue and I am the owner, I already played it locally in OnPlayCueRequested.
+            if (isPredicted && IsOwner) return;
             _cueManagerComponent.PlayCue(cueTag, data);
         }
         
@@ -419,7 +423,7 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void AddCuesBatchClientRpc(Tag[] cueTags, CueData[] cueDatas, ClientRpcParams clientRpcParams = default)
         {
-            for (int i = 0; i < cueTags.Length; i++)
+            for (var i = 0; i < cueTags.Length; i++)
             {
                 var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTags[i]);
                 AbilitySystem.CueManager.AddCue(cueDefinition, cueDatas[i]);
@@ -432,11 +436,9 @@ namespace AbilitySystem.Scripts
             foreach (var data in syncData)
             {
                 var attribute = AbilitySystem.AttributeSetManager.GetAttribute(data.AttributeName);
-                if (attribute != null)
-                {
-                    attribute.SetBaseValue(data.BaseValue);
-                    attribute.SetCurrentValue(data.CurrentValue);
-                }
+                if (attribute == null) continue;
+                attribute.SetBaseValue(data.BaseValue);
+                attribute.SetCurrentValue(data.CurrentValue);
             }
         }
 
@@ -466,6 +468,12 @@ namespace AbilitySystem.Scripts
         public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
             AbilitySystem.AbilityManager.RemoveAbility(abilityName);
+        }
+
+        [Rpc(SendTo.NotServer)]
+        public void NotifyClientsAbilityChargesChangedRpc(string abilityName, int current, int max)
+        {
+            AbilitySystem.ReplicationManager.ProcessClientAbilityChargesChanged(abilityName, current, max);
         }
         
         [Rpc(SendTo.NotServer)]

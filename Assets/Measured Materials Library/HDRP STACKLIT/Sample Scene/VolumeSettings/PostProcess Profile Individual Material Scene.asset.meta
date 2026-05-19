@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 33e0705f79c445a40b0786f8f2abeafb
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Sample Scene/VolumeSettings/PostProcess
+    Profile Individual Material Scene.asset
+  uploadId: 292299

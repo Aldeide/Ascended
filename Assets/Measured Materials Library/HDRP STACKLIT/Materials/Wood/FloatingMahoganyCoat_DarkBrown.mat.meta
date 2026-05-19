@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c65da75c0e4370b43837b8d586a11e6e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Wood/FloatingMahoganyCoat_DarkBrown.mat
+  uploadId: 292299

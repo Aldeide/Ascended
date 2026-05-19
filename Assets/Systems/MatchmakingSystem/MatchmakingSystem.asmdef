@@ -1,0 +1,19 @@
+{
+    "name": "MatchmakingSystem",
+    "rootNamespace": "MatchmakingSystem",
+    "references": [
+        "Unity.Netcode.Runtime",
+        "Unity.Collections",
+        "Facepunch Transport for Netcode for GameObjects",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

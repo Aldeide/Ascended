@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Ascended.sln"
+    "dotnet.defaultSolution": "Ascended.sln",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "c:\\Users\\Anthony\\Desktop\\Ascended\\Ascended\\Ascended.sln"
+    ]
 }

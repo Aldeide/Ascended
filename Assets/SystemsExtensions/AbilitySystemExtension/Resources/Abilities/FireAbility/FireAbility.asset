@@ -17,7 +17,17 @@ MonoBehaviour:
   edges: []
   groups: []
   stackNodes: []
-  pinnedElements: []
+  pinnedElements:
+  - position:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 150
+      height: 200
+    opened: 1
+    editorType:
+      serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
@@ -65,6 +75,12 @@ MonoBehaviour:
     <AncestorsNames>k__BackingField:
     - Status
     <AncestorsHashCodes>k__BackingField: b0c3cf74
+  - <Name>k__BackingField: Status.Debuff.Stun
+    <HashCode>k__BackingField: -712063834
+    <AncestorsNames>k__BackingField:
+    - Status
+    - Status.Debuff
+    <AncestorsHashCodes>k__BackingField: b0c3cf74a846b920
   GrantedEffects: []
   NetworkPolicy: 1
   NetworkSecurityPolicy: 0

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bd56a17b3ca103049a72cd663ef7ccf9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Wood/QuiltedMaple_Bronze.mat
+  uploadId: 292299

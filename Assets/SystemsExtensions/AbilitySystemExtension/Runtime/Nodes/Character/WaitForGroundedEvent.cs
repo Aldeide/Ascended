@@ -32,7 +32,6 @@ namespace AbilitySystemExtension.Runtime.Nodes.Character
         
         protected override void Process()
         {
-            Debug.Log("ProcessWaitForGroundedEvent");
             var ignoredAwaitableResult = WaitForEvent();
         }
         
@@ -40,7 +39,6 @@ namespace AbilitySystemExtension.Runtime.Nodes.Character
         {
             _eventReceived = new TaskCompletionSource<object>();
             await _eventReceived.Task;
-            Debug.Log("FinishedWaitForGroundedEvent");
             ProcessFinished();
         }
     }

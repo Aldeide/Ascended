@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f79777e2d3405a0478d7cd69f33bef54
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Aluminum_Chrome_Metal/MetalScratched.mat
+  uploadId: 292299

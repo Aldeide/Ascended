@@ -6,7 +6,10 @@
         "GUID:eec0964c48f6f4e40bc3ec2257ccf8c5",
         "GUID:f9c18cb9c0eed9d449c8e38d555810d9",
         "GUID:ca937d03ee5dd4d699091438dc0f3ae6",
-        "GUID:a432eb0a70c5c4a37ab50d59671586f8"
+        "Unity.Collections",
+        "Unity.Jobs",
+        "Unity.Mathematics",
+        "Unity.Burst"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

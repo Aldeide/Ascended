@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6673be5f95059b542a0e6f624ddb3c58
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 138814
+  packageName: Unity Measured Materials Library
+  packageVersion: 1.0
+  assetPath: Assets/Measured Materials Library/HDRP STACKLIT/Materials/Fabric_Suede/FabricTwillCoarseContrast_Gray.mat
+  uploadId: 292299
