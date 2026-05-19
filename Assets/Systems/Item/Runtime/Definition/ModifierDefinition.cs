@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
-using Item.Runtime.Constants;
 using Item.Runtime.Interface;
 using Item.Runtime.Interface.Core;
 using Item.Runtime.Modifiers;
@@ -18,8 +17,8 @@ namespace Item.Runtime.Definition
     public class ModifierDefinition : ItemDefinition
     {
         [Header("Mod Configuration")]
-        // Could be a tag (e.g. Mod.Active)
-        public ModType ModType;
+        [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
+        public Tag[] OwnedTags;
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] ModifiableEquipmentTags;
 

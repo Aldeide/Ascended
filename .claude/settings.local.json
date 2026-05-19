@@ -3,7 +3,26 @@
     "allow": [
       "Bash(awk '{print $NF}')",
       "PowerShell(& \"C:\\\\Program Files\\\\Unity\\\\Hub\\\\Editor\\\\6000.2.0b12\\\\Editor\\\\Unity.exe\" -batchmode -quit -projectPath \"c:\\\\RepoGit\\\\Ascended\" -logFile \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\build_check.log\" -executeMethod UnityEditor.SyncVS.SyncSolution; Write-Host \"Exit code: $LASTEXITCODE\")",
-      "PowerShell(& \"C:\\\\Program Files\\\\Unity\\\\Hub\\\\Editor\\\\6000.2.0b12\\\\Editor\\\\Unity.exe\" -batchmode -runTests -testPlatform EditMode -projectPath \"c:\\\\RepoGit\\\\Ascended\" -testResults \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\test_results.xml\" -logFile \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\test_run.log\"; Write-Host \"Exit code: $LASTEXITCODE\")"
+      "PowerShell(& \"C:\\\\Program Files\\\\Unity\\\\Hub\\\\Editor\\\\6000.2.0b12\\\\Editor\\\\Unity.exe\" -batchmode -runTests -testPlatform EditMode -projectPath \"c:\\\\RepoGit\\\\Ascended\" -testResults \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\test_results.xml\" -logFile \"c:\\\\RepoGit\\\\Ascended\\\\Logs\\\\test_run.log\"; Write-Host \"Exit code: $LASTEXITCODE\")",
+      "Bash(\"C:/Program Files/Unity/Hub/Editor/6000.2.0b12/Editor/Unity.exe\" -batchmode -nographics -quit -projectPath \"C:/RepoGit/Ascended\" -logFile \"C:/RepoGit/Ascended/compile.log\")",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(command -v dotnet)",
+      "Bash(command -v msbuild)",
+      "Read(//c/Program Files/dotnet/**)",
+      "Bash(\"C:/Program Files/dotnet/dotnet.exe\" build \"C:/RepoGit/Ascended/ItemSystem.csproj\" -nologo -v q)",
+      "Bash(\"C:/Program Files/dotnet/dotnet.exe\" build \"C:/RepoGit/Ascended/Item.csproj\" -nologo -v q)",
+      "Bash(\"C:/Program Files/dotnet/dotnet.exe\" build \"C:/RepoGit/Ascended/ItemTests.csproj\" -nologo -v q)",
+      "Bash(git checkout *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)",
+      "Bash(\"C:/Program Files/dotnet/dotnet.exe\" build \"C:/RepoGit/Ascended/Item.csproj\" -nologo -v q --no-dependencies)",
+      "Bash(\"C:/Program Files/dotnet/dotnet.exe\" build \"C:/RepoGit/Ascended/ItemTests.csproj\" -nologo -v q --no-dependencies)",
+      "Bash(\"C:/Program Files/dotnet/dotnet.exe\" build \"C:/RepoGit/Ascended/AbilitySystem.csproj\" -nologo -v q --no-dependencies)",
+      "Bash(\"C:/Program Files/Unity/Hub/Editor/6000.2.0b12/Editor/Unity.exe\" -batchmode -nographics -projectPath \"C:/RepoGit/Ascended\" -runTests -testPlatform EditMode -testCategory \"\" -testFilter \"Systems.Item.Tests\" -testResults \"C:/RepoGit/Ascended/test_results.xml\" -logFile \"C:/RepoGit/Ascended/test_run.log\")",
+      "Bash(\"C:/Program Files/Unity/Hub/Editor/6000.4.5f1/Editor/Unity.exe\" -batchmode -nographics -projectPath \"C:/RepoGit/Ascended\" -runTests -testPlatform EditMode -testFilter \"Systems.Item.Tests\" -testResults \"C:/RepoGit/Ascended/test_results.xml\" -logFile \"C:/RepoGit/Ascended/test_run.log\")",
+      "Bash(\"C:/Program Files/Unity/Hub/Editor/6000.4.5f1/Editor/Unity.exe\" -batchmode -nographics -projectPath \"C:/RepoGit/Ascended\" -runTests -testPlatform EditMode -testResults \"C:/RepoGit/Ascended/test_results.xml\" -logFile \"C:/RepoGit/Ascended/test_run.log\")",
+      "Bash(\"C:/Program Files/Unity/Hub/Editor/6000.4.5f1/Editor/Unity.exe\" -batchmode -nographics -quit -projectPath \"C:/RepoGit/Ascended\" -executeMethod Ascended.Editor.CI.CIBuild.BuildWindows -buildOutput \"C:/RepoGit/Ascended/Build/Windows/Ascended.exe\" -logFile \"C:/RepoGit/Ascended/build.log\")"
     ]
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GameplayTags.Runtime;
 using Item.Runtime.Database;
 using Item.Runtime.Definition;
 using Item.Runtime.Interface;
@@ -16,10 +17,13 @@ namespace Item.Runtime.Modifiers
         public Sprite Icon { get; set; }
         public int Level { get; set; }
         public int MaxLevel { get; set; }
-        
+
+        public Tag[] OwnedTags => _definition.OwnedTags;
+        public Tag[] ModifiableEquipmentTags => _definition.ModifiableEquipmentTags;
+
         public Dictionary<ItemDefinition, ScalableFloat.Runtime.ScalableFloat> UpgradeCosts { get; set; }
         public Dictionary<ItemDefinition, int> NextUpgradeCosts { get; set; }
-        
+
         private readonly IInventoryManager _inventoryManager;
         private Equipment _attachedEquipment;
         private ModifierDefinition _definition;

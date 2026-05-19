@@ -41,10 +41,12 @@ MonoBehaviour:
   - Effect.Cost.Ability.Dash
   - Effect.Modifier.Damage
   - Effect.Modifier.Damage.Kinetic
+  - EquipmentSlot.Armor
   - EquipmentSlot.Core
-  - EquipmentSlot.Utility.One
-  - EquipmentSlot.Utility.Two
+  - EquipmentSlot.Weapon
+  - Item.Equipment.Armor
   - Item.Equipment.EnergyCore
+  - Item.Equipment.Weapon
   - Item.Modifier.Active
   - Item.Modifier.Passive
   - Mod.Slot.Active.1

@@ -6,7 +6,16 @@ The project utilizes a data-driven Item System that manages inventory, equipment
 
 ### 1. Item Definitions (`ItemDefinition`)
 All items begin as `ScriptableObject` definitions. They contain static metadata (Name, Icon, Description) and act as factories for runtime objects.
-- **`EquipmentDefinition`**: Extends the base definition to include power-level data, mod slots, and granted abilities.
+- **`EquipmentDefinition`**: Extends the base definition to include `EquipmentTags`, `EquipmentSlot`, mod slots, and granted abilities/effects.
+- **`ModifierDefinition`**: Defines a mod. Carries `OwnedTags` (e.g. `Item.Modifier.Active`/`Passive`) used to match against a slot's `TagQuery`, and `ModifiableEquipmentTags` to gate which equipments can host it.
+
+### Equipment Categories
+Three concrete equipment categories are defined as assets under `Assets/Systems/Equipment/Resources/Equipment/`:
+- **Energy Core** — `EquipmentSlot.Core`, tag `Item.Equipment.EnergyCore`.
+- **Weapon** — `EquipmentSlot.Weapon`, tag `Item.Equipment.Weapon`.
+- **Armor** — `EquipmentSlot.Armor`, tag `Item.Equipment.Armor`.
+
+Each category exposes the same mod slot contract: **1 active + 2 passive** (`Mod.Slot.Active.1`, `Mod.Slot.Passive.1`, `Mod.Slot.Passive.2`). The active/passive constraint is enforced by the slot's `TagQuery` matching a mod's `OwnedTags` (e.g., a passive slot only accepts mods carrying `Item.Modifier.Passive`).
 
 ### 2. Inventory Management (`InventoryManager`)
 A central registry for all items owned by an actor.
@@ -43,8 +52,13 @@ Items can be leveled up if the owner possesses the required resources in their `
 
 ### Modifiers (`IModifiable`)
 High-tier equipment supports `Modifier` slots.
-- **Modifiers**: These are separate assets that provide additional abilities or attribute tweaks.
-- **Slot Hardware**: Mod slots are level-gated, meaning players must upgrade the equipment to unlock additional slots.
+- **Modifiers**: Separate assets (`ModifierDefinition`) that provide additional abilities or attribute tweaks.
+- **Slot Hardware**: Mod slots are level-gated (`RequiredLevel` on `ModSlot`) — typically the second passive slot is unlocked at a higher equipment level.
+- **Type Filtering**: Each `ModSlot` carries a `TagQuery` matched against the mod's `OwnedTags`. A slot tagged for `Item.Modifier.Active` rejects passive mods and vice-versa.
+- **Equipment Compatibility**: A mod's `ModifiableEquipmentTags` must intersect the host equipment's `EquipmentTags` — e.g. an EnergyCore-only mod cannot be slotted into a Weapon.
+
+`Equipment.CanAddMod(slot, mod)` returns `true` only when **all four** conditions are satisfied:
+slot exists, equipment level ≥ slot's required level, slot's `TagQuery` matches the mod's owned tags, and the mod's `ModifiableEquipmentTags` intersect the equipment's `EquipmentTags`.
 
 ## 📚 Data Registry (`ItemLibrary`)
 The `ItemLibrary` is a singleton service that performs a `Resources.LoadAll` on initialization. It provides a convenient global lookup for converting saved item IDs/names back into operational `ItemDefinition` assets.

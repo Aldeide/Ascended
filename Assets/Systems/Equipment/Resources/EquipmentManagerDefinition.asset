@@ -27,17 +27,17 @@ MonoBehaviour:
     <AncestorsNames>k__BackingField:
     - EquipmentSlot
     <AncestorsHashCodes>k__BackingField: 36e44add
-  - <Name>k__BackingField: EquipmentSlot.Utility.One
-    <HashCode>k__BackingField: 1209799498
+  - <Name>k__BackingField: EquipmentSlot.Weapon
+    <HashCode>k__BackingField: 0
     <AncestorsNames>k__BackingField:
     - EquipmentSlot
-    - EquipmentSlot.Utility
-    <AncestorsHashCodes>k__BackingField: 36e44add80fd2777
-  - <Name>k__BackingField: EquipmentSlot.Utility.Two
-    <HashCode>k__BackingField: 1707192472
+    <AncestorsHashCodes>k__BackingField: 36e44add
+  - <Name>k__BackingField: EquipmentSlot.Armor
+    <HashCode>k__BackingField: 0
     <AncestorsNames>k__BackingField:
     - EquipmentSlot
-    - EquipmentSlot.Utility
-    <AncestorsHashCodes>k__BackingField: 36e44add80fd2777
+    <AncestorsHashCodes>k__BackingField: 36e44add
   Equipment:
   - {fileID: 11400000, guid: 5bb65c2a0a6542f41abd499881be2386, type: 2}
+  - {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+  - {fileID: 11400000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 2}
