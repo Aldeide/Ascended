@@ -92,10 +92,11 @@ Allows the "Caller" (the Ability, projectile, or script) to pass a dynamic value
 Gameplay Effects (GEs) are the primary vehicle for all state changes.
 
 ### 1. Application Validation
-Before an effect is applied, the `EffectManager` performs a three-stage validation:
+Before an effect is applied, the `EffectManager` performs a multi-stage validation:
 1. **Immunity Check**: Checks if the target has any `ApplicationImmunityTags` that match the effect's asset tags.
 2. **Requirement Check**: Verifies the target possesses all `ApplicationRequiredTags`.
-3. **Removal Logic**: If the effect has `RemoveGameplayEffectsWithTags`, it immediately terminates all existing effects on the target that match the tags.
+3. **Custom Application Requirements**: Iterates through any custom `EffectApplicationRequirement` scriptable objects to validate complex scripts (e.g. "Target must have >50% HP").
+4. **Removal Logic**: If the effect has `RemoveGameplayEffectsWithTags`, it immediately terminates all existing effects on the target that match the tags.
 
 ### 2. Ongoing State Evaluation
 Effects can be "Suspended" without being removed. If an effect has `OngoingRequiredTags`, the system constantly monitors the owner's tag state. If requirements are lost, the effect's `IsActive` flag is set to false, pausing its modifiers until requirements are met again.
@@ -143,7 +144,12 @@ Abilities support different replication and execution models via the `AbilityNet
     - **Replication Trust**: Because the ability only runs on the server, the client does *not* execute the ability locally or receive activation/termination RPC requests.
     - Instead, the client trusts the authoritative replication layer to automatically synchronize the resulting active `GameplayEffects`, `GameplayTags`, and `GameplayCues` applied by the server-side ability execution. This prevents duplicate client-side activations and matching replication bugs.
 
-### 5. Robust Activation Safeguards & Idempotency
+### 5. Ability RPC Batching
+For abilities that activate, apply payloads, and terminate rapidly (like hitscan weapons or instant interactions), the networking overhead of separate RPCs can be expensive. 
+- The **`ScopedAbilityRPCBatcher`** can be used in a `using` block to intercept calls to the `ReplicationManager`. 
+- Upon disposal, it batches `TryActivate`, `TargetData`, and `EndAbility` into a single `AbilityBatchData` struct and dispatches a single RPC to the server, significantly reducing bandwidth.
+
+### 6. Robust Activation Safeguards & Idempotency
 To prevent duplicate execution and duplicate effect applications (especially when running as a Host acting as both server and client), the system implements several layers of runtime guards:
 - **Initialization Idempotency**: `AbilitySystemComponent.Initialise()` checks if the Ability System has already been created and initialized. If so, it exits early to prevent destroying existing instances and leaving orphaned event bindings.
 - **Activation Blockers**: The base class `Ability.CanActivate()` automatically checks `IsActive`. If the ability is already running on the manager, it prevents duplicate concurrent activations and returns `AbilityActivationResult.BlockedByAbility`. Subclasses can customize this by overriding `CanActivate()`.
@@ -162,7 +168,14 @@ Cues respond to four primary events via the `CueAction` enum:
 - **Remove**: Cleans up a persistent visual when an effect expires.
 - **Execute**: Immediate logic-driven cue.
 
-### 2. Predictive Handshake
+### 2. Cue Parameters (`CueData`)
+When a cue is triggered, it passes a `CueData` context payload. This supports advanced functionality similar to Epic's GAS `FGameplayCueParameters`, serializing over the network:
+- **`Magnitude`**: Useful for scaling visual intensity based on an effect's power.
+- **`Normal`**: Surface normal for placing impact decals.
+- **`SourceId` / `TargetId`**: References to the involved entities.
+- **`VectorData[]`**: Custom arrays for drawing splines or multiple impact points.
+
+### 3. Predictive Handshake
 The system uses a **Mark-and-Cull** pattern to handle local prediction:
 - **Client**: When a predicted ability triggers a cue, it marks the cue's **PredictionKey** in the `CueManager`.
 - **Server**: Replicates the cue back to all clients.

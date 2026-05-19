@@ -6,6 +6,7 @@ namespace AbilitySystem.Runtime.Effects
         Immune = 2,
         ApplicationRequiredTagsFailure = 3,
         OverflowDeny = 4,
-        OverflowClear = 5
+        OverflowClear = 5,
+        FailedCustomRequirement = 6
     }
 }

@@ -188,6 +188,7 @@ namespace AbilitySystem.Scripts
             repl.OnServerAbilityActivationRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
             repl.OnServerAbilityUnpredictedActivationRequested += (name, data) => ServerTryActivateUnpredictedAbilityRpc(name, data);
             repl.OnServerAbilityTerminationRequested += (name) => ServerTryEndAbilityRpc(name);
+            repl.OnServerAbilityBatchRequested += (batch) => ServerAbilityBatchRpc(batch);
             repl.OnAbilityActivationResponded += (key, success) =>
             {
                 if (success) NotifyAbilityActivationSucceededRpc(key);
@@ -282,6 +283,12 @@ namespace AbilitySystem.Scripts
         public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityTermination(abilityName);
+        }
+
+        [Rpc(SendTo.Server)]
+        public void ServerAbilityBatchRpc(AbilityBatchData batch, RpcParams rpcParams = default)
+        {
+            AbilitySystem.ReplicationManager.ProcessServerAbilityBatch(batch);
         }
 
         [Rpc(SendTo.Server)]

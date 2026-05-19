@@ -63,6 +63,17 @@ namespace AbilitySystem.Runtime.Effects
                 return EffectApplicationResult.ApplicationRequiredTagsFailure;
             }
 
+            if (effect.Definition.ApplicationRequirements != null)
+            {
+                foreach (var req in effect.Definition.ApplicationRequirements)
+                {
+                    if (req != null && !req.CanApplyEffect(_owner, effect.Source, effect))
+                    {
+                        return EffectApplicationResult.FailedCustomRequirement;
+                    }
+                }
+            }
+
             if (effect.Definition.RemoveGameplayEffectsWithTags != null && effect.Definition.RemoveGameplayEffectsWithTags.Length > 0)
             {
                 var effectsToRemove = Effects.Where(e => 

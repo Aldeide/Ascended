@@ -57,6 +57,10 @@ namespace AbilitySystem.Runtime.Effects
         [ValueDropdown("@TagsDropdown.GameplayTagChoices", IsUniqueList = true, HideChildProperties = true)]
         public Tag[] ApplicationImmunityTags = Array.Empty<Tag>();
         
+        [Title("Application Requirements")]
+        [Tooltip("Custom application requirements that must all pass for the effect to be applied.")]
+        public EffectApplicationRequirement[] ApplicationRequirements = Array.Empty<EffectApplicationRequirement>();
+        
         [Space]
         [ShowInInspector]
         [Title("Modifiers")]

@@ -31,6 +31,7 @@ namespace AbilitySystem.Runtime.Networking
         Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
         Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
         Action<string> OnServerAbilityTerminationRequested { get; set; }
+        Action<AbilityBatchData> OnServerAbilityBatchRequested { get; set; }
         Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
         Action<string, AbilityData> OnClientActivateAbility { get; set; }
         Action<string> OnClientEndAbility { get; set; }
@@ -67,6 +68,10 @@ namespace AbilitySystem.Runtime.Networking
         void ProcessClientAbilityChargesChanged(string abilityName, int current, int max);
         
         // From AbilityManager (outbound)
+        bool IsBatching { get; }
+        void BeginBatch();
+        void EndBatch();
+        void ProcessServerAbilityBatch(AbilityBatchData batch);
         void RequestAbilityActivation(string name, PredictionKey key, AbilityData data);
         void RequestAbilityActivationUnpredicted(string name, AbilityData data);
         void RequestAbilityTermination(string name);

@@ -30,6 +30,7 @@ namespace AbilitySystem.Test.Utilities
         public Action<string, PredictionKey, AbilityData> OnServerAbilityActivationRequested { get; set; }
         public Action<string, AbilityData> OnServerAbilityUnpredictedActivationRequested { get; set; }
         public Action<string> OnServerAbilityTerminationRequested { get; set; }
+        public Action<AbilityBatchData> OnServerAbilityBatchRequested { get; set; }
         public Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
         public Action<string, AbilityData> OnClientActivateAbility { get; set; }
         public Action<string> OnClientEndAbility { get; set; }
@@ -203,9 +204,39 @@ namespace AbilitySystem.Test.Utilities
             }
         }
 
+        public bool IsBatching { get; private set; }
+        private AbilityBatchData _currentBatch;
+
+        public void BeginBatch()
+        {
+            IsBatching = true;
+            _currentBatch = new AbilityBatchData();
+        }
+
+        public void EndBatch()
+        {
+            if (IsBatching)
+            {
+                IsBatching = false;
+                if (!string.IsNullOrEmpty(_currentBatch.AbilityName))
+                {
+                    OnServerAbilityBatchRequested?.Invoke(_currentBatch);
+                }
+            }
+        }
+
         public void RequestAbilityActivation(string name, PredictionKey key, AbilityData data)
         {
-            OnServerAbilityActivationRequested?.Invoke(name, key, data);
+            if (IsBatching)
+            {
+                _currentBatch.AbilityName = name;
+                _currentBatch.PredictionKey = key;
+                _currentBatch.ActivationData = data;
+            }
+            else
+            {
+                OnServerAbilityActivationRequested?.Invoke(name, key, data);
+            }
         }
 
         public void RequestAbilityActivationUnpredicted(string name, AbilityData data)
@@ -215,7 +246,14 @@ namespace AbilitySystem.Test.Utilities
 
         public void RequestAbilityTermination(string name)
         {
-            OnServerAbilityTerminationRequested?.Invoke(name);
+            if (IsBatching && _currentBatch.AbilityName == name)
+            {
+                _currentBatch.EndAbilityImmediately = true;
+            }
+            else
+            {
+                OnServerAbilityTerminationRequested?.Invoke(name);
+            }
         }
 
         public void RequestClientActivateAbility(string name, AbilityData data)
@@ -262,6 +300,15 @@ namespace AbilitySystem.Test.Utilities
         {
             if (!_owner.IsServer()) return;
             _owner.AbilityManager.EndAbility(name);
+        }
+
+        public void ProcessServerAbilityBatch(AbilityBatchData batch)
+        {
+            ProcessServerAbilityActivation(batch.AbilityName, batch.PredictionKey, batch.ActivationData);
+            if (batch.EndAbilityImmediately)
+            {
+                _owner.AbilityManager.EndAbility(batch.AbilityName);
+            }
         }
 
         public void ProcessAbilityActivationConfirmed(PredictionKey key)
