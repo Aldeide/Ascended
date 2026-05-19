@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
@@ -15,10 +15,6 @@ namespace AbilitySystem.Scripts
 
         public EffectDefinition EffectDefinition;
         public float DamageAmount;
-        
-        // Cache the Tag instantiation to avoid GC allocation and string parsing
-        // overhead during high-frequency physics callbacks like OnTriggerEnter.
-        private static readonly Tag DamageTag = new Tag("Data.Effect.Damage");
 
         private void OnTriggerEnter(Collider other)
         {
