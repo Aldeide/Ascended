@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AbilitySystem.Runtime.Effects;
 using GameplayTags.Runtime;
@@ -10,9 +10,6 @@ namespace AbilitySystem.Scripts
 {
     public class ServerDamageEffectApplicator : NetworkBehaviour
     {
-        // Cache Tag instantiation to prevent GC allocation in high-frequency physics callbacks
-        private static readonly Tag DamageTag = new Tag("Data.Effect.Damage");
-
         public EffectDefinition EffectDefinition;
         public float DamageAmount;
         

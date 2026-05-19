@@ -1,0 +1,4 @@
+## 2024-05-18 - Information Disclosure via Broadcast RPCs in Netcode
+**Vulnerability:** Debug information or other sensitive data was being broadcasted to all connected clients using `[Rpc(SendTo.Everyone)]`, relying entirely on the client to discard the message if they weren't the intended recipient (e.g., `if (NetworkManager.LocalClientId != targetId) return;`). This allows a malicious client to intercept sensitive data on the network.
+**Learning:** In a server-authoritative architecture using Unity Netcode for GameObjects (NGO), you should never send sensitive data to the entire network and trust the client to filter it. Network traffic can be intercepted.
+**Prevention:** Always use targeted RPCs to send data only to the specific client that requested it or needs it. In NGO 2.x, use the `[Rpc(SendTo.SpecifiedInParams)]` attribute and call the RPC using `RpcTarget.Single(clientId, RpcTargetUse.Temp)`.
