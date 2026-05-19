@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f9da2cd20b844d98091193c6eaa6292, type: 3}
-  m_Name: EnergyCoreEquipment
-  m_EditorClassIdentifier: 
-  Name: EnergyCore
+  m_Name: OverchargedCore
+  m_EditorClassIdentifier:
+  Name: OverchargedCore
   DisplayName:
     m_TableReference:
-      m_TableCollectionName: GUID:c4eb29c878f6183498c14f256a5724a1
+      m_TableCollectionName:
     m_TableEntryReference:
-      m_KeyId: 20043014144
-      m_Key: 
+      m_KeyId: 0
+      m_Key:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   Description:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName:
     m_TableEntryReference:
       m_KeyId: 0
-      m_Key: 
+      m_Key:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
@@ -92,7 +92,7 @@ MonoBehaviour:
       - Mod.Slot
       - Mod.Slot.Passive
       <AncestorsHashCodes>k__BackingField: 3ed98f597c2a300c59ba30f0
-    RequiredLevel: 5
+    RequiredLevel: 7
     TagQuery:
       Condition:
       - MatchType: 4
@@ -103,11 +103,10 @@ MonoBehaviour:
           - Item
           - Item.Modifier
           <AncestorsHashCodes>k__BackingField: 952fdcbc08953be7
-  GrantedAbilities:
-  - {fileID: 11400000, guid: 65614ffc5c2d7394ab347dbd352a3a3b, type: 2}
+  GrantedAbilities: []
   GrantedEffects: []
   GrantedTags: []
-  MaxLevel: 255
+  MaxLevel: 20
   references:
     version: 2
     RefIds: []

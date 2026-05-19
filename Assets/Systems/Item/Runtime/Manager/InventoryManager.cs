@@ -17,9 +17,9 @@ namespace Item.Runtime.Manager
         public event Action OnInventoryChanged;
         
         private readonly IAbilitySystem _owner;
-        private readonly IInventoryReplicationManager _replicationManager;
-        
-        public InventoryManager(IAbilitySystem owner, IInventoryReplicationManager replicationManager)
+        private readonly IItemReplicationManager _replicationManager;
+
+        public InventoryManager(IAbilitySystem owner, IItemReplicationManager replicationManager)
         {
             _owner = owner;
             _replicationManager = replicationManager;
@@ -37,7 +37,7 @@ namespace Item.Runtime.Manager
             if (_replicationManager != null && _replicationManager.IsServer())
             {
                 // TODO: Create item database entry so we can have a unique id per item.
-                _replicationManager.NotifyClientAddItem(item.Name, 1);
+                _replicationManager.NotifyClientItemAdded(item.Name, 1);
             }
             OnInventoryChanged?.Invoke();
         }
@@ -52,7 +52,7 @@ namespace Item.Runtime.Manager
 
             if (_replicationManager != null && _replicationManager.IsServer())
             {
-                _replicationManager.NotifyClientAddItem(itemName, amount);
+                _replicationManager.NotifyClientItemAdded(itemName, amount);
             }
             
             OnInventoryChanged?.Invoke();
@@ -62,6 +62,10 @@ namespace Item.Runtime.Manager
         {
             if (Items.Remove(item))
             {
+                if (_replicationManager != null && _replicationManager.IsServer())
+                {
+                    _replicationManager.NotifyClientItemRemoved(item.Name, 1);
+                }
                 OnInventoryChanged?.Invoke();
             }
         }
@@ -114,6 +118,11 @@ namespace Item.Runtime.Manager
                     {
                         Items.Remove(itemToRemove);
                     }
+                }
+
+                if (_replicationManager != null && _replicationManager.IsServer())
+                {
+                    _replicationManager.NotifyClientItemRemoved(required.Key.Name, required.Value);
                 }
             }
             OnInventoryChanged?.Invoke();
