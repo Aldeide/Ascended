@@ -102,6 +102,14 @@ namespace AbilitySystem.Test.Utilities
 
             serverRep.OnClientEndAbility = (name) =>
                 clientRep.ProcessClientEndAbility(name);
+
+            // Client -> Server Sync Key
+            clientRep.OnServerSyncKeyReceived = (name, key) =>
+                serverRep.ProcessServerSyncKey(name, key);
+
+            // Server -> Client Sync Key
+            serverRep.OnClientSyncKeyConfirmed = (name, key) =>
+                clientRep.ProcessClientSyncKeyConfirmed(name, key);
         }
 
         /// <summary>

@@ -34,6 +34,8 @@ namespace AbilitySystem.Runtime.Networking
         Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
         Action<string, AbilityData> OnClientActivateAbility { get; set; }
         Action<string> OnClientEndAbility { get; set; }
+        Action<string, PredictionKey> OnServerSyncKeyReceived { get; set; }
+        Action<string, PredictionKey> OnClientSyncKeyConfirmed { get; set; }
 
         IDataManager DataManager { get; set; }
         
@@ -70,6 +72,8 @@ namespace AbilitySystem.Runtime.Networking
         void RequestAbilityTermination(string name);
         void RequestClientActivateAbility(string name, AbilityData data);
         void RequestClientEndAbility(string name);
+        void SendSyncKey(string abilityName, PredictionKey key);
+        void ConfirmSyncKey(string abilityName, PredictionKey key);
 
         // From Component (inbound from RPC)
         void ProcessServerAbilityActivation(string name, PredictionKey key, AbilityData data);
@@ -80,5 +84,7 @@ namespace AbilitySystem.Runtime.Networking
         void ProcessAbilityActivationDenied(string name, PredictionKey key);
         void ProcessClientActivateAbility(string name, AbilityData data);
         void ProcessClientEndAbility(string name);
+        void ProcessServerSyncKey(string abilityName, PredictionKey key);
+        void ProcessClientSyncKeyConfirmed(string abilityName, PredictionKey key);
     }
 }

@@ -30,6 +30,8 @@ namespace AbilitySystem.Runtime.Attributes
         public Func<Attribute, float, float> OnAttributeCurrentValuePreChange;
         public Action<Attribute, float, float> OnAttributeCurrentValueChanged;
 
+        public AttributeSet AttributeSet => _attributeSet;
+
         public Attribute(string name, AttributeSet attributeSet, float baseValue,
             float minValue = float.MinValue, float maxValue = float.MaxValue, int index = -1)
         {
@@ -85,6 +87,7 @@ namespace AbilitySystem.Runtime.Attributes
         public virtual void SetBaseValue(float value)
         {
             var previousValue = BaseValue;
+            _attributeSet?.PreAttributeChange(this, ref value);
             value = InvokePreBaseValueListeners(value);
             
             if (_manager != null && _index >= 0)
@@ -98,6 +101,7 @@ namespace AbilitySystem.Runtime.Attributes
             }
             
             OnAttributeBaseValueChanged?.Invoke(this, previousValue, BaseValue);
+            _attributeSet?.PostAttributeChange(this, previousValue, BaseValue);
         }
         
         public void SetBaseValueNoEvent(float value)
@@ -122,6 +126,7 @@ namespace AbilitySystem.Runtime.Attributes
         public void SetCurrentValue(float value)
         {
             var previousValue = CurrentValue;
+            _attributeSet?.PreAttributeChange(this, ref value);
             value = InvokePreCurrentValueListeners(value);
             
             if (_manager != null && _index >= 0)
@@ -135,6 +140,7 @@ namespace AbilitySystem.Runtime.Attributes
             }
             
             OnAttributeCurrentValueChanged?.Invoke(this, previousValue, CurrentValue);
+            _attributeSet?.PostAttributeChange(this, previousValue, CurrentValue);
         }
         
         public void SetCurrentValueNoEvent(float value)

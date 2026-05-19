@@ -28,6 +28,7 @@ namespace AbilitySystem.Runtime.AttributeSets
         private Dictionary<string, AttributeAggregator> _attributeAggregators;
         private Dictionary<string, Attribute> _attributeFullNameCache;
         private List<Attribute> _allAttributesList = new List<Attribute>();
+        public Attribute CurrentlyCalculatingAttribute;
 
         // Job related data
         private NativeArray<AttributeState> _attributeStates;
@@ -193,6 +194,16 @@ namespace AbilitySystem.Runtime.AttributeSets
                     if (!_attributeFullNameCache.TryGetValue(modifier.AttributeName, out var attribute)) continue;
                     
                     var magnitude = modifier.Calculate(instantEffect);
+                    
+                    // Trigger PreGameplayEffectExecute callback. Can modify magnitude or cancel execution (by returning false).
+                    if (attribute.AttributeSet != null)
+                    {
+                        if (!attribute.AttributeSet.PreGameplayEffectExecute(instantEffect, modifier, ref magnitude))
+                        {
+                            continue;
+                        }
+                    }
+                    
                     var baseValue = attribute.BaseValue;
                     switch (modifier.Operation)
                     {
@@ -215,6 +226,9 @@ namespace AbilitySystem.Runtime.AttributeSets
                             throw new ArgumentOutOfRangeException();
                     }
                     attribute.SetBaseValue(baseValue);
+                    
+                    // Trigger PostGameplayEffectExecute callback
+                    attribute.AttributeSet?.PostGameplayEffectExecute(instantEffect, modifier, magnitude);
                 }
             }
 
@@ -262,6 +276,7 @@ namespace AbilitySystem.Runtime.AttributeSets
             {
                 oldValues[i] = _allAttributesList[i].CurrentValue;
                 var attr = _allAttributesList[i];
+                CurrentlyCalculatingAttribute = attr;
                 var aggregator = _attributeAggregators[attr.GetName()];
                 var mods = aggregator.GetModifiers();
                 
@@ -275,6 +290,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                         modsList.Add(new ModifierData(mod.Modifier.Calculate(mod.Effect), mod.Modifier.Operation));
                     }
                 }
+                CurrentlyCalculatingAttribute = null;
                 _modifierRanges[i] = new int2(start, modsList.Count - start);
                 
                 // Update base values in case they changed via SetBaseValue
@@ -310,6 +326,7 @@ namespace AbilitySystem.Runtime.AttributeSets
                     attr.SetCurrentValueNoEvent(newValue);
                     attr.OnAttributeCurrentValueChanged?.Invoke(attr, oldValues[i], newValue);
                     OnAnyAttributeCurrentValueChanged?.Invoke(attr, oldValues[i], newValue);
+                    attr.AttributeSet?.PostAttributeChange(attr, oldValues[i], newValue);
                 }
             }
 

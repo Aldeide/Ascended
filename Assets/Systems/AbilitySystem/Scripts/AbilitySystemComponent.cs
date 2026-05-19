@@ -195,6 +195,8 @@ namespace AbilitySystem.Scripts
             };
             repl.OnClientActivateAbility += (name, data) => NotifyOwnerActivateAbilityRpc(name, data);
             repl.OnClientEndAbility += (name) => NotifyOwnerEndAbilityRpc(name);
+            repl.OnServerSyncKeyReceived += (name, key) => ServerSendSyncKeyRpc(name, key);
+            repl.OnClientSyncKeyConfirmed += (name, key) => ClientConfirmSyncKeyRpc(name, key);
             abilitySystemManager.OnPlayCueRequested += (tag, data, pred) =>
             {
                 // If it's predicted and we are the owner, play it locally immediately.
@@ -282,31 +284,73 @@ namespace AbilitySystem.Scripts
             AbilitySystem.ReplicationManager.ProcessServerAbilityTermination(abilityName);
         }
 
+        [Rpc(SendTo.Server)]
+        public void ServerSendSyncKeyRpc(string abilityName, PredictionKey key, RpcParams rpcParams = default)
+        {
+            AbilitySystem.ReplicationManager.ProcessServerSyncKey(abilityName, key);
+        }
+
+        [Rpc(SendTo.Owner)]
+        public void ClientConfirmSyncKeyRpc(string abilityName, PredictionKey key)
+        {
+            AbilitySystem.ReplicationManager.ProcessClientSyncKeyConfirmed(abilityName, key);
+        }
+
+        public void AbilityLocalInputPressed(string abilityName)
+        {
+            AbilitySystem.AbilityManager.AbilityLocalInputPressed(abilityName);
+        }
+
+        public void AbilityLocalInputReleased(string abilityName)
+        {
+            AbilitySystem.AbilityManager.AbilityLocalInputReleased(abilityName);
+        }
+
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerActivateAbilityRpc(string abilityName, AbilityData data)
         {
-            if (IsServer) return;
+            NotifyOwnerActivateAbilityInternal(abilityName, data);
+        }
+
+        public void NotifyOwnerActivateAbilityInternal(string abilityName, AbilityData data)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             AbilitySystem.ReplicationManager.ProcessClientActivateAbility(abilityName, data);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEndAbilityRpc(string abilityName)
         {
-            if (IsServer) return;
+            NotifyOwnerEndAbilityInternal(abilityName);
+        }
+
+        public void NotifyOwnerEndAbilityInternal(string abilityName)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             AbilitySystem.ReplicationManager.ProcessClientEndAbility(abilityName);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationSucceededRpc(PredictionKey key)
         {
-            if (IsServer) return;
+            NotifyAbilityActivationSucceededInternal(key);
+        }
+
+        public void NotifyAbilityActivationSucceededInternal(PredictionKey key)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             AbilitySystem.ReplicationManager.ProcessAbilityActivationConfirmed(key);
         }
 
         [Rpc(SendTo.Owner)]
         public void NotifyAbilityActivationFailedRpc(string abilityName, PredictionKey key)
         {
-            if (IsServer) return;
+            NotifyAbilityActivationFailedInternal(abilityName, key);
+        }
+
+        public void NotifyAbilityActivationFailedInternal(string abilityName, PredictionKey key)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             AbilitySystem.ReplicationManager.ProcessAbilityActivationDenied(abilityName, key);
         }
 
@@ -340,7 +384,12 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectAddedRpc(EffectSyncData data)
         {
-            if (IsServer) return;
+            NotifyOwnerEffectAddedInternal(data);
+        }
+
+        public void NotifyOwnerEffectAddedInternal(EffectSyncData data)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
             if (effectDefinition == null) return;
             
@@ -392,7 +441,12 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectRemovedRpc(string effectName)
         {
-            if (IsServer) return;
+            NotifyOwnerEffectRemovedInternal(effectName);
+        }
+
+        public void NotifyOwnerEffectRemovedInternal(string effectName)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             AbilitySystem.EffectManager.RemoveEffect(effectName);
         }
 
@@ -424,7 +478,12 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void AddCuesClientRpc(Tag cueTag, CueData cueData = default, ClientRpcParams clientRpcParams = default)
         {
-            if (IsServer) return;
+            AddCuesClientInternal(cueTag, cueData);
+        }
+
+        public void AddCuesClientInternal(Tag cueTag, CueData cueData = default)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTag);
             AbilitySystem.CueManager.AddCue(cueDefinition, cueData);
         }
@@ -432,7 +491,12 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void AddCuesBatchClientRpc(Tag[] cueTags, CueData[] cueDatas, ClientRpcParams clientRpcParams = default)
         {
-            if (IsServer) return;
+            AddCuesBatchClientInternal(cueTags, cueDatas);
+        }
+
+        public void AddCuesBatchClientInternal(Tag[] cueTags, CueData[] cueDatas)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             for (var i = 0; i < cueTags.Length; i++)
             {
                 var cueDefinition = DataLibrary.Instance.GetCueByTag(cueTags[i]);
@@ -443,7 +507,12 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void SyncAttributesClientRpc(AttributeSyncData[] syncData, ClientRpcParams clientRpcParams = default)
         {
-            if (IsServer) return;
+            SyncAttributesClientInternal(syncData);
+        }
+
+        public void SyncAttributesClientInternal(AttributeSyncData[] syncData)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             foreach (var data in syncData)
             {
                 var attribute = AbilitySystem.AttributeSetManager.GetAttribute(data.AttributeName);
@@ -456,7 +525,12 @@ namespace AbilitySystem.Scripts
         [ClientRpc]
         public void SyncEffectsClientRpc(EffectSyncData[] syncData, ClientRpcParams clientRpcParams = default)
         {
-            if (IsServer) return;
+            SyncEffectsClientInternal(syncData);
+        }
+
+        public void SyncEffectsClientInternal(EffectSyncData[] syncData)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             foreach (var data in syncData)
             {
                 var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
@@ -472,7 +546,12 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.NotServer)]
         public void NotifyClientAbilityGrantedRpc(string abilityName)
         {
-            if (IsServer) return;
+            NotifyClientAbilityGrantedInternal(abilityName);
+        }
+
+        public void NotifyClientAbilityGrantedInternal(string abilityName)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             var abilityDefinition = DataLibrary.Instance.GetAbilityByName(abilityName);
             AbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
         }
@@ -480,7 +559,12 @@ namespace AbilitySystem.Scripts
         [Rpc(SendTo.NotServer)]
         public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
-            if (IsServer) return;
+            NotifyClientAbilityRemovedInternal(abilityName);
+        }
+
+        public void NotifyClientAbilityRemovedInternal(string abilityName)
+        {
+            if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             AbilitySystem.AbilityManager.RemoveAbility(abilityName);
         }
 

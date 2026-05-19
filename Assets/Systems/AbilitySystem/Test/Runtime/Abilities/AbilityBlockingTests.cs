@@ -68,5 +68,36 @@ namespace AbilitySystem.Test.Runtime.Abilities
             
             Assert.IsTrue(success, "Ability should be permitted to activate after the blocker has ended");
         }
+
+        /// <summary>
+        /// Verifies that blocking a parent tag correctly prevents the activation of an ability that possesses a descendant/sub-tag of that parent.
+        /// </summary>
+        [Test]
+        public void AbilityBlockingTests_ActiveBlocker_BlocksDescendantTaggedAbility()
+        {
+            var parentTag = new Tag("Ability.Test");
+            var childTag = new Tag("Ability.Test.SubAction");
+
+            var blockerDef = AbilityUtilities.CreateInstantAbilityDefinition();
+            blockerDef.UniqueName = "Blocker";
+            blockerDef.BlockAbilityTags = new[] { parentTag };
+            
+            var blockedDef = AbilityUtilities.CreateInstantAbilityDefinition();
+            blockedDef.UniqueName = "Blocked";
+            blockedDef.AssetTags = new[] { childTag };
+            
+            Source.AbilityManager.GrantAbility(blockerDef);
+            Source.AbilityManager.GrantAbility(blockedDef);
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
+            
+            // Activate blocker
+            bool blockerSuccess = Source.AbilityManager.TryActivateAbility("Blocker");
+            Assert.IsTrue(blockerSuccess, "Blocker ability should have activated");
+            Assert.IsTrue(Source.AbilityManager.Abilities["Blocker"].IsActive);
+            
+            // Try activate blocked ability with sub-tag
+            bool blockedSuccess = Source.AbilityManager.TryActivateAbility("Blocked");
+            Assert.IsFalse(blockedSuccess, "Ability with descendant tag should have been blocked by parent tag blocker");
+        }
     }
 }

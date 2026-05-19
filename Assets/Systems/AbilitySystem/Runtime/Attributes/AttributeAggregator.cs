@@ -177,6 +177,17 @@ namespace AbilitySystem.Runtime.Attributes
                 var attr = dependencyModifier.GetDynamicDependency(effect);
                 if (attr != null) attr.OnAttributeCurrentValueChanged += OnDependencyChanged;
             }
+            if (modifier is IMultiDynamicDependency multiDependencyModifier)
+            {
+                var attrs = multiDependencyModifier.GetDynamicDependencies(effect);
+                if (attrs != null)
+                {
+                    foreach (var attr in attrs)
+                    {
+                        if (attr != null) attr.OnAttributeCurrentValueChanged += OnDependencyChanged;
+                    }
+                }
+            }
         }
         
         private void UnregisterDynamicDependencies(Effect effect, Modifier modifier)
@@ -185,6 +196,17 @@ namespace AbilitySystem.Runtime.Attributes
             {
                 var attr = dependencyModifier.GetDynamicDependency(effect);
                 if (attr != null) attr.OnAttributeCurrentValueChanged -= OnDependencyChanged;
+            }
+            if (modifier is IMultiDynamicDependency multiDependencyModifier)
+            {
+                var attrs = multiDependencyModifier.GetDynamicDependencies(effect);
+                if (attrs != null)
+                {
+                    foreach (var attr in attrs)
+                    {
+                        if (attr != null) attr.OnAttributeCurrentValueChanged -= OnDependencyChanged;
+                    }
+                }
             }
         }
 

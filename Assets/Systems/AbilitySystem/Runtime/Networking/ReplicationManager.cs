@@ -38,6 +38,8 @@ namespace AbilitySystem.Runtime.Networking
         public Action<PredictionKey, bool> OnAbilityActivationResponded { get; set; }
         public Action<string, AbilityData> OnClientActivateAbility { get; set; }
         public Action<string> OnClientEndAbility { get; set; }
+        public Action<string, PredictionKey> OnServerSyncKeyReceived { get; set; }
+        public Action<string, PredictionKey> OnClientSyncKeyConfirmed { get; set; }
 
         public IDataManager DataManager { get; set; }
 
@@ -288,6 +290,31 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessClientEndAbility(string name)
         {
             _owner.AbilityManager.ForceEndAbility(name);
+        }
+
+        public void SendSyncKey(string abilityName, PredictionKey key)
+        {
+            OnServerSyncKeyReceived?.Invoke(abilityName, key);
+        }
+
+        public void ConfirmSyncKey(string abilityName, PredictionKey key)
+        {
+            OnClientSyncKeyConfirmed?.Invoke(abilityName, key);
+        }
+
+        public void ProcessServerSyncKey(string abilityName, PredictionKey key)
+        {
+            if (!_owner.IsServer()) return;
+            if (_owner.AbilityManager.Abilities.TryGetValue(abilityName, out var ability))
+            {
+                ability.QueueSyncKey(key);
+            }
+        }
+
+        public void ProcessClientSyncKeyConfirmed(string abilityName, PredictionKey key)
+        {
+            if (_owner.IsServer()) return;
+            OnClientSyncKeyConfirmed?.Invoke(abilityName, key);
         }
     }
 }

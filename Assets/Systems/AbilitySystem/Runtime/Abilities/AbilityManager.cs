@@ -290,5 +290,21 @@ namespace AbilitySystem.Runtime.Abilities
                 ((ChargesAbility)ability).SetCharges(charges);
             }
         }
+
+        public void AbilityLocalInputPressed(string abilityName)
+        {
+            if (Abilities.TryGetValue(abilityName, out var ability) && ability.IsActive)
+            {
+                ability.NotifyInputPressed();
+            }
+        }
+
+        public void AbilityLocalInputReleased(string abilityName)
+        {
+            if (Abilities.TryGetValue(abilityName, out var ability) && ability.IsActive)
+            {
+                ability.NotifyInputReleased();
+            }
+        }
     }
 }

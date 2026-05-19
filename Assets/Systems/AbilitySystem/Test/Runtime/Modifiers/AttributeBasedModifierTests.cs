@@ -149,8 +149,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             effectDef.Modifiers = new[] { modifier };
 
             TargetAttributes.Health.SetBaseValue(100f);
-            TargetAttributes.Health.SetCurrentValue(100f);
-            TargetAttributes.Energy.SetCurrentValue(10f);
+            TargetAttributes.Energy.SetBaseValue(10f);
 
             var effect = new Effect(effectDef);
             effect.Initialise(Source, Target);
@@ -160,7 +159,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
             Assert.AreEqual(110f, TargetAttributes.Health.CurrentValue);
 
             // Change Energy (the dynamic dependency)
-            TargetAttributes.Energy.SetCurrentValue(50f);
+            TargetAttributes.Energy.SetBaseValue(50f);
 
             // Should automatically update to: 100 (base) + 50 (modifier) = 150
             Assert.AreEqual(150f, TargetAttributes.Health.CurrentValue, "Target attribute should have updated automatically when the dependency attribute changed");

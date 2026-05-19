@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Core;
+using AbilitySystem.Runtime.Effects;
+using AbilitySystem.Runtime.Modifiers;
 using JetBrains.Annotations;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
@@ -90,6 +92,23 @@ namespace AbilitySystem.Runtime.AttributeSets
             var output = Name + "\n";
             return _attributes.Values.Aggregate(
                 output, (current, attribute) => current + (attribute.DebugString() + "\n"));
+        }
+
+        public virtual bool PreGameplayEffectExecute(Effect effect, Modifier modifier, ref float magnitude)
+        {
+            return true;
+        }
+
+        public virtual void PostGameplayEffectExecute(Effect effect, Modifier modifier, float magnitude)
+        {
+        }
+
+        public virtual void PreAttributeChange(Attribute attribute, ref float newValue)
+        {
+        }
+
+        public virtual void PostAttributeChange(Attribute attribute, float oldValue, float newValue)
+        {
         }
 
         public abstract void Reset();

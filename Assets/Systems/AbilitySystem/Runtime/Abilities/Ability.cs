@@ -32,6 +32,34 @@ namespace AbilitySystem.Runtime.Abilities
         public virtual int Level { get; set; }
         
         public PredictionKey PredictionKey { get; private set; }
+        public void SetPredictionKey(PredictionKey key) => PredictionKey = key;
+
+        private readonly List<PredictionKey> _receivedSyncKeys = new();
+        public event Action<PredictionKey> OnSyncKeyReceived;
+
+        public void QueueSyncKey(PredictionKey key)
+        {
+            _receivedSyncKeys.Add(key);
+            OnSyncKeyReceived?.Invoke(key);
+        }
+
+        public bool TryConsumeSyncKey(out PredictionKey key)
+        {
+            if (_receivedSyncKeys.Count > 0)
+            {
+                key = _receivedSyncKeys[0];
+                _receivedSyncKeys.RemoveAt(0);
+                return true;
+            }
+            key = default;
+            return false;
+        }
+
+        public event Action OnInputPressed;
+        public event Action OnInputReleased;
+
+        public void NotifyInputPressed() => OnInputPressed?.Invoke();
+        public void NotifyInputReleased() => OnInputReleased?.Invoke();
 
         private readonly List<Effect> _activatedEffects;
         private readonly List<AbilityTask> _activeTasks;
