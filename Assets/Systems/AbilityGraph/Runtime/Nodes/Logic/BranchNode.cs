@@ -1,30 +1,44 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using AbilityGraph.Runtime.Nodes.Base;
 using GraphProcessor;
 
 namespace AbilityGraph.Runtime.Nodes.Logic
 {
-    [System.Serializable, NodeMenuItem("Logic/Branch")]
-    public class BranchNode : ExecutableNode, IExecutableNode
+    [Serializable, NodeMenuItem("Logic/Branch")]
+    public class BranchNode : Nodes.Base.ExecutableNode, Nodes.IExecutableNode
     {
         [Input(name = "Condition")]
         public bool Condition;
-        
-        [Output(name = "ExecutesIfTrue")]
-        public ExecutableLink ExecutesIfTrue;
 
-        [Output(name = "ExecutesIfFalse")] public ExecutableLink ExecutesIfFalse;
-        
-        public override IEnumerable<ExecutableNode>	GetExecutedNodes()
+        [Output(name = "ExecutesIfTrue")]
+        public Nodes.Base.ExecutableLink ExecutesIfTrue;
+
+        [Output(name = "ExecutesIfFalse")]
+        public Nodes.Base.ExecutableLink ExecutesIfFalse;
+
+        // Cached at Initialise() time.
+        private NodePort _truePort;
+        private NodePort _falsePort;
+
+        public override void Initialise(GraphContext context)
         {
-            if (Condition)
+            base.Initialise(context);
+            foreach (var port in outputPorts)
             {
-                return outputPorts.FirstOrDefault(n => n.fieldName == nameof(ExecutesIfTrue))
-                    ?.GetEdges().Select(e => e.inputNode as ExecutableNode);
+                if (port.fieldName == nameof(ExecutesIfTrue))  _truePort  = port;
+                else if (port.fieldName == nameof(ExecutesIfFalse)) _falsePort = port;
             }
-            return outputPorts.FirstOrDefault(n => n.fieldName == nameof(ExecutesIfFalse))
-                ?.GetEdges().Select(e => e.inputNode as ExecutableNode);
+        }
+
+        public override IEnumerable<Nodes.Base.ExecutableNode> GetExecutedNodes()
+        {
+            var port = Condition ? _truePort : _falsePort;
+            if (port == null) yield break;
+            foreach (var edge in port.GetEdges())
+            {
+                if (edge.inputNode is Nodes.Base.ExecutableNode exec)
+                    yield return exec;
+            }
         }
     }
 }

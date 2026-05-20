@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using GraphProcessor;
-using UnityEngine;
 
 namespace AbilityGraph.Runtime.Nodes.Base
 {
-    
     /// <summary>
-    /// This class represents a waitable node which invokes another node after a time/frame
+    /// A node that suspends graph execution until an async operation completes,
+    /// then resumes via the "Execute After" output port.
     /// </summary>
     [Serializable]
     public abstract class WaitableNode : LinearExecutableNode
@@ -16,18 +14,44 @@ namespace AbilityGraph.Runtime.Nodes.Base
         [Output(name = "Execute After")]
         public ExecutableLink ExecuteAfter;
 
-        protected void ProcessFinished()
-        {
-            onProcessFinished.Invoke(this);
-        }
+        // Cached at Initialise() time.
+        private NodePort _executeAfterPort;
 
-        [HideInInspector]
         public Action<WaitableNode> onProcessFinished;
 
-        public IEnumerable< ExecutableNode > GetExecuteAfterNodes()
+        protected void ProcessFinished()
         {
-            return outputPorts.FirstOrDefault(n => n.fieldName == nameof(ExecuteAfter))
-                .GetEdges().Select(e => e.inputNode as ExecutableNode);
+            onProcessFinished?.Invoke(this);
+        }
+
+        public override void Initialise(GraphContext context)
+        {
+            base.Initialise(context);
+            // CachePorts in base handles Executes; we handle ExecuteAfter here.
+        }
+
+        protected override void CachePorts()
+        {
+            base.CachePorts();
+            _executeAfterPort = null;
+            foreach (var port in outputPorts)
+            {
+                if (port.fieldName == nameof(ExecuteAfter))
+                {
+                    _executeAfterPort = port;
+                    break;
+                }
+            }
+        }
+
+        public IEnumerable<ExecutableNode> GetExecuteAfterNodes()
+        {
+            if (_executeAfterPort == null) yield break;
+            foreach (var edge in _executeAfterPort.GetEdges())
+            {
+                if (edge.inputNode is ExecutableNode execNode)
+                    yield return execNode;
+            }
         }
     }
 }

@@ -16,8 +16,26 @@ namespace AbilityGraph.Runtime.Nodes.Base
         public override FieldInfo[] GetNodeFields()
         {
             var fields = base.GetNodeFields();
-            Array.Sort(fields, (f1, f2) => f1.Name == nameof(Executed) ? -1 : 1);
+            Array.Sort(fields, FieldOrderComparer.Instance);
             return fields;
+        }
+
+        /// <summary>
+        /// Static comparer so <see cref="GetNodeFields"/> never allocates a delegate.
+        /// Ensures the "Executed" input pin is always rendered at the top.
+        /// </summary>
+        private sealed class FieldOrderComparer : IComparer<FieldInfo>
+        {
+            public static readonly FieldOrderComparer Instance = new FieldOrderComparer();
+            private FieldOrderComparer() { }
+
+            public int Compare(FieldInfo x, FieldInfo y)
+            {
+                bool xIsExecuted = x?.Name == nameof(Executed);
+                bool yIsExecuted = y?.Name == nameof(Executed);
+                if (xIsExecuted == yIsExecuted) return 0;
+                return xIsExecuted ? -1 : 1;
+            }
         }
     }
 }

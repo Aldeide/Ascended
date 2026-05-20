@@ -9,34 +9,49 @@ namespace AbilityGraph.Runtime
 {
     public class GraphAbility : Ability
     {
-        private readonly AbilityDefinition _graph;
-        private readonly ActivateAbilityNode _activateNode;
-        private readonly EndAbilityNode _endNode;
+        private readonly AbilityGraphDefinition _graph;
+        private readonly GraphContext _context;
         private readonly GraphRunner _activateRunner;
+        private readonly GraphRunner _endRunner;
+
         public GraphAbility(AbilityDefinition ability, IAbilitySystem owner) : base(ability, owner)
         {
-            _graph = ScriptableObject.Instantiate(ability);
-            _activateNode = _graph.nodes.FirstOrDefault(n => n is ActivateAbilityNode) as ActivateAbilityNode;
-            _endNode = _graph.nodes.FirstOrDefault(n => n is EndAbilityNode) as EndAbilityNode;
-            _graph.nodes.FindAll(n=>n is AbilityNode).ForEach(n=> (n as AbilityNode)?.Initialise(this));
-            _activateRunner = new GraphRunner(_activateNode, this);
+            // Deep-copy the asset so this instance's node state is isolated from other actors.
+            _graph = ScriptableObject.Instantiate(ability as AbilityGraphDefinition);
+
+            _context = new GraphContext(this, owner);
+
+            // Initialize all AbilityNodes with the shared context.
+            foreach (var node in _graph.nodes)
+            {
+                if (node is AbilityNode abilityNode)
+                    abilityNode.Initialise(_context);
+            }
+
+            // Build activate runner from the ActivateAbilityNode.
+            var activateNode = _graph.nodes.OfType<ActivateAbilityNode>().FirstOrDefault();
+            if (activateNode != null)
+                _activateRunner = new GraphRunner(activateNode, _context);
+
+            // Build a dedicated end runner from the EndAbilityNode so that
+            // end-ability graphs are first-class and support waitable nodes.
+            var endNode = _graph.nodes.OfType<EndAbilityNode>().FirstOrDefault();
+            if (endNode != null)
+                _endRunner = new GraphRunner(endNode, _context);
         }
 
         protected override void ActivateAbility(AbilityData data)
         {
-            Debug.Log("Activate graph!");
-            if (_activateNode == null) return;
+            if (_activateRunner == null) return;
+            _context.SetActivationData(data);
             _activateRunner.Run();
         }
 
         public override void EndAbility()
         {
-            if (_endNode == null) return;
-            var exec = _endNode.GetExecutedNodes();
-            foreach (var n in exec)
-            {
-                n.OnProcess();
-            }
+            // Cancel any in-flight waitable nodes on the activate runner.
+            _activateRunner?.Cancel();
+            _endRunner?.Run();
         }
     }
 }

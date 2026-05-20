@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 namespace AbilityGraph.Runtime.Nodes.Abilities
 {
     [Serializable, NodeMenuItem("Spawn/SpawnPrefab")]
-    public class SpawnPrefabNode : AbilityNode
+    public class SpawnPrefabNode : LinearExecutableNode
     {
         public GameObject Prefab;
         
