@@ -1,3 +1,4 @@
+using AbilityGraph.Runtime;
 using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
@@ -41,6 +42,10 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
                 Level = 1,
                 ServerOnly = true
             };
+
+            var abilityMock = new Mock<Ability>();
+            var context = new GraphContext(abilityMock.Object, Source);
+            _node.Initialise(context);
         }
 
         [TearDown]
@@ -58,7 +63,6 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
         {
             SourceMock.Setup(x => x.IsServer()).Returns(false);
             
-            AbilityGraphTestUtilities.InjectOwner(_node, Source);
             AbilityGraphTestUtilities.InvokeProcess(_node);
 
             _mockTargetSystem.Verify(x => x.ApplyEffectToSelf(It.IsAny<Effect>()), Times.Never);
@@ -74,7 +78,6 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
             SourceMock.Setup(x => x.MakeOutgoingEffect(It.IsAny<EffectDefinition>(), It.IsAny<int>(), It.IsAny<EffectContext>()))
                 .Returns(new Effect(_effectDef));
             
-            AbilityGraphTestUtilities.InjectOwner(_node, Source);
             AbilityGraphTestUtilities.InvokeProcess(_node);
 
             _mockTargetSystem.Verify(x => x.ApplyEffectToSelf(It.IsAny<Effect>()), Times.Once);

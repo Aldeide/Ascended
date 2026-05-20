@@ -1,5 +1,8 @@
+using AbilityGraph.Runtime;
 using AbilityGraph.Runtime.Nodes.Math;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Test.Utilities;
+using Moq;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -10,6 +13,22 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Math
     /// </summary>
     public class MathNodesTests : AbilitySystemTestBase
     {
+        private Mock<Ability> _abilityMock;
+        private GraphContext _context;
+
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            var def = ScriptableObject.CreateInstance<TestAbilityDefinition>();
+            def.UniqueName = "TestAbility";
+            _abilityMock = new Mock<Ability>(def, Source, 5);
+            _abilityMock.Setup(a => a.Owner).Returns(Source);
+            _abilityMock.Setup(a => a.Level).Returns(5);
+            _context = new GraphContext(_abilityMock.Object, Source);
+        }
+
         /// <summary>
         /// Validates that FloatArithmeticNode performs basic arithmetic operations correctly.
         /// </summary>
@@ -86,6 +105,31 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Math
             node.B = new Vector3(0, 0, 10);
             AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(10f, node.Distance);
+        }
+
+        /// <summary>
+        /// Validates that ClampFloatNode clamps the input value to the specified min and max bounds.
+        /// </summary>
+        [Test]
+        public void MathNodesTests_ClampFloatNode_ClampsValueToMinMaxRange()
+        {
+            var node = new ClampFloatNode();
+            node.Initialise(_context);
+
+            node.Value = 15f;
+            node.Min = 0f;
+            node.Max = 10f;
+
+            AbilityGraphTestUtilities.InvokeProcess(node);
+            Assert.AreEqual(10f, node.Result);
+
+            node.Value = -5f;
+            AbilityGraphTestUtilities.InvokeProcess(node);
+            Assert.AreEqual(0f, node.Result);
+
+            node.Value = 5f;
+            AbilityGraphTestUtilities.InvokeProcess(node);
+            Assert.AreEqual(5f, node.Result);
         }
     }
 }

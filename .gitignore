@@ -72,3 +72,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 DummyTestProject/
 test_project/
+
+# Test reports and logs
+unity_*.txt
+TestResults*.xml
+UnityEditorTestRun.log
+unity_*.log

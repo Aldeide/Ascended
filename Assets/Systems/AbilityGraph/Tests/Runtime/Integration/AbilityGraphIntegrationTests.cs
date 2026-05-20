@@ -1,4 +1,5 @@
 using System;
+using AbilityGraph.Runtime;
 using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilityGraph.Runtime.Nodes.Spatial;
 using AbilitySystem.Runtime.Abilities;
@@ -61,7 +62,8 @@ namespace AbilityGraph.Tests.Runtime.Integration
 
             // 1. Client Execution
             var clientSystem = AbilitySystemUtilities.CreateMockClientAbilitySystem();
-            AbilityGraphTestUtilities.InjectOwner(applyNode, clientSystem.Object);
+            var clientAbility = new Mock<Ability>();
+            applyNode.Initialise(new GraphContext(clientAbility.Object, clientSystem.Object));
             AbilityGraphTestUtilities.InvokeProcess(applyNode);
 
             // Client should NOT have applied the effect because it's ServerOnly
@@ -69,7 +71,8 @@ namespace AbilityGraph.Tests.Runtime.Integration
 
             // 2. Server Execution
             var serverSystem = AbilitySystemUtilities.CreateMockServerAbilitySystem();
-            AbilityGraphTestUtilities.InjectOwner(applyNode, serverSystem.Object);
+            var serverAbility = new Mock<Ability>();
+            applyNode.Initialise(new GraphContext(serverAbility.Object, serverSystem.Object));
             
             // Server MUST be able to make the effect
             serverSystem.Setup(x => x.MakeOutgoingEffect(It.IsAny<EffectDefinition>(), It.IsAny<int>(), It.IsAny<EffectContext>()))

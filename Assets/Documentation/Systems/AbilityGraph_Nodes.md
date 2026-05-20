@@ -31,6 +31,13 @@ Instantiates and applies an `EffectDefinition` to the ability owner.
 - **Properties**: `EffectDefinition` (ScriptableObject reference)
 - **Menu**: `Abilities/ApplyEffectToOwner`
 
+### `ApplyEffectToTargetNode`
+Instantiates and applies an `EffectDefinition` to a specified target GameObject.
+- **Inputs**: Exec (In), Target (GameObject), Level (Int)
+- **Outputs**: Exec (Out)
+- **Properties**: `EffectDefinition` (ScriptableObject reference), `ServerOnly` (Bool - if true, only applies on the server)
+- **Menu**: `Abilities/ApplyEffectToTarget`
+
 ### `CallEndAbilityNode`
 Calls `TryEndAbility()` on the current ability — used to end it from within the graph.
 - **Inputs**: Exec (In)
@@ -186,6 +193,13 @@ Applies a `VelocityChange` force to the owner's `Rigidbody`. Cached on `Initiali
 - **Inputs**: Exec (In), Force (Vector3)
 - **Outputs**: Exec (Out)
 - **Menu**: `Character/RigidbodyAddForce`
+
+### `WaitForGroundedEvent`
+Asynchronously pauses the graph until the character's movement controller is grounded.
+- **Inputs**: Exec (In)
+- **Outputs**: Exec (Out)
+- **Type**: `WaitableNode` (Async)
+- **Menu**: `Character/WaitForGroundedEvent`
 
 ### `GetOwnerTransformNode`
 Retrieves the position and rotation of the ability system owner.

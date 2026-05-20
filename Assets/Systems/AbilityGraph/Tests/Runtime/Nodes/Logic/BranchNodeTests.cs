@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AbilityGraph.Runtime;
 using AbilityGraph.Runtime.Nodes.Base;
 using AbilityGraph.Runtime.Nodes.Logic;
+using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Test.Utilities;
 using GraphProcessor;
 using Moq;
@@ -55,6 +57,10 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Logic
             portList.Add(falsePort);
             
             outputPortsField.SetValue(_branchNode, portList);
+
+            var abilityMock = new Mock<Ability>();
+            var context = new GraphContext(abilityMock.Object, Source);
+            _branchNode.Initialise(context);
         }
         
         /// <summary>
