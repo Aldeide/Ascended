@@ -3,6 +3,7 @@ using Steamworks;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Core.Utilities;
 
 namespace MatchmakingSystem.Runtime
 {
@@ -129,8 +130,7 @@ namespace MatchmakingSystem.Runtime
             ulong clientId = rpcParams.Receive.SenderClientId;
 
             // Sentinel: Sanitize name to prevent TextMeshPro rich text injection (XSS-equivalent)
-            // Note: Replacing with empty string rather than full-width characters prevents FixedString64Bytes capacity exceptions.
-            string safeName = name.ToString().Replace("<", "").Replace(">", "").Replace("\n", "").Replace("\r", "");
+            string safeName = StringUtilities.SanitizeRichText(name.ToString());
             FixedString64Bytes sanitizedName = new FixedString64Bytes(safeName);
 
             for (int i = 0; i < LobbyPlayers.Count; i++)
