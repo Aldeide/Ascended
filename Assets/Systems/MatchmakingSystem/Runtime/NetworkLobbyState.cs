@@ -127,14 +127,20 @@ namespace MatchmakingSystem.Runtime
         public void UpdatePlayerNameServerRpc(FixedString64Bytes name, ServerRpcParams rpcParams = default)
         {
             ulong clientId = rpcParams.Receive.SenderClientId;
+
+            // Sentinel: Sanitize name to prevent TextMeshPro rich text injection (XSS-equivalent)
+            // Note: Replacing with empty string rather than full-width characters prevents FixedString64Bytes capacity exceptions.
+            string safeName = name.ToString().Replace("<", "").Replace(">", "").Replace("\n", "").Replace("\r", "");
+            FixedString64Bytes sanitizedName = new FixedString64Bytes(safeName);
+
             for (int i = 0; i < LobbyPlayers.Count; i++)
             {
                 if (LobbyPlayers[i].ClientId == clientId)
                 {
                     var playerState = LobbyPlayers[i];
-                    playerState.PlayerName = name;
+                    playerState.PlayerName = sanitizedName;
                     LobbyPlayers[i] = playerState;
-                    Debug.Log($"[NetworkLobbyState] Updated player {clientId} name to: {name}");
+                    Debug.Log($"[NetworkLobbyState] Updated player {clientId} name to: {sanitizedName}");
                     break;
                 }
             }
