@@ -35,7 +35,8 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
         public void AbilityNodesTests_HasTagNode_ReturnsCorrectTagStatus()
         {
             var node = new HasTagNode();
-            node.Initialise(_abilityMock.Object);
+            var context = new AbilityGraph.Runtime.GraphContext(_abilityMock.Object, Source);
+            node.Initialise(context);
             var tag = new Tag("Test.Tag");
             
             var tagManagerMock = new Mock<GameplayTagManager>(Source);
@@ -59,7 +60,8 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
         public void AbilityNodesTests_GetAbilityLevelNode_ReturnsCorrectAbilityLevel()
         {
             var node = new GetAbilityLevelNode();
-            node.Initialise(_abilityMock.Object);
+            var context = new AbilityGraph.Runtime.GraphContext(_abilityMock.Object, Source);
+            node.Initialise(context);
             
             AbilityGraphTestUtilities.InvokeProcess(node);
             Assert.AreEqual(5, node.Level);
@@ -72,7 +74,8 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Abilities
         public void AbilityNodesTests_ModifyAttributeBaseNode_AppliesValueModification()
         {
             var node = new ModifyAttributeBaseNode();
-            node.Initialise(_abilityMock.Object);
+            var context = new AbilityGraph.Runtime.GraphContext(_abilityMock.Object, Source);
+            node.Initialise(context);
             node.AttributeName = "Stat.Health";
             node.Value = 10f;
             node.ModificationType = AttributeModificationType.Add;

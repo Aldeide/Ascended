@@ -14,10 +14,13 @@ namespace AbilityGraph.Runtime.Nodes.Abilities
         public override string name => "Rigidbody: Add Force";
         private Rigidbody _rigidbody;
     
-        public override void Initialise(Ability ability)
+        public override void Initialise(GraphContext context)
         {
-            base.Initialise(ability);
-            _rigidbody = ((Component)ability.Owner.NetworkRole)?.gameObject.GetComponent<Rigidbody>();
+            base.Initialise(context);
+            if (Ability != null && Ability.Owner != null && Ability.Owner.NetworkRole != null)
+            {
+                _rigidbody = ((Component)Ability.Owner.NetworkRole)?.gameObject.GetComponent<Rigidbody>();
+            }
         }
     
         protected override void Process()

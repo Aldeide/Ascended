@@ -41,9 +41,9 @@ namespace AbilityGraph.Runtime.Nodes.Utilities
         }
         
         // Ensure cleanup if ability ends prematurely
-        public override void Initialise(AbilitySystem.Runtime.Abilities.Ability ability)
+        public override void Initialise(GraphContext context)
         {
-            base.Initialise(ability);
+            base.Initialise(context);
             // We'd ideally want an OnDestroy or similar logic in the Node, 
             // but for now, the OnTagsChanged listener is simple enough.
         }

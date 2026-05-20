@@ -50,6 +50,20 @@ Checks if the ability owner possesses a specific Gameplay Tag.
 - **Menu**: `Abilities/HasTag`
 - **Usage**: Branching logic based on owner state (e.g., `State.Stunned`).
 
+### `AddTagToOwnerNode`
+Adds a loose Gameplay Tag to the ability owner.
+- **Inputs**: Exec (In), Tag (GameplayTag)
+- **Outputs**: Exec (Out)
+- **Menu**: `Abilities/Add Tag To Owner`
+- **Usage**: Dynamically applying transient tags during ability execution.
+
+### `RemoveTagFromOwnerNode`
+Removes a loose Gameplay Tag from the ability owner.
+- **Inputs**: Exec (In), Tag (GameplayTag)
+- **Outputs**: Exec (Out)
+- **Menu**: `Abilities/Remove Tag From Owner`
+- **Usage**: Reverting a tag applied during the ability.
+
 ### `RemoveEffectByTagNode`
 Removes all active Gameplay Effects from the owner that grant the specified tag.
 - **Inputs**: Exec (In), Tag (GameplayTag)
@@ -68,6 +82,13 @@ Retrieves the current level of the ability instance.
 - **Outputs**: Level (Int)
 - **Usage**: Scaling damage or effect magnitudes by ability rank.
 
+### `SendGameplayEventNode`
+Dispatches a `DynamicGameplayEvent` with a Tag and Magnitude to a target Actor.
+- **Inputs**: Exec (In), Target (GameObject), Event Tag (GameplayTag), Magnitude (Float)
+- **Outputs**: Exec (Out)
+- **Menu**: `Abilities/Send Gameplay Event`
+- **Usage**: Notifying other systems or triggering abilities on other targets.
+
 ---
 
 ## 📊 Attribute Nodes
@@ -78,11 +99,54 @@ Reads the `CurrentValue` and `BaseValue` of any attribute on the owner.
 - **Properties**: `attributeFullName` (dropdown: `AttributeSet.AttributeName`)
 - **Menu**: `Attributes/GetAttribute`
 
+### `GetAttributePercentNode`
+Calculates the percentage/ratio between a Current Attribute and a Max Attribute.
+- **Outputs**: Percent (Float)
+- **Properties**: `CurrentAttributeFullName` (dropdown), `MaxAttributeFullName` (dropdown)
+- **Menu**: `Attributes/Get Attribute Percent`
+- **Usage**: Checking percentage-based thresholds (e.g. current health / max health).
+
 ### `ModifyAttributeBaseNode`
 Permanently modifies the **BaseValue** of an attribute.
 - **Inputs**: Exec (In), AttributeName (String), Value (Float)
 - **Outputs**: Exec (Out)
 - **Usage**: Permanent upgrades or character progression via graphs.
+
+---
+
+## ⏳ Ability Tasks (Async Waitable Nodes)
+
+Special async nodes that yield graph execution until a specific task completes.
+
+### `WaitTargetDataNode`
+Spawns a targeting actor and waits for the client to confirm or cancel targeting.
+- **Inputs**: Exec (In)
+- **Outputs**: Exec (Out), Target Data (TargetDataHandle)
+- **Properties**: `TargetActorPrefab` (AbilityTargetActor reference)
+- **Type**: `WaitableNode` (Async)
+- **Menu**: `Abilities/Wait Target Data`
+
+### `WaitInputPressNode`
+Asynchronously waits until the local player presses the ability activation input again.
+- **Inputs**: Exec (In)
+- **Outputs**: Exec (Out)
+- **Type**: `WaitableNode` (Async)
+- **Menu**: `Abilities/Wait Input Press`
+
+### `WaitInputReleaseNode`
+Asynchronously waits until the local player releases the ability activation input.
+- **Inputs**: Exec (In)
+- **Outputs**: Exec (Out)
+- **Type**: `WaitableNode` (Async)
+- **Menu**: `Abilities/Wait Input Release`
+
+### `WaitNetSyncNode`
+Synchronizes the client and server execution before proceeding.
+- **Inputs**: Exec (In)
+- **Outputs**: Exec (Out)
+- **Properties**: `SyncType` (AbilityNetSyncType enum)
+- **Type**: `WaitableNode` (Async)
+- **Menu**: `Abilities/Wait Net Sync`
 
 ---
 
@@ -134,7 +198,7 @@ Extracts `MuzzlePosition` and `TargetPosition` from the `AbilityData` provided a
 
 ---
 
-## 🔀 Logic Nodes
+## 🔀 Logic & Flow Control Nodes
 
 ### `BranchNode`
 Routes execution to `ExecutesIfTrue` or `ExecutesIfFalse` based on a boolean condition.
@@ -159,6 +223,17 @@ Fires the `Out` path only the first time it is executed per ability instance. A 
 - **Outputs**: Out (Exec)
 - **Menu**: `Logic/Trigger Once`
 
+### `DoOnceNode`
+Fires the `Executes` path only once until `Reset` or `ResetTrigger()` is called.
+- **Inputs**: Reset (Exec), Start Closed (Bool)
+- **Outputs**: Executes (Exec)
+- **Menu**: `Logic/Do Once`
+
+### `SequenceNode`
+Executes multiple execution paths sequentially (`Then 0`, `Then 1`, `Then 2`).
+- **Outputs**: Then 0 (Exec), Then 1 (Exec), Then 2 (Exec)
+- **Menu**: `Logic/Sequence`
+
 ### `SelectNode`
 Generic type-adaptive selector — picks between two values based on a boolean. Automatically infers port types from the first connected value.
 - **Inputs**: Condition (Bool), True Value (Dynamic), False Value (Dynamic)
@@ -178,6 +253,12 @@ Binary float operations: Add, Subtract, Multiply, Divide.
 Float comparison: Equal, NotEqual, Greater, Less, GreaterOrEqual, LessOrEqual.
 - **Inputs**: A (Float), B (Float)
 - **Outputs**: Result (Bool)
+
+### `ClampFloatNode`
+Clamps a float value between a Min and Max range.
+- **Inputs**: Value (Float), Min (Float), Max (Float)
+- **Outputs**: Result (Float)
+- **Menu**: `Math/Clamp Float`
 
 ### `RandomFloatInRangeNode`
 Generates a random float between Min and Max.
@@ -223,6 +304,16 @@ Asynchronously pauses the graph until a specific Gameplay Tag is removed from th
 - **Inputs**: Exec (In), Tag (GameplayTag)
 - **Outputs**: Exec (Done)
 - **Type**: `WaitableNode` (Async)
+
+### `IsServerNode`
+Checks if the ability system owner runs with server authority.
+- **Outputs**: Is Server (Bool)
+- **Menu**: `Utilities/Is Server`
+
+### `IsLocalClientNode`
+Checks if the ability is running on the local predicted client.
+- **Outputs**: Is Local (Bool)
+- **Menu**: `Utilities/Is Local Client`
 
 ### `DebugNode`
 Logs a value or string to the Unity console. Supports Log, Warning, Error, and Assert levels.

@@ -74,6 +74,7 @@ namespace AbilitySystem.Runtime.Abilities
         protected Ability()
         {
             _activatedEffects = new List<Effect>();
+            _activeTasks = new List<AbilityTask>();
         }
 
         protected Ability(AbilityDefinition ability, IAbilitySystem owner, int level = 1)

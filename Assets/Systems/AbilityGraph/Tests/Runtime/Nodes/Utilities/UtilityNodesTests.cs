@@ -38,7 +38,8 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Utilities
             };
             _abilityMock.Setup(a => a.Data).Returns(data);
             
-            node.Initialise(_abilityMock.Object);
+            var context = new AbilityGraph.Runtime.GraphContext(_abilityMock.Object, Source);
+            node.Initialise(context);
             AbilityGraphTestUtilities.InvokeProcess(node);
             
             Assert.AreEqual(data.TargetPosition, node.TargetPosition);
@@ -52,7 +53,8 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Utilities
         public void UtilityNodesTests_GetOwnerTransformNode_HandlesMissingNetworkRole()
         {
             var node = new GetOwnerTransformNode();
-            node.Initialise(_abilityMock.Object);
+            var context = new AbilityGraph.Runtime.GraphContext(_abilityMock.Object, Source);
+            node.Initialise(context);
             
             SourceMock.Setup(o => o.NetworkRole).Returns((AbilitySystem.Runtime.Networking.INetworkRole)null);
             
