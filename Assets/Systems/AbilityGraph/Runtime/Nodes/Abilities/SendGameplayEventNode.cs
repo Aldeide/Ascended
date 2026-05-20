@@ -22,7 +22,7 @@ namespace AbilityGraph.Runtime.Nodes.Abilities
 
         protected override void Process()
         {
-            var targetGo = Target != null ? Target : (Owner?.NetworkRole?.gameObject);
+            var targetGo = Target != null ? Target : (Owner?.NetworkRole as Component)?.gameObject;
             if (targetGo == null) return;
 
             var asc = targetGo.GetComponent<AbilitySystemComponent>();
