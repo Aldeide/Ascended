@@ -1,4 +1,4 @@
-﻿using Unity.Netcode;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -35,6 +35,13 @@ namespace Systems.Controllers
         public void Update()
         {
             if (!IsLocalPlayer) return;
+            UpdateTargetPosition();
+        }
+
+        public void OnLook(InputAction.CallbackContext context)
+        {
+            if (!IsLocalPlayer || context.phase != InputActionPhase.Performed)
+                return;
             UpdateTargetPosition();
         }
 
