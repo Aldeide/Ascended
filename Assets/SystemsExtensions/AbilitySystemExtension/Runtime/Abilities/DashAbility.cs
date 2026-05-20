@@ -38,7 +38,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             
             _startPosition = _rigidbody.position;
             Vector3 direction;
-            if (_playerMovementController.MovementDirection.magnitude > 0.01f)
+            if (_playerMovementController.MovementDirection.sqrMagnitude > 0.0001f)
             {
                 direction = _playerMovementController.MovementDirection.normalized;
             }

@@ -110,12 +110,13 @@ namespace AbilitySystemExtension.Scripts
             if (!IsLocalPlayer) return;
             if (!CanMove()) return;
 
-            if (IsInAimingState() || _movementInput.magnitude > 0.01f)
+            // Optimization: Use sqrMagnitude instead of magnitude to avoid costly square root calculation per frame
+            if (IsInAimingState() || _movementInput.sqrMagnitude > 0.0001f)
             {
                 _rigidbody.MoveRotation(ComputeRotation(_currentAngle));
             }
 
-            if (_movementInput.magnitude > 0.01f)
+            if (_movementInput.sqrMagnitude > 0.0001f)
             {
                 _rigidbody.MovePosition(_rigidbody.position + MovementDirection * (Time.fixedDeltaTime * _movementSpeed));
             }
@@ -136,7 +137,7 @@ namespace AbilitySystemExtension.Scripts
 
         private void UpdateAnimator()
         {
-            if (_movementInput.magnitude > 0.01f)
+            if (_movementInput.sqrMagnitude > 0.0001f)
             {
                 _animationController.SetIsMoving(true);
                 if (IsInAimingState())
@@ -185,7 +186,7 @@ namespace AbilitySystemExtension.Scripts
 
         private void ComputeMovementDirection(float targetAngle)
         {
-            if (_movementInput.magnitude <= 0.01f)
+            if (_movementInput.sqrMagnitude <= 0.0001f)
             {
                 UpdateAnimator();
                 MovementDirection = Vector3.zero;
