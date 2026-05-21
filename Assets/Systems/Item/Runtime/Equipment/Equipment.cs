@@ -94,14 +94,20 @@ namespace Item.Runtime
                 return;
             }
 
-            foreach (var ability in _definition.GrantedAbilities)
+            if (_definition.GrantedAbilities != null)
             {
-                owner.AbilityManager.GrantAbility(ability);
+                foreach (var ability in _definition.GrantedAbilities)
+                {
+                    owner.AbilityManager.GrantAbility(ability);
+                }
             }
 
-            foreach (var effect in _definition.GrantedEffects)
+            if (_definition.GrantedEffects != null)
             {
-                owner.EffectManager.AddEffect(effect.ToEffect(owner, owner));
+                foreach (var effect in _definition.GrantedEffects)
+                {
+                    owner.EffectManager.AddEffect(effect.ToEffect(owner, owner));
+                }
             }
         }
 
@@ -114,13 +120,19 @@ namespace Item.Runtime
                 return;
             }
 
-            foreach (var ability in _definition.GrantedAbilities)
+            if (_definition.GrantedAbilities != null)
             {
-                owner.AbilityManager.RemoveAbility(ability);
+                foreach (var ability in _definition.GrantedAbilities)
+                {
+                    owner.AbilityManager.RemoveAbility(ability);
+                }
             }
-            foreach (var effect in _definition.GrantedEffects)
+            if (_definition.GrantedEffects != null)
             {
-                owner.EffectManager.RemoveEffect(effect.name);
+                foreach (var effect in _definition.GrantedEffects)
+                {
+                    owner.EffectManager.RemoveEffect(effect.name);
+                }
             }
         }
 
@@ -141,11 +153,13 @@ namespace Item.Runtime
 
         public bool CanAddMod(Tag modSlot, Modifier mod)
         {
+            if (_definition.ModSlots == null) return false;
             var slot = _definition.ModSlots.FirstOrDefault(s => s.ModSlotTag == modSlot);
             if (slot.ModSlotTag != modSlot) return false;
             if (slot.RequiredLevel > Level) return false;
             if (mod.OwnedTags == null || !slot.TagQuery.MatchesTags(mod.OwnedTags)) return false;
             if (mod.ModifiableEquipmentTags == null
+                || _definition.EquipmentTags == null
                 || !mod.ModifiableEquipmentTags.Any(t => _definition.EquipmentTags.Contains(t))) return false;
             return true;
         }
@@ -167,6 +181,7 @@ namespace Item.Runtime
 
         private void InitialiseMods()
         {
+            if (_definition.ModSlots == null) return;
             foreach (var slot in _definition.ModSlots)
             {
                 Mods.Add(slot.ModSlotTag, null);
