@@ -4,6 +4,7 @@ using AbilitySystemExtension.Scripts;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Item.Scripts.UI;
 
 namespace Systems.Controllers
 {
@@ -15,6 +16,36 @@ namespace Systems.Controllers
 
         private PlayerMovementController _movementController;
         private float _combatStanceTimer = 0f;
+
+        private InventoryUIController _inventoryUI;
+
+        private bool IsInventoryOpen()
+        {
+            if (_inventoryUI == null)
+            {
+                _inventoryUI = GetComponentInChildren<InventoryUIController>();
+            }
+            return _inventoryUI != null && _inventoryUI.IsMenuOpen;
+        }
+
+        public void CancelActiveActions()
+        {
+            if (!IsLocalPlayer) return;
+            
+            if (_asc != null)
+            {
+                _asc.EndAbility("AimCameraAbility");
+                _asc.EndAbility("FireAbility");
+            }
+            
+            if (_movementController != null)
+            {
+                _movementController.SetManualAiming(false);
+                _movementController.SetCombatStance(false);
+            }
+            
+            _combatStanceTimer = 0f;
+        }
 
         public void Start()
         {
@@ -38,6 +69,7 @@ namespace Systems.Controllers
         public void OnAim(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
+            if (IsInventoryOpen()) return;
             if (context.phase == InputActionPhase.Started)
             {
                 _movementController.SetManualAiming(true);
@@ -52,6 +84,7 @@ namespace Systems.Controllers
         public void OnFire(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
+            if (IsInventoryOpen()) return;
             if (context.phase == InputActionPhase.Started)
             {
                 var data = new AbilityData
@@ -76,6 +109,7 @@ namespace Systems.Controllers
         public void OnDash(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
+            if (IsInventoryOpen()) return;
             if (context.phase != InputActionPhase.Performed) return;
             _asc.TryActivateAbility("DashAbility");
         }
@@ -83,6 +117,7 @@ namespace Systems.Controllers
         public void OnJump(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
+            if (IsInventoryOpen()) return;
             if (context.phase != InputActionPhase.Performed) return;
             _asc.TryActivateAbility("JumpAbility");
         }
@@ -90,6 +125,7 @@ namespace Systems.Controllers
         public void OnReload(InputAction.CallbackContext context)
         {
             if (!IsLocalPlayer) return;
+            if (IsInventoryOpen()) return;
             if (context.phase != InputActionPhase.Performed) return;
             _asc.TryActivateAbility("ReloadWeaponAbility");
         }

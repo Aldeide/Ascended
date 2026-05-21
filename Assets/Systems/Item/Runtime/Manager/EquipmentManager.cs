@@ -32,7 +32,8 @@ namespace Item.Runtime.Manager
             IAbilitySystem owner,
             IInventoryManager inventoryManager,
             EquipmentManagerDefinition definition,
-            IItemReplicationManager replicationManager = null)
+            IItemReplicationManager replicationManager = null,
+            StartingEquipmentDefinition startingEquipment = null)
         {
             _owner = owner;
             _inventoryManager = inventoryManager;
@@ -43,14 +44,22 @@ namespace Item.Runtime.Manager
                 _equipment.TryAdd(slot, null);
             }
 
-            foreach (var equipmentDefinition in _definition.Equipment)
+            IEnumerable<EquipmentDefinition> initialEquipment = startingEquipment != null
+                ? startingEquipment.StartingEquipment
+                : _definition.Equipment;
+
+            if (initialEquipment != null)
             {
-                var slot = equipmentDefinition.EquipmentSlot;
-                if (!_equipment.ContainsKey(slot)) continue;
-                var equipment = new Equipment(_inventoryManager, equipmentDefinition);
-                _equipment[slot] = equipment;
-                AttachServerReplicationHooks(slot, equipment);
-                _equipment[slot].Equip();
+                foreach (var equipmentDefinition in initialEquipment)
+                {
+                    if (equipmentDefinition == null) continue;
+                    var slot = equipmentDefinition.EquipmentSlot;
+                    if (!_equipment.ContainsKey(slot)) continue;
+                    var equipment = new Equipment(_inventoryManager, equipmentDefinition);
+                    _equipment[slot] = equipment;
+                    AttachServerReplicationHooks(slot, equipment);
+                    _equipment[slot].Equip();
+                }
             }
         }
 

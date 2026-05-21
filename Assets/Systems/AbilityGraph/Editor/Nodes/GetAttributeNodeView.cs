@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using AbilityGraph.Runtime.Nodes.Abilities;
 using AbilitySystem.Runtime.Utilities;
 using GraphProcessor;
@@ -25,6 +25,7 @@ namespace AbilityGraph.Editor.Nodes
                 {
                     owner.RegisterCompleteObjectUndo("Updated dropdown input");
                     node.attributeFullName = v.newValue;
+                    NotifyNodeChanged();
                 });
             }
 

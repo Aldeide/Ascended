@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using GameplayTags.Runtime;
 using Item.Runtime.Manager;
 using Item.Scripts;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Item.Scripts.UI
 {
-    public class EquipmentUIController : MonoBehaviour
+    public class EquipmentUIController : NetworkBehaviour
     {
         [Header("UI Document")]
         [SerializeField] private UIDocument uiDocument;
@@ -56,11 +58,18 @@ namespace Item.Scripts.UI
             if (!InitializeUI()) return;
             
             _localPlayerInventory = inventory;
-            _equipmentManager = equipmentManager;
             
+            // Unsubscribe from previous equipment manager to avoid memory leaks/double-subscription
+            if (_equipmentManager != null)
+            {
+                _equipmentManager.OnEquipmentChanged -= RefreshEquipment;
+            }
+
+            _equipmentManager = equipmentManager;
             _equipmentManager.OnEquipmentChanged += RefreshEquipment;
             RefreshEquipment();
         }
+
 
         private void OnDisable()
         {
@@ -68,6 +77,19 @@ namespace Item.Scripts.UI
             {
                 _equipmentManager.OnEquipmentChanged -= RefreshEquipment;
             }
+        }
+
+        private string GetPlaceholderText(string uxmlId)
+        {
+            return uxmlId switch
+            {
+                "slot-head" => "HEAD",
+                "slot-chest" => "CHEST",
+                "slot-legs" => "LEGS",
+                "slot-mainhand" => "WEAPON",
+                "slot-offhand" => "OFFHAND",
+                _ => ""
+            };
         }
 
         private void RefreshEquipment()
@@ -87,15 +109,39 @@ namespace Item.Scripts.UI
                 
                 if (_slotElements.TryGetValue(uxmlId, out var slotElement))
                 {
-                    if (item != null && item.Icon != null)
+                    var label = slotElement.Q<Label>();
+                    
+                    if (item != null)
                     {
-                        slotElement.style.backgroundImage = new StyleBackground(item.Icon);
-                        slotElement.style.opacity = 1.0f;
+                        if (item.Icon != null)
+                        {
+                            slotElement.style.backgroundImage = new StyleBackground(item.Icon);
+                            slotElement.style.opacity = 1.0f;
+                            if (label != null)
+                            {
+                                label.style.display = DisplayStyle.None;
+                            }
+                        }
+                        else
+                        {
+                            slotElement.style.backgroundImage = null;
+                            slotElement.style.opacity = 1.0f;
+                            if (label != null)
+                            {
+                                label.text = item.Name;
+                                label.style.display = DisplayStyle.Flex;
+                            }
+                        }
                     }
                     else
                     {
                         slotElement.style.backgroundImage = null;
-                        slotElement.style.opacity = 0.5f; // Placeholder look
+                        slotElement.style.opacity = 1.0f; // Keep background slot styling clear
+                        if (label != null)
+                        {
+                            label.text = GetPlaceholderText(uxmlId);
+                            label.style.display = DisplayStyle.Flex;
+                        }
                     }
                 }
             }
@@ -103,14 +149,39 @@ namespace Item.Scripts.UI
 
         private string TagToUxmlId(Tag tag)
         {
-            // Simple mapping: EquipmentSlot.Head -> slot-head
             string tagName = tag.ToString().ToLower();
-            if (tagName.Contains("head")) return "slot-head";
-            if (tagName.Contains("chest")) return "slot-chest";
+            if (tagName.Contains("weapon") || tagName.Contains("mainhand")) return "slot-mainhand";
+            if (tagName.Contains("armor") || tagName.Contains("chest")) return "slot-chest";
+            if (tagName.Contains("core") || tagName.Contains("head")) return "slot-head";
             if (tagName.Contains("legs")) return "slot-legs";
-            if (tagName.Contains("mainhand")) return "slot-mainhand";
             if (tagName.Contains("offhand")) return "slot-offhand";
             return "";
+        }
+        
+        public void OnEquipment(InputAction.CallbackContext context)
+        {
+            if (!IsLocalPlayer) return;
+            
+            Debug.Log($"Inventory Input: {context.action.name}, Phase: {context.phase}, IsLocalPlayer: {IsLocalPlayer}");
+            
+            if (context.phase == InputActionPhase.Performed)
+            {
+                var inventoryUI = GetComponent<InventoryUIController>();
+                if (inventoryUI != null)
+                {
+                    inventoryUI.ToggleMenu();
+                }
+            }
+        }
+
+        public void Cleanup()
+        {
+            if (_equipmentManager != null)
+            {
+                _equipmentManager.OnEquipmentChanged -= RefreshEquipment;
+                _equipmentManager = null;
+            }
+            _localPlayerInventory = null;
         }
     }
 }

@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
+using Item.Scripts.UI;
 
 namespace AbilitySystemExtension.Scripts
 {
@@ -42,6 +43,17 @@ namespace AbilitySystemExtension.Scripts
         public Vector3 MovementDirection { get; private set; } = new Vector3(0, 0, 0);
         public Action<bool> OnGroundedChanged;
 
+        private InventoryUIController _inventoryUI;
+
+        private InventoryUIController GetInventoryUI()
+        {
+            if (_inventoryUI == null)
+            {
+                _inventoryUI = GetComponentInChildren<InventoryUIController>();
+            }
+            return _inventoryUI;
+        }
+
         public override void OnNetworkSpawn()
         {
         }
@@ -67,12 +79,40 @@ namespace AbilitySystemExtension.Scripts
         {
             // For now, movement is locally authoritative.
             if (!IsLocalPlayer) return;
-            if (!CanMove()) return;
 
             if (_camera == null)
             {
                 _camera = Camera.main;
-                if (_camera == null) return; // Prevent MissingReferenceException if no camera is present (e.g. in Lobby)
+            }
+
+            var inv = GetInventoryUI();
+            if (inv != null && inv.IsMenuOpen)
+            {
+                // Smoothly rotate character to face the camera
+                if (_camera != null)
+                {
+                    Vector3 dirToCamera = _camera.transform.position - transform.position;
+                    dirToCamera.y = 0f; // Keep rotation horizontal
+                    if (dirToCamera.sqrMagnitude > 0.001f)
+                    {
+                        Quaternion targetRot = Quaternion.LookRotation(dirToCamera);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
+                    }
+                }
+
+                // Stop movement and update animator
+                _movementInput = Vector3.zero;
+                MovementDirection = Vector3.zero;
+                UpdateAnimator();
+                return;
+            }
+
+            if (!CanMove())
+            {
+                _movementInput = Vector3.zero;
+                MovementDirection = Vector3.zero;
+                UpdateAnimator();
+                return;
             }
 
             // Update grounded state.
@@ -177,6 +217,9 @@ namespace AbilitySystemExtension.Scripts
 
         public bool CanMove()
         {
+            var inv = GetInventoryUI();
+            if (inv != null && inv.IsMenuOpen) return false;
+
             return !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Immobilised) &&
                    !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Debuff.Stun) &&
                    !_abilitySystem.TagManager.HasAnyPartialTag(TagLibrary.Status.Dead) &&

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Item.Runtime.Definition;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,22 +7,45 @@ namespace Item.Scripts
 {
     public class ItemLibrary : MonoBehaviour
     {
-        public static ItemLibrary Instance { get; private set; }
+        private static ItemLibrary _instance;
+        public static ItemLibrary Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindAnyObjectByType<ItemLibrary>();
+                    if (_instance == null)
+                    {
+                        var go = new GameObject("ItemLibrary");
+                        _instance = go.AddComponent<ItemLibrary>();
+                    }
+                }
+                return _instance;
+            }
+            private set => _instance = value;
+        }
+
         [ShowInInspector]
         private Dictionary<string, ItemDefinition> _items = new();
         private void Awake()
         {
-            if (Instance && Instance != this)
+            if (_instance != null && _instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            Instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
             foreach (var item in Resources.LoadAll<ItemDefinition>(""))
             {
-                _items.Add(item.Name, item);
+                if (item == null) continue;
+                if (!string.IsNullOrEmpty(item.Name))
+                {
+                    _items.TryAdd(item.Name, item);
+                }
+                _items.TryAdd(item.name, item);
             }
         }
 

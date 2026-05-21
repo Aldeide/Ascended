@@ -111,5 +111,15 @@ namespace Plugins.Tags.Tests.Runtime
             Assert.IsTrue(tagA1 != tagB, "Different tags should be unequal");
             Assert.IsTrue(tagA1.Equals(tagA2), "Equals method should return true for identical tags");
         }
+
+        /// <summary>
+        /// Verifies that ToString returns the tag Name property.
+        /// </summary>
+        [Test]
+        public void TagTests_ToString_ReturnsTagName()
+        {
+            var tag = new Tag("Testing.Tag.TagA");
+            Assert.AreEqual("Testing.Tag.TagA", tag.ToString());
+        }
     }
 }

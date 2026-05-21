@@ -15,6 +15,7 @@ namespace Item.Scripts
     public class EquipmentComponent : NetworkBehaviour
     {
         public EquipmentManagerDefinition EquipmentManagerDefinition;
+        public StartingEquipmentDefinition StartingEquipment;
 
         public EquipmentManager EquipmentManager => _equipmentManager;
 
@@ -53,6 +54,14 @@ namespace Item.Scripts
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            if (_abilitySystemComponent != null)
+            {
+                _abilitySystemComponent.OnAbilitySystemInitialised -= Initialise;
+            }
+            if (_inventoryComponent != null)
+            {
+                _inventoryComponent.OnInventoryInitialised -= Initialise;
+            }
             UnsubscribeReplication();
         }
 
@@ -73,7 +82,7 @@ namespace Item.Scripts
             }
 
             _equipmentManager = new EquipmentManager(_abilitySystemComponent.AbilitySystem, _inventoryManager,
-                EquipmentManagerDefinition, _replicationManager);
+                EquipmentManagerDefinition, _replicationManager, StartingEquipment);
 
             // Bind back-reference so the replication manager's Process methods can mutate the equipment.
             if (_replicationManager is ItemReplicationManager concrete)
@@ -88,6 +97,11 @@ namespace Item.Scripts
             if (IsServer)
             {
                 NotifyOwnerSnapshotRpc(_equipmentManager.CaptureSnapshot());
+            }
+            else if (IsClient && IsOwner)
+            {
+                // Client requests the snapshot once both managers are initialised.
+                RequestSnapshotRpc();
             }
         }
 
@@ -211,6 +225,15 @@ namespace Item.Scripts
         private void RequestUpgradeRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUpgradeRequested(slot);
+        }
+
+        [Rpc(SendTo.Server)]
+        private void RequestSnapshotRpc()
+        {
+            if (_equipmentManager != null)
+            {
+                NotifyOwnerSnapshotRpc(_equipmentManager.CaptureSnapshot());
+            }
         }
     }
 }

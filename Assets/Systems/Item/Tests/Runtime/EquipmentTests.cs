@@ -321,5 +321,109 @@ namespace Systems.Item.Tests
             CollectionAssert.AreEqual(new[] { ownedTag }, mod.OwnedTags);
             CollectionAssert.AreEqual(new[] { modifiableTag }, mod.ModifiableEquipmentTags);
         }
+
+        [Test]
+        public void AddMod_ReEquipAfterRemove_Succeeds()
+        {
+            var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(Source);
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            var equipment = new Equipment(inv.Object, def) { Level = 10 };
+
+            var modDef = CreateModifierDef(new Tag("Item.Modifier.Passive"), new Tag("Item.Equipment.Weapon"));
+            var mod = new Modifier(modDef, inv.Object);
+            
+            // Equip first time
+            equipment.AddMod(slot, mod);
+            Assert.AreSame(mod, equipment.Mods[slot]);
+
+            // Remove it
+            equipment.RemoveMod(slot, mod);
+            Assert.IsFalse(equipment.Mods.ContainsKey(slot));
+
+            // Equip again (re-equip)
+            equipment.AddMod(slot, mod);
+            Assert.AreSame(mod, equipment.Mods[slot], "Should be able to re-equip mod in the slot after removal.");
+        }
+
+        [Test]
+        public void ToSerializedEquipment_WithEmptySlots_DoesNotThrowAndFiltersNulls()
+        {
+            var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(Source);
+            var slot = new Tag("Mod.Slot.Passive.1");
+            var def = CreateEquipmentWithSlot(
+                new Tag("Item.Equipment.Weapon"), slot, new Tag("Item.Modifier.Passive"));
+            
+            // Starts with slot set to null
+            var equipment = new Equipment(inv.Object, def) { Level = 10, Name = "Sword" };
+
+            SerialisedEquipment serialised = default;
+            Assert.DoesNotThrow(() => serialised = equipment.ToSerializedEquipment(),
+                "ToSerializedEquipment should not throw NullReferenceException when slots are empty.");
+
+            Assert.IsNotNull(serialised.Modifiers);
+            Assert.AreEqual(0, serialised.Modifiers.Count, "Empty slots should not be serialized.");
+        }
+
+        [Test]
+        public void EquipmentManager_StartingEquipment_EquipsItems()
+        {
+            SourceMock.Setup(m => m.IsServer()).Returns(true);
+            var inv = new Mock<IInventoryManager>();
+            inv.Setup(m => m.GetOwner()).Returns(Source);
+
+            var def = CreateMockDefinition("MainHand", "Chest");
+            
+            var weaponDef = TestItems.BasicEquipment("StartingSword", "MainHand");
+            var armorDef = TestItems.BasicEquipment("StartingShield", "Chest");
+
+            var startingDef = UnityEngine.ScriptableObject.CreateInstance<global::Item.Runtime.Definition.StartingEquipmentDefinition>();
+            startingDef.StartingEquipment = new List<EquipmentDefinition> { weaponDef, armorDef };
+
+            var manager = new EquipmentManager(Source, inv.Object, def, startingEquipment: startingDef);
+
+            var equipped = manager.GetEquipment();
+            Assert.IsNotNull(equipped[new Tag("MainHand")]);
+            Assert.AreEqual("StartingSword", equipped[new Tag("MainHand")].Name);
+            
+            Assert.IsNotNull(equipped[new Tag("Chest")]);
+            Assert.AreEqual("StartingShield", equipped[new Tag("Chest")].Name);
+        }
+
+        [Test]
+        public void EquipmentComponent_Initialise_PopulatesStartingEquipment()
+        {
+            var go = new UnityEngine.GameObject();
+            var asc = go.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+            var abilitySystemField = typeof(AbilitySystem.Scripts.AbilitySystemComponent).GetProperty("AbilitySystem", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            abilitySystemField.SetValue(asc, Source);
+
+            var inventoryComponent = go.AddComponent<global::Item.Scripts.InventoryComponent>();
+            var mockInv = new Mock<IInventoryManager>();
+            mockInv.Setup(m => m.GetOwner()).Returns(Source);
+            inventoryComponent.InventoryManager = mockInv.Object;
+
+            var equipmentComponent = go.AddComponent<global::Item.Scripts.EquipmentComponent>();
+            
+            var def = CreateMockDefinition("MainHand");
+            var weaponDef = TestItems.BasicEquipment("StartingSword", "MainHand");
+            var startingDef = UnityEngine.ScriptableObject.CreateInstance<global::Item.Runtime.Definition.StartingEquipmentDefinition>();
+            startingDef.StartingEquipment = new List<EquipmentDefinition> { weaponDef };
+
+            equipmentComponent.EquipmentManagerDefinition = def;
+            equipmentComponent.StartingEquipment = startingDef;
+
+            equipmentComponent.Initialise();
+
+            Assert.IsNotNull(equipmentComponent.EquipmentManager);
+            var equipped = equipmentComponent.EquipmentManager.GetEquipment();
+            Assert.IsNotNull(equipped[new Tag("MainHand")]);
+            Assert.AreEqual("StartingSword", equipped[new Tag("MainHand")].Name);
+
+            UnityEngine.Object.DestroyImmediate(go);
+        }
     }
 }

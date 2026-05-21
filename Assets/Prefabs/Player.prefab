@@ -44,7 +44,7 @@ Light:
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 0, g: 0.94610643, b: 1, a: 1}
-  m_Intensity: 9.062086
+  m_Intensity: 151.80466
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 0
@@ -5575,6 +5575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   EquipmentManagerDefinition: {fileID: 11400000, guid: 9e8ed9753be065149960dd56dd047e8d, type: 2}
+  StartingEquipment: {fileID: 11400000, guid: 7b0956391d5b10d40864fc83278f8416, type: 2}
 --- !u!114 &3927616742072257092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5603,6 +5604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Item::Item.Scripts.InventoryComponent
   ShowTopMostFoldoutHeaderGroup: 1
+  startingItems: {fileID: 0}
 --- !u!114 &5329675371770631307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6090,6 +6092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e64d388d6d11f4d842aae0f3c4ce9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Item::Item.Scripts.UI.EquipmentUIController
+  ShowTopMostFoldoutHeaderGroup: 1
   uiDocument: {fileID: 5197334296451713787}
 --- !u!114 &906191941378387349
 MonoBehaviour:
@@ -6158,8 +6161,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 74929961521300719}
+        m_TargetAssemblyTypeName: Item.Scripts.UI.EquipmentUIController, Item
+        m_MethodName: OnEquipment
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 484ff4eb-7df2-453d-baa4-a88a0f45f9bc
     m_ActionName: 'Player/Inventory[/Keyboard/i]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f78a8da7-b939-4276-93df-ba10da1f1e32
+    m_ActionName: 'Player/Reload[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 040ef326-c83f-443a-a600-d1ffa4750ed9
+    m_ActionName: 'Player/SpawnHost[/Keyboard/f1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cc2599d1-e667-4908-9988-1e21a90e7908
+    m_ActionName: 'Player/SpawnClient[/Keyboard/f2]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bf198baa-e80b-470d-b2f1-b2649ac10496
+    m_ActionName: 'Player/SpawnServer[/Keyboard/f3]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

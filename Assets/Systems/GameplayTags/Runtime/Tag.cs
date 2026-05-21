@@ -99,6 +99,11 @@ namespace GameplayTags.Runtime
             }
         }
         
+        public override string ToString()
+        {
+            return Name ?? "";
+        }
+
         public bool Equals(Tag other)
         {
             if (Name == null || other.Name == null)

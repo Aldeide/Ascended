@@ -63,15 +63,20 @@ namespace Item.Runtime
             InitialiseMods();
             Icon = _definition.Icon;
 
-            foreach (var mod in serialisedEquipment.Modifiers)
+            if (serialisedEquipment.Modifiers != null)
             {
-                AddMod(new Tag(mod.Key), new Modifier(_manager, mod.Value));
+                foreach (var mod in serialisedEquipment.Modifiers)
+                {
+                    AddMod(new Tag(mod.Key), new Modifier(_manager, mod.Value));
+                }
             }
         }
 
         public SerialisedEquipment ToSerializedEquipment()
         {
-            var modifiers = Mods.ToDictionary(mod => mod.Key.ToString(), mod => mod.Value.ToSerializedModifier());
+            var modifiers = Mods
+                .Where(mod => mod.Value != null)
+                .ToDictionary(mod => mod.Key.ToString(), mod => mod.Value.ToSerializedModifier());
             return new SerialisedEquipment()
             {
                 Level = Level,
@@ -122,7 +127,6 @@ namespace Item.Runtime
         public void AddMod(Tag modSlot, Modifier mod)
         {
             if (!CanAddMod(modSlot, mod)) return;
-            if (!Mods.ContainsKey(modSlot)) return;
             Mods[modSlot] = mod;
             mod.Equip(this);
             OnModAdded?.Invoke(modSlot, mod);

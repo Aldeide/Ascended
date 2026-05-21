@@ -1,5 +1,6 @@
 using System;
 using AbilitySystem.Scripts;
+using Item.Runtime.Definition;
 using Item.Runtime.Interface.Core;
 using Item.Runtime.Manager;
 using Systems.Item.Runtime.Networking;
@@ -16,6 +17,14 @@ namespace Item.Scripts
     /// </summary>
     public class InventoryComponent : NetworkBehaviour
     {
+        [SerializeField] private StartingItemsDefinition startingItems;
+
+        public StartingItemsDefinition StartingItems
+        {
+            get => startingItems;
+            set => startingItems = value;
+        }
+
         public IInventoryManager InventoryManager { get; set; }
         public IItemReplicationManager ReplicationManager { get; set; }
         public Action OnInventoryInitialised;
@@ -44,16 +53,33 @@ namespace Item.Scripts
             UnsubscribeReplication();
         }
 
-        private void Initialise()
+        public void Initialise()
         {
             if (InventoryManager != null) return;
 
-            ReplicationManager = new ItemReplicationManager(() => IsServer, () => IsClient);
+            if (ReplicationManager == null)
+            {
+                ReplicationManager = new ItemReplicationManager(() => IsServer, () => IsClient);
+            }
             InventoryManager = new InventoryManager(_abilitySystemComponent.AbilitySystem, ReplicationManager);
             // EquipmentComponent will rebind the replication manager once it builds its EquipmentManager.
-            ((ItemReplicationManager)ReplicationManager).Bind(InventoryManager, null);
+            if (ReplicationManager is ItemReplicationManager concrete)
+            {
+                concrete.Bind(InventoryManager, null);
+            }
 
             SubscribeReplication();
+
+            if (ReplicationManager.IsServer() && startingItems != null && startingItems.StartingItems != null)
+            {
+                foreach (var entry in startingItems.StartingItems)
+                {
+                    if (entry.Item != null)
+                    {
+                        InventoryManager.AddItem(entry.Item.Name, entry.Quantity);
+                    }
+                }
+            }
 
             OnInventoryInitialised?.Invoke();
         }

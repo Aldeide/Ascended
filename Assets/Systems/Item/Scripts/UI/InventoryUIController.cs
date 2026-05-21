@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AbilitySystem.Scripts;
 using Item.Runtime.Interface;
 using Item.Runtime.Manager;
@@ -28,10 +29,13 @@ namespace Item.Scripts.UI
         private InventoryComponent _localPlayerInventory;
         private AbilitySystemComponent _asc;
         private bool _isMenuOpen = false;
+        public bool IsMenuOpen => _isMenuOpen;
+        private int _lastToggleFrame = -1;
 
         private void Awake()
         {
             _isMenuOpen = false;
+            _lastToggleFrame = -1;
         }
 
         private void Start()
@@ -95,8 +99,15 @@ namespace Item.Scripts.UI
             }
         }
 
-        private void ToggleMenu()
+        public void ToggleMenu()
         {
+            if (Time.frameCount == _lastToggleFrame)
+            {
+                Debug.Log("ToggleMenu: Already toggled this frame, ignoring to prevent double-toggles.");
+                return;
+            }
+            _lastToggleFrame = Time.frameCount;
+
             Debug.Log("Toggling Inventory Menu...");
             if (!InitializeUI()) 
             {
@@ -121,6 +132,9 @@ namespace Item.Scripts.UI
                 {
                     _localPlayerInventory.InventoryManager.OnInventoryChanged += RefreshInventory;
                     RefreshInventory();
+
+                    // Cancel active player actions/combat when menu is opened
+                    _localPlayerInventory.SendMessage("CancelActiveActions", SendMessageOptions.DontRequireReceiver);
 
                     // Initialize Equipment UI
                     var equipComp = _localPlayerInventory.GetComponent<EquipmentComponent>();
@@ -150,6 +164,13 @@ namespace Item.Scripts.UI
                 if (_localPlayerInventory != null)
                 {
                     _localPlayerInventory.InventoryManager.OnInventoryChanged -= RefreshInventory;
+                }
+
+                // Cleanup Equipment UI subscription
+                var equipUI = GetComponent<EquipmentUIController>();
+                if (equipUI != null)
+                {
+                    equipUI.Cleanup();
                 }
             }
         }
@@ -194,16 +215,25 @@ namespace Item.Scripts.UI
                 return;
             }
 
-            foreach (var item in items)
+            // Group duplicate items to show stacked quantity in UI
+            var groupedItems = items.GroupBy(i => i.Name).Select(g => new { Item = g.First(), Count = g.Count() });
+
+            foreach (var group in groupedItems)
             {
                 var itemElement = itemTemplate.Instantiate();
                 var icon = itemElement.Q<VisualElement>("item-icon");
                 var quantity = itemElement.Q<Label>("item-quantity");
                 var border = itemElement.Q<VisualElement>("item-rarity-border");
 
-                if (item.Icon != null && icon != null)
+                if (group.Item.Icon != null && icon != null)
                 {
-                    icon.style.backgroundImage = new StyleBackground(item.Icon);
+                    icon.style.backgroundImage = new StyleBackground(group.Item.Icon);
+                }
+
+                if (quantity != null)
+                {
+                    quantity.text = group.Count.ToString();
+                    quantity.style.display = group.Count > 1 ? DisplayStyle.Flex : DisplayStyle.None;
                 }
 
                 if (border != null)

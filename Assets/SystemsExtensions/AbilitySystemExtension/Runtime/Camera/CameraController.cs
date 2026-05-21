@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Item.Scripts.UI;
 
 namespace Systems.Camera
 {
@@ -17,6 +18,25 @@ namespace Systems.Camera
         public GameObject defaultVirtualCamera;
         public GameObject aimVirtualCamera;
 
+        private CameraTargetController _targetController;
+        private InventoryUIController _inventoryUI;
+
+        private InventoryUIController GetInventoryUI()
+        {
+            if (_inventoryUI == null && followTarget != null)
+            {
+                if (_targetController == null)
+                {
+                    _targetController = followTarget.GetComponent<CameraTargetController>();
+                }
+                if (_targetController != null && _targetController.Player != null)
+                {
+                    _inventoryUI = _targetController.Player.GetComponentInChildren<InventoryUIController>();
+                }
+            }
+            return _inventoryUI;
+        }
+
         public void OnLook(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed) return;
@@ -25,6 +45,13 @@ namespace Systems.Camera
 
         private void Update()
         {
+            var inv = GetInventoryUI();
+            if (inv != null && inv.IsMenuOpen)
+            {
+                mouseDelta = Vector2.zero;
+                return;
+            }
+
             if (mouseDelta.sqrMagnitude > 0.01f)
             {
                 UpdateCamera(mouseDelta);

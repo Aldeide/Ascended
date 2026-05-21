@@ -130,5 +130,55 @@ namespace Systems.Item.Tests
             
             Assert.AreEqual(1, inventory.Items.Count);
         }
+
+        /// <summary>
+        /// Validates that InventoryComponent initializes starting items correctly on the server.
+        /// </summary>
+        [Test]
+        public void InventoryComponent_InitialiseOnServer_PopulatesStartingItems()
+        {
+            var go = new UnityEngine.GameObject();
+            var asc = go.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+            
+            var abilitySystemField = typeof(AbilitySystem.Scripts.AbilitySystemComponent).GetProperty("AbilitySystem", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            abilitySystemField.SetValue(asc, Source);
+            
+            var inventoryComponent = go.AddComponent<global::Item.Scripts.InventoryComponent>();
+            
+            var mockReplicationManager = new Mock<IItemReplicationManager>();
+            mockReplicationManager.Setup(m => m.IsServer()).Returns(true);
+            inventoryComponent.ReplicationManager = mockReplicationManager.Object;
+            
+            var itemDef = UnityEngine.ScriptableObject.CreateInstance<global::Item.Runtime.Definition.EquipmentDefinition>();
+            itemDef.Name = "BasicItem";
+            
+            var startingItemsDef = UnityEngine.ScriptableObject.CreateInstance<global::Item.Runtime.Definition.StartingItemsDefinition>();
+            startingItemsDef.StartingItems = new List<global::Item.Runtime.Definition.StartingItemsDefinition.StartingItemEntry>
+            {
+                new global::Item.Runtime.Definition.StartingItemsDefinition.StartingItemEntry { Item = itemDef, Quantity = 3 }
+            };
+            inventoryComponent.StartingItems = startingItemsDef;
+
+            // Set up ItemLibrary mock instance
+            var libGo = new UnityEngine.GameObject();
+            var itemLibrary = libGo.AddComponent<global::Item.Runtime.Database.ItemLibrary>();
+            var instanceProperty = typeof(global::Item.Runtime.Database.ItemLibrary).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            instanceProperty.SetValue(null, itemLibrary);
+
+            var itemsField = typeof(global::Item.Runtime.Database.ItemLibrary).GetField("_items", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var itemsDict = new Dictionary<string, global::Item.Runtime.Definition.ItemDefinition> { { "BasicItem", itemDef } };
+            itemsField.SetValue(itemLibrary, itemsDict);
+            
+            inventoryComponent.Initialise();
+            
+            Assert.IsNotNull(inventoryComponent.InventoryManager);
+            Assert.AreEqual(3, inventoryComponent.InventoryManager.Items.Count);
+            Assert.AreEqual("BasicItem", inventoryComponent.InventoryManager.Items[0].Name);
+
+            // Clean up
+            instanceProperty.SetValue(null, null);
+            UnityEngine.Object.DestroyImmediate(go);
+            UnityEngine.Object.DestroyImmediate(libGo);
+        }
     }
 }

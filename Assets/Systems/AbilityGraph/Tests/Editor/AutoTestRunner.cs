@@ -14,7 +14,7 @@ namespace AbilityGraph.Tests.Editor
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             // Only trigger if a C# script was imported/changed
-            bool hasCsChanges = importedAssets.Any(path => path.EndsWith(".cs"));
+            bool hasCsChanges = false;// importedAssets.Any(path => path.EndsWith(".cs"));
             if (!hasCsChanges) return;
 
             Debug.Log("[AutoTestRunner] C# script changes detected. Running EditMode tests...");

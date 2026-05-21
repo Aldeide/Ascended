@@ -1,4 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Interface/Play/InventoryMenu.uss" />
+    <Style src="project://database/Assets/Interface/Play/InventoryItem.uss" />
     <ui:VisualElement name="inventory-screen" class="screen-overlay">
         <ui:VisualElement name="menu-container" class="glass-panel">
             <ui:Label name="menu-title" text="EQUIPMENT &amp; INVENTORY" class="panel-title" />
@@ -7,12 +9,22 @@
                 <!-- Left Section: Character Equipment -->
                 <ui:VisualElement name="character-section" class="section-container">
                     <ui:VisualElement name="character-preview" class="character-preview-box">
-                       <!-- Character silhouette/model would go here -->
-                        <ui:VisualElement name="slot-head" class="equipment-slot-view" />
-                        <ui:VisualElement name="slot-chest" class="equipment-slot-view" />
-                        <ui:VisualElement name="slot-legs" class="equipment-slot-view" />
-                        <ui:VisualElement name="slot-mainhand" class="equipment-slot-view" />
-                        <ui:VisualElement name="slot-offhand" class="equipment-slot-view" />
+                        <!-- Character silhouette/model would go here -->
+                        <ui:VisualElement name="slot-head" class="equipment-slot-view">
+                            <ui:Label name="slot-head-label" text="HEAD" class="slot-placeholder-label" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="slot-chest" class="equipment-slot-view">
+                            <ui:Label name="slot-chest-label" text="CHEST" class="slot-placeholder-label" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="slot-legs" class="equipment-slot-view">
+                            <ui:Label name="slot-legs-label" text="LEGS" class="slot-placeholder-label" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="slot-mainhand" class="equipment-slot-view">
+                            <ui:Label name="slot-mainhand-label" text="WEAPON" class="slot-placeholder-label" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="slot-offhand" class="equipment-slot-view">
+                            <ui:Label name="slot-offhand-label" text="OFFHAND" class="slot-placeholder-label" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
 
