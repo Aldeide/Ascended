@@ -68,7 +68,18 @@ namespace Item.Scripts
         public void Initialise()
         {
             if (_equipmentManager != null) return;
-            if (!_abilitySystemComponent.IsInitialized) return;
+
+            if (_abilitySystemComponent == null)
+            {
+                _abilitySystemComponent = GetComponent<AbilitySystemComponent>();
+            }
+
+            if (_abilitySystemComponent == null || !_abilitySystemComponent.IsInitialized) return;
+
+            if (_inventoryComponent == null)
+            {
+                _inventoryComponent = GetComponent<InventoryComponent>();
+            }
 
             if (_inventoryManager == null && _inventoryComponent != null)
             {

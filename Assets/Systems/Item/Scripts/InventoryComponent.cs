@@ -57,6 +57,13 @@ namespace Item.Scripts
         {
             if (InventoryManager != null) return;
 
+            if (_abilitySystemComponent == null)
+            {
+                _abilitySystemComponent = GetComponent<AbilitySystemComponent>();
+            }
+
+            if (_abilitySystemComponent == null || !_abilitySystemComponent.IsInitialized) return;
+
             if (ReplicationManager == null)
             {
                 ReplicationManager = new ItemReplicationManager(() => IsServer, () => IsClient);
