@@ -1,3 +1,6 @@
 ## 2024-06-25 - Caching LayerMask and Struct Instantiations in Unity Update Loops
 **Learning:** Unity's `LayerMask.GetMask(params string[] layerNames)` allocates a new string array on every invocation when passed string literals directly, creating GC pressure. Furthermore, repeatedly calling constructors that perform string parsing or manipulation (like the custom `new Tag(string)`) inside high-frequency loops like `Update()` or `FixedUpdate()` creates significant per-frame allocations.
 **Action:** Always cache string-based layer mask lookups (`LayerMask.GetMask()`) and struct instantiations that parse strings (`new Tag()`) into `private static readonly` fields at the class level instead of executing them inline within high-frequency Unity methods.
+## 2024-05-24 - Optimize magnitude checks in hot paths
+**Learning:** Using `Vector3.magnitude` invokes an expensive square root operation. In hot paths (like Update or FixedUpdate), checking magnitudes against constants can be a performance bottleneck.
+**Action:** Replace `Vector3.magnitude` with `Vector3.sqrMagnitude` and compare it against the squared constant value instead.
