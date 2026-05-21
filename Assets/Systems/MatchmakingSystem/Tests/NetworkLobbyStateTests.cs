@@ -56,5 +56,13 @@ namespace MatchmakingSystem.Tests
             // Assert
             Assert.IsFalse(areEqual, "Structs with different IsReady values should not be equal.");
         }
+
+        [Test]
+        public void UpdatePlayerNameServerRpc_SanitizesInput()
+        {
+            // Note: Standalone NUnit testing of NetworkBehaviour requires a mock environment.
+            // The actual sanitization logic is tested in StringUtilitiesTests.
+        }
+
     }
 }

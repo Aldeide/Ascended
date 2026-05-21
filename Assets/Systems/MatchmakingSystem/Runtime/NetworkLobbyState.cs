@@ -3,6 +3,7 @@ using Steamworks;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using Systems.Core.Utilities;
 
 namespace MatchmakingSystem.Runtime
 {
@@ -126,15 +127,17 @@ namespace MatchmakingSystem.Runtime
         [ServerRpc(RequireOwnership = false)]
         public void UpdatePlayerNameServerRpc(FixedString64Bytes name, ServerRpcParams rpcParams = default)
         {
+            // Sanitize the input to prevent TextMeshPro rich text injection (XSS equivalent)
+            FixedString64Bytes sanitizedName = StringUtilities.SanitizeForRichText(name);
             ulong clientId = rpcParams.Receive.SenderClientId;
             for (int i = 0; i < LobbyPlayers.Count; i++)
             {
                 if (LobbyPlayers[i].ClientId == clientId)
                 {
                     var playerState = LobbyPlayers[i];
-                    playerState.PlayerName = name;
+                    playerState.PlayerName = sanitizedName;
                     LobbyPlayers[i] = playerState;
-                    Debug.Log($"[NetworkLobbyState] Updated player {clientId} name to: {name}");
+                    Debug.Log($"[NetworkLobbyState] Updated player {clientId} name to: {sanitizedName}");
                     break;
                 }
             }

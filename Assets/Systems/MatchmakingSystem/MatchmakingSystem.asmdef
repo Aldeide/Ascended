@@ -5,7 +5,8 @@
         "Unity.Netcode.Runtime",
         "Unity.Collections",
         "Facepunch Transport for Netcode for GameObjects",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
