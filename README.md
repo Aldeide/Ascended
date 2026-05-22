@@ -28,7 +28,18 @@ We use automated tests to verify code stability before integration. You can run 
     .\run_tests.ps1 -TestFilter "ChargesAbilityTests"
     ```
 
+*   **Run Ability System tests:**
+    You can run all Ability System tests locally using a specific script tailored for the GAS sub-system:
+    ```powershell
+    .\run_all_ability_tests.ps1
+    ```
+
 ### Quick Verification
 *   **Command:** `.\run_tests.ps1`
 *   **Expected Output:** `Unity finished with exit code 0`
+*   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
+
+### Quick Verification for Ability System Tests
+*   **Command:** `.\run_all_ability_tests.ps1`
+*   **Expected Output:** `Tests completed. Results saved to Results_AllTests.xml` with test statistics.
 *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.

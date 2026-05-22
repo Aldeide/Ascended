@@ -1,5 +1,5 @@
-$unityPath = "C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe"
-$projectPath = "c:\Users\Anthony\Desktop\Ascended\Ascended"
+$unityPath = if ($env:UNITY_PATH) { $env:UNITY_PATH } else { "C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe" }
+$projectPath = $PSScriptRoot
 $logFile = "UnityLog_AllTests.txt"
 $testResults = "Results_AllTests.xml"
 
