@@ -1,4 +1,4 @@
-﻿using AISystem.Runtime.Goals;
+using AISystem.Runtime.Goals;
 using CrashKonijn.Agent.Runtime;
 using CrashKonijn.Goap.Runtime;
 using Unity.Netcode;
@@ -17,13 +17,16 @@ namespace AISystem.Runtime.DecisionMakers
             _provider = GetComponent<GoapActionProvider>();
             
             // This only applies to the code demo
-            if (_provider.AgentTypeBehaviour == null)
+            if (_provider != null && _provider.AgentTypeBehaviour == null && _goap != null)
                 _provider.AgentType = _goap.GetAgentType("DefaultAgent");
         }
 
         private void Start()
         {
-            _provider.RequestGoal<IdleGoal>();
+            if (_provider != null && (_provider.AgentType != null || _provider.AgentTypeBehaviour != null))
+            {
+                _provider.RequestGoal<IdleGoal>();
+            }
         }
     }
 }

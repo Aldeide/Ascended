@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="24" result="Passed" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.3353776">
+  <test-suite type="TestSuite" id="1000" name="Ascended" fullname="Ascended" runstate="Runnable" testcasecount="347" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.335378" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1374" name="Assembly-CSharp-Editor.dll" fullname="C:/Users/Anthony/Desktop/Ascended/Ascended/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.323723" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="71268" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1378" name="AISystem" fullname="AISystem" runstate="Runnable" testcasecount="24" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.323155" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1379" name="Tests" fullname="AISystem.Tests" runstate="Runnable" testcasecount="24" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.322951" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1349" name="AISystemTests" fullname="AISystem.Tests.AISystemTests" classname="AISystem.Tests.AISystemTests" runstate="Runnable" testcasecount="24" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.321866" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1355" name="AbilitySensor_SensesAbilityStateCorrectly" fullname="AISystem.Tests.AISystemTests.AbilitySensor_SensesAbilityStateCorrectly" methodname="AbilitySensor_SensesAbilityStateCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="789820800" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.157882" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -23404690
+[AbilityManager] Created for System -23404690
+]]></output>
+            </test-case>
+            <test-case id="1373" name="AgentMoveBehaviour_EventBindingAndUpdates" fullname="AISystem.Tests.AISystemTests.AgentMoveBehaviour_EventBindingAndUpdates" methodname="AgentMoveBehaviour_EventBindingAndUpdates" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="2051704635" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.007528" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1356" name="AllyNeedsHealingSensor_DetectsAllyingNeedCorrectly" fullname="AISystem.Tests.AISystemTests.AllyNeedsHealingSensor_DetectsAllyingNeedCorrectly" methodname="AllyNeedsHealingSensor_DetectsAllyingNeedCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="327456667" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.015931" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 1556695550
+[AbilityManager] Created for System 1556695550
+[AbilityManager] Created for System -449245964
+[AbilityManager] Created for System -449245964
+]]></output>
+            </test-case>
+            <test-case id="1357" name="AttributeSensor_ComparesAttributesCorrectly" fullname="AISystem.Tests.AISystemTests.AttributeSensor_ComparesAttributesCorrectly" methodname="AttributeSensor_ComparesAttributesCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1259238483" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.004884" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 253370798
+[AbilityManager] Created for System 253370798
+]]></output>
+            </test-case>
+            <test-case id="1371" name="DefaultAgentDecisionMaker_RequestsIdleGoalInStart" fullname="AISystem.Tests.AISystemTests.DefaultAgentDecisionMaker_RequestsIdleGoalInStart" methodname="DefaultAgentDecisionMaker_RequestsIdleGoalInStart" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1601364156" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.001261" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1372" name="EnemyDecisionMaker_GoalSelectionLogic" fullname="AISystem.Tests.AISystemTests.EnemyDecisionMaker_GoalSelectionLogic" methodname="EnemyDecisionMaker_GoalSelectionLogic" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="259666289" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.008367" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 1661893140
+[AbilityManager] Created for System 1661893140
+[AbilityManager] Created for System -1337550582
+[AbilityManager] Created for System -1337550582
+]]></output>
+            </test-case>
+            <test-case id="1358" name="EnemyTargetSensor_FindsPlayersOrFallback" fullname="AISystem.Tests.AISystemTests.EnemyTargetSensor_FindsPlayersOrFallback" methodname="EnemyTargetSensor_FindsPlayersOrFallback" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1642909490" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.012545" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -1688263518
+[AbilityManager] Created for System -1688263518
+[AbilityManager] Created for System 1634020248
+[AbilityManager] Created for System 1634020248
+]]></output>
+            </test-case>
+            <test-case id="1367" name="GoapAbilityAction_PerformsCorrectly" fullname="AISystem.Tests.AISystemTests.GoapAbilityAction_PerformsCorrectly" methodname="GoapAbilityAction_PerformsCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="677795485" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.011099" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -1017164698
+[AbilityManager] Created for System -1017164698
+]]></output>
+            </test-case>
+            <test-case id="1359" name="HealTargetSensor_SensesLowestHealthAllyCorrectly" fullname="AISystem.Tests.AISystemTests.HealTargetSensor_SensesLowestHealthAllyCorrectly" methodname="HealTargetSensor_SensesLowestHealthAllyCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="110402385" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.012170" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -1445726700
+[AbilityManager] Created for System -1445726700
+[AbilityManager] Created for System -578962166
+[AbilityManager] Created for System -578962166
+[AbilityManager] Created for System 1977901056
+[AbilityManager] Created for System 1977901056
+]]></output>
+            </test-case>
+            <test-case id="1360" name="HealthLowSensor_EvaluatesHealthThresholdCorrectly" fullname="AISystem.Tests.AISystemTests.HealthLowSensor_EvaluatesHealthThresholdCorrectly" methodname="HealthLowSensor_EvaluatesHealthThresholdCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="446600940" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.006320" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 700002200
+[AbilityManager] Created for System 700002200
+]]></output>
+            </test-case>
+            <test-case id="1368" name="IdleAction_PerformsCorrectly" fullname="AISystem.Tests.AISystemTests.IdleAction_PerformsCorrectly" methodname="IdleAction_PerformsCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1528496965" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.010563" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 1140267192
+[AbilityManager] Created for System 1140267192
+]]></output>
+            </test-case>
+            <test-case id="1361" name="IdleTargetSensor_SensesCorrectly" fullname="AISystem.Tests.AISystemTests.IdleTargetSensor_SensesCorrectly" methodname="IdleTargetSensor_SensesCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1618138902" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.004823" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 807181474
+[AbilityManager] Created for System 807181474
+]]></output>
+            </test-case>
+            <test-case id="1369" name="MoveToFlankAction_CompletesImmediately" fullname="AISystem.Tests.AISystemTests.MoveToFlankAction_CompletesImmediately" methodname="MoveToFlankAction_CompletesImmediately" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1203023957" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.000480" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1362" name="RangeSensor_SensesRangeCorrectly" fullname="AISystem.Tests.AISystemTests.RangeSensor_SensesRangeCorrectly" methodname="RangeSensor_SensesRangeCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="499295669" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.009951" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -429674908
+[AbilityManager] Created for System -429674908
+]]></output>
+            </test-case>
+            <test-case id="1363" name="RoleSensor_ChecksRolesCorrectly" fullname="AISystem.Tests.AISystemTests.RoleSensor_ChecksRolesCorrectly" methodname="RoleSensor_ChecksRolesCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1085482767" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:22Z" duration="0.005124" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -1696806134
+[AbilityManager] Created for System -1696806134
+]]></output>
+            </test-case>
+            <test-case id="1354" name="TacticalGroupCoordinator_AssignsRolesSequentially" fullname="AISystem.Tests.AISystemTests.TacticalGroupCoordinator_AssignsRolesSequentially" methodname="TacticalGroupCoordinator_AssignsRolesSequentially" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="2015024678" result="Passed" start-time="2026-05-22 21:19:22Z" end-time="2026-05-22 21:19:23Z" duration="0.001860" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1350" name="TacticalPointEvaluationJob_CalculatesScoresCorrectly" fullname="AISystem.Tests.AISystemTests.TacticalPointEvaluationJob_CalculatesScoresCorrectly" methodname="TacticalPointEvaluationJob_CalculatesScoresCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1592319676" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.003402" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1352" name="TacticalPointManager_GetPointData_FiltersOccupancyCorrectlyForQueryingAgent" fullname="AISystem.Tests.AISystemTests.TacticalPointManager_GetPointData_FiltersOccupancyCorrectlyForQueryingAgent" methodname="TacticalPointManager_GetPointData_FiltersOccupancyCorrectlyForQueryingAgent" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1875271524" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.002201" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1351" name="TacticalPointManager_RegistersAndUnregistersPoints" fullname="AISystem.Tests.AISystemTests.TacticalPointManager_RegistersAndUnregistersPoints" methodname="TacticalPointManager_RegistersAndUnregistersPoints" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="505219147" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.001576" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1353" name="TacticalPointManager_ReservesAndReleasesPoints" fullname="AISystem.Tests.AISystemTests.TacticalPointManager_ReservesAndReleasesPoints" methodname="TacticalPointManager_ReservesAndReleasesPoints" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="493182313" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.000935" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1364" name="TacticalPositionSensor_CalculatesBestCover" fullname="AISystem.Tests.AISystemTests.TacticalPositionSensor_CalculatesBestCover" methodname="TacticalPositionSensor_CalculatesBestCover" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="810655432" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.008660" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -363887106
+[AbilityManager] Created for System -363887106
+[AbilityManager] Created for System 1003138292
+[AbilityManager] Created for System 1003138292
+]]></output>
+            </test-case>
+            <test-case id="1365" name="TagSensor_ChecksGameplayTagsCorrectly" fullname="AISystem.Tests.AISystemTests.TagSensor_ChecksGameplayTagsCorrectly" methodname="TagSensor_ChecksGameplayTagsCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1819942223" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.006195" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System 855714836
+[AbilityManager] Created for System 855714836
+]]></output>
+            </test-case>
+            <test-case id="1370" name="TakeCoverAction_CompletesImmediately" fullname="AISystem.Tests.AISystemTests.TakeCoverAction_CompletesImmediately" methodname="TakeCoverAction_CompletesImmediately" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="1531090950" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.000533" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+]]></output>
+            </test-case>
+            <test-case id="1366" name="TargetDeadSensor_ChecksTargetStateCorrectly" fullname="AISystem.Tests.AISystemTests.TargetDeadSensor_ChecksTargetStateCorrectly" methodname="TargetDeadSensor_ChecksTargetStateCorrectly" classname="AISystem.Tests.AISystemTests" runstate="Runnable" seed="286428680" result="Passed" start-time="2026-05-22 21:19:23Z" end-time="2026-05-22 21:19:23Z" duration="0.008320" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+
+IgnoreFailingMessages:true
+[AbilityManager] Created for System -817201194
+[AbilityManager] Created for System -817201194
+[AbilityManager] Created for System 193094348
+[AbilityManager] Created for System 193094348
+Saving results to: C:/Users/Anthony/AppData/LocalLow/DefaultCompany/Ascended\TestResults.xml
+Saving results to: C:/Users/Anthony/AppData/LocalLow/DefaultCompany/Ascended\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
