@@ -22,6 +22,11 @@ We use automated tests to verify code stability before integration. You can run 
     .\run_tests.ps1
     ```
 
+*   **Run all ability tests:**
+    ```powershell
+    .\run_all_ability_tests.ps1
+    ```
+
 *   **Run specific tests (Filter):**
     You can run specific test categories or methods by using the `-TestFilter` parameter.
     ```powershell
