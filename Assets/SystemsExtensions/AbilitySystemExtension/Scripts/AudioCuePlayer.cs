@@ -12,6 +12,12 @@ namespace AbilitySystemExtension.Scripts
         {
             base.Start();
             _audioSource = GetComponent<AudioSource>();
+
+            // Automatically ensure SoundOcclusion is attached to the same GameObject
+            if (GetComponent<Systems.Audio.SoundOcclusion>() == null)
+            {
+                gameObject.AddComponent<Systems.Audio.SoundOcclusion>();
+            }
         }
         
         public override void OnExecuteCue(CueDefinition definition, CueData cueData)

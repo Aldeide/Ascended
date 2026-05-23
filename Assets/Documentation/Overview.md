@@ -20,6 +20,7 @@ The project follows a strict **modular architecture** designed to separate reusa
 
 | Directory | Purpose |
 | :--- | :--- |
+| `Assets/Systems/Audio` | High-performance, jobified sound raytracing, occlusion, and environmental reverb. |
 | `Assets/Systems/AbilitySystem` | The core Gameplay Ability System (GAS). |
 | `Assets/Systems/AbilityGraph` | Visual node-based engine for creating and executing abilities. |
 | `Assets/AISystem` | Modular AI framework based on Sensors, Goals, and Actions. |
@@ -58,4 +59,4 @@ graph TD
 
 ---
 [Ability System](./Systems/Ability_System.md) | [Item System](./Systems/Item_System.md) | [AI Architecture](./Systems/AI_Architecture.md) | [UI Architecture](./UI/Architecture.md)
-[Interaction & Camera](./Systems/Interaction_and_Camera.md) | [Animation & Visuals](./Systems/Animation_and_Visuals.md) | [Assets & Localization](./Systems/Asset_and_Localization.md) | [Utilities Reference](./Systems/Utilities_Reference.md)
+[Interaction & Camera](./Systems/Interaction_and_Camera.md) | [Animation & Visuals](./Systems/Animation_and_Visuals.md) | [Assets & Localization](./Systems/Asset_and_Localization.md) | [Utilities Reference](./Systems/Utilities_Reference.md) | [Sound Raytracing](./Systems/Sound_Raytracing.md)

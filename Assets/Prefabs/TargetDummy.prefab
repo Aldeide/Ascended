@@ -2136,6 +2136,7 @@ GameObject:
   - component: {fileID: 6197218997424908743}
   - component: {fileID: 9119129982187297207}
   - component: {fileID: 125234658050388963}
+  - component: {fileID: 235234658050388964}
   m_Layer: 6
   m_Name: SoundEffects
   m_TagString: Untagged
@@ -2267,6 +2268,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1948814fe74f24b59ddc67412349ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &235234658050388964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6464323327559292463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb773208425b3cd4ead5fde3d016aeb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems.Audio::Systems.Audio.SoundOcclusion
+  MaterialMap: {fileID: 11400000, guid: adf17a7aab9b85648a3a8c3c54b3f3e1, type: 2}
+  OcclusionLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  SampleMode: 3
+  SpreadWidth: 1.5
+  UpdateInterval: 0.1
+  VolumeFadeSpeed: 5
+  CutoffFadeSpeed: 5
+  MaxThicknessThreshold: 5
+  MinCutoffFrequency: 150
+  MaxCutoffFrequency: 22000
+  Force3DSpatialization: 1
+  MinDistance: 1
+  MaxDistance: 50
+  RolloffMode: 1
+  EnableAirAbsorption: 1
+  AirAbsorptionRate: 150
 --- !u!1 &6554235462620764362
 GameObject:
   m_ObjectHideFlags: 0

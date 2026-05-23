@@ -109,7 +109,6 @@ namespace AbilitySystemExtension.Scripts
 
             if (!CanMove())
             {
-                _movementInput = Vector3.zero;
                 MovementDirection = Vector3.zero;
                 UpdateAnimator();
                 return;
@@ -176,7 +175,7 @@ namespace AbilitySystemExtension.Scripts
 
         private void UpdateAnimator()
         {
-            if (_movementInput.sqrMagnitude > 0.0001f /* sqrMagnitude is faster */)
+            if (CanMove() && _movementInput.sqrMagnitude > 0.0001f /* sqrMagnitude is faster */)
             {
                 _animationController.SetIsMoving(true);
                 if (IsInAimingState())

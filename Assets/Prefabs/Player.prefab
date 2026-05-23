@@ -3068,6 +3068,7 @@ GameObject:
   - component: {fileID: 6771164155719455632}
   - component: {fileID: 2611580030237981464}
   - component: {fileID: 8735893729538057515}
+  - component: {fileID: 8402939458096805727}
   m_Layer: 6
   m_Name: SoundEffects
   m_TagString: Untagged
@@ -3210,6 +3211,36 @@ MonoBehaviour:
         - Cue.Audio
         - Cue.Audio.Gun
         <AncestorsHashCodes>k__BackingField: d31da389f38dd10f7d116014
+--- !u!114 &8402939458096805727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5848913197243067785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb773208425b3cd4ead5fde3d016aeb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems.Audio::Systems.Audio.SoundOcclusion
+  MaterialMap: {fileID: 11400000, guid: adf17a7aab9b85648a3a8c3c54b3f3e1, type: 2}
+  OcclusionLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  SampleMode: 3
+  SpreadWidth: 1.5
+  UpdateInterval: 0.1
+  VolumeFadeSpeed: 5
+  CutoffFadeSpeed: 5
+  MaxThicknessThreshold: 5
+  MinCutoffFrequency: 150
+  MaxCutoffFrequency: 22000
+  Force3DSpatialization: 1
+  MinDistance: 1
+  MaxDistance: 50
+  RolloffMode: 0
+  EnableAirAbsorption: 1
+  AirAbsorptionRate: 150
 --- !u!1 &6127460654349743310
 GameObject:
   m_ObjectHideFlags: 0
@@ -3923,6 +3954,8 @@ GameObject:
   - component: {fileID: 3927616742072257092}
   - component: {fileID: 8954473457822325761}
   - component: {fileID: 5329675371770631307}
+  - component: {fileID: 8548132407892850898}
+  - component: {fileID: 977919231617961430}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -5626,6 +5659,38 @@ MonoBehaviour:
         <AncestorsNames>k__BackingField:
         - Cue
         <AncestorsHashCodes>k__BackingField: d31da389
+--- !u!81 &8548132407892850898
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+--- !u!114 &977919231617961430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7499a75331d77442ab55ea51917f001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems.Audio::Systems.Audio.AcousticReverbEstimator
+  MaterialMap: {fileID: 11400000, guid: adf17a7aab9b85648a3a8c3c54b3f3e1, type: 2}
+  ReverbLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  RayCount: 128
+  MaxRayDistance: 30
+  MaxBounces: 8
+  UpdateInterval: 0.1
+  FadeSpeed: 4
+  MinDecayTime: 0.1
+  MaxDecayTime: 7
+  OpenSpaceAbsorption: 1
 --- !u!1 &6911334762277334251
 GameObject:
   m_ObjectHideFlags: 0
