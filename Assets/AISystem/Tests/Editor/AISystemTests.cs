@@ -366,14 +366,14 @@ namespace AISystem.Tests
         public void EnemyTargetSensor_FindsPlayersOrFallback()
         {
             var (agentGo, agentMock, _, _) = CreateMockAgent("Agent", "Enemy");
-            agentGo.transform.position = new Vector3(0, 0, 0);
+            agentGo.transform.position = new Vector3(1000, 1000, 1000);
 
             var sensor = new EnemyTargetSensor();
 
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
-            playerGo.transform.position = new Vector3(0, 0, 10);
+            playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
@@ -382,7 +382,7 @@ namespace AISystem.Tests
             // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
-            otherEnemyGo.transform.position = new Vector3(0, 0, 5);
+            otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
@@ -498,16 +498,16 @@ namespace AISystem.Tests
             awakeMethod.Invoke(manager, null);
 
             var ptGo = CreateGameObject("CoverPoint");
-            ptGo.transform.position = new Vector3(0, 0, 5);
+            ptGo.transform.position = new Vector3(1000, 1000, 1005);
             var pt = ptGo.AddComponent<TacticalPoint>();
             manager.RegisterPoint(pt);
 
             var (go, agentMock, _, _) = CreateMockAgent();
-            go.transform.position = Vector3.zero;
+            go.transform.position = new Vector3(1000, 1000, 1000);
 
             // Setup a player threat
             var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
-            playerGo.transform.position = new Vector3(0, 0, 10);
+            playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
