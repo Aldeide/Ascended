@@ -209,16 +209,17 @@ namespace Systems.Audio
             Vector3 sourcePos = transform.position;
             Vector3 listenerPos = _cachedListener.transform.position;
             Vector3 toListener = listenerPos - sourcePos;
-            float distance = toListener.magnitude;
+            float sqrDistance = toListener.sqrMagnitude;
 
-            if (distance <= 0.01f)
+            if (sqrDistance <= 0.0001f) // 0.01f * 0.01f
             {
                 ClearOcclusion();
                 return;
             }
 
+            float distance = Mathf.Sqrt(sqrDistance);
             _activeSampleCount = (int)SampleMode;
-            Vector3 direction = toListener.normalized;
+            Vector3 direction = toListener / distance;
             Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
             Vector3 up = Vector3.Cross(direction, right).normalized * SpreadWidth;
 
@@ -331,7 +332,9 @@ namespace Systems.Audio
 
             // Setup backward ray for this sample
             Vector3 offset = Vector3.zero;
-            Vector3 direction = (_cachedListener.transform.position - transform.position).normalized;
+            Vector3 toListenerVec = _cachedListener.transform.position - transform.position;
+            float toListenerDistance = Mathf.Sqrt(toListenerVec.sqrMagnitude);
+            Vector3 direction = toListenerDistance > 0.00001f ? toListenerVec / toListenerDistance : Vector3.forward;
             Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
             Vector3 up = Vector3.Cross(direction, right).normalized * SpreadWidth;
 
@@ -375,8 +378,10 @@ namespace Systems.Audio
             }
 
             Vector3 backwardHitPoint = hit.point;
-            float thickness = Vector3.Distance(_samples[index].ForwardHitPoint, backwardHitPoint);
-            thickness = Mathf.Min(thickness, MaxThicknessThreshold);
+            float sqrThickness = (_samples[index].ForwardHitPoint - backwardHitPoint).sqrMagnitude;
+            float thickness = sqrThickness > MaxThicknessThreshold * MaxThicknessThreshold
+                ? MaxThicknessThreshold
+                : Mathf.Sqrt(sqrThickness);
 
             float transmissionLossDb = 15f; // Fallback
             float materialCutoff = 800f;   // Fallback
