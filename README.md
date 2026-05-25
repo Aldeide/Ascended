@@ -4,7 +4,7 @@
 
 ## Local Testing
 
-We use automated tests to verify code stability before integration. You can run these tests locally using the provided PowerShell script.
+We use automated tests to verify code stability before integration. You can run these tests locally using the provided PowerShell scripts.
 
 ### Prerequisites
 
@@ -22,6 +22,11 @@ We use automated tests to verify code stability before integration. You can run 
     .\run_tests.ps1
     ```
 
+*   **Run all Ability System tests:**
+    ```powershell
+    .\run_all_ability_tests.ps1
+    ```
+
 *   **Run specific tests (Filter):**
     You can run specific test categories or methods by using the `-TestFilter` parameter.
     ```powershell
@@ -29,6 +34,6 @@ We use automated tests to verify code stability before integration. You can run 
     ```
 
 ### Quick Verification
-*   **Command:** `.\run_tests.ps1`
-*   **Expected Output:** `Unity finished with exit code 0`
+*   **Command:** `.\run_tests.ps1` or `.\run_all_ability_tests.ps1`
+*   **Expected Output:** `Unity finished with exit code 0` (for `run_tests.ps1`) or `Total: [X], Passed: [Y], Failed: 0, Inconclusive: 0, Skipped: 0` (for `run_all_ability_tests.ps1`)
 *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
