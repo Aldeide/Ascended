@@ -31,19 +31,19 @@ namespace AISystem.Runtime.Sensors
                 if (players != null && players.Length > 0)
                 {
                     GameObject closest = null;
-                    float minDist = float.MaxValue;
+                    float minDistSqr = float.MaxValue;
                     foreach (var p in players)
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
+                        float dSqr = (agent.Transform.position - p.transform.position).sqrMagnitude;
+                        if (dSqr < minDistSqr)
                         {
-                            minDist = d;
+                            minDistSqr = dSqr;
                             closest = p;
                         }
                     }
                     if (closest != null)
                     {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
+                        float dist = Mathf.Sqrt(minDistSqr);
                         return dist >= MinRange && dist <= MaxRange;
                     }
                 }
