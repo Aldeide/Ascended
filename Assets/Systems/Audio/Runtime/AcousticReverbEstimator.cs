@@ -288,7 +288,8 @@ namespace Systems.Audio
                 _totalRecordedHits++;
 
                 // Calculate bounce reflection
-                Vector3 reflectDir = Vector3.Reflect(ray.Direction, hit.normal).normalized;
+                // ray.Direction and hit.normal are already normalized, so reflectDir is naturally normalized
+                Vector3 reflectDir = Vector3.Reflect(ray.Direction, hit.normal);
                 
                 // Record path point for Gizmos
                 if (currentPoints < MaxBounces + 1)
