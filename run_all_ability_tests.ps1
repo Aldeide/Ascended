@@ -1,7 +1,7 @@
-$unityPath = "C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe"
-$projectPath = "c:\Users\Anthony\Desktop\Ascended\Ascended"
-$logFile = "UnityLog_AllTests.txt"
-$testResults = "Results_AllTests.xml"
+$unityPath = if ($env:UNITY_PATH) { $env:UNITY_PATH } else { "C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe" }
+$projectPath = $PSScriptRoot
+$logFile = Join-Path $PSScriptRoot "UnityLog_AllTests.txt"
+$testResults = Join-Path $PSScriptRoot "Results_AllTests.xml"
 
 if (Test-Path $logFile) { Remove-Item $logFile }
 if (Test-Path $testResults) { Remove-Item $testResults }
