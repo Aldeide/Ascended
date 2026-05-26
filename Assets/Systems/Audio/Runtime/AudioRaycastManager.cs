@@ -95,7 +95,7 @@ namespace Systems.Audio
         /// Queues a raycast request to be executed on worker threads this frame.
         /// </summary>
         /// <param name="origin">Start point of the ray.</param>
-        /// <param name="direction">Direction of the ray.</param>
+        /// <param name="direction">Direction of the ray. MUST be normalized.</param>
         /// <param name="maxDistance">Maximum distance of the ray.</param>
         /// <param name="receiver">Interface receiver to get the callback.</param>
         /// <param name="requestId">Custom ID to identify the raycast on callback.</param>
@@ -138,7 +138,7 @@ namespace Systems.Audio
                 // In Unity 6, RaycastCommand constructor: (from, direction, distance, layerMask, maxHits)
                 _commands[i] = new RaycastCommand(
                     req.Origin,
-                    req.Direction.normalized,
+                    req.Direction, // Direction is expected to be normalized by caller to save Sqrt costs
                     req.MaxDistance,
                     req.LayerMask,
                     1 // Only need the first hit
