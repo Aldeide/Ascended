@@ -22,6 +22,11 @@ We use automated tests to verify code stability before integration. You can run 
     .\run_tests.ps1
     ```
 
+
+*   **Run all ability system tests:**
+    ```powershell
+    .\run_all_ability_tests.ps1
+    ```
 *   **Run specific tests (Filter):**
     You can run specific test categories or methods by using the `-TestFilter` parameter.
     ```powershell
@@ -32,3 +37,8 @@ We use automated tests to verify code stability before integration. You can run 
 *   **Command:** `.\run_tests.ps1`
 *   **Expected Output:** `Unity finished with exit code 0`
 *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
+
+*   **Ability Tests Verification:**
+    *   **Command:** `.\run_all_ability_tests.ps1`
+    *   **Expected Output:** `Total: X, Passed: X, Failed: 0, Inconclusive: 0, Skipped: 0`
+    *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
