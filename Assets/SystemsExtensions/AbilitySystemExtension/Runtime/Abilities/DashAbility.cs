@@ -38,13 +38,14 @@ namespace AbilitySystemExtension.Runtime.Abilities
             
             _startPosition = _rigidbody.position;
             Vector3 direction;
-            if (_playerMovementController.MovementDirection.sqrMagnitude > 0.0001f /* sqrMagnitude is faster */)
+            float sqrMag = _playerMovementController.MovementDirection.sqrMagnitude;
+            if (sqrMag > 0.0001f /* sqrMagnitude is faster */)
             {
-                direction = _playerMovementController.MovementDirection.normalized;
+                direction = _playerMovementController.MovementDirection / Mathf.Sqrt(sqrMag);
             }
             else
             {
-                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward.normalized;
+                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward;
             }
             
             _endPosition = _startPosition + direction * Distance;
@@ -73,21 +74,24 @@ namespace AbilitySystemExtension.Runtime.Abilities
             Vector3 moveDelta = targetPosHorizontal - currentPos;
             moveDelta.y = 0; // Keep it horizontal for the wall check
             
-            float moveDist = moveDelta.magnitude;
+            float moveSqrDist = moveDelta.sqrMagnitude;
             Vector3 nextPos = currentPos;
 
-            if (moveDist > 0.001f)
+            if (moveSqrDist > 0.000001f)
             {
+                float moveDist = Mathf.Sqrt(moveSqrDist);
+                Vector3 moveDir = moveDelta / moveDist;
+
                 // Wall check at waist height (0.6m up) with a SphereCast.
                 // This allows us to "see over" stairs and small obstacles (usually < 0.3m)
                 // but still hit walls and large obstacles.
                 Vector3 castOrigin = currentPos + Vector3.up * 0.6f;
                 int environmentLayer = EnvironmentLayerMask;
                 
-                if (Physics.SphereCast(castOrigin, 0.3f, moveDelta.normalized, out var hit, moveDist, environmentLayer))
+                if (Physics.SphereCast(castOrigin, 0.3f, moveDir, out var hit, moveDist, environmentLayer))
                 {
                     // We hit a wall! Stop at the hit point.
-                    nextPos = currentPos + moveDelta.normalized * Mathf.Max(0, hit.distance - 0.05f);
+                    nextPos = currentPos + moveDir * Mathf.Max(0, hit.distance - 0.05f);
                     // Stop the dash progress if we hit a solid wall
                     _endPosition = nextPos;
                 }

@@ -1,3 +1,6 @@
 ## 2024-05-24 - Avoid duplicate Mathf.Sqrt in distance and normal calculations
 **Learning:** Both `.magnitude` and `.normalized` trigger `Mathf.Sqrt`. Calling both sequentially is an anti-pattern.
 **Action:** Use `.sqrMagnitude` for early exits. If required, calculate `Mathf.Sqrt` once, cache it, and manually divide the vector by the cached distance to normalize it.
+## 2024-05-14 - Redundant Sqrt in Vector3 Operations
+**Learning:** In Unity hot paths, calling `.normalized` directly or computing `.magnitude` inherently performs expensive `Mathf.Sqrt()` operations. Using `.normalized` directly multiple times, or combining it with a `.magnitude` check (e.g. `Vector3.Distance`), leads to redundant square root calculations. Additionally, calling `.normalized` on vectors that are already inherently normalized (like `transform.forward`) is unnecessary overhead.
+**Action:** Replace `.magnitude` early-exit checks with `.sqrMagnitude` against squared constants. If the condition passes, compute `Mathf.Sqrt()` exactly once, cache the value as the magnitude, and compute the normalized direction manually (`vector / magnitude`) to optimize multiple usages. Avoid calling `.normalized` on pre-normalized vectors.
