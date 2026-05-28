@@ -65,6 +65,18 @@ namespace AbilitySystem.Scripts
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
 
+        // Bolt Optimization: Centralized static registry for fast O(1) active component lookups,
+        // eliminating expensive Object.FindObjectsOfType calls across the project.
+        private void OnEnable()
+        {
+            AbilitySystemRegistry.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            AbilitySystemRegistry.Unregister(this);
+        }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();

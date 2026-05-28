@@ -15,9 +15,9 @@ namespace AISystem.Runtime.Sensors
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
-            foreach (var comp in components)
+            foreach (var comp in AbilitySystemRegistry.AllComponents)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents

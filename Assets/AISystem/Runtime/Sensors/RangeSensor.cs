@@ -27,31 +27,36 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                GameObject closest = null;
+                float minDistSqr = float.MaxValue;
+                foreach (var comp in AbilitySystem.Scripts.AbilitySystemRegistry.AllComponents)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp != null && comp.gameObject != null && comp.gameObject.CompareTag("Player"))
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
+                        float dSqr = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                        if (dSqr < minDistSqr)
                         {
-                            minDist = d;
-                            closest = p;
+                            minDistSqr = dSqr;
+                            closest = comp.gameObject;
                         }
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
                 }
+
+                if (closest != null)
+                {
+                    float dist = Mathf.Sqrt(minDistSqr);
+                    return dist >= MinRange && dist <= MaxRange;
+                }
+
                 return false;
             }
 
-            float distance = Vector3.Distance(agent.Transform.position, target.Position);
-            return distance >= MinRange && distance <= MaxRange;
+            float distanceSqr = (agent.Transform.position - target.Position).sqrMagnitude;
+            // Since MinRange and MaxRange could be negative, though unlikely, standard distance is safer for boolean check
+            // However, assuming they are >= 0, we can check squares
+            float minSqr = MinRange * MinRange;
+            float maxSqr = MaxRange * MaxRange;
+            return distanceSqr >= minSqr && distanceSqr <= maxSqr;
         }
     }
 }

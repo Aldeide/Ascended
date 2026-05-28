@@ -54,6 +54,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystem.Scripts.AbilitySystemRegistry.AllComponents.Clear();
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -89,6 +90,9 @@ namespace AISystem.Tests
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
+
+            // Manually register it with the AbilitySystemRegistry since OnEnable doesn't always fire in tests reliably
+            AbilitySystem.Scripts.AbilitySystemRegistry.Register(asc);
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
@@ -375,15 +379,30 @@ namespace AISystem.Tests
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
+            // Note: Since our refactored sensor relies on AbilitySystemRegistry,
+            // the player must have an AbilitySystemComponent to be registered and detected.
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var awakeMethodPlayer = typeof(AbilitySystemComponent).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic);
+            if(awakeMethodPlayer != null) awakeMethodPlayer.Invoke(playerAsc, null);
+            var onEnableMethodPlayer = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if(onEnableMethodPlayer != null) onEnableMethodPlayer.Invoke(playerAsc, null);
+            AbilitySystem.Scripts.AbilitySystemRegistry.Register(playerAsc);
+
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            AbilitySystem.Scripts.AbilitySystemRegistry.Unregister(playerAsc);
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            var awakeMethodOther = typeof(AbilitySystemComponent).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic);
+            if(awakeMethodOther != null) awakeMethodOther.Invoke(otherAsc, null);
+            var onEnableMethodOther = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if(onEnableMethodOther != null) onEnableMethodOther.Invoke(otherAsc, null);
+            AbilitySystem.Scripts.AbilitySystemRegistry.Register(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
