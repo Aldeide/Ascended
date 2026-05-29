@@ -140,7 +140,7 @@ namespace Systems.Audio
         private void Start()
         {
             FindListener();
-            _nextUpdateTime = Time.time + Random.Range(0f, UpdateInterval); // Stagger initial start times
+            _nextUpdateTime = Time.time + UnityEngine.Random.Range(0f, UpdateInterval); // Stagger initial start times
 
             for (int i = 0; i < _samples.Length; i++)
             {
@@ -220,8 +220,12 @@ namespace Systems.Audio
             float distance = Mathf.Sqrt(sqrDistance);
             _activeSampleCount = (int)SampleMode;
             Vector3 direction = toListener / distance;
-            Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
-            Vector3 up = Vector3.Cross(direction, right).normalized * SpreadWidth;
+            // BOLT OPTIMIZATION: rightNorm is normalized. Cross product of two normalized, perpendicular vectors (direction and rightNorm) is inherently normalized.
+            // Avoids calling .normalized on the second cross product and avoids multiplying by SpreadWidth twice.
+            Vector3 rightNorm = Vector3.Cross(direction, Vector3.up).normalized;
+            Vector3 upNorm = Vector3.Cross(direction, rightNorm);
+            Vector3 right = rightNorm * SpreadWidth;
+            Vector3 up = upNorm * SpreadWidth;
 
             for (int i = 0; i < _activeSampleCount; i++)
             {
@@ -339,8 +343,12 @@ namespace Systems.Audio
             Vector3 toListenerVec = _cachedListener.transform.position - transform.position;
             float toListenerDistance = Mathf.Sqrt(toListenerVec.sqrMagnitude);
             Vector3 direction = toListenerDistance > 0.00001f ? toListenerVec / toListenerDistance : Vector3.forward;
-            Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
-            Vector3 up = Vector3.Cross(direction, right).normalized * SpreadWidth;
+            // BOLT OPTIMIZATION: rightNorm is normalized. Cross product of two normalized, perpendicular vectors (direction and rightNorm) is inherently normalized.
+            // Avoids calling .normalized on the second cross product and avoids multiplying by SpreadWidth twice.
+            Vector3 rightNorm = Vector3.Cross(direction, Vector3.up).normalized;
+            Vector3 upNorm = Vector3.Cross(direction, rightNorm);
+            Vector3 right = rightNorm * SpreadWidth;
+            Vector3 up = upNorm * SpreadWidth;
 
             switch (index)
             {
@@ -456,8 +464,13 @@ namespace Systems.Audio
             Vector3 listenerPos = _cachedListener.transform.position;
 
             Vector3 direction = listenerPos - start;
-            Vector3 right = Vector3.Cross(direction.normalized, Vector3.up).normalized * SpreadWidth;
-            Vector3 up = Vector3.Cross(direction.normalized, right).normalized * SpreadWidth;
+            // BOLT OPTIMIZATION: rightNorm is normalized. Cross product of two normalized, perpendicular vectors (dirNorm and rightNorm) is inherently normalized.
+            // Avoids calling .normalized on the second cross product and avoids multiplying by SpreadWidth twice.
+            Vector3 dirNorm = direction.normalized;
+            Vector3 rightNorm = Vector3.Cross(dirNorm, Vector3.up).normalized;
+            Vector3 upNorm = Vector3.Cross(dirNorm, rightNorm);
+            Vector3 right = rightNorm * SpreadWidth;
+            Vector3 up = upNorm * SpreadWidth;
 
             for (int i = 0; i < _activeSampleCount; i++)
             {

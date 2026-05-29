@@ -164,7 +164,7 @@ namespace Systems.Audio
 
         private void Start()
         {
-            _nextUpdateTime = Time.time + Random.Range(0f, UpdateInterval);
+            _nextUpdateTime = Time.time + UnityEngine.Random.Range(0f, UpdateInterval);
         }
 
         private void Update()
