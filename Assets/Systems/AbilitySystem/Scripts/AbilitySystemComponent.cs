@@ -18,7 +18,7 @@ namespace AbilitySystem.Scripts
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
-        public IAbilitySystem AbilitySystem { get; internal set; }
+        public AbilitySystem.Runtime.Core.IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
@@ -43,13 +43,12 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
+            NotifyDebugDataClientRpc(debugInfo, RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp));
         }
 
-        [Rpc(SendTo.Everyone)]
-        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
+        [Rpc(SendTo.SpecifiedInParams)]
+        public void NotifyDebugDataClientRpc(string debugInfo, RpcParams rpcParams = default)
         {
-            if (NetworkManager.LocalClientId != targetId) return;
             ServerDebugString = debugInfo;
         }
 
