@@ -78,3 +78,4 @@ unity_*.txt
 TestResults*.xml
 UnityEditorTestRun.log
 unity_*.log
+AscendedTests/
