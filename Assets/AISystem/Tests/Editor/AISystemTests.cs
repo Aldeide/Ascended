@@ -46,6 +46,8 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
+
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -92,6 +94,9 @@ namespace AISystem.Tests
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
+            // Register the component manually for EditMode tests
+            AbilitySystemComponent.ActiveInstances.Add(asc);
 
             return (go, agentMock, abilitySystemMock, asc);
         }
