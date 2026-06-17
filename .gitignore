@@ -78,3 +78,10 @@ unity_*.txt
 TestResults*.xml
 UnityEditorTestRun.log
 unity_*.log
+
+# Local Test Scripts Output
+[Uu]nity[Ll]og_*.txt
+[Uu]nity[Cc]ompile[Ll]og.txt
+[Rr]esults_*.xml
+build.log
+compile.log
