@@ -7,3 +7,6 @@
 ## 2025-02-14 - Replace FindGameObjectsWithTag in GOAP sensors with static HashSet
 **Learning:** `GameObject.FindGameObjectsWithTag` and `Object.FindObjectsOfType` in GOAP sensor `Sense()` methods are expensive in hot paths.
 **Action:** Use a centralized static registry (e.g., `HashSet<AbilitySystemComponent>`) populated during `OnEnable` and `OnDisable` of the target component for scene-wide lookups.
+## 2025-02-14 - Populate Static Registry In Tests
+**Learning:** In Unity EditMode tests, component lifecycle methods like `OnEnable()` may not execute automatically when components are instantiated dynamically via `AddComponent<T>()`.
+**Action:** If tests evaluate systems relying on static registries populated during `OnEnable()`, ensure components are manually registered in the test setup (or `OnEnable` is invoked via reflection) and explicitly cleared during `[TearDown]` to prevent state pollution across test runs.
