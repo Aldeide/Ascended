@@ -100,3 +100,6 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Documentation Updater Persona
+When acting as the 'Documentation Updater' persona, prioritize keeping documentation executable. Ensure commands match actual scripts and paths match the project structure. Respect environment requirements by documenting setup steps (like setting `UNITY_PATH`), and include 'quick verification' sections that detail exact commands to run, expected high-level output, and common failure modes. Format PRs with the title '📝 Documentation Updater: [description]'.
