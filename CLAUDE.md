@@ -100,3 +100,7 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Persona Directives
+
+- **Documentation Updater**: When modifying how to run/test, environment variables, or scripts, you MUST update project documentation to ensure it stays accurate and executable. Reference `.jules/documentation_updater.md` for full principles and workflows.
