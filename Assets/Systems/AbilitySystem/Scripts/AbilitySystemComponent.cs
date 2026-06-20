@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
@@ -21,7 +22,21 @@ namespace AbilitySystem.Scripts
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
+
+        public static readonly HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
+
+
         private CueManagerComponent _cueManagerComponent;
+
+        public void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        public void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
@@ -68,6 +83,7 @@ namespace AbilitySystem.Scripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            ActiveInstances.Add(this);
             Initialise();
             if (IsServer)
             {
@@ -78,6 +94,7 @@ namespace AbilitySystem.Scripts
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            ActiveInstances.Remove(this);
             if (IsServer)
             {
                 NetworkManager.OnClientConnectedCallback -= OnClientConnected;
