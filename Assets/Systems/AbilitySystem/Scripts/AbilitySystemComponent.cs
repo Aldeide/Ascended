@@ -79,7 +79,7 @@ namespace AbilitySystem.Scripts
             ActiveInstances.Remove(this);
         }
 
-public override void OnNetworkSpawn()
+        public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             Initialise();
