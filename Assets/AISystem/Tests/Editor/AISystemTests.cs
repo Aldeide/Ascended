@@ -380,14 +380,16 @@ namespace AISystem.Tests
             Assert.IsNotNull(target);
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
-            // Case 2: Fallback (No player tagged object, search closest ASC)
+                        // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
-            var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            var otherAsc = otherEnemyGo.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
-            var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+            var prop = typeof(AbilitySystem.Scripts.AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(otherAsc);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
