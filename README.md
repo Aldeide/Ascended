@@ -4,7 +4,7 @@
 
 ## Local Testing
 
-We use automated tests to verify code stability before integration. You can run these tests locally using the provided PowerShell script.
+We use automated tests to verify code stability before integration. You can run these tests locally using the provided PowerShell (Windows) or Bash (Linux/macOS) scripts.
 
 ### Prerequisites
 
@@ -21,24 +21,36 @@ We use automated tests to verify code stability before integration. You can run 
     ```powershell
     .\run_tests.ps1
     ```
+    *Linux/macOS:*
+    ```bash
+    ./run_tests.sh
+    ```
 
 
 *   **Run all ability system tests:**
     ```powershell
     .\run_all_ability_tests.ps1
     ```
+    *Linux/macOS:*
+    ```bash
+    ./run_all_ability_tests.sh
+    ```
 *   **Run specific tests (Filter):**
     You can run specific test categories or methods by using the `-TestFilter` parameter.
     ```powershell
     .\run_tests.ps1 -TestFilter "ChargesAbilityTests"
     ```
+    *Linux/macOS:*
+    ```bash
+    ./run_tests.sh -TestFilter "ChargesAbilityTests"
+    ```
 
 ### Quick Verification
-*   **Command:** `.\run_tests.ps1`
+*   **Command:** `.\run_tests.ps1 (or ./run_tests.sh on Linux/macOS)`
 *   **Expected Output:** `Unity finished with exit code 0`
 *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
 
 *   **Ability Tests Verification:**
-    *   **Command:** `.\run_all_ability_tests.ps1`
+    *   **Command:** `.\run_all_ability_tests.ps1 (or ./run_all_ability_tests.sh on Linux/macOS)`
     *   **Expected Output:** `Total: X, Passed: X, Failed: 0, Inconclusive: 0, Skipped: 0`
     *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
