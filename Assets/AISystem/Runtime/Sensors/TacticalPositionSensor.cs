@@ -99,44 +99,42 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players != null && players.Length > 0)
+            GameObject closestPlayer = null;
+            AbilitySystemComponent closestFallback = null;
+            float minDist = float.MaxValue;
+            float closestFallbackDist = float.MaxValue;
+            bool hasPlayers = false;
+
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
-                GameObject closest = null;
-                float minDist = float.MaxValue;
-                foreach (var p in players)
+                if (comp == null || comp.gameObject == null || comp.gameObject == agentTransform.gameObject) continue;
+
+                float dist = Vector3.Distance(agentTransform.position, comp.transform.position);
+
+                if (comp.gameObject.CompareTag("Player"))
                 {
-                    if (p == null) continue;
-                    float dist = Vector3.Distance(agentTransform.position, p.transform.position);
+                    hasPlayers = true;
                     if (dist < minDist)
                     {
                         minDist = dist;
-                        closest = p;
+                        closestPlayer = comp.gameObject;
                     }
                 }
-                if (closest != null)
+                else
                 {
-                    return closest;
+                    if (dist < closestFallbackDist)
+                    {
+                        closestFallbackDist = dist;
+                        closestFallback = comp;
+                    }
                 }
             }
 
-            // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
-            AbilitySystemComponent closestComp = null;
-            float closestDist = float.MaxValue;
-            foreach (var comp in components)
+            if (hasPlayers && closestPlayer != null)
             {
-                if (comp == null || comp.gameObject == null) continue;
-                if (comp.gameObject == agentTransform.gameObject) continue;
-                float dist = Vector3.Distance(agentTransform.position, comp.transform.position);
-                if (dist < closestDist)
-                {
-                    closestDist = dist;
-                    closestComp = comp;
-                }
+                return closestPlayer;
             }
-
-            return closestComp != null ? closestComp.gameObject : null;
+            return closestFallback != null ? closestFallback.gameObject : null;
         }
     }
 }
