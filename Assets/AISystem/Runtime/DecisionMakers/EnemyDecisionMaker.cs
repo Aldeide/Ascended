@@ -110,6 +110,7 @@ namespace AISystem.Runtime.DecisionMakers
             var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == gameObject) continue;
                 if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;

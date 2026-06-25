@@ -22,17 +22,6 @@ namespace AbilitySystem.Scripts
         public Action OnAbilitySystemInitialised;
         public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-            ActiveInstances.Add(this);
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            ActiveInstances.Remove(this);
-            base.OnNetworkDespawn();
-        }
 
         private void OnEnable()
         {
@@ -92,6 +81,7 @@ namespace AbilitySystem.Scripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            ActiveInstances.Add(this);
             Initialise();
             if (IsServer)
             {
@@ -101,6 +91,7 @@ namespace AbilitySystem.Scripts
 
         public override void OnNetworkDespawn()
         {
+            ActiveInstances.Remove(this);
             base.OnNetworkDespawn();
             if (IsServer)
             {
