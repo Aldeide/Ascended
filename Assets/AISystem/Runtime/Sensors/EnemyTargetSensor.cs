@@ -7,6 +7,7 @@ namespace AISystem.Runtime.Sensors
 {
     public class EnemyTargetSensor : LocalTargetSensorBase
     {
+        private static readonly System.Collections.Generic.List<GameObject> _cachedPlayers = new System.Collections.Generic.List<GameObject>(8);
         public override void Created() {}
 
         public override void Update() {}
@@ -14,11 +15,21 @@ namespace AISystem.Runtime.Sensors
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
             // Find closest player GameObject
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players == null || players.Length == 0)
+
+            _cachedPlayers.Clear();
+            foreach (var instance in AbilitySystemComponent.ActiveInstances)
+            {
+                if (instance != null && instance.gameObject != null && instance.gameObject.CompareTag("Player"))
+                {
+                    _cachedPlayers.Add(instance.gameObject);
+                }
+            }
+            var players = _cachedPlayers;
+
+            if (players == null || players.Count == 0)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
                 foreach (var comp in components)
