@@ -21,7 +21,6 @@ namespace AbilitySystem.Runtime.Abilities
         {
             _owner = owner;
             Abilities = new Dictionary<string, Ability>();
-            Debug.Log($"[AbilityManager] Created for System {owner.GetHashCode()}");
         }
 
         public Ability GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
@@ -29,10 +28,8 @@ namespace AbilitySystem.Runtime.Abilities
             if (abilityDefinition == null) return null;
             if (Abilities.TryGetValue(abilityDefinition.UniqueName, out var existing))
             {
-                Debug.Log($"[AbilityManager] Already has ability {abilityDefinition.UniqueName} on server={_owner.IsServer()}");
                 return existing;
             }
-            Debug.Log($"[AbilityManager] Granting {abilityDefinition.UniqueName} to server={_owner.IsServer()}");
             var ability = abilityDefinition.ToAbility(_owner);
             ability.SetLevel(level);
             Abilities.Add(abilityDefinition.UniqueName, ability);
