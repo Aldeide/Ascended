@@ -3956,6 +3956,9 @@ GameObject:
   - component: {fileID: 5329675371770631307}
   - component: {fileID: 8548132407892850898}
   - component: {fileID: 977919231617961430}
+  - component: {fileID: 6741049530914465220}
+  - component: {fileID: 1070794123628039337}
+  - component: {fileID: 3743277569458888418}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -3997,7 +4000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1198471492
+  GlobalObjectIdHash: 266794933
   InScenePlacedSourceGlobalObjectIdHash: 1198471492
   DeferredDespawnTick: 0
   Ownership: 1
@@ -5496,7 +5499,7 @@ MonoBehaviour:
   baseTransform: {fileID: 3431953994317972873}
   Hips: {fileID: 6024721926596410489}
   ScaleReferenceMode: 3
-  finalScaleReference: 0.9289159
+  finalScaleReference: 0.92891586
   finalScaleReferenceSqrt: 0.9328631
   customScaleReferenceValue: 0.5
   DelayedInitialization: 0
@@ -5691,6 +5694,57 @@ MonoBehaviour:
   MinDecayTime: 0.1
   MaxDecayTime: 7
   OpenSpaceAbsorption: 1
+--- !u!114 &6741049530914465220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f370210871113764eae0bf733554467a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AnimationSystem::Ascended.Systems.Animation.Runtime.AscendedTrajectoryGenerator
+  UsePhysicsDrivenTrajectory: 0
+  _inputSmoothing: 10
+  _maxSpeed: 5
+  _targetRigidbody: {fileID: 0}
+--- !u!114 &1070794123628039337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b960848088a8b3e4ea517e6b2937a845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AnimationSystem::Ascended.Systems.Animation.Runtime.AscendedMotionMatcher
+  _database: {fileID: 11400000, guid: 5df518b20843f77479db839879acc8f9, type: 2}
+  _updateInterval: 0.1
+  _blendDuration: 0.2
+  _trajectoryPositionWeight: 1
+  _trajectoryVelocityWeight: 0.5
+  _trajectoryFacingWeight: 0.5
+  _posePositionWeight: 0.5
+  _poseVelocityWeight: 0.2
+  _clipSwitchPenalty: 0.1
+  _timeJumpPenalty: 0.05
+--- !u!114 &3743277569458888418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861893469669043747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bcff47a23119344babdc9b860c93371, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AnimationSystem::Ascended.Systems.Animation.Runtime.AscendedMotionController
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &6911334762277334251
 GameObject:
   m_ObjectHideFlags: 0

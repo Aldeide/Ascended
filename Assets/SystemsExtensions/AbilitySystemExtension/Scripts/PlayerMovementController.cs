@@ -12,11 +12,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 using Item.Scripts.UI;
+using Ascended.Systems.Animation.Runtime;
 
 namespace AbilitySystemExtension.Scripts
 {
     [RequireComponent(typeof(AnimationController))]
-    public class PlayerMovementController : NetworkBehaviour
+    public class PlayerMovementController : NetworkBehaviour, IMotionInputProvider
     {
         // Offset for grounded checks.
         private static readonly Vector3 Offset = new Vector3(0, 0.1f, 0);
@@ -24,6 +25,7 @@ namespace AbilitySystemExtension.Scripts
         private static readonly Tag StunnedTag = new Tag("Status.Debuff.Stun");
         private static int _environmentLayerMask = 0;
         [ShowInInspector] [SerializeField] private Vector3 _movementInput = new Vector3(0, 0, 0);
+        public Vector3 MovementInput => _movementInput;
 
         [FormerlySerializedAs("cameraTarget")] [SerializeField]
         private GameObject CameraTarget;
@@ -265,6 +267,11 @@ namespace AbilitySystemExtension.Scripts
         private bool IsInAimingState()
         {
             return _manualAiming || _combatStance;
+        }
+
+        public Vector2 GetMovementInput()
+        {
+            return new Vector2(_movementInput.x, _movementInput.z);
         }
     }
 }
