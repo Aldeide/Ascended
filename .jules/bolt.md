@@ -1,6 +1,6 @@
-## 2024-06-25 - Caching LayerMask and Struct Instantiations in Unity Update Loops
-**Learning:** Unity's `LayerMask.GetMask(params string[] layerNames)` allocates a new string array on every invocation when passed string literals directly, creating GC pressure. Furthermore, repeatedly calling constructors that perform string parsing or manipulation (like the custom `new Tag(string)`) inside high-frequency loops like `Update()` or `FixedUpdate()` creates significant per-frame allocations.
-**Action:** Always cache string-based layer mask lookups (`LayerMask.GetMask()`) and struct instantiations that parse strings (`new Tag()`) into `private static readonly` fields at the class level instead of executing them inline within high-frequency Unity methods.
-## 2024-05-24 - Optimize magnitude checks in hot paths
-**Learning:** Using `Vector3.magnitude` invokes an expensive square root operation. In hot paths (like Update or FixedUpdate), checking magnitudes against constants can be a performance bottleneck.
-**Action:** Replace `Vector3.magnitude` with `Vector3.sqrMagnitude` and compare it against the squared constant value instead.
+## 2024-05-24 - Avoid duplicate Mathf.Sqrt in distance and normal calculations
+**Learning:** Both `.magnitude` and `.normalized` trigger `Mathf.Sqrt`. Calling both sequentially is an anti-pattern.
+**Action:** Use `.sqrMagnitude` for early exits. If required, calculate `Mathf.Sqrt` once, cache it, and manually divide the vector by the cached distance to normalize it.
+## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
+**Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
+**Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
