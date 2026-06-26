@@ -25,7 +25,7 @@ namespace AISystem.Runtime.Tactics
             if (Instance == null)
             {
                 Instance = this;
-                // Gather existing points in the scene
+                // Gather existing points in the scene that might have missed registration due to execution order
                 var scenePoints = FindObjectsOfType<TacticalPoint>();
                 foreach (var pt in scenePoints)
                 {
