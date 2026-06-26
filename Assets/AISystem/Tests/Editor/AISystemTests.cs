@@ -84,6 +84,11 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+
+            // Explicitly call OnEnable via reflection to populate static hashset since EditMode tests don't trigger OnEnable
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (onEnableMethod != null) onEnableMethod.Invoke(asc, null);
+
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
