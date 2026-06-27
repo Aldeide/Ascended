@@ -54,6 +54,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -89,6 +90,10 @@ namespace AISystem.Tests
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
+
+            // Explicitly call OnEnable since it is not automatically invoked in EditMode on AddComponent
+            var onEnable = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (onEnable != null) onEnable.Invoke(asc, null);
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
