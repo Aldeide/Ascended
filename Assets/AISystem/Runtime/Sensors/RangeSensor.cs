@@ -1,3 +1,4 @@
+using AbilitySystem.Scripts;
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
@@ -27,25 +28,30 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                var components = AbilitySystemComponent.ActiveInstances;
+                AbilitySystemComponent closestPlayer = null;
+                float minDistSqr = float.MaxValue;
+
+                foreach (var comp in components)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp == null || comp.gameObject == null) continue;
+                    if (comp.gameObject == agent.Transform.gameObject) continue;
+
+                    if (comp.gameObject.CompareTag("Player"))
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
+                        float dSqr = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                        if (dSqr < minDistSqr)
                         {
-                            minDist = d;
-                            closest = p;
+                            minDistSqr = dSqr;
+                            closestPlayer = comp;
                         }
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
+                }
+
+                if (closestPlayer != null)
+                {
+                    float dist = Mathf.Sqrt(minDistSqr);
+                    return dist >= MinRange && dist <= MaxRange;
                 }
                 return false;
             }
