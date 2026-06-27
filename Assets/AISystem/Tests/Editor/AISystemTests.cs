@@ -54,6 +54,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -89,6 +90,10 @@ namespace AISystem.Tests
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
+
+            // Explicitly call OnEnable since it is not automatically invoked in EditMode on AddComponent
+            var onEnable = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (onEnable != null) onEnable.Invoke(asc, null);
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
@@ -371,8 +376,7 @@ namespace AISystem.Tests
             var sensor = new EnemyTargetSensor();
 
             // Case 1: Player Tag
-            var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("PlayerObj", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -381,12 +385,10 @@ namespace AISystem.Tests
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
-            var otherEnemyGo = CreateGameObject("OtherEnemy");
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Remove(playerAsc); // explicitly clean up deleted object from static hashset
+
+            var (otherEnemyGo, _, _, _) = CreateMockAgent("OtherEnemy", "Enemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
-            var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
-            var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
-            var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-            prop.SetValue(otherAsc, otherAbilityMock.Object);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
