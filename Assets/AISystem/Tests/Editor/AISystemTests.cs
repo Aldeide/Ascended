@@ -46,6 +46,9 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
+            if (AISystem.Runtime.Tactics.TacticalPointManager.Instance != null) Object.DestroyImmediate(AISystem.Runtime.Tactics.TacticalPointManager.Instance.gameObject);
+
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -85,6 +88,7 @@ namespace AISystem.Tests
 
             var asc = go.AddComponent<AbilitySystemComponent>();
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
