@@ -1,3 +1,5 @@
+using AbilitySystem.Scripts;
+using System.Linq;
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
@@ -27,7 +29,7 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
+                var players = AbilitySystemComponent.ActiveInstances.Where(a => a.CompareTag("Player")).Select(a => a.gameObject).ToArray();
                 if (players != null && players.Length > 0)
                 {
                     GameObject closest = null;

@@ -26,6 +26,19 @@ namespace AbilitySystem.Scripts
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
 
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
+
+
         public void RequestUpdateFromServer()
         {
             if (IsServer)

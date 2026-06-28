@@ -1,3 +1,4 @@
+using System.Linq;
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Runtime;
 using AISystem.Runtime.Tactics;
@@ -99,7 +100,7 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
+            var players = AbilitySystemComponent.ActiveInstances.Where(a => a.CompareTag("Player")).Select(a => a.gameObject).ToArray();
             if (players != null && players.Length > 0)
             {
                 GameObject closest = null;
@@ -121,7 +122,7 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)
