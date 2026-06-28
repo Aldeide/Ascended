@@ -1,3 +1,4 @@
+using System.Linq;
 using AbilitySystem.Scripts;
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Runtime;
@@ -14,11 +15,11 @@ namespace AISystem.Runtime.Sensors
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
             // Find closest player GameObject
-            var players = GameObject.FindGameObjectsWithTag("Player");
+            var players = AbilitySystemComponent.ActiveInstances.Where(a => a.CompareTag("Player")).Select(a => a.gameObject).ToArray();
             if (players == null || players.Length == 0)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
                 foreach (var comp in components)
