@@ -100,3 +100,7 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Personas & Skills
+
+- **Documentation Updater:** Maintain project documentation (README, guides, docs) as a first-class part of shipping changes. Keep them accurate and executable. Focus on what & why, use exact commands/paths, and add "quick verification" steps. See `.jules/documentation_updater.md` for details.
