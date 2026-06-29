@@ -7,3 +7,6 @@
 ## 2024-03-08 - Replaced FindObjectsOfType with centralized HashSet
 **Learning:** In Unity hot paths (like AI sensors running every frame or tick), `Object.FindObjectsOfType` and `GameObject.FindGameObjectsWithTag` cause significant CPU overhead and garbage collection allocations because they traverse the entire scene hierarchy.
 **Action:** Replace these calls with a static `HashSet<T>` registry on the target component itself. Populate it in `OnEnable()` and clear it in `OnDisable()`. This is called the "Runtime Set" pattern and provides O(1) allocation-free access to all active instances.
+## 2024-03-08 - Added component check for Player tags
+**Learning:** When optimizing object lookups by iterating over a `HashSet` of a specific component (like `AbilitySystemComponent.ActiveInstances`) instead of using `GameObject.FindGameObjectsWithTag("Player")`, the optimization inherently assumes all "Player" GameObjects will have that component. If they don't, they are silently excluded.
+**Action:** Ensure that unit tests checking for "Player" tag fallbacks are updated to explicitly add the required component to the mock player objects so they are discovered by the new optimized sensor logic.
