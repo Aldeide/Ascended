@@ -78,3 +78,11 @@ unity_*.txt
 TestResults*.xml
 UnityEditorTestRun.log
 unity_*.log
+Results_Script.xml
+UnityLog_Script.txt
+UnityCompileLog.txt
+compile.log
+build.log
+UnityLog_AllTests.txt
+Results_AllTests.xml
+UnityLog_TestRun.txt
