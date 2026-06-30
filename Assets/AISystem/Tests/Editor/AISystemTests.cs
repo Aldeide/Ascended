@@ -90,6 +90,7 @@ namespace AISystem.Tests
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
 
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
@@ -373,6 +374,8 @@ namespace AISystem.Tests
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
+            var pAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(pAsc);
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -381,12 +384,14 @@ namespace AISystem.Tests
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
+            AbilitySystemComponent.ActiveInstances.Remove(pAsc);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
