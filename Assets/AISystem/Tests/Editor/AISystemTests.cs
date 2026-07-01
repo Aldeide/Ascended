@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -85,6 +86,7 @@ namespace AISystem.Tests
 
             var asc = go.AddComponent<AbilitySystemComponent>();
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
+            AbilitySystemComponent.ActiveInstances.Add(asc); // Ensure it's in the registry for EditMode tests
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
@@ -373,6 +375,8 @@ namespace AISystem.Tests
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
+            var pAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(pAsc);
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -380,10 +384,12 @@ namespace AISystem.Tests
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            AbilitySystemComponent.ActiveInstances.Remove(pAsc);
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
