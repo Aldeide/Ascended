@@ -11,6 +11,7 @@ namespace AISystem.Runtime.Sensors
 {
     public class TacticalPositionSensor : LocalTargetSensorBase
     {
+        private static readonly System.Collections.Generic.List<GameObject> _cachedPlayers = new System.Collections.Generic.List<GameObject>(8);
         public bool PreferFlanking { get; set; }
 
         public override void Created() {}
@@ -99,8 +100,18 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players != null && players.Length > 0)
+
+            _cachedPlayers.Clear();
+            foreach (var instance in AbilitySystemComponent.ActiveInstances)
+            {
+                if (instance != null && instance.gameObject != null && instance.gameObject.CompareTag("Player"))
+                {
+                    _cachedPlayers.Add(instance.gameObject);
+                }
+            }
+            var players = _cachedPlayers;
+
+            if (players != null && players.Count > 0)
             {
                 GameObject closest = null;
                 float minDist = float.MaxValue;
@@ -121,7 +132,7 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)

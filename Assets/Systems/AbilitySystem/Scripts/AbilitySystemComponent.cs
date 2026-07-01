@@ -20,6 +20,19 @@ namespace AbilitySystem.Scripts
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
+
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
+
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
 
@@ -68,6 +81,7 @@ namespace AbilitySystem.Scripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            ActiveInstances.Add(this);
             Initialise();
             if (IsServer)
             {
@@ -77,6 +91,7 @@ namespace AbilitySystem.Scripts
 
         public override void OnNetworkDespawn()
         {
+            ActiveInstances.Remove(this);
             base.OnNetworkDespawn();
             if (IsServer)
             {
