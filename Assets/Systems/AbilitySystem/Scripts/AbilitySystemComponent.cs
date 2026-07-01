@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
@@ -64,6 +65,9 @@ namespace AbilitySystem.Scripts
         }
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
+
+
+        public static readonly HashSet<AbilitySystemComponent> ActiveInstances = new();
 
         public override void OnNetworkSpawn()
         {
@@ -158,6 +162,17 @@ namespace AbilitySystem.Scripts
                 effectSyncData[k] = data;
             }
             SyncEffectsClientRpc(effectSyncData, clientRpcParams);
+        }
+
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
         }
 
         public void Initialise()
