@@ -1,6 +1,7 @@
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
+using AbilitySystem.Scripts;
 using UnityEngine;
 
 namespace AISystem.Runtime.Sensors
@@ -27,13 +28,16 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                var players = AbilitySystemComponent.ActiveInstances;
+                if (players != null && players.Count > 0)
                 {
                     GameObject closest = null;
                     float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    foreach (var playerComp in players)
                     {
+                        if (!playerComp.gameObject.CompareTag("Player")) continue;
+                        var p = playerComp.gameObject;
+
                         float d = Vector3.Distance(agent.Transform.position, p.transform.position);
                         if (d < minDist)
                         {
