@@ -39,6 +39,7 @@ namespace AISystem.Tests
         [SetUp]
         public void SetUp()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             _gameObjectsToCleanup = new List<GameObject>();
             UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
         }
@@ -84,6 +85,8 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            var enableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (enableMethod != null) enableMethod.Invoke(asc, null);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -374,6 +377,9 @@ namespace AISystem.Tests
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var pAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var enableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (enableMethod != null) enableMethod.Invoke(pAsc, null);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
@@ -381,9 +387,13 @@ namespace AISystem.Tests
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
+            var activeInstancesField = typeof(AbilitySystemComponent).GetField("ActiveInstances", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+            var activeInstances = (System.Collections.Generic.HashSet<AbilitySystemComponent>)activeInstancesField.GetValue(null);
+            activeInstances.RemoveWhere(x => x == null || x.gameObject == null);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            if (enableMethod != null) enableMethod.Invoke(otherAsc, null);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);

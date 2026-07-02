@@ -14,11 +14,17 @@ namespace AISystem.Runtime.Sensors
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
             // Find closest player GameObject
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players == null || players.Length == 0)
+            bool hasPlayer = false;
+            foreach (var p in AbilitySystemComponent.ActiveInstances) {
+                if (p.gameObject.CompareTag("Player")) {
+                    hasPlayer = true;
+                    break;
+                }
+            }
+            if (!hasPlayer)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
                 foreach (var comp in components)
@@ -41,8 +47,10 @@ namespace AISystem.Runtime.Sensors
 
             GameObject closestPlayer = null;
             float minDist = float.MaxValue;
-            foreach (var player in players)
+            foreach (var playerComp in AbilitySystemComponent.ActiveInstances)
             {
+                if (!playerComp.gameObject.CompareTag("Player")) continue;
+                var player = playerComp.gameObject;
                 if (player == null) continue;
                 float dist = Vector3.Distance(agent.Transform.position, player.transform.position);
                 if (dist < minDist)
