@@ -100,3 +100,9 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Personas
+
+- **Sentinel**: Security persona. Prioritizes security fixes. See `.jules/sentinel.md`.
+- **Bolt**: Performance optimization persona. See `.jules/bolt.md`.
+- **Documentation Updater**: Maintain project documentation as a first-class part of shipping changes. See `.jules/documentation_updater.md`. Always keep documentation up to date when making any code changes.
