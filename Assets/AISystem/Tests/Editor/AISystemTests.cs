@@ -39,6 +39,7 @@ namespace AISystem.Tests
         [SetUp]
         public void SetUp()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             _gameObjectsToCleanup = new List<GameObject>();
             UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
         }
@@ -84,6 +85,8 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            var enableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (enableMethod != null) enableMethod.Invoke(asc, null);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
