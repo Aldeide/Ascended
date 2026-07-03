@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -84,6 +85,8 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (onEnableMethod != null) onEnableMethod.Invoke(asc, null);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -373,6 +376,9 @@ namespace AISystem.Tests
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (onEnableMethod != null) onEnableMethod.Invoke(playerAsc, null);
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -380,10 +386,13 @@ namespace AISystem.Tests
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            if (onEnableMethod != null) onEnableMethod.Invoke(playerAsc, new object[] {}); // Not strictly necessary to disable, just destroy it
             UnityEngine.Object.DestroyImmediate(playerGo);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Remove(playerAsc); // Clean up registry manually since DestroyImmediate might not trigger OnDisable right away in edit mode tests.
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            if (onEnableMethod != null) onEnableMethod.Invoke(otherAsc, null);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
