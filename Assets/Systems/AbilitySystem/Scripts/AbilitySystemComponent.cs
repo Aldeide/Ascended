@@ -17,8 +17,21 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // Performance optimization: centralized registry to avoid expensive FindObjectsOfType calls in hot paths
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new();
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;

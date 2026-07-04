@@ -107,7 +107,8 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
-            var components = FindObjectsOfType<AbilitySystemComponent>();
+            // Performance optimization: Using ActiveInstances registry instead of FindObjectsOfType
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
                 if (comp.gameObject == gameObject) continue;
