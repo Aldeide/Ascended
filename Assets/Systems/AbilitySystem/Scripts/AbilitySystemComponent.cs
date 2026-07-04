@@ -43,13 +43,15 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
+            // 🛡️ Sentinel: Fixed Information Exposure vulnerability.
+            // Avoid SendTo.Everyone with client-side filtering for sensitive data.
+            // Use SendTo.SpecifiedInParams to only transmit the data to the requesting client.
+            NotifyDebugDataClientRpc(debugInfo, new RpcParams { Send = new RpcSendParams { Target = RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp) } });
         }
 
-        [Rpc(SendTo.Everyone)]
-        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
+        [Rpc(SendTo.SpecifiedInParams)]
+        public void NotifyDebugDataClientRpc(string debugInfo, RpcParams rpcParams = default)
         {
-            if (NetworkManager.LocalClientId != targetId) return;
             ServerDebugString = debugInfo;
         }
 
