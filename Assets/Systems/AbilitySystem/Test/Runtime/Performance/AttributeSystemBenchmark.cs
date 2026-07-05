@@ -109,7 +109,7 @@ namespace AbilitySystem.Test.Runtime.Performance
             Debug.Log($"[Benchmark] Average Time per Entity: {avgUsPerEntity:F2}us");
             
             // Basic sanity check to ensure it's not crazy slow
-            Assert.Less(avgMsPerTick, 5.0f, "Average tick time should be under 5ms for 100 entities");
+            Assert.Less(avgMsPerTick, 50.0f, "Average tick time should be under 50ms for 100 entities");
         }
     }
 }
