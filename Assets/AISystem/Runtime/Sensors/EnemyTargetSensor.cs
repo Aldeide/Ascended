@@ -14,14 +14,21 @@ namespace AISystem.Runtime.Sensors
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
             // Find closest player GameObject
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players == null || players.Length == 0)
+            bool hasPlayers = false;
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
+            {
+                if (comp != null && comp.gameObject != null && comp.gameObject.CompareTag("Player"))
+                {
+                    hasPlayers = true;
+                    break;
+                }
+            }
+            if (!hasPlayers)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
-                foreach (var comp in components)
+                foreach (var comp in AbilitySystemComponent.ActiveInstances)
                 {
                     if (comp == null || comp.gameObject == null) continue;
                     if (comp.gameObject == agent.Transform.gameObject) continue;
@@ -41,14 +48,16 @@ namespace AISystem.Runtime.Sensors
 
             GameObject closestPlayer = null;
             float minDist = float.MaxValue;
-            foreach (var player in players)
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
-                if (player == null) continue;
-                float dist = Vector3.Distance(agent.Transform.position, player.transform.position);
+                if (comp == null || comp.gameObject == null) continue;
+                if (!comp.gameObject.CompareTag("Player")) continue;
+
+                float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    closestPlayer = player;
+                    closestPlayer = comp.gameObject;
                 }
             }
 

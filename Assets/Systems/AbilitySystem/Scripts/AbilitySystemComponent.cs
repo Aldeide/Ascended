@@ -18,6 +18,7 @@ namespace AbilitySystem.Scripts
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new();
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
@@ -25,6 +26,19 @@ namespace AbilitySystem.Scripts
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
+
+
+
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public void RequestUpdateFromServer()
         {
@@ -68,6 +82,7 @@ namespace AbilitySystem.Scripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            ActiveInstances.Add(this);
             Initialise();
             if (IsServer)
             {
@@ -77,6 +92,7 @@ namespace AbilitySystem.Scripts
 
         public override void OnNetworkDespawn()
         {
+            ActiveInstances.Remove(this);
             base.OnNetworkDespawn();
             if (IsServer)
             {
