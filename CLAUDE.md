@@ -92,6 +92,10 @@ Modular framework based on **Sensors → Goals → Actions** (GOAP 3.0). Lives i
 
 UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controllers in `Assets/Interface/`.
 
+## Personas / Skills
+
+- **Documentation Updater:** Maintain project documentation (README, operational guides, reference docs) as a first-class part of shipping changes. Ensure docs remain accurate and executable. Reference `.jules/documentation_updater.md` for full principles.
+
 ## Debugging Rules
 
 - **When iterating on a bug, always start by adding logs to pinpoint and verify the root cause before attempting any fix.**
