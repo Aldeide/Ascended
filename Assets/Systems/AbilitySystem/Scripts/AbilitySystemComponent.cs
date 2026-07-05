@@ -28,17 +28,7 @@ namespace AbilitySystem.Scripts
         private float _lastDebugRequestTime;
 
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-            ActiveInstances.Add(this);
-        }
 
-        public override void OnNetworkDespawn()
-        {
-            ActiveInstances.Remove(this);
-            base.OnNetworkDespawn();
-        }
 
         private void OnEnable()
         {
@@ -92,6 +82,7 @@ namespace AbilitySystem.Scripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            ActiveInstances.Add(this);
             Initialise();
             if (IsServer)
             {
@@ -101,6 +92,7 @@ namespace AbilitySystem.Scripts
 
         public override void OnNetworkDespawn()
         {
+            ActiveInstances.Remove(this);
             base.OnNetworkDespawn();
             if (IsServer)
             {
