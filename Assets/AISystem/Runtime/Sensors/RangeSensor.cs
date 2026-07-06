@@ -26,26 +26,26 @@ namespace AISystem.Runtime.Sensors
 
             if (target == null)
             {
-                // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                // Fallback: look for the closest player using centralized registry
+                AbilitySystem.Scripts.AbilitySystemComponent closestPlayer = null;
+                float minDist = float.MaxValue;
+                foreach (var comp in AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp == null || comp.gameObject == null) continue;
+                    if (!comp.CompareTag("Player")) continue;
+
+                    float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
+                    if (dist < minDist)
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
-                        {
-                            minDist = d;
-                            closest = p;
-                        }
+                        minDist = dist;
+                        closestPlayer = comp;
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
+                }
+
+                if (closestPlayer != null)
+                {
+                    float dist = Vector3.Distance(agent.Transform.position, closestPlayer.transform.position);
+                    return dist >= MinRange && dist <= MaxRange;
                 }
                 return false;
             }

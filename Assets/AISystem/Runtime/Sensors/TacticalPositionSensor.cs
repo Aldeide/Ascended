@@ -99,32 +99,30 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players != null && players.Length > 0)
+            AbilitySystemComponent closestPlayer = null;
+            float minDist = float.MaxValue;
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
-                GameObject closest = null;
-                float minDist = float.MaxValue;
-                foreach (var p in players)
+                if (comp == null || comp.gameObject == null) continue;
+                if (!comp.CompareTag("Player")) continue;
+
+                float dist = Vector3.Distance(agentTransform.position, comp.transform.position);
+                if (dist < minDist)
                 {
-                    if (p == null) continue;
-                    float dist = Vector3.Distance(agentTransform.position, p.transform.position);
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        closest = p;
-                    }
-                }
-                if (closest != null)
-                {
-                    return closest;
+                    minDist = dist;
+                    closestPlayer = comp;
                 }
             }
 
+            if (closestPlayer != null)
+            {
+                return closestPlayer.gameObject;
+            }
+
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
-            foreach (var comp in components)
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
                 if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agentTransform.gameObject) continue;
