@@ -55,6 +55,8 @@ namespace AISystem.Tests
             }
             _gameObjectsToCleanup.Clear();
 
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
             if (pointManager != null)
@@ -92,6 +94,9 @@ namespace AISystem.Tests
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
+            // Required for unit tests since OnEnable might not run automatically
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
 
             return (go, agentMock, abilitySystemMock, asc);
         }
@@ -370,23 +375,29 @@ namespace AISystem.Tests
 
             var sensor = new EnemyTargetSensor();
 
-            // Case 1: Player Tag
+            // Case 1: Player Tag (Needs AbilitySystemComponent for registry lookup now!)
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var playerAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
+            var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+            prop.SetValue(playerAsc, playerAbilityMock.Object);
+            AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            AbilitySystemComponent.ActiveInstances.Remove(playerAsc);
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
-            var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
