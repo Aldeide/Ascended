@@ -2,3 +2,7 @@
 **Vulnerability:** A malicious client could send rich text tags (like `<color=red>`) in their `FixedString64Bytes` player name over a `ServerRpc`. TextMeshPro evaluates these tags indiscriminately, leading to UI spoofing or breaking layout for all clients when the lobby state is synced. This is the Unity equivalent of Cross-Site Scripting (XSS).
 **Learning:** `FixedString` types in Unity Collections do not have built-in sanitization and are often blindly passed to UI elements.
 **Prevention:** Always sanitize player-provided strings using a centralized utility (like `StringUtilities.SanitizeForRichText`) that strips `<` and `>` characters *before* updating authoritative network state via ServerRpc.
+## 2024-05-22 - Networked Information Disclosure via Client-Side Filtering
+**Vulnerability:** A `[Rpc(SendTo.Everyone)]` combined with a naive client-side filter (`if (NetworkManager.LocalClientId != targetId) return;`) was used to send sensitive debug information. A malicious client could ignore the client-side `return` statement and capture sensitive game states or debug information sent to other players over the network.
+**Learning:** Sending data to all clients and relying on the client's code to ignore it is an Information Exposure vulnerability. The data still goes over the wire to everyone.
+**Prevention:** Always restrict data delivery on the server using `[Rpc(SendTo.SpecifiedInParams)]` (or ServerRpc/ClientRpc targeted equivalents) and `RpcSendParams.TargetClientIds` to ensure sensitive payloads are only transmitted to authorized clients.
