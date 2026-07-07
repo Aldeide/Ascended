@@ -23,7 +23,25 @@ namespace AISystem.Runtime.Tactics
         public GameObject Occupier { get; set; }
         public bool IsOccupied => Occupier != null;
 
+
+        private void OnEnable()
+        {
+            if (TacticalPointManager.Instance != null)
+            {
+                TacticalPointManager.Instance.RegisterPoint(this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (TacticalPointManager.Instance != null)
+            {
+                TacticalPointManager.Instance.UnregisterPoint(this);
+            }
+        }
+
         private void OnDrawGizmos()
+
         {
             Gizmos.color = IsOccupied ? Color.red : Color.blue;
             Gizmos.DrawWireSphere(transform.position, 0.5f);

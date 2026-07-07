@@ -10,6 +10,7 @@ using AbilitySystem.Runtime.Utilities;
 using GameplayTags.Runtime;
 using Unity.Netcode;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Serialization;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
@@ -22,6 +23,19 @@ namespace AbilitySystem.Scripts
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
+
+
+        public static readonly HashSet<AbilitySystemComponent> ActiveInstances = new();
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;

@@ -84,6 +84,11 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+
+            // Explicitly call OnEnable via reflection to populate static hashset since EditMode tests don't trigger OnEnable
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (onEnableMethod != null) onEnableMethod.Invoke(asc, null);
+
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -371,8 +376,7 @@ namespace AISystem.Tests
             var sensor = new EnemyTargetSensor();
 
             // Case 1: Player Tag
-            var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            var (playerGo, _, _, _) = CreateMockAgent("PlayerObj", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -381,12 +385,8 @@ namespace AISystem.Tests
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
-            var otherEnemyGo = CreateGameObject("OtherEnemy");
+            var (otherEnemyGo, _, _, _) = CreateMockAgent("OtherEnemy", "Enemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
-            var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
-            var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
-            var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-            prop.SetValue(otherAsc, otherAbilityMock.Object);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
