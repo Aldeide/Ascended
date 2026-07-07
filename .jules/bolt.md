@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2024-06-13 - Avoid Object.FindObjectsOfType in GOAP Sensors
+**Learning:** Calling `Object.FindObjectsOfType` inside frequent GOAP sensor evaluation paths (like `EnemyTargetSensor` or `TacticalPositionSensor`) causes significant per-frame allocations and GC spikes.
+**Action:** Replace `Object.FindObjectsOfType<T>` with a static `HashSet<T>` populated in `OnEnable` and `OnDisable` of the target component to ensure fast, allocation-free iteration.

@@ -53,6 +53,10 @@ namespace AISystem.Tests
                     UnityEngine.Object.DestroyImmediate(go);
                 }
             }
+            foreach (var go in _gameObjectsToCleanup)
+            {
+                if (go != null && go.TryGetComponent<AbilitySystemComponent>(out var asc)) { AbilitySystemComponent.Instances.Remove(asc); }
+            }
             _gameObjectsToCleanup.Clear();
 
             // Reset singletons
@@ -84,6 +88,9 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.Instances.Add(asc);
+            var initMethod = typeof(AbilitySystemComponent).GetMethod("Initialise", BindingFlags.Instance | BindingFlags.Public);
+            initMethod?.Invoke(asc, null);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -314,6 +321,8 @@ namespace AISystem.Tests
             var sensor = new AllyNeedsHealingSensor();
 
             // Set ally health to 30/100 (ratio < 0.5)
+            var initMethod = typeof(AbilitySystemComponent).GetMethod("Initialise", BindingFlags.Instance | BindingFlags.Public);
+            initMethod?.Invoke(allyAsc, null);
             var attributeSet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet.Health.SetBaseValue(30f);
 
@@ -384,6 +393,9 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.Instances.Add(otherAsc);
+            var initMethod2 = typeof(AbilitySystemComponent).GetMethod("Initialise", BindingFlags.Instance | BindingFlags.Public);
+            initMethod2?.Invoke(otherAsc, null);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -400,11 +412,15 @@ namespace AISystem.Tests
 
             var (allyGo1, _, _, allyAsc1) = CreateMockAgent("Ally1", "Enemy");
             allyGo1.AddComponent<EnemyDecisionMaker>();
+            var initMethod = typeof(AbilitySystemComponent).GetMethod("Initialise", BindingFlags.Instance | BindingFlags.Public);
+            initMethod?.Invoke(allyAsc1, null);
             var attributeSet1 = allyAsc1.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet1.Health.SetBaseValue(40f); // 40%
 
             var (allyGo2, _, _, allyAsc2) = CreateMockAgent("Ally2", "Enemy");
             allyGo2.AddComponent<EnemyDecisionMaker>();
+            var initMethod2 = typeof(AbilitySystemComponent).GetMethod("Initialise", BindingFlags.Instance | BindingFlags.Public);
+            initMethod2?.Invoke(allyAsc2, null);
             var attributeSet2 = allyAsc2.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet2.Health.SetBaseValue(20f); // 20%
 
@@ -716,6 +732,8 @@ namespace AISystem.Tests
             var (allyGo, _, _, allyAsc) = CreateMockAgent("Ally", "Enemy");
             var allyDm = allyGo.AddComponent<EnemyDecisionMaker>();
             awakeMethod.Invoke(allyDm, null);
+            var initMethod3 = typeof(AbilitySystemComponent).GetMethod("Initialise", BindingFlags.Instance | BindingFlags.Public);
+            initMethod3?.Invoke(allyAsc, null);
             var allySet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             allySet.Health.SetBaseValue(20f); // Needs healing
 
