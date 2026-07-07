@@ -373,6 +373,9 @@ namespace AISystem.Tests
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            onEnableMethod.Invoke(playerAsc, null);
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -380,10 +383,13 @@ namespace AISystem.Tests
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            var onDisableMethod = typeof(AbilitySystemComponent).GetMethod("OnDisable", BindingFlags.Instance | BindingFlags.NonPublic);
+            onDisableMethod.Invoke(playerAsc, null);
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            onEnableMethod.Invoke(otherAsc, null);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -508,6 +514,10 @@ namespace AISystem.Tests
             // Setup a player threat
             var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.GetComponent<AbilitySystemComponent>();
+            if (playerAsc == null) playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            onEnableMethod.Invoke(playerAsc, null);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
