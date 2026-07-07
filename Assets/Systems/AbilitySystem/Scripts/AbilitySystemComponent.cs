@@ -45,7 +45,7 @@ namespace AbilitySystem.Scripts
             var debugInfo = CalculateFullDebugInfo();
             var sendParams = new RpcParams
             {
-                Send = new RpcSendParams
+                Send = new ClientRpcSendParams
                 {
                     TargetClientIds = new[] { rpcParams.Receive.SenderClientId }
                 }
