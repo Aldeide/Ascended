@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2025-02-14 - Replace Vector3.Distance with sqrMagnitude in hot paths
+**Learning:** `Vector3.Distance` inherently performs a `Mathf.Sqrt()` calculation. In hot paths, especially when only comparing distances to find a minimum or checking if it's within a range, this is an expensive and redundant operation.
+**Action:** Replace `Vector3.Distance(a, b)` with `(a - b).sqrMagnitude` and compare the result against the squared minimum/maximum distances, or against the previously found minimum squared distance.

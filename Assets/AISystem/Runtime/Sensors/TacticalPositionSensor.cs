@@ -27,7 +27,7 @@ namespace AISystem.Runtime.Sensors
                 return null;
 
             // Find the threat (closest player or fallback)
-            var threat = FindThreat(agent.Transform);
+            var threat = FindThreat(agent.Transform.gameObject.transform);
             if (threat == null)
                 return null;
 
@@ -107,7 +107,7 @@ namespace AISystem.Runtime.Sensors
                 foreach (var p in players)
                 {
                     if (p == null) continue;
-                    float dist = Vector3.Distance(agentTransform.position, p.transform.position);
+                    float dist = (agentTransform.position - p.transform.position).sqrMagnitude;
                     if (dist < minDist)
                     {
                         minDist = dist;
@@ -121,14 +121,14 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = UnityEngine.Object.FindObjectsOfType<AbilitySystemComponent>();
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)
             {
                 if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agentTransform.gameObject) continue;
-                float dist = Vector3.Distance(agentTransform.position, comp.transform.position);
+                float dist = (agentTransform.position - comp.transform.position).sqrMagnitude;
                 if (dist < closestDist)
                 {
                     closestDist = dist;
