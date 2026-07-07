@@ -44,7 +44,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
             else
             {
-                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward.normalized;
+                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward;
             }
             
             _endPosition = _startPosition + direction * Distance;
@@ -78,16 +78,17 @@ namespace AbilitySystemExtension.Runtime.Abilities
 
             if (moveDist > 0.001f)
             {
+                Vector3 moveDeltaDir = moveDelta / moveDist;
                 // Wall check at waist height (0.6m up) with a SphereCast.
                 // This allows us to "see over" stairs and small obstacles (usually < 0.3m)
                 // but still hit walls and large obstacles.
                 Vector3 castOrigin = currentPos + Vector3.up * 0.6f;
                 int environmentLayer = EnvironmentLayerMask;
                 
-                if (Physics.SphereCast(castOrigin, 0.3f, moveDelta.normalized, out var hit, moveDist, environmentLayer))
+                if (Physics.SphereCast(castOrigin, 0.3f, moveDeltaDir, out var hit, moveDist, environmentLayer))
                 {
                     // We hit a wall! Stop at the hit point.
-                    nextPos = currentPos + moveDelta.normalized * Mathf.Max(0, hit.distance - 0.05f);
+                    nextPos = currentPos + moveDeltaDir * Mathf.Max(0, hit.distance - 0.05f);
                     // Stop the dash progress if we hit a solid wall
                     _endPosition = nextPos;
                 }
