@@ -27,8 +27,15 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                var players = new System.Collections.Generic.List<GameObject>();
+                foreach (var instance in AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances)
+                {
+                    if (instance != null && instance.gameObject != null && instance.gameObject.CompareTag("Player"))
+                    {
+                        players.Add(instance.gameObject);
+                    }
+                }
+                if (players != null && players.Count > 0)
                 {
                     GameObject closest = null;
                     float minDist = float.MaxValue;

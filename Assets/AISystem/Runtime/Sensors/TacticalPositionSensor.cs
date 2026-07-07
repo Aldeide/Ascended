@@ -99,8 +99,15 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players != null && players.Length > 0)
+            var players = new System.Collections.Generic.List<GameObject>();
+            foreach (var instance in AbilitySystemComponent.ActiveInstances)
+            {
+                if (instance != null && instance.gameObject != null && instance.gameObject.CompareTag("Player"))
+                {
+                    players.Add(instance.gameObject);
+                }
+            }
+            if (players != null && players.Count > 0)
             {
                 GameObject closest = null;
                 float minDist = float.MaxValue;
@@ -121,7 +128,7 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)

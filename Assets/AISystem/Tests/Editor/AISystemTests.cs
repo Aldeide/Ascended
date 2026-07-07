@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -84,6 +85,7 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            asc.OnEnable(); // Ensure component is registered in ActiveInstances
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -371,8 +373,7 @@ namespace AISystem.Tests
             var sensor = new EnemyTargetSensor();
 
             // Case 1: Player Tag
-            var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("PlayerObj", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -380,13 +381,11 @@ namespace AISystem.Tests
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            playerAsc.OnDisable();
             UnityEngine.Object.DestroyImmediate(playerGo);
-            var otherEnemyGo = CreateGameObject("OtherEnemy");
+
+            var (otherEnemyGo, _, _, otherAsc) = CreateMockAgent("OtherEnemy", "Enemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
-            var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
-            var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
-            var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-            prop.SetValue(otherAsc, otherAbilityMock.Object);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
