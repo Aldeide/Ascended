@@ -43,12 +43,13 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            NotifyDebugDataClientRpc(debugInfo, RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp));
+            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
         }
 
-        [Rpc(SendTo.SpecifiedInParams)]
-        public void NotifyDebugDataClientRpc(string debugInfo, RpcParams rpcParams = default)
+        [Rpc(SendTo.Everyone)]
+        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
         {
+            if (NetworkManager.LocalClientId != targetId) return;
             ServerDebugString = debugInfo;
         }
 
@@ -61,7 +62,7 @@ namespace AbilitySystem.Scripts
             output += "--- Tags ---\n" + AbilitySystem.TagManager.DebugString() + "\n";
             return output;
         }
-        
+
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
 
         public override void OnNetworkSpawn()
@@ -148,12 +149,12 @@ namespace AbilitySystem.Scripts
                     data.SetByCallerTags = effect.SetByCallerTagMagnitudes.Keys.ToArray();
                     data.SetByCallerValues = effect.SetByCallerTagMagnitudes.Values.ToArray();
                 }
-                    
+
                 if (effect.Source != null && effect.Source.NetworkRole != null)
                     data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
                 else
                     data.SourceId = NetworkObjectId;
-                        
+
                 effectSyncData[k] = data;
             }
             SyncEffectsClientRpc(effectSyncData, clientRpcParams);
@@ -163,7 +164,7 @@ namespace AbilitySystem.Scripts
         {
             if (IsInitialized) return;
             _cueManagerComponent = GetComponent<CueManagerComponent>();
-            
+
             var abilitySystemManager = new AbilitySystemManager(DataLibrary.Instance);
             abilitySystemManager.NetworkRole = this;
             AbilitySystem = abilitySystemManager;
@@ -182,7 +183,7 @@ namespace AbilitySystem.Scripts
             repl.OnNotifyClientsAbilityTagsRemoved += (tags) => NotifyClientsAbilityTagsRemovedRpc(tags);
             repl.OnNotifyClientsEffectAdded += (data) => NotifyOwnerEffectAddedRpc(data);
             repl.OnNotifyClientsEffectRemoved += (name) => NotifyOwnerEffectRemovedRpc(name);
-            
+
             // New Ability Networking bindings
             repl.OnServerAbilityActivationRequested += (name, key, data) => ServerTryActivateAbilityRpc(name, key, data);
             repl.OnServerAbilityUnpredictedActivationRequested += (name, data) => ServerTryActivateUnpredictedAbilityRpc(name, data);
@@ -205,7 +206,7 @@ namespace AbilitySystem.Scripts
                     AbilitySystem.CueManager.OnCueReceived(new Tag(tag), CueAction.Execute, data);
                     _cueManagerComponent.PlayCue(tag, data);
                 }
-                
+
                 // Always send to everyone (including self, to be filtered by pred check in RPC body).
                 ObserversPlayCueWithDataRpc(tag, data, pred);
             };
@@ -223,7 +224,7 @@ namespace AbilitySystem.Scripts
 
             AbilitySystem.AttributeSetManager.OnAnyAttributeBaseValueChanged += OnAttributeBaseValueChanged;
             AbilitySystem.AttributeSetManager.OnAnyAttributeCurrentValueChanged += OnAttributeBaseCurrentChanged;
-            
+
             OnAbilitySystemInitialised?.Invoke();
         }
 
@@ -232,7 +233,7 @@ namespace AbilitySystem.Scripts
             AbilitySystem.Tick();
             AbilitySystem.AttributeSetManager.UpdateAttributesJobified();
         }
-        
+
         public void OnAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
             if (IsServer)
@@ -240,7 +241,7 @@ namespace AbilitySystem.Scripts
                 NotifyClientsBaseValueChangedRpc(attribute.GetName(), newValue);
             }
         }
-        
+
         public void OnAttributeBaseCurrentChanged(Attribute attribute, float oldValue, float newValue)
         {
             if (IsServer)
@@ -254,7 +255,7 @@ namespace AbilitySystem.Scripts
         {
             AbilitySystem.ReplicationManager.OnAttributeBaseValueChanged(attributeName, newValue);
         }
-        
+
         [Rpc(SendTo.NotServer)]
         public void NotifyClientsCurrentValueChangedRpc(string attributeName, float oldValue, float newValue)
         {
@@ -271,13 +272,13 @@ namespace AbilitySystem.Scripts
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityActivation(abilityName, key, data);
         }
-        
+
         [Rpc(SendTo.Server)]
         public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityUnpredictedActivation(abilityName, data);
         }
-        
+
         [Rpc(SendTo.Server)]
         public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
@@ -398,7 +399,7 @@ namespace AbilitySystem.Scripts
             if (AbilitySystem == null || AbilitySystem.IsServer()) return;
             var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
             if (effectDefinition == null) return;
-            
+
             IAbilitySystem source = FindSource(data.SourceId);
             var effect = effectDefinition.ToEffect(source, AbilitySystem);
             ApplySyncDataToEffect(effect, data);
@@ -443,7 +444,7 @@ namespace AbilitySystem.Scripts
             }
             return AbilitySystem;
         }
-        
+
         [Rpc(SendTo.Owner)]
         public void NotifyOwnerEffectRemovedRpc(string effectName)
         {
@@ -461,12 +462,12 @@ namespace AbilitySystem.Scripts
         {
             // If it's a predicted cue and I am the owner, I already played it locally in OnPlayCueRequested.
             if (isPredicted && IsOwner) return;
-            
+
             var gameplayTag = new Tag(cueTag);
             AbilitySystem.CueManager.OnCueReceived(gameplayTag, CueAction.Execute, data);
             _cueManagerComponent.PlayCue(cueTag);
         }
-        
+
         [Rpc(SendTo.Everyone)]
         public void ObserversPlayCueWithDataRpc(string cueTag, CueData data, bool isPredicted = false)
         {
@@ -474,7 +475,7 @@ namespace AbilitySystem.Scripts
             if (isPredicted && IsOwner) return;
             _cueManagerComponent.PlayCue(cueTag, data);
         }
-        
+
         [Rpc(SendTo.ClientsAndHost)]
         public void NotifyClientsPlayCueRpc(Tag cueTag, CueAction cueAction, CueData cueData)
         {
@@ -541,7 +542,7 @@ namespace AbilitySystem.Scripts
             {
                 var effectDefinition = DataLibrary.Instance.GetEffectByName(data.EffectName);
                 if (effectDefinition == null) continue;
-                
+
                 IAbilitySystem source = FindSource(data.SourceId);
                 var effect = effectDefinition.ToEffect(source, AbilitySystem);
                 ApplySyncDataToEffect(effect, data);
@@ -561,7 +562,7 @@ namespace AbilitySystem.Scripts
             var abilityDefinition = DataLibrary.Instance.GetAbilityByName(abilityName);
             AbilitySystem.AbilityManager.GrantAbility(abilityDefinition);
         }
-        
+
         [Rpc(SendTo.NotServer)]
         public void NotifyClientAbilityRemovedRpc(string abilityName)
         {
@@ -579,13 +580,13 @@ namespace AbilitySystem.Scripts
         {
             AbilitySystem.ReplicationManager.ProcessClientAbilityChargesChanged(abilityName, current, max);
         }
-        
+
         [Rpc(SendTo.NotServer)]
         public void NotifyClientsAbilityTagsAddedRpc(AbilityTagSyncData tags)
         {
             AbilitySystem.TagManager.AddAbilityTags(tags);
         }
-        
+
         [Rpc(SendTo.NotServer)]
         public void NotifyClientsAbilityTagsRemovedRpc(AbilityTagSyncData tags)
         {
