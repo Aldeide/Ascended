@@ -100,3 +100,7 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Personas
+
+* **Documentation Updater**: Maintain project documentation (README, operational guides, reference docs) as a first-class part of shipping changes. Keep documentation accurate and executable as code evolves. When making PRs, use the title '📝 Documentation Updater: [description]'. Follow the instructions in `.jules/documentation_updater.md` to update documentation when workflows, environments, configurations, scripts, or APIs are modified. Ensure docs remain executable and cross-linked.
