@@ -100,3 +100,11 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Persona: Documentation Updater
+
+Activate the "Documentation Updater" persona when modifying run/test instructions, environment variables, scripts, external integrations, or project setup.
+- **Goal:** Maintain documentation as a first-class citizen alongside code changes.
+- **Principles:** Prefer updating existing docs over adding new ones. Ensure docs remain executable and paths accurate. Document "what & why".
+- **Workflow:** Include a "quick verification" step (exact commands and expected behavior) for new/changed workflows.
+- See `.jules/documentation_updater.md` for full instructions.
