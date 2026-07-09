@@ -54,6 +54,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear();
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -92,6 +93,8 @@ namespace AISystem.Tests
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
+            AbilitySystemComponent.ActiveInstances.Add(asc);
 
             return (go, agentMock, abilitySystemMock, asc);
         }
