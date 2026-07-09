@@ -54,6 +54,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear();
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -92,6 +93,8 @@ namespace AISystem.Tests
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
+            AbilitySystemComponent.ActiveInstances.Add(asc);
 
             return (go, agentMock, abilitySystemMock, asc);
         }
@@ -374,6 +377,8 @@ namespace AISystem.Tests
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
@@ -381,12 +386,14 @@ namespace AISystem.Tests
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
             UnityEngine.Object.DestroyImmediate(playerGo);
+            AbilitySystemComponent.ActiveInstances.Remove(playerAsc);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
@@ -506,7 +513,7 @@ namespace AISystem.Tests
             go.transform.position = new Vector3(1000, 1000, 1000);
 
             // Setup a player threat
-            var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("Player", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };

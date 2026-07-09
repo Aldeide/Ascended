@@ -2,6 +2,7 @@ using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using AbilitySystem.Scripts;
 
 namespace AISystem.Runtime.Sensors
 {
@@ -26,29 +27,31 @@ namespace AISystem.Runtime.Sensors
 
             if (target == null)
             {
-                // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                var components = AbilitySystemComponent.ActiveInstances;
+                GameObject closest = null;
+                float minDist = float.MaxValue;
+                foreach (var comp in components)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp == null || comp.gameObject == null) continue;
+                    if (!comp.CompareTag("Player")) continue;
+
+                    float sqrDist = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                    if (sqrDist < minDist)
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
-                        {
-                            minDist = d;
-                            closest = p;
-                        }
-                    }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
+                        minDist = sqrDist;
+                        closest = comp.gameObject;
                     }
                 }
+
+                if (closest != null)
+                {
+                    float dist = (agent.Transform.position - closest.transform.position).magnitude;
+                    return dist >= MinRange && dist <= MaxRange;
+                }
+
                 return false;
             }
+
 
             float distance = Vector3.Distance(agent.Transform.position, target.Position);
             return distance >= MinRange && distance <= MaxRange;
