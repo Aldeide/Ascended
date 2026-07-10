@@ -93,6 +93,7 @@ namespace Systems.Audio
         private float _targetVolumeScale = 1f;
         private float _targetCutoffHz = 22000f;
         private float _nextUpdateTime;
+        private float _cachedDistance;
 
         // Structure to track each sample ray's state asynchronously
         private struct RaySample
@@ -165,8 +166,7 @@ namespace Systems.Audio
             float targetCutoff = _targetCutoffHz;
             if (EnableAirAbsorption && _cachedListener != null)
             {
-                float distance = Vector3.Distance(transform.position, _cachedListener.transform.position);
-                float airAbsorptionCutoff = MaxCutoffFrequency - (distance * AirAbsorptionRate);
+                float airAbsorptionCutoff = MaxCutoffFrequency - (_cachedDistance * AirAbsorptionRate);
                 targetCutoff = Mathf.Min(targetCutoff, Mathf.Max(airAbsorptionCutoff, MinCutoffFrequency));
             }
 
@@ -213,11 +213,13 @@ namespace Systems.Audio
 
             if (sqrDistance <= 0.0001f) // 0.01f * 0.01f
             {
+                _cachedDistance = 0f;
                 ClearOcclusion();
                 return;
             }
 
             float distance = Mathf.Sqrt(sqrDistance);
+            _cachedDistance = distance;
             _activeSampleCount = (int)SampleMode;
             Vector3 direction = toListener / distance;
             Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
