@@ -54,6 +54,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear(); // Clean up static registry
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -92,6 +93,8 @@ namespace AISystem.Tests
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
+            AbilitySystemComponent.ActiveInstances.Add(asc); // Add to static registry for EditMode tests
 
             return (go, agentMock, abilitySystemMock, asc);
         }
@@ -692,6 +695,12 @@ namespace AISystem.Tests
             var awakeMethod = typeof(EnemyDecisionMaker).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic);
             awakeMethod.Invoke(dm, null);
 
+            var propInfo = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (propInfo != null && propInfo.CanWrite)
+            {
+                propInfo.SetValue(asc, abilitySystemMock.Object);
+            }
+
             var evaluateGoalMethod = typeof(EnemyDecisionMaker).GetMethod("EvaluateGoal", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // Case 1: Healthy -> KillEnemyGoal
@@ -716,6 +725,8 @@ namespace AISystem.Tests
             var (allyGo, _, _, allyAsc) = CreateMockAgent("Ally", "Enemy");
             var allyDm = allyGo.AddComponent<EnemyDecisionMaker>();
             awakeMethod.Invoke(allyDm, null);
+            var propInfo2 = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (propInfo2 != null && propInfo2.CanWrite) propInfo2.SetValue(allyAsc, abilitySystemMock.Object);
             var allySet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             allySet.Health.SetBaseValue(20f); // Needs healing
 
