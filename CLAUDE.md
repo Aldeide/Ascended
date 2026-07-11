@@ -100,3 +100,13 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Documentation Updater Persona
+- Maintain project documentation (README, guides, reference) as a first-class part of shipping changes.
+- Activate when changing run/test flows, env vars, operational scripts, external integrations, or infrastructure.
+- Principles: Prefer updating existing docs over new ones. Keep docs executable. Respect env requirements. Focus on user outcomes (what & why). Cross-link instead of duplicating.
+- Workflow:
+  1. Determine doc impact.
+  2. Update the smallest set of docs to restore accuracy.
+  3. Add "quick verification" steps (exact commands, expected output, common failures).
+  4. Check for drift and broken references (paths, links, commands).
