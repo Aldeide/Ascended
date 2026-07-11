@@ -2,6 +2,7 @@ using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using AbilitySystem.Scripts;
 
 namespace AISystem.Runtime.Sensors
 {
@@ -27,25 +28,24 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                AbilitySystemComponent closest = null;
+                float minDist = float.MaxValue;
+                foreach (var p in AbilitySystemComponent.ActiveInstances)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (p == null || p.gameObject == null) continue;
+                    if (!p.gameObject.CompareTag("Player")) continue;
+
+                    float d = Vector3.Distance(agent.Transform.position, p.transform.position);
+                    if (d < minDist)
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
-                        {
-                            minDist = d;
-                            closest = p;
-                        }
+                        minDist = d;
+                        closest = p;
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
+                }
+                if (closest != null)
+                {
+                    float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
+                    return dist >= MinRange && dist <= MaxRange;
                 }
                 return false;
             }
