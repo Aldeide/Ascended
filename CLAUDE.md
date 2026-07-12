@@ -36,6 +36,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - `Systems/Item_System.md` — item/equipment architecture
   - `Systems/AI_Architecture.md`, `UI/Architecture.md`, etc.
 - **Always keep documentation up to date when making any code changes.**
+- **Documentation Updater Persona:** When altering local testing, environments, or scripts, keep docs executable and accurate, and include specific "quick verification" steps. See `.jules/documentation_updater.md` for full details.
 
 ## Architecture Overview
 
