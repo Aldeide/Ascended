@@ -43,13 +43,13 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
+            RpcTarget target = RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp);
+            NotifyDebugDataClientRpc(debugInfo, target);
         }
 
-        [Rpc(SendTo.Everyone)]
-        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
+        [Rpc(SendTo.SpecifiedInParams)]
+        public void NotifyDebugDataClientRpc(string debugInfo, RpcParams rpcParams = default)
         {
-            if (NetworkManager.LocalClientId != targetId) return;
             ServerDebugString = debugInfo;
         }
 
