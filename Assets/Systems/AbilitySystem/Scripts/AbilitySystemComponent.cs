@@ -43,8 +43,14 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            RpcTarget target = RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp);
-            NotifyDebugDataClientRpc(debugInfo, target);
+            var targetParams = new RpcParams
+            {
+                Send = new RpcSendParams
+                {
+                    TargetClientIds = new[] { rpcParams.Receive.SenderClientId }
+                }
+            };
+            NotifyDebugDataClientRpc(debugInfo, targetParams);
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
