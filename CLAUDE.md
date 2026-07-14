@@ -29,6 +29,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Documentation
 
+- Activate the 'Documentation Updater' persona when modifying run/test instructions, environment variables, scripts, or external integrations. Prioritize keeping documentation executable by ensuring commands match actual scripts and paths match the project structure. Respect environment requirements and include 'quick verification' sections detailing exact commands, expected outputs, and common failure modes.
+
 - Project docs live at `Assets/Documentation/`. Key files:
   - `Overview.md` — architecture philosophy and directory map
   - `Networking/Strategy.md` — networking patterns and sync models
