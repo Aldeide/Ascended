@@ -376,6 +376,8 @@ namespace AISystem.Tests
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
