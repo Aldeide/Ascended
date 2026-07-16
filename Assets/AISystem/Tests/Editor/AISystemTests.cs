@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -307,8 +308,10 @@ namespace AISystem.Tests
         public void AllyNeedsHealingSensor_DetectsAllyingNeedCorrectly()
         {
             var (healerGo, healerMock, healerAbilityMock, healerAsc) = CreateMockAgent("Healer", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(healerAsc);
             
             var (allyGo, allyMock, allyAbilityMock, allyAsc) = CreateMockAgent("Ally", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc);
             allyGo.AddComponent<EnemyDecisionMaker>();
 
             var sensor = new AllyNeedsHealingSensor();
@@ -384,6 +387,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -399,11 +403,13 @@ namespace AISystem.Tests
             var (healerGo, healerMock, _, _) = CreateMockAgent("Healer", "Enemy");
 
             var (allyGo1, _, _, allyAsc1) = CreateMockAgent("Ally1", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc1);
             allyGo1.AddComponent<EnemyDecisionMaker>();
             var attributeSet1 = allyAsc1.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet1.Health.SetBaseValue(40f); // 40%
 
             var (allyGo2, _, _, allyAsc2) = CreateMockAgent("Ally2", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc2);
             allyGo2.AddComponent<EnemyDecisionMaker>();
             var attributeSet2 = allyAsc2.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet2.Health.SetBaseValue(20f); // 20%
@@ -419,6 +425,7 @@ namespace AISystem.Tests
         public void HealthLowSensor_EvaluatesHealthThresholdCorrectly()
         {
             var (go, agentMock, _, asc) = CreateMockAgent();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var sensor = new HealthLowSensor();
 
             var attributeSet = asc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
@@ -506,7 +513,8 @@ namespace AISystem.Tests
             go.transform.position = new Vector3(1000, 1000, 1000);
 
             // Setup a player threat
-            var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("Player", "Player");
+            AbilitySystemComponent.ActiveInstances.Add(playerAsc);
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
@@ -683,6 +691,7 @@ namespace AISystem.Tests
         public void EnemyDecisionMaker_GoalSelectionLogic()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             go.AddComponent<AgentBehaviour>();
             var provider = go.AddComponent<GoapActionProvider>();
             
@@ -714,6 +723,7 @@ namespace AISystem.Tests
 
             // Setup an ally with low health
             var (allyGo, _, _, allyAsc) = CreateMockAgent("Ally", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc);
             var allyDm = allyGo.AddComponent<EnemyDecisionMaker>();
             awakeMethod.Invoke(allyDm, null);
             var allySet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
