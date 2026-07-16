@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2024-07-16 - Avoid FindObjectsOfType in hot paths
+**Learning:** Finding objects of a specific component type using `Object.FindObjectsOfType` or `GameObject.FindGameObjectsWithTag` generates GC allocation and is extremely slow in Unity hot paths like AI sensors' `Sense` method or `Update`.
+**Action:** Replace `FindObjectsOfType` with a centralized static registry (e.g. `HashSet<T> ActiveInstances`) populated during `OnEnable`/`OnDisable` to guarantee O(1) complexity and 0 GC allocations.
