@@ -29,6 +29,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Documentation
 
+- **Personas & Skills:** See `.jules/documentation_updater.md` for guidelines on updating documentation.
 - Project docs live at `Assets/Documentation/`. Key files:
   - `Overview.md` — architecture philosophy and directory map
   - `Networking/Strategy.md` — networking patterns and sync models
