@@ -121,7 +121,8 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // Optimization: Use centralized static registry instead of FindObjectsOfType to eliminate GC allocations and CPU overhead in hot path.
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)

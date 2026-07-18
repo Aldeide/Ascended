@@ -107,9 +107,11 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
-            var components = FindObjectsOfType<AbilitySystemComponent>();
+            // Optimization: Use centralized static registry instead of FindObjectsOfType to eliminate GC allocations and CPU overhead in hot path.
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == gameObject) continue;
                 if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;

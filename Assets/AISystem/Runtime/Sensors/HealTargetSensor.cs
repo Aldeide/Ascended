@@ -14,12 +14,14 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // Optimization: Use centralized static registry instead of FindObjectsOfType to eliminate GC allocations and CPU overhead in hot path.
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent lowestAlly = null;
             float lowestRatio = 1.0f;
 
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents
