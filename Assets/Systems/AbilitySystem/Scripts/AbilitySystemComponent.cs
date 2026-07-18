@@ -17,6 +17,8 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // Centralized static registry to avoid expensive FindObjectsOfType calls in hot paths
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new();
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
@@ -64,6 +66,16 @@ namespace AbilitySystem.Scripts
         }
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
+
+        public void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        public void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public override void OnNetworkSpawn()
         {
