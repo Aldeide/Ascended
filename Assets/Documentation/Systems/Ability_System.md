@@ -235,5 +235,15 @@ sequenceDiagram
     end
 ```
 
+
+## 🧪 Local Testing
+
+You can run automated tests for the Ability System locally using the provided PowerShell script located in the repository root.
+
+### Quick Verification
+*   **Command:** `.\run_all_ability_tests.ps1`
+*   **Expected Output:** `Total: X, Passed: X, Failed: 0, Inconclusive: 0, Skipped: 0`
+*   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
+
 ---
 [Back to Overview](../Overview.md) | [Item System](./Item_System.md)
