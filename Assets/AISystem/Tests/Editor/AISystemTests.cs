@@ -284,6 +284,7 @@ namespace AISystem.Tests
         public void AbilitySensor_SensesAbilityStateCorrectly()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var sensor = new AbilitySensor { AbilityName = "Fireball", CheckReady = true };
 
             // Setup Ability Definition and Ability Instance
@@ -311,6 +312,10 @@ namespace AISystem.Tests
             var (allyGo, allyMock, allyAbilityMock, allyAsc) = CreateMockAgent("Ally", "Enemy");
             allyGo.AddComponent<EnemyDecisionMaker>();
 
+            // Add to ActiveInstances since we refactored it
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(healerAsc);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(allyAsc);
+
             var sensor = new AllyNeedsHealingSensor();
 
             // Set ally health to 30/100 (ratio < 0.5)
@@ -330,6 +335,7 @@ namespace AISystem.Tests
         public void AttributeSensor_ComparesAttributesCorrectly()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var sensor = new AttributeSensor
             {
                 AttributeName = "Health",
@@ -365,15 +371,20 @@ namespace AISystem.Tests
         [Test]
         public void EnemyTargetSensor_FindsPlayersOrFallback()
         {
-            var (agentGo, agentMock, _, _) = CreateMockAgent("Agent", "Enemy");
+            var (agentGo, agentMock, _, agentAsc) = CreateMockAgent("Agent", "Enemy");
             agentGo.transform.position = new Vector3(1000, 1000, 1000);
+
+            var playerGo = CreateGameObject("PlayerObj");
+            playerGo.tag = "Player";
+            playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(agentAsc);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var sensor = new EnemyTargetSensor();
 
             // Case 1: Player Tag
-            var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
-            playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
@@ -384,6 +395,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -396,7 +408,7 @@ namespace AISystem.Tests
         [Test]
         public void HealTargetSensor_SensesLowestHealthAllyCorrectly()
         {
-            var (healerGo, healerMock, _, _) = CreateMockAgent("Healer", "Enemy");
+            var (healerGo, healerMock, _, healerAsc) = CreateMockAgent("Healer", "Enemy");
 
             var (allyGo1, _, _, allyAsc1) = CreateMockAgent("Ally1", "Enemy");
             allyGo1.AddComponent<EnemyDecisionMaker>();
@@ -407,6 +419,10 @@ namespace AISystem.Tests
             allyGo2.AddComponent<EnemyDecisionMaker>();
             var attributeSet2 = allyAsc2.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet2.Health.SetBaseValue(20f); // 20%
+
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(healerAsc);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(allyAsc1);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(allyAsc2);
 
             var sensor = new HealTargetSensor();
             var target = sensor.Sense((IActionReceiver)healerMock.Object, null, null);
@@ -419,6 +435,7 @@ namespace AISystem.Tests
         public void HealthLowSensor_EvaluatesHealthThresholdCorrectly()
         {
             var (go, agentMock, _, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var sensor = new HealthLowSensor();
 
             var attributeSet = asc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
@@ -435,7 +452,8 @@ namespace AISystem.Tests
         [Test]
         public void IdleTargetSensor_SensesCorrectly()
         {
-            var (go, agentMock, _, _) = CreateMockAgent();
+            var (go, agentMock, _, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             go.transform.position = Vector3.zero;
 
             var sensor = new IdleTargetSensor();
@@ -448,8 +466,15 @@ namespace AISystem.Tests
         [Test]
         public void RangeSensor_SensesRangeCorrectly()
         {
-            var (go, agentMock, _, _) = CreateMockAgent();
-            go.transform.position = Vector3.zero;
+            var (agentGo, agentMock, _, agentAsc) = CreateMockAgent("Agent", "Enemy");
+
+            var playerGo = CreateGameObject("Player1");
+            playerGo.tag = "Player";
+            playerGo.transform.position = new Vector3(0, 0, 10);
+            var playerAsc = playerGo.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(agentAsc);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var sensor = new RangeSensor { MinRange = 1f, MaxRange = 10f };
 
@@ -477,7 +502,8 @@ namespace AISystem.Tests
         [Test]
         public void RoleSensor_ChecksRolesCorrectly()
         {
-            var (go, agentMock, _, _) = CreateMockAgent();
+            var (go, agentMock, _, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var dm = go.AddComponent<EnemyDecisionMaker>();
             dm.Role = EnemyRole.Flanker;
 
@@ -502,12 +528,15 @@ namespace AISystem.Tests
             var pt = ptGo.AddComponent<TacticalPoint>();
             manager.RegisterPoint(pt);
 
-            var (go, agentMock, _, _) = CreateMockAgent();
+            var (go, agentMock, _, agentAsc) = CreateMockAgent();
             go.transform.position = new Vector3(1000, 1000, 1000);
 
             // Setup a player threat
-            var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("Player", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(agentAsc);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -521,6 +550,7 @@ namespace AISystem.Tests
         public void TagSensor_ChecksGameplayTagsCorrectly()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var sensor = new TagSensor { TagName = "Status.Stunned", CheckTarget = false };
 
             // Self does not have tag
@@ -534,14 +564,18 @@ namespace AISystem.Tests
         [Test]
         public void TargetDeadSensor_ChecksTargetStateCorrectly()
         {
-            var (go, agentMock, _, _) = CreateMockAgent();
+            var (agentGo, agentMock, _, agentAsc) = CreateMockAgent("Agent", "Enemy");
+
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(agentAsc);
+
             var sensor = new TargetDeadSensor();
 
             // Case 1: No target/action -> true
             Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
 
             // Case 2: Target is alive
-            var (targetGo, _, _, targetAsc) = CreateMockAgent("Target", "Player");
+            var (targetGo, targetMock, _, targetAsc) = CreateMockAgent("Target", "Player");
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(targetAsc);
             var targetSet = targetAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             targetSet.Health.SetBaseValue(100f);
 
@@ -568,6 +602,7 @@ namespace AISystem.Tests
         public void GoapAbilityAction_PerformsCorrectly()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var action = new GoapAbilityAction();
 
             // Setup Properties via Reflection
@@ -588,7 +623,7 @@ namespace AISystem.Tests
             asc.AbilitySystem.AbilityManager.Abilities.Add("Fireball", ability);
 
             // Ability can activate -> executes and returns Completed (since TestAbility starts inactive)
-            bool triggered = false;
+            // bool triggered = false;
             
             // Mock TryActivateAbility
             // Wait, does AbilitySystemComponent have TryActivateAbility?
@@ -604,7 +639,8 @@ namespace AISystem.Tests
         [Test]
         public void IdleAction_PerformsCorrectly()
         {
-            var (go, agentMock, _, _) = CreateMockAgent();
+            var (go, agentMock, _, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var action = new IdleAction();
             var data = new IdleAction.Data();
 
@@ -683,6 +719,7 @@ namespace AISystem.Tests
         public void EnemyDecisionMaker_GoalSelectionLogic()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             go.AddComponent<AgentBehaviour>();
             var provider = go.AddComponent<GoapActionProvider>();
             
@@ -714,6 +751,7 @@ namespace AISystem.Tests
 
             // Setup an ally with low health
             var (allyGo, _, _, allyAsc) = CreateMockAgent("Ally", "Enemy");
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(allyAsc);
             var allyDm = allyGo.AddComponent<EnemyDecisionMaker>();
             awakeMethod.Invoke(allyDm, null);
             var allySet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
