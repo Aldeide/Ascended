@@ -57,6 +57,16 @@ graph TD
     D -->|Update UI| F
 ```
 
+
+## 🧪 Local Testing
+
+For verifying code stability before integration, you can run all tests locally via PowerShell:
+*   **Command:** `.\run_tests.ps1`
+*   **Expected Output:** `Unity finished with exit code 0`
+*   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
+
+For more details on setting up the environment, see the [Local Testing](../../README.md#local-testing) section in the root `README.md`.
+
 ---
 [Ability System](./Systems/Ability_System.md) | [Item System](./Systems/Item_System.md) | [AI Architecture](./Systems/AI_Architecture.md) | [UI Architecture](./UI/Architecture.md)
 [Interaction & Camera](./Systems/Interaction_and_Camera.md) | [Animation & Visuals](./Systems/Animation_and_Visuals.md) | [Assets & Localization](./Systems/Asset_and_Localization.md) | [Utilities Reference](./Systems/Utilities_Reference.md) | [Sound Raytracing](./Systems/Sound_Raytracing.md)
