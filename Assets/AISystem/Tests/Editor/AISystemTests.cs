@@ -565,10 +565,8 @@ namespace AISystem.Tests
         public void TargetDeadSensor_ChecksTargetStateCorrectly()
         {
             var (agentGo, agentMock, _, agentAsc) = CreateMockAgent("Agent", "Enemy");
-            var (targetGo, targetMock, _, asc) = CreateMockAgent("Target", "Enemy");
 
             AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(agentAsc);
-            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
 
             var sensor = new TargetDeadSensor();
 
@@ -576,7 +574,7 @@ namespace AISystem.Tests
             Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
 
             // Case 2: Target is alive
-            var (targetGo, _, _, targetAsc) = CreateMockAgent("Target", "Player");
+            var (targetGo, targetMock, _, targetAsc) = CreateMockAgent("Target", "Player");
             AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(targetAsc);
             var targetSet = targetAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             targetSet.Health.SetBaseValue(100f);
@@ -625,7 +623,7 @@ namespace AISystem.Tests
             asc.AbilitySystem.AbilityManager.Abilities.Add("Fireball", ability);
 
             // Ability can activate -> executes and returns Completed (since TestAbility starts inactive)
-            bool triggered = false;
+            // bool triggered = false;
             
             // Mock TryActivateAbility
             // Wait, does AbilitySystemComponent have TryActivateAbility?
