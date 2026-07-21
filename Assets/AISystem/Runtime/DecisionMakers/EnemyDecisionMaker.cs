@@ -53,8 +53,9 @@ namespace AISystem.Runtime.DecisionMakers
             EvaluateGoal();
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
+            base.OnDestroy();
             if (TacticalGroupCoordinator.Instance != null)
             {
                 TacticalGroupCoordinator.Instance.UnregisterAgent(this);
