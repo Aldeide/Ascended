@@ -390,6 +390,7 @@ namespace AISystem.Tests
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
