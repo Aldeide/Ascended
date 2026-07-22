@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -83,15 +84,24 @@ namespace AISystem.Tests
             var go = CreateGameObject(name);
             go.tag = tag;
 
-            var asc = go.AddComponent<AbilitySystemComponent>();
+            var agentMock = new Mock<IMonoAgent>();
+            agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
+
+            // Add the component
+            var asc = go.AddComponent<AbilitySystemComponent>();
+            asc.Definition = ScriptableObject.CreateInstance<AbilitySystemDefinition>();
+            asc.Definition.Attributes = new[]
+            {
+                ScriptableObject.CreateInstance<TestAttributeSetDefinition>()
+            };
+            asc.Definition.BaseEffects = Array.Empty<EffectDefinition>();
             
-            // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
 
-            var agentMock = new Mock<IMonoAgent>();
-            agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+            AbilitySystemComponent.ActiveInstances.Add(asc);
 
             return (go, agentMock, abilitySystemMock, asc);
         }
