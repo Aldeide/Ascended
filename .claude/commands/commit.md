@@ -5,13 +5,13 @@ Follow these steps in order. Stop and report clearly if any step fails — do no
 ## Step 1 — Build C#
 
 Find the Unity executable. Check common locations in order:
-1. Read `ProjectSettings/ProjectVersion.txt` to get the Unity version string (e.g. `2022.3.10f1`).
+1. Read `ProjectSettings/ProjectVersion.txt` to get the Unity version string (e.g. `6000.4.5f1`).
 2. Look for the executable at `C:\Program Files\Unity\Hub\Editor\<version>\Editor\Unity.exe`.
 3. If not found there, search `C:\Program Files\Unity\Hub\Editor\` for the closest matching version folder.
 
 Run a headless compilation check:
 ```
-"<unity_exe>" -batchmode -quit -projectPath "c:\RepoGit\Ascended" -logFile "c:\RepoGit\Ascended\Logs\build_check.log" -executeMethod UnityEditor.SyncVS.SyncSolution
+"<unity_exe>" -batchmode -quit -projectPath "." -logFile "Logs\build_check.log" -executeMethod UnityEditor.SyncVS.SyncSolution
 ```
 
 If the Unity executable cannot be found, fall back to:
@@ -33,10 +33,10 @@ If Unity processes were found and killed, log a warning: "Killed running Unity i
 
 Run EditMode tests headlessly using the same Unity executable found in Step 1:
 ```
-"<unity_exe>" -batchmode -runTests -testPlatform EditMode -projectPath "c:\RepoGit\Ascended" -testResults "c:\RepoGit\Ascended\Logs\test_results.xml" -logFile "c:\RepoGit\Ascended\Logs\test_run.log"
+powershell -ExecutionPolicy Bypass -File .\run_tests.ps1
 ```
 
-Parse `Logs\test_results.xml` after the run. Report a summary: total / passed / failed / skipped.
+Parse `Results_Script.xml` after the run. Report a summary: total / passed / failed / skipped.
 
 If any test fails: list the failing test names and stop. Do not commit with failing tests.
 
