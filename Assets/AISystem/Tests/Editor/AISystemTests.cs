@@ -84,22 +84,15 @@ namespace AISystem.Tests
             var go = CreateGameObject(name);
             go.tag = tag;
 
-            var agentMock = new Mock<IMonoAgent>();
-            agentMock.SetupGet(a => a.Transform).Returns(go.transform);
-
-            var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
-
-            // Add the component
             var asc = go.AddComponent<AbilitySystemComponent>();
-            asc.Definition = ScriptableObject.CreateInstance<AbilitySystemDefinition>();
-            asc.Definition.Attributes = new[]
-            {
-                ScriptableObject.CreateInstance<TestAttributeSetDefinition>()
-            };
-            asc.Definition.BaseEffects = Array.Empty<EffectDefinition>();
+            var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
+            // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
+
+            var agentMock = new Mock<IMonoAgent>();
+            agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
             AbilitySystemComponent.ActiveInstances.Add(asc);
 
