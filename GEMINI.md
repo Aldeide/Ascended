@@ -11,6 +11,7 @@ This file provides guidance to Antigravity (the Gemini-based AI assistant) when 
   Ensure the build completes successfully with **0 errors**.
 - **Local Testing**: Run edit-mode and play-mode tests locally using the PowerShell script:
   ```powershell
+  $env:UNITY_PATH = "C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe"
   .\run_tests.ps1
   ```
   Ensure all tests pass before proposing commits.
