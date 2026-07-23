@@ -81,6 +81,7 @@ namespace AbilitySystem.Test.Runtime.Abilities.Targeting
         [TearDown]
         public override void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (_prefabGo != null)
             {
                 Object.DestroyImmediate(_prefabGo);

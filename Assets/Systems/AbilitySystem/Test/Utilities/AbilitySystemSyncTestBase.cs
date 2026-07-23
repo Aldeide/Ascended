@@ -34,6 +34,12 @@ namespace AbilitySystem.Test.Utilities
             LinkSystems();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+        }
+
         protected void LinkSystems()
         {
             var serverRepl = ServerSystem.ReplicationManager;
