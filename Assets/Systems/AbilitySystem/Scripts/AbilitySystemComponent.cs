@@ -17,11 +17,30 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
+
+        // --- PERFORMANCE OPTIMIZATION ---
+        // Global registry to avoid expensive FindObjectsOfType<AbilitySystemComponent> calls
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new();
+
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
+
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
+
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
@@ -65,9 +84,11 @@ namespace AbilitySystem.Scripts
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
 
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+
             Initialise();
             if (IsServer)
             {
@@ -75,9 +96,11 @@ namespace AbilitySystem.Scripts
             }
         }
 
+
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+
             if (IsServer)
             {
                 NetworkManager.OnClientConnectedCallback -= OnClientConnected;
