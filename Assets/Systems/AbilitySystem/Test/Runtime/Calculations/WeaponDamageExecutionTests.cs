@@ -30,6 +30,7 @@ namespace AbilitySystem.Test.Runtime.Calculations
         [TearDown]
         public void Teardown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (_execution != null) Object.DestroyImmediate(_execution);
         }
 

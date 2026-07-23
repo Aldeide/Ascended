@@ -39,6 +39,7 @@ namespace AbilityGraph.Tests.Runtime.Integration
         [TearDown]
         public void Teardown()
         {
+            if (AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances != null) AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (_targetObj != null) Object.DestroyImmediate(_targetObj);
             if (_effectDef != null) Object.DestroyImmediate(_effectDef);
         }
