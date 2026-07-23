@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2025-03-09 - Avoid FindObjectsOfType in AI Sensor Update Loops
+**Learning:** `FindObjectsOfType<T>` and `Object.FindObjectsOfType<T>` perform extensive scene-wide searches and memory allocations, severely impacting performance when called frequently by AI sensors and decision makers.
+**Action:** Replace `FindObjectsOfType<T>` calls with a static registry pattern (e.g., `public static readonly HashSet<T> ActiveInstances = new()`) updated during `OnNetworkSpawn` and `OnNetworkDespawn`. Ensure mock instances generated during tests are manually added to this registry.

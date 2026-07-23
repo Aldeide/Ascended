@@ -27,6 +27,7 @@ namespace AbilityGraph.Tests.Runtime.Nodes.Spatial
         [TearDown]
         public void Teardown()
         {
+            if (AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances != null) AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (_targetObject != null) Object.DestroyImmediate(_targetObject);
         }
 

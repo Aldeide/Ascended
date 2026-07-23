@@ -55,6 +55,7 @@ namespace Systems.Audio.Tests
         [TearDown]
         public void TearDown()
         {
+            if (AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances != null) AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             // Clean up ScriptableObjects to avoid memory leaks in the test runner
             Object.DestroyImmediate(_concrete);
             Object.DestroyImmediate(_wood);

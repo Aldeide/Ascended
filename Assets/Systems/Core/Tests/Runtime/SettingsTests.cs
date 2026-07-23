@@ -27,6 +27,7 @@ namespace Systems.Core.Tests
         [TearDown]
         public void TearDown()
         {
+            if (AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances != null) AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (_settingsGO != null) Object.DestroyImmediate(_settingsGO);
             PlayerPrefs.DeleteAll();
         }
