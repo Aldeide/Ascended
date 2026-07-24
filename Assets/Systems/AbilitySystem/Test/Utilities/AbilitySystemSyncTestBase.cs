@@ -18,6 +18,12 @@ namespace AbilitySystem.Test.Utilities
         protected AbilitySystemManager ClientSystem;
         protected MockDataManager DataManager;
 
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+        }
+
         [SetUp]
         public virtual void Setup()
         {
