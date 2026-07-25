@@ -18,6 +18,7 @@ namespace AISystem.Runtime.Sensors
             var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents
