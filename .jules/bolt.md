@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2024-07-26 - Replace FindObjectsOfType with ActiveInstances in hot paths
+**Learning:** Calling `FindObjectsOfType` in sensor/AI updates is highly inefficient and generates GC allocs. Distance comparisons using `Vector3.Distance` do unnecessary `Mathf.Sqrt` calls.
+**Action:** Used `AbilitySystemComponent.ActiveInstances` static hash set to track active components to avoid scene searches. Used `.sqrMagnitude` for distance comparisons.

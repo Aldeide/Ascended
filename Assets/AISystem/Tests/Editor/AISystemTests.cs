@@ -69,6 +69,8 @@ namespace AISystem.Tests
                 UnityEngine.Object.DestroyImmediate(groupCoordinator.gameObject);
             }
             typeof(TacticalGroupCoordinator).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).SetValue(null, null);
+
+            AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         private GameObject CreateGameObject(string name = "GameObject")
@@ -93,6 +95,7 @@ namespace AISystem.Tests
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             return (go, agentMock, abilitySystemMock, asc);
         }
 
