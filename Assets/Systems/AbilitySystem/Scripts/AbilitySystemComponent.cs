@@ -17,6 +17,9 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // Optimization: Centralized static registry for fast O(1) tracking, avoiding expensive FindObjectsOfType calls in hot paths.
+        public static System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
@@ -158,6 +161,16 @@ namespace AbilitySystem.Scripts
                 effectSyncData[k] = data;
             }
             SyncEffectsClientRpc(effectSyncData, clientRpcParams);
+        }
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
         }
 
         public void Initialise()
