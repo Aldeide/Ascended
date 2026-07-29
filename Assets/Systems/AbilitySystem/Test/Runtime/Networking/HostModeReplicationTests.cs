@@ -22,7 +22,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         public void SetUp()
         {
             _gameObject = new GameObject("HostPlayer");
-            _component = _gameObject.AddComponent<AbilitySystemComponent>();
+            _component = _gameObject.AddComponent<AbilitySystemComponent>(); AbilitySystemComponent.ActiveInstances.Add(_component);
             
             _mockAbilitySystem = new Mock<IAbilitySystem>();
             _mockReplicationManager = new Mock<IReplicationManager>();
@@ -37,6 +37,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             Object.DestroyImmediate(_gameObject);
         }
 

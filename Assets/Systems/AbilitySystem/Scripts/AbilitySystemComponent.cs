@@ -63,7 +63,20 @@ namespace AbilitySystem.Scripts
             return output;
         }
         
-        public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
+                public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
+
+        // Bolt Opt: Centralized ActiveInstances static lookup to prevent expensive FindObjectsOfType calls in hot paths (AI Sensors)
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
+
+        protected virtual void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public override void OnNetworkSpawn()
         {
