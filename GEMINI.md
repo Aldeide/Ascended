@@ -8,7 +8,7 @@ This file provides guidance to Antigravity (the Gemini-based AI assistant) when 
   ```powershell
   dotnet build Ascended.sln
   ```
-  Ensure the build completes successfully with **0 errors**.
+  Ensure the build completes successfully with **0 errors**. Note that Unity `.sln` and `.csproj` files are generated dynamically and excluded via `.gitignore`. You must generate them first via Unity or use a headless build command.
 - **Local Testing**: Run edit-mode and play-mode tests locally using the PowerShell script:
   ```powershell
   .\run_tests.ps1
