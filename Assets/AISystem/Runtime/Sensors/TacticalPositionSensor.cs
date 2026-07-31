@@ -99,44 +99,41 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players != null && players.Length > 0)
-            {
-                GameObject closest = null;
-                float minDist = float.MaxValue;
-                foreach (var p in players)
-                {
-                    if (p == null) continue;
-                    float dist = Vector3.Distance(agentTransform.position, p.transform.position);
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        closest = p;
-                    }
-                }
-                if (closest != null)
-                {
-                    return closest;
-                }
-            }
+            AbilitySystemComponent closestPlayer = null;
+            float minPlayerDistSq = float.MaxValue;
+            AbilitySystemComponent closestAny = null;
+            float minAnyDistSq = float.MaxValue;
 
-            // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
-            AbilitySystemComponent closestComp = null;
-            float closestDist = float.MaxValue;
-            foreach (var comp in components)
+            // ⚡ Bolt Optimization: Replace FindGameObjectsWithTag with ActiveInstances and use sqrMagnitude
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
                 if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agentTransform.gameObject) continue;
-                float dist = Vector3.Distance(agentTransform.position, comp.transform.position);
-                if (dist < closestDist)
+
+                float distSq = (comp.transform.position - agentTransform.position).sqrMagnitude;
+
+                if (comp.gameObject.CompareTag("Player"))
                 {
-                    closestDist = dist;
-                    closestComp = comp;
+                    if (distSq < minPlayerDistSq)
+                    {
+                        minPlayerDistSq = distSq;
+                        closestPlayer = comp;
+                    }
+                }
+
+                if (distSq < minAnyDistSq)
+                {
+                    minAnyDistSq = distSq;
+                    closestAny = comp;
                 }
             }
 
-            return closestComp != null ? closestComp.gameObject : null;
+            if (closestPlayer != null)
+            {
+                return closestPlayer.gameObject;
+            }
+
+            return closestAny != null ? closestAny.gameObject : null;
         }
     }
 }
