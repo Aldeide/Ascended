@@ -46,6 +46,8 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -84,6 +86,8 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -374,6 +378,10 @@ namespace AISystem.Tests
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(playerAsc);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(playerAsc);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
@@ -384,6 +392,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -461,6 +470,9 @@ namespace AISystem.Tests
             var actionStateMock = new Mock<IActionState>();
             actionStateMock.SetupGet(asMock => asMock.Action).Returns(actionMock.Object);
             
+            // Workaround for IActionState not fully mocking Data cleanly or agent throwing on ActionState.Data access?
+            // Actually, wait, the exception is: CrashKonijn.Goap.Runtime.GoapException: This should not be called anymore!
+            // at CrashKonijn.Goap.Runtime.LocalWorldSensorBase.Sense(IMonoAgent agent, IComponentReference references)
             var actionData = new GoapAbilityAction.Data { Target = targetMock.Object };
             actionStateMock.SetupGet(asMock => asMock.Data).Returns(actionData);
 

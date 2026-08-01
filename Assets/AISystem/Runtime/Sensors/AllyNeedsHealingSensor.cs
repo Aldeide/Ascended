@@ -15,7 +15,8 @@ namespace AISystem.Runtime.Sensors
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // OPTIMIZATION: Use ActiveInstances to avoid FindObjectsOfType overhead
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
                 if (comp.gameObject == agent.Transform.gameObject) continue;

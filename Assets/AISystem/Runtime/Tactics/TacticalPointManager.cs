@@ -26,7 +26,7 @@ namespace AISystem.Runtime.Tactics
             {
                 Instance = this;
                 // Gather existing points in the scene
-                var scenePoints = FindObjectsOfType<TacticalPoint>();
+                var scenePoints = FindObjectsByType<TacticalPoint>(FindObjectsSortMode.None);
                 foreach (var pt in scenePoints)
                 {
                     RegisterPoint(pt);

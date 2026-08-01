@@ -14,7 +14,8 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // OPTIMIZATION: Use ActiveInstances to avoid FindObjectsOfType overhead
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent lowestAlly = null;
             float lowestRatio = 1.0f;
 

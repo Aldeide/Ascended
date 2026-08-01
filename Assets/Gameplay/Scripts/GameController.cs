@@ -14,7 +14,7 @@ namespace Gameplay.Scripts
             {
                 if(!_instance)
                 {
-                    _instance = FindFirstObjectByType<GameController>();
+                    _instance = FindAnyObjectByType<GameController>();
                 }
 
                 return _instance;
