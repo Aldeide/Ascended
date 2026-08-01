@@ -12,7 +12,7 @@ namespace AISystem.Runtime.DecisionMakers
         private GoapBehaviour _goap;
         private void Awake()
         {
-            _goap = FindObjectOfType<GoapBehaviour>();
+            _goap = FindAnyObjectByType<GoapBehaviour>();
             _agent = GetComponent<AgentBehaviour>();
             _provider = GetComponent<GoapActionProvider>();
             

@@ -32,7 +32,7 @@ namespace AISystem.Runtime.DecisionMakers
 
         private void Awake()
         {
-            _goap = FindObjectOfType<GoapBehaviour>();
+            _goap = FindAnyObjectByType<GoapBehaviour>();
             _agent = GetComponent<AgentBehaviour>();
             _provider = GetComponent<GoapActionProvider>();
             _asc = GetComponent<AbilitySystemComponent>();
@@ -53,8 +53,9 @@ namespace AISystem.Runtime.DecisionMakers
             EvaluateGoal();
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
+            base.OnDestroy();
             if (TacticalGroupCoordinator.Instance != null)
             {
                 TacticalGroupCoordinator.Instance.UnregisterAgent(this);
