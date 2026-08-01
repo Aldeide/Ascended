@@ -2,6 +2,7 @@ using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using AbilitySystem.Scripts;
 
 namespace AISystem.Runtime.Sensors
 {
@@ -26,27 +27,34 @@ namespace AISystem.Runtime.Sensors
 
             if (target == null)
             {
-                // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                // OPTIMIZATION: Avoid expensive GameObject.FindGameObjectsWithTag allocations
+                // in the hot path by using the AbilitySystemComponent.ActiveInstances registry.
+                // Using sqrMagnitude instead of Vector3.Distance avoids redundant Mathf.Sqrt calculations
+                // during the search loop.
+                AbilitySystemComponent closestPlayer = null;
+                float minPlayerSqrDist = float.MaxValue;
+
+                foreach (var comp in AbilitySystemComponent.ActiveInstances)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp == null || comp.gameObject == null) continue;
+
+                    if (comp.gameObject.CompareTag("Player"))
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
+                        float sqrDist = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                        if (sqrDist < minPlayerSqrDist)
                         {
-                            minDist = d;
-                            closest = p;
+                            minPlayerSqrDist = sqrDist;
+                            closestPlayer = comp;
                         }
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
                 }
+
+                if (closestPlayer != null)
+                {
+                    float dist = Mathf.Sqrt(minPlayerSqrDist);
+                    return dist >= MinRange && dist <= MaxRange;
+                }
+
                 return false;
             }
 
