@@ -47,6 +47,7 @@ namespace AISystem.Tests
         public void TearDown()
         {
             AbilitySystemComponent.ActiveInstances.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -85,6 +86,7 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
@@ -468,6 +470,9 @@ namespace AISystem.Tests
             var actionStateMock = new Mock<IActionState>();
             actionStateMock.SetupGet(asMock => asMock.Action).Returns(actionMock.Object);
             
+            // Workaround for IActionState not fully mocking Data cleanly or agent throwing on ActionState.Data access?
+            // Actually, wait, the exception is: CrashKonijn.Goap.Runtime.GoapException: This should not be called anymore!
+            // at CrashKonijn.Goap.Runtime.LocalWorldSensorBase.Sense(IMonoAgent agent, IComponentReference references)
             var actionData = new GoapAbilityAction.Data { Target = targetMock.Object };
             actionStateMock.SetupGet(asMock => asMock.Data).Returns(actionData);
 
