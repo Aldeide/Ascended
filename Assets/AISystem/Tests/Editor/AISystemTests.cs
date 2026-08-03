@@ -41,6 +41,7 @@ namespace AISystem.Tests
         {
             _gameObjectsToCleanup = new List<GameObject>();
             UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         [TearDown]
@@ -54,6 +55,7 @@ namespace AISystem.Tests
                 }
             }
             _gameObjectsToCleanup.Clear();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
 
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
@@ -83,7 +85,7 @@ namespace AISystem.Tests
             var go = CreateGameObject(name);
             go.tag = tag;
 
-            var asc = go.AddComponent<AbilitySystemComponent>();
+            var asc = go.AddComponent<AbilitySystemComponent>(); AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -383,7 +385,7 @@ namespace AISystem.Tests
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
-            var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>(); AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
