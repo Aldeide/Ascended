@@ -13,48 +13,47 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
-            // Find closest player GameObject
-            var players = GameObject.FindGameObjectsWithTag("Player");
-            if (players == null || players.Length == 0)
+            AbilitySystemComponent closestPlayer = null;
+            float minPlayerDistSqr = float.MaxValue;
+
+            AbilitySystemComponent closestAny = null;
+            float minAnyDistSqr = float.MaxValue;
+
+            // ⚡ Bolt: Use O(1) registry instead of expensive FindObjectsOfType/FindGameObjectsWithTag
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
-                // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
-                AbilitySystemComponent closest = null;
-                float closestDist = float.MaxValue;
-                foreach (var comp in components)
+                if (comp == null || comp.gameObject == null) continue;
+                if (comp.gameObject == agent.Transform.gameObject) continue;
+
+                // ⚡ Bolt: Use sqrMagnitude to avoid expensive Mathf.Sqrt calls
+                float distSqr = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+
+                if (comp.gameObject.CompareTag("Player"))
                 {
-                    if (comp == null || comp.gameObject == null) continue;
-                    if (comp.gameObject == agent.Transform.gameObject) continue;
-                    float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
-                    if (dist < closestDist)
+                    if (distSqr < minPlayerDistSqr)
                     {
-                        closestDist = dist;
-                        closest = comp;
+                        minPlayerDistSqr = distSqr;
+                        closestPlayer = comp;
                     }
                 }
-                if (closest != null)
+                else
                 {
-                    return new TransformTarget(closest.transform);
-                }
-                return null;
-            }
-
-            GameObject closestPlayer = null;
-            float minDist = float.MaxValue;
-            foreach (var player in players)
-            {
-                if (player == null) continue;
-                float dist = Vector3.Distance(agent.Transform.position, player.transform.position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    closestPlayer = player;
+                    if (distSqr < minAnyDistSqr)
+                    {
+                        minAnyDistSqr = distSqr;
+                        closestAny = comp;
+                    }
                 }
             }
 
             if (closestPlayer != null)
             {
                 return new TransformTarget(closestPlayer.transform);
+            }
+
+            if (closestAny != null)
+            {
+                return new TransformTarget(closestAny.transform);
             }
 
             return null;

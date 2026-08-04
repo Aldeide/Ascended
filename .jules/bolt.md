@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2025-02-14 - Replace FindObjectsOfType and FindGameObjectsWithTag in hot paths with centralized static registry
+**Learning:** Calling `Object.FindObjectsOfType` or `GameObject.FindGameObjectsWithTag` inside AI sensors (which are updated frequently) is extremely expensive. Using a centralized static registry populated during `OnEnable` and `OnDisable` reduces the cost from O(N) over all scene objects to O(M) over active instances of that type. Using `.sqrMagnitude` for distance comparison further removes redundant `Mathf.Sqrt` calls in distance checks.
+**Action:** Establish an `ActiveInstances` HashSet registry on the component type being queried to avoid using `FindObjectsOfType` or `FindGameObjectsWithTag` for frequently executed lookups, and use `.sqrMagnitude` whenever distance calculations are used solely for comparison.

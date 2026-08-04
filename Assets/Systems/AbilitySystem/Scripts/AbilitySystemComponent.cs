@@ -17,6 +17,10 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // ⚡ Bolt: Global static registry for O(1) active component lookups,
+        // avoiding expensive FindObjectsOfType / FindGameObjectsWithTag calls
+        public static HashSet<AbilitySystemComponent> ActiveInstances { get; } = new HashSet<AbilitySystemComponent>();
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
@@ -25,6 +29,16 @@ namespace AbilitySystem.Scripts
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public void RequestUpdateFromServer()
         {
