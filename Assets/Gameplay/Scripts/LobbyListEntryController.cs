@@ -1,4 +1,5 @@
 ﻿using UnityEngine.UIElements;
+using Systems.Core.Utilities;
 
 namespace Gameplay.Scripts
 {
@@ -14,7 +15,7 @@ namespace Gameplay.Scripts
 
         public void SetLobbyEntryData(string lobbyName)
         {
-            _lobbyLabel.text = lobbyName;
+            _lobbyLabel.text = StringUtilities.SanitizeForRichText(lobbyName);
         }
     }
 }
