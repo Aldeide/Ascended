@@ -43,6 +43,7 @@ namespace AbilitySystem.Test.Utilities
 
             var go = new GameObject($"MockPlayer_{networkId}");
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
 
             asc.AbilitySystem = system;
 
