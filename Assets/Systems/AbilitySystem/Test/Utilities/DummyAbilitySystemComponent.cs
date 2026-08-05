@@ -16,6 +16,23 @@ namespace AbilitySystem.Test.Utilities
     /// </summary>
     public class DummyAbilitySystemComponent : MonoBehaviour, IAbilitySystem
     {
+        protected virtual void OnEnable()
+        {
+            var asc = GetComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+            if (asc != null)
+            {
+                AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            var asc = GetComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+            if (asc != null)
+            {
+                AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Remove(asc);
+            }
+        }
         public IAbilitySystem MockSystem;
 
         public INetworkRole NetworkRole { get => MockSystem?.NetworkRole; set { if (MockSystem != null) MockSystem.NetworkRole = value; } }

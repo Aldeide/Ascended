@@ -32,11 +32,18 @@ namespace AbilitySystem.Test.Runtime.Networking
             _mockAbilitySystem.Setup(x => x.ReplicationManager).Returns(_mockReplicationManager.Object);
             
             _component.AbilitySystem = _mockAbilitySystem.Object;
+
+            // Explicitly add to ActiveInstances for testing environments where OnEnable might not have run natively
+            AbilitySystemComponent.ActiveInstances.Add(_component);
         }
 
         [TearDown]
         public void TearDown()
         {
+            if (_component != null)
+            {
+                AbilitySystemComponent.ActiveInstances.Remove(_component);
+            }
             Object.DestroyImmediate(_gameObject);
         }
 
