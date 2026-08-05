@@ -2,6 +2,7 @@ using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
 using UnityEngine;
+using AbilitySystem.Scripts;
 
 namespace AISystem.Runtime.Sensors
 {
@@ -26,26 +27,28 @@ namespace AISystem.Runtime.Sensors
 
             if (target == null)
             {
-                // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                // Optimize: Fallback to look for the closest player using centralized registry and sqrMagnitude
+                GameObject closest = null;
+                float minDistSqr = float.MaxValue;
+                foreach (var comp in AbilitySystemComponent.ActiveInstances)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp == null || comp.gameObject == null) continue;
+                    if (comp.gameObject == agent.Transform.gameObject) continue;
+
+                    if (comp.gameObject.CompareTag("Player"))
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
-                        if (d < minDist)
+                        float distSqr = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                        if (distSqr < minDistSqr)
                         {
-                            minDist = d;
-                            closest = p;
+                            minDistSqr = distSqr;
+                            closest = comp.gameObject;
                         }
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
+                }
+                if (closest != null)
+                {
+                    float dist = Mathf.Sqrt(minDistSqr);
+                    return dist >= MinRange && dist <= MaxRange;
                 }
                 return false;
             }
