@@ -46,6 +46,9 @@ namespace AbilitySystem.Test.Utilities
 
             asc.AbilitySystem = system;
 
+            // Explicitly add to ActiveInstances for testing environments where OnEnable might not have run naturally
+            AbilitySystemComponent.ActiveInstances.Add(asc);
+
             return go;
         }
         

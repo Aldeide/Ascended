@@ -20,7 +20,6 @@ namespace AbilitySystem.Scripts
     {
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
-
         public static readonly HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
 
         protected virtual void OnEnable()
