@@ -43,13 +43,14 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
+            NotifyDebugDataClientRpc(debugInfo, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new[] { rpcParams.Receive.SenderClientId } } });
         }
 
-        [Rpc(SendTo.Everyone)]
-        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
+        [ClientRpc]
+        public void NotifyDebugDataClientRpc(string debugInfo, ClientRpcParams clientRpcParams = default)
         {
-            if (NetworkManager.LocalClientId != targetId) return;
+            // Fix: Information Exposure vulnerability due to client-side filtering.
+            // Using [ClientRpc] with TargetClientIds instead of [Rpc(SendTo.Everyone)]
             ServerDebugString = debugInfo;
         }
 
