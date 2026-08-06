@@ -84,10 +84,13 @@ namespace AbilitySystemExtension.Runtime.Abilities
                 Vector3 castOrigin = currentPos + Vector3.up * 0.6f;
                 int environmentLayer = EnvironmentLayerMask;
                 
-                if (Physics.SphereCast(castOrigin, 0.3f, moveDelta.normalized, out var hit, moveDist, environmentLayer))
+                // ⚡ Bolt Optimization: Avoid redundant Mathf.Sqrt by reusing already calculated moveDist for normalization
+                Vector3 moveDir = moveDelta / moveDist;
+
+                if (Physics.SphereCast(castOrigin, 0.3f, moveDir, out var hit, moveDist, environmentLayer))
                 {
                     // We hit a wall! Stop at the hit point.
-                    nextPos = currentPos + moveDelta.normalized * Mathf.Max(0, hit.distance - 0.05f);
+                    nextPos = currentPos + moveDir * Mathf.Max(0, hit.distance - 0.05f);
                     // Stop the dash progress if we hit a solid wall
                     _endPosition = nextPos;
                 }
