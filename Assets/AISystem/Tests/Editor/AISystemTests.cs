@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -84,6 +85,7 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc); // ⚡ Bolt: Manually register in EditMode tests where OnEnable isn't called automatically
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
