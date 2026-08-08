@@ -47,7 +47,6 @@ namespace AISystem.Tests
         public void TearDown()
         {
             AbilitySystemComponent.ActiveInstances.Clear();
-            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -83,8 +82,7 @@ namespace AISystem.Tests
         private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
-            UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
-            try { go.tag = tag; } catch { }
+            go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
             AbilitySystemComponent.ActiveInstances.Add(asc);
