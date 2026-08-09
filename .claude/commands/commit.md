@@ -11,11 +11,13 @@ Find the Unity executable. Check common locations in order:
 
 Run a headless compilation check:
 ```
-"<unity_exe>" -batchmode -quit -projectPath "c:\RepoGit\Ascended" -logFile "c:\RepoGit\Ascended\Logs\build_check.log" -executeMethod UnityEditor.SyncVS.SyncSolution
+"<unity_exe>" -batchmode -quit -projectPath "." -logFile ".\Logs\build_check.log" -executeMethod UnityEditor.SyncVS.SyncSolution
 ```
 
 If the Unity executable cannot be found, fall back to:
 ```
+# Note: Ascended.sln is generated dynamically by Unity.
+# Ensure it has been generated (by opening the project in Unity or via SyncSolution) before running this.
 dotnet build Ascended.sln --configuration Debug
 ```
 Note: this may produce warnings about Unity-specific references — treat compiler errors as failures, warnings as acceptable.
@@ -33,7 +35,7 @@ If Unity processes were found and killed, log a warning: "Killed running Unity i
 
 Run EditMode tests headlessly using the same Unity executable found in Step 1:
 ```
-"<unity_exe>" -batchmode -runTests -testPlatform EditMode -projectPath "c:\RepoGit\Ascended" -testResults "c:\RepoGit\Ascended\Logs\test_results.xml" -logFile "c:\RepoGit\Ascended\Logs\test_run.log"
+"<unity_exe>" -batchmode -runTests -testPlatform EditMode -projectPath "." -testResults ".\Logs\test_results.xml" -logFile ".\Logs\test_run.log"
 ```
 
 Parse `Logs\test_results.xml` after the run. Report a summary: total / passed / failed / skipped.
