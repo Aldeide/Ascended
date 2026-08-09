@@ -107,10 +107,11 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
-            var components = FindObjectsOfType<AbilitySystemComponent>();
+            // Bolt: O(1) lookup via ActiveInstances
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
-                if (comp.gameObject == gameObject) continue;
+                if (comp == null || comp.gameObject == null || comp.gameObject == gameObject) continue;
                 if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;
 
