@@ -91,6 +91,9 @@ namespace AISystem.Tests
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
 
+            var onEnable = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            onEnable?.Invoke(asc, null);
+
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
@@ -388,6 +391,9 @@ namespace AISystem.Tests
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+
+            var onEnable = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            onEnable?.Invoke(otherAsc, null);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
