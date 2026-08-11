@@ -40,12 +40,14 @@ namespace AISystem.Tests
         public void SetUp()
         {
             _gameObjectsToCleanup = new List<GameObject>();
+            AbilitySystemComponent.ActiveInstances.Clear();
             UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
         }
 
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -78,6 +80,7 @@ namespace AISystem.Tests
             return go;
         }
 
+
         private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
@@ -90,7 +93,15 @@ namespace AISystem.Tests
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
 
+            // Trigger OnEnable so it adds to ActiveInstances registry
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (onEnableMethod != null)
+            {
+                onEnableMethod.Invoke(asc, null);
+            }
+
             var agentMock = new Mock<IMonoAgent>();
+
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
             return (go, agentMock, abilitySystemMock, asc);
@@ -387,6 +398,12 @@ namespace AISystem.Tests
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (onEnableMethod != null)
+            {
+                onEnableMethod.Invoke(otherAsc, null);
+            }
+
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
