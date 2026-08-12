@@ -37,6 +37,13 @@ The project follows a strict **modular architecture** designed to separate reusa
 | `Assets/Systems/ScalableFloat` | Data-driven mathematical scaling for designer values. |
 | `Assets/Localisation` | Multi-language support for UI and game data. |
 
+
+## 📝 Documentation Rules
+
+- **Keep it executable**: Any listed command or local development script must match project reality.
+- **Environment**: Documentation must specify necessary environment setup (e.g. `UNITY_PATH`).
+- **Quick Verification**: For new workflows, document 1-2 exact commands and expected outputs to verify it works locally.
+
 ## 🛠️ Key Technologies
 
 - **UI Toolkit**: Preferred for all modern interfaces (Main Menu, HUD, Settings). Uses a semi-MVC pattern.
