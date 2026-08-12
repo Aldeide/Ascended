@@ -17,18 +17,18 @@ namespace AISystem.Runtime.Sensors
             var players = GameObject.FindGameObjectsWithTag("Player");
             if (players == null || players.Length == 0)
             {
-                // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                // ⚡ Bolt: Use O(1) static registry instead of expensive Object.FindObjectsOfType
+                var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
-                float closestDist = float.MaxValue;
+                float closestDistSqr = float.MaxValue;
                 foreach (var comp in components)
                 {
                     if (comp == null || comp.gameObject == null) continue;
                     if (comp.gameObject == agent.Transform.gameObject) continue;
-                    float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
-                    if (dist < closestDist)
+                    float distSqr = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                    if (distSqr < closestDistSqr)
                     {
-                        closestDist = dist;
+                        closestDistSqr = distSqr;
                         closest = comp;
                     }
                 }
@@ -40,14 +40,14 @@ namespace AISystem.Runtime.Sensors
             }
 
             GameObject closestPlayer = null;
-            float minDist = float.MaxValue;
+            float minDistSqr = float.MaxValue;
             foreach (var player in players)
             {
                 if (player == null) continue;
-                float dist = Vector3.Distance(agent.Transform.position, player.transform.position);
-                if (dist < minDist)
+                float distSqr = (agent.Transform.position - player.transform.position).sqrMagnitude;
+                if (distSqr < minDistSqr)
                 {
-                    minDist = dist;
+                    minDistSqr = distSqr;
                     closestPlayer = player;
                 }
             }
