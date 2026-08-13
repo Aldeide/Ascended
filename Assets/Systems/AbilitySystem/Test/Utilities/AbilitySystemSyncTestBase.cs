@@ -14,6 +14,12 @@ namespace AbilitySystem.Test.Utilities
 {
     public abstract class AbilitySystemSyncTestBase
     {
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+        }
+
         protected AbilitySystemManager ServerSystem;
         protected AbilitySystemManager ClientSystem;
         protected MockDataManager DataManager;
