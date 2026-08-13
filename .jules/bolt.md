@@ -4,3 +4,7 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+
+## 2026-08-13 - Replace FindObjectsOfType with Static Instance Registry
+**Learning:** Using `FindObjectsOfType<T>()` in frequent operations like AI sensor updates is a major performance bottleneck due to scene-wide iteration.
+**Action:** Maintain a centralized static registry (e.g., `HashSet<T> ActiveInstances`) populated during Unity lifecycle events (`OnEnable`/`OnDisable`) to enable O(1) lookups instead.
