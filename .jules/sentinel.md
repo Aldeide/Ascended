@@ -2,3 +2,9 @@
 **Vulnerability:** A malicious client could send rich text tags (like `<color=red>`) in their `FixedString64Bytes` player name over a `ServerRpc`. TextMeshPro evaluates these tags indiscriminately, leading to UI spoofing or breaking layout for all clients when the lobby state is synced. This is the Unity equivalent of Cross-Site Scripting (XSS).
 **Learning:** `FixedString` types in Unity Collections do not have built-in sanitization and are often blindly passed to UI elements.
 **Prevention:** Always sanitize player-provided strings using a centralized utility (like `StringUtilities.SanitizeForRichText`) that strips `<` and `>` characters *before* updating authoritative network state via ServerRpc.
+
+
+## 2024-08-14 - TextMeshPro Rich Text Injection (XSS equivalent) on HostName & LobbyName
+**Vulnerability:** A malicious client could set their Steam Name to contain rich text tags (like `<size=200>`), causing the UI to break or spoof information for all clients when the lobby list or lobby players list is displayed. TextMeshPro evaluates these tags indiscriminately.
+**Learning:** The previous implementation only sanitized the `PlayerName` sent via ServerRpc in the lobby, but did not sanitize the names rendered in `MainMenuUI` from the Steam Matchmaking lobby fetch, nor did it sanitize `lobbyName` rendered in `LobbyListEntryController`. Furthermore, the `LobbyUI` used the original `.ToString()` representation of the player name without re-sanitization, which could lead to missed injections if the backend data wasn't clean or was modified directly.
+**Prevention:** Apply input sanitization at the UI rendering level for any user-provided string that will be assigned to a TextMeshPro `text` property, even if it comes from an external API like Steamworks. I added a `string` overload to `StringUtilities.SanitizeForRichText` to make this easier.
