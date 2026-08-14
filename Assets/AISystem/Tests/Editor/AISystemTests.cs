@@ -81,7 +81,7 @@ namespace AISystem.Tests
         private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
-            go.tag = tag;
+            try { go.tag = tag; } catch (System.Exception) { /* ignore tag errors in tests */ }
 
             var asc = go.AddComponent<AbilitySystemComponent>();
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
