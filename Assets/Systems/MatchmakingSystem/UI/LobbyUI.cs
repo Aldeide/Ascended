@@ -183,7 +183,7 @@ namespace MatchmakingSystem.UI
                 var statusLabel = entry.Q<Label>("ReadyStatusLabel");
                 
                 if (nameLabel != null)
-                    nameLabel.text = player.PlayerName.ToString();
+                    nameLabel.text = Systems.Core.Utilities.StringUtilities.SanitizeForRichText(player.PlayerName.ToString());
 
                 if (statusLabel != null)
                 {

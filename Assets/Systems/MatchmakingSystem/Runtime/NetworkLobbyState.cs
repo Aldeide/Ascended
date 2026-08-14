@@ -117,7 +117,7 @@ namespace MatchmakingSystem.Runtime
             LobbyPlayers.Add(new LobbyPlayerState
             {
                 ClientId = clientId,
-                PlayerName = new FixedString64Bytes(playerName),
+                PlayerName = StringUtilities.SanitizeForRichText(new FixedString64Bytes(playerName)),
                 IsReady = false
             });
 
