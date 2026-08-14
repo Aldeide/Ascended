@@ -23,7 +23,9 @@ namespace AISystem.Runtime.Sensors
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents
-                if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
+                bool isEnemyTag = false;
+try { isEnemyTag = comp.CompareTag("Enemy"); } catch { }
+                if (!isEnemyTag && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;
 
                 if (comp.IsInitialized)

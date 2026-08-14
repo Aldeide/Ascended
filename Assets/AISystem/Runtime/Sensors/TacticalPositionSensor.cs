@@ -99,7 +99,8 @@ namespace AISystem.Runtime.Sensors
 
         private GameObject FindThreat(Transform agentTransform)
         {
-            var players = GameObject.FindGameObjectsWithTag("Player");
+            GameObject[] players = null;
+            try { players = GameObject.FindGameObjectsWithTag("Player"); } catch { }
             if (players != null && players.Length > 0)
             {
                 GameObject closest = null;

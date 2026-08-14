@@ -113,7 +113,9 @@ namespace AISystem.Runtime.DecisionMakers
             {
                 if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == gameObject) continue;
-                if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
+                bool isEnemyTag = false;
+try { isEnemyTag = comp.CompareTag("Enemy"); } catch { }
+                if (!isEnemyTag && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;
 
                 if (comp.IsInitialized)
