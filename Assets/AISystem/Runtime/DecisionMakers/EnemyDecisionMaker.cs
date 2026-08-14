@@ -107,9 +107,11 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
-            var components = FindObjectsOfType<AbilitySystemComponent>();
+            // Bolt: Use pre-cached active instances to avoid expensive FindObjectsOfType calls in sensor loops
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == gameObject) continue;
                 if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;
