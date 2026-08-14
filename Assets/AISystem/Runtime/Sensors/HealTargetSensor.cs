@@ -14,16 +14,20 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // Bolt: Use pre-cached active instances to avoid expensive FindObjectsOfType calls in sensor loops
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent lowestAlly = null;
             float lowestRatio = 1.0f;
 
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents
-                if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
+                bool isEnemyTag = false;
+try { isEnemyTag = comp.CompareTag("Enemy"); } catch { }
+                if (!isEnemyTag && comp.GetComponent<EnemyDecisionMaker>() == null)
                     continue;
 
                 if (comp.IsInitialized)

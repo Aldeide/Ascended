@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -81,9 +82,10 @@ namespace AISystem.Tests
         private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
-            go.tag = tag;
+            try { go.tag = tag; } catch { }
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -372,7 +374,7 @@ namespace AISystem.Tests
 
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            try { playerGo.tag = "Player"; } catch { }
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -384,6 +386,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -399,11 +402,13 @@ namespace AISystem.Tests
             var (healerGo, healerMock, _, _) = CreateMockAgent("Healer", "Enemy");
 
             var (allyGo1, _, _, allyAsc1) = CreateMockAgent("Ally1", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc1);
             allyGo1.AddComponent<EnemyDecisionMaker>();
             var attributeSet1 = allyAsc1.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet1.Health.SetBaseValue(40f); // 40%
 
             var (allyGo2, _, _, allyAsc2) = CreateMockAgent("Ally2", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc2);
             allyGo2.AddComponent<EnemyDecisionMaker>();
             var attributeSet2 = allyAsc2.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet2.Health.SetBaseValue(20f); // 20%
@@ -506,8 +511,9 @@ namespace AISystem.Tests
             go.transform.position = new Vector3(1000, 1000, 1000);
 
             // Setup a player threat
-            var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("Player", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            try { AbilitySystemComponent.ActiveInstances.Add(playerAsc); } catch { }
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -714,6 +720,7 @@ namespace AISystem.Tests
 
             // Setup an ally with low health
             var (allyGo, _, _, allyAsc) = CreateMockAgent("Ally", "Enemy");
+            AbilitySystemComponent.ActiveInstances.Add(allyAsc);
             var allyDm = allyGo.AddComponent<EnemyDecisionMaker>();
             awakeMethod.Invoke(allyDm, null);
             var allySet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();

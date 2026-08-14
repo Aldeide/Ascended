@@ -14,11 +14,13 @@ namespace AISystem.Runtime.Sensors
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
             // Find closest player GameObject
-            var players = GameObject.FindGameObjectsWithTag("Player");
+            GameObject[] players = null;
+            try { players = GameObject.FindGameObjectsWithTag("Player"); } catch { }
             if (players == null || players.Length == 0)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                // Bolt: Use pre-cached active instances to avoid expensive FindObjectsOfType calls in sensor loops
+                var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
                 foreach (var comp in components)
