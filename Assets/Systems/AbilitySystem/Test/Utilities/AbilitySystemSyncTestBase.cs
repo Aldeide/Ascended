@@ -6,6 +6,7 @@ using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
+using AbilitySystem.Scripts;
 using UnityEngine;
 using NUnit.Framework;
 using UnityEditor.PackageManager;
@@ -21,7 +22,7 @@ namespace AbilitySystem.Test.Utilities
         [SetUp]
         public virtual void Setup()
         {
-            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear();
 
             DataManager = new MockDataManager();
             
@@ -96,7 +97,7 @@ namespace AbilitySystem.Test.Utilities
         [TearDown]
         public virtual void TearDown()
         {
-            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+            AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         public void SyncAbilities()
