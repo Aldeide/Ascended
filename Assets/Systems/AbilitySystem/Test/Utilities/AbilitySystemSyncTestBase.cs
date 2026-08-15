@@ -21,6 +21,8 @@ namespace AbilitySystem.Test.Utilities
         [SetUp]
         public virtual void Setup()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+
             DataManager = new MockDataManager();
             
             ServerSystem = new AbilitySystemManager(DataManager);
@@ -89,6 +91,12 @@ namespace AbilitySystem.Test.Utilities
 
             clientRepl.OnServerAbilityTerminationRequested += (name) => 
                 serverRepl.ProcessServerAbilityTermination(name);
+        }
+
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         public void SyncAbilities()
