@@ -1,6 +1,7 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Test.Utilities;
 using Moq;
+using AbilitySystem.Scripts;
 using NUnit.Framework;
 
 namespace AbilitySystem.Test.Utilities
@@ -25,6 +26,7 @@ namespace AbilitySystem.Test.Utilities
         [SetUp]
         public virtual void SetUp()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             InitializeMocks();
             InitializeAttributes();
         }
@@ -47,6 +49,7 @@ namespace AbilitySystem.Test.Utilities
         [TearDown]
         public virtual void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             if (SourceMock != null && Source.AttributeSetManager != null)
             {
                 Source.AttributeSetManager.Dispose();

@@ -16,6 +16,19 @@ namespace AbilitySystem.Test.Utilities
     /// </summary>
     public class DummyAbilitySystemComponent : MonoBehaviour, IAbilitySystem
     {
+        private void OnEnable()
+        {
+            // Note: We intentionally DO NOT add this to AbilitySystemComponent.ActiveInstances
+            // because DummyAbilitySystemComponent does not inherit from AbilitySystemComponent.
+            // If we attempted to cast 'this' to AbilitySystemComponent or pass it as one,
+            // it would cause a CS0039 compilation error or runtime exception.
+            // Mock environments needing to test code that relies on the registry
+            // must manually instantiate and add true AbilitySystemComponent instances.
+        }
+
+        private void OnDisable()
+        {
+        }
         public IAbilitySystem MockSystem;
 
         public INetworkRole NetworkRole { get => MockSystem?.NetworkRole; set { if (MockSystem != null) MockSystem.NetworkRole = value; } }

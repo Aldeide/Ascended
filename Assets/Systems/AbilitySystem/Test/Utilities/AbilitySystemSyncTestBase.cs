@@ -6,6 +6,7 @@ using AbilitySystem.Runtime.Cues;
 using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Runtime.Tags;
+using AbilitySystem.Scripts;
 using UnityEngine;
 using NUnit.Framework;
 using UnityEditor.PackageManager;
@@ -21,6 +22,8 @@ namespace AbilitySystem.Test.Utilities
         [SetUp]
         public virtual void Setup()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
+
             DataManager = new MockDataManager();
             
             ServerSystem = new AbilitySystemManager(DataManager);
@@ -89,6 +92,12 @@ namespace AbilitySystem.Test.Utilities
 
             clientRepl.OnServerAbilityTerminationRequested += (name) => 
                 serverRepl.ProcessServerAbilityTermination(name);
+        }
+
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         public void SyncAbilities()
