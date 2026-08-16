@@ -9,6 +9,7 @@ using AbilitySystem.Runtime.Tags;
 using UnityEngine;
 using NUnit.Framework;
 using UnityEditor.PackageManager;
+using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Test.Utilities
 {
@@ -32,6 +33,12 @@ namespace AbilitySystem.Test.Utilities
             ClientSystem.ReplicationManager = new MockReplicationManager(ClientSystem) { DataManager = DataManager };
 
             LinkSystems();
+        }
+
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         protected void LinkSystems()

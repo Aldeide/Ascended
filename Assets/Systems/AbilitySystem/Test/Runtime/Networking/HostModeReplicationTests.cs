@@ -14,7 +14,7 @@ namespace AbilitySystem.Test.Runtime.Networking
     public class HostModeReplicationTests
     {
         private GameObject _gameObject;
-        private AbilitySystemComponent _component;
+        private AbilitySystem.Scripts.AbilitySystemComponent _component;
         private Mock<IAbilitySystem> _mockAbilitySystem;
         private Mock<IReplicationManager> _mockReplicationManager;
 
@@ -22,7 +22,8 @@ namespace AbilitySystem.Test.Runtime.Networking
         public void SetUp()
         {
             _gameObject = new GameObject("HostPlayer");
-            _component = _gameObject.AddComponent<AbilitySystemComponent>();
+            _component = _gameObject.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(_component);
             
             _mockAbilitySystem = new Mock<IAbilitySystem>();
             _mockReplicationManager = new Mock<IReplicationManager>();
@@ -37,6 +38,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [TearDown]
         public void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             Object.DestroyImmediate(_gameObject);
         }
 

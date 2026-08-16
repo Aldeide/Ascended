@@ -121,7 +121,7 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = System.Linq.Enumerable.ToList(AbilitySystemComponent.ActiveInstances);
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)
