@@ -9,6 +9,7 @@ using AbilitySystem.Runtime.Tags;
 using UnityEngine;
 using NUnit.Framework;
 using UnityEditor.PackageManager;
+using AbilitySystem.Scripts;
 
 namespace AbilitySystem.Test.Utilities
 {
