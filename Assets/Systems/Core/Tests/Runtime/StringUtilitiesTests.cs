@@ -32,5 +32,31 @@ namespace Systems.Core.Tests
             // Assert
             Assert.That(sanitized.ToString(), Is.EqualTo("Normal Player"));
         }
+
+        [Test]
+        public void SanitizeForRichText_String_StripsHtmlTags()
+        {
+            // Arrange
+            string maliciousInput = "<color=red>Hacked!</color>";
+
+            // Act
+            string sanitized = StringUtilities.SanitizeForRichText(maliciousInput);
+
+            // Assert
+            Assert.That(sanitized, Is.EqualTo("color=redHacked!/color"));
+        }
+
+        [Test]
+        public void SanitizeForRichText_String_NoTags_ReturnsOriginal()
+        {
+            // Arrange
+            string normalInput = "Normal Player";
+
+            // Act
+            string sanitized = StringUtilities.SanitizeForRichText(normalInput);
+
+            // Assert
+            Assert.That(sanitized, Is.EqualTo("Normal Player"));
+        }
     }
 }

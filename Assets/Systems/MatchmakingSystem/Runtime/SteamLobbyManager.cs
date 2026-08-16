@@ -6,6 +6,7 @@ using Steamworks;
 using Steamworks.Data;
 using Unity.Netcode;
 using Netcode.Transports.Facepunch;
+using Systems.Core.Utilities;
 
 namespace MatchmakingSystem.Runtime
 {
@@ -123,7 +124,7 @@ namespace MatchmakingSystem.Runtime
 
             lobby.SetPublic(); // Or Private if you only want invites
             lobby.SetJoinable(true);
-            lobby.SetData("HostName", SteamClient.Name);
+            lobby.SetData("HostName", StringUtilities.SanitizeForRichText(SteamClient.Name));
 
             CurrentLobby = lobby;
             
