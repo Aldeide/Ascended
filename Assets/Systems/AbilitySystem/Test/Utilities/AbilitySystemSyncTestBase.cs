@@ -38,7 +38,7 @@ namespace AbilitySystem.Test.Utilities
         [TearDown]
         public virtual void TearDown()
         {
-            AbilitySystemComponent.ActiveInstances.Clear();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         protected void LinkSystems()
