@@ -18,14 +18,14 @@ namespace AISystem.Runtime.Sensors
             if (players == null || players.Length == 0)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
                 foreach (var comp in components)
                 {
                     if (comp == null || comp.gameObject == null) continue;
                     if (comp.gameObject == agent.Transform.gameObject) continue;
-                    float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
+                    float dist = (agent.Transform.position - comp.transform.position).sqrMagnitude;
                     if (dist < closestDist)
                     {
                         closestDist = dist;

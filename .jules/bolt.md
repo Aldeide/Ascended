@@ -1,6 +1,7 @@
-## 2024-05-24 - Avoid duplicate Mathf.Sqrt in distance and normal calculations
-**Learning:** Both `.magnitude` and `.normalized` trigger `Mathf.Sqrt`. Calling both sequentially is an anti-pattern.
-**Action:** Use `.sqrMagnitude` for early exits. If required, calculate `Mathf.Sqrt` once, cache it, and manually divide the vector by the cached distance to normalize it.
-## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
-**Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
-**Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2024-05-24 - AI Sensor Optimization
+**Learning:** Avoid `Object.FindObjectsOfType` in hot paths like `Sense` inside AI sensors. Maintain a centralized static registry of active instances to optimize lookups. Also use `.sqrMagnitude` instead of `Vector3.Distance` to save redundant `Mathf.Sqrt` calls.
+**Action:** When creating new components that need frequent lookups by AI sensors, implement a static `HashSet` registry that is updated in standard lifecycle methods like `OnEnable` and `OnDisable`.
+
+## 2024-05-24 - AI Sensor Optimization
+**Learning:** Avoid `Object.FindObjectsOfType` in hot paths like `Sense` inside AI sensors. Maintain a centralized static registry of active instances to optimize lookups. Also use `.sqrMagnitude` instead of `Vector3.Distance` to save redundant `Mathf.Sqrt` calls.
+**Action:** When creating new components that need frequent lookups by AI sensors, implement a static `HashSet` registry that is updated in standard lifecycle methods like `OnEnable` and `OnDisable`.

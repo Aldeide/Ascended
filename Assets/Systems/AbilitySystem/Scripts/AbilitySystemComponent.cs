@@ -17,8 +17,20 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
+
+        protected virtual void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
         public Action OnAbilitySystemInitialised;
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
