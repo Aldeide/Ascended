@@ -308,13 +308,6 @@ namespace AISystem.Tests
             asc.AbilitySystem.AbilityManager.Abilities.Add("Fireball", ability);
 
             // Case 1: CanActivate returns Success
-            // Setup action data for agentMock
-            var actionData = new GoapAbilityAction.Data { AbilityName = "Fireball" };
-            var actionMock = new Mock<IAction>();
-            var actionStateMock = new Mock<IActionState>();
-            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
-            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
-            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
 
             var result = sensor.Sense(agentMock.Object, null);
             Assert.IsTrue(ToBool(result));
