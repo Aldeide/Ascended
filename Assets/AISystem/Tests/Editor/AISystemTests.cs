@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -92,6 +93,13 @@ namespace AISystem.Tests
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
+
+            // Manual lifecycle invocation for Edit Mode tests
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (onEnableMethod != null)
+            {
+                onEnableMethod.Invoke(asc, null);
+            }
 
             return (go, agentMock, abilitySystemMock, asc);
         }
@@ -284,6 +292,12 @@ namespace AISystem.Tests
         public void AbilitySensor_SensesAbilityStateCorrectly()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             var sensor = new AbilitySensor { AbilityName = "Fireball", CheckReady = true };
 
             // Setup Ability Definition and Ability Instance
@@ -294,12 +308,20 @@ namespace AISystem.Tests
             asc.AbilitySystem.AbilityManager.Abilities.Add("Fireball", ability);
 
             // Case 1: CanActivate returns Success
-            var result = sensor.Sense((IActionReceiver)agentMock.Object, null);
+            // Setup action data for agentMock
+            var actionData = new GoapAbilityAction.Data { AbilityName = "Fireball" };
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
+
+            var result = sensor.Sense(agentMock.Object, null);
             Assert.IsTrue(ToBool(result));
 
             // Case 2: CanActivate returns BlockedByAbility
             ability.IsActive = true;
-            result = sensor.Sense((IActionReceiver)agentMock.Object, null);
+            result = sensor.Sense(agentMock.Object, null);
             Assert.IsFalse(ToBool(result));
         }
 
@@ -307,6 +329,12 @@ namespace AISystem.Tests
         public void AllyNeedsHealingSensor_DetectsAllyingNeedCorrectly()
         {
             var (healerGo, healerMock, healerAbilityMock, healerAsc) = CreateMockAgent("Healer", "Enemy");
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            healerMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             
             var (allyGo, allyMock, allyAbilityMock, allyAsc) = CreateMockAgent("Ally", "Enemy");
             allyGo.AddComponent<EnemyDecisionMaker>();
@@ -317,12 +345,12 @@ namespace AISystem.Tests
             var attributeSet = allyAsc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             attributeSet.Health.SetBaseValue(30f);
 
-            var result = sensor.Sense((IActionReceiver)healerMock.Object, null);
+            var result = sensor.Sense(healerMock.Object, null);
             Assert.IsTrue(ToBool(result));
 
             // Set ally health to 80/100 (ratio > 0.5)
             attributeSet.Health.SetBaseValue(80f);
-            result = sensor.Sense((IActionReceiver)healerMock.Object, null);
+            result = sensor.Sense(healerMock.Object, null);
             Assert.IsFalse(ToBool(result));
         }
 
@@ -341,31 +369,37 @@ namespace AISystem.Tests
             attributeSet.Health.SetBaseValue(30f);
 
             // LessThan (30 < 50) -> true
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // LessThan (60 < 50) -> false
             attributeSet.Health.SetBaseValue(60f);
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // GreaterThan (60 > 50) -> true
             sensor.Comparison = AttributeComparisonType.GreaterThan;
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // RatioLessThan (60/150 = 0.4 < 0.5) -> true
             sensor.Comparison = AttributeComparisonType.RatioLessThan;
             sensor.MaxAttributeName = "MaxHealth";
             sensor.Threshold = 0.5f;
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // RatioGreaterThan (60/150 = 0.4 > 0.5) -> false
             sensor.Comparison = AttributeComparisonType.RatioGreaterThan;
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
         }
 
         [Test]
         public void EnemyTargetSensor_FindsPlayersOrFallback()
         {
             var (agentGo, agentMock, _, _) = CreateMockAgent("Agent", "Enemy");
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             agentGo.transform.position = new Vector3(1000, 1000, 1000);
 
             var sensor = new EnemyTargetSensor();
@@ -374,8 +408,10 @@ namespace AISystem.Tests
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.Invoke(playerAsc, null);
 
-            var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
+            var target = sensor.Sense(agentMock.Object, null, null);
             Assert.IsNotNull(target);
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
@@ -384,11 +420,12 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.Invoke(otherAsc, null);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
 
-            target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
+            target = sensor.Sense(agentMock.Object, null, null);
             Assert.IsNotNull(target);
             Assert.AreEqual(otherEnemyGo.transform.position, target.Position);
         }
@@ -397,6 +434,12 @@ namespace AISystem.Tests
         public void HealTargetSensor_SensesLowestHealthAllyCorrectly()
         {
             var (healerGo, healerMock, _, _) = CreateMockAgent("Healer", "Enemy");
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            healerMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
 
             var (allyGo1, _, _, allyAsc1) = CreateMockAgent("Ally1", "Enemy");
             allyGo1.AddComponent<EnemyDecisionMaker>();
@@ -409,7 +452,7 @@ namespace AISystem.Tests
             attributeSet2.Health.SetBaseValue(20f); // 20%
 
             var sensor = new HealTargetSensor();
-            var target = sensor.Sense((IActionReceiver)healerMock.Object, null, null);
+            var target = sensor.Sense(healerMock.Object, null, null);
 
             Assert.IsNotNull(target);
             Assert.AreEqual(allyGo2.transform.position, target.Position);
@@ -419,27 +462,39 @@ namespace AISystem.Tests
         public void HealthLowSensor_EvaluatesHealthThresholdCorrectly()
         {
             var (go, agentMock, _, asc) = CreateMockAgent();
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             var sensor = new HealthLowSensor();
 
             var attributeSet = asc.AbilitySystem.AttributeSetManager.GetAttributeSet<TestAttributeSet>();
             
             // 20/150 = 13.3% < 30% -> true
             attributeSet.Health.SetBaseValue(20f);
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // 80/150 = 53.3% > 30% -> false
             attributeSet.Health.SetBaseValue(80f);
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
         }
 
         [Test]
         public void IdleTargetSensor_SensesCorrectly()
         {
             var (go, agentMock, _, _) = CreateMockAgent();
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             go.transform.position = Vector3.zero;
 
             var sensor = new IdleTargetSensor();
-            var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
+            var target = sensor.Sense(agentMock.Object, null, null);
 
             Assert.IsNotNull(target);
             Assert.LessOrEqual(Vector3.Distance(Vector3.zero, target.Position), 4f);
@@ -449,6 +504,11 @@ namespace AISystem.Tests
         public void RangeSensor_SensesRangeCorrectly()
         {
             var (go, agentMock, _, _) = CreateMockAgent();
+            var playerGo = CreateGameObject("PlayerObj");
+            playerGo.tag = "Player";
+            playerGo.transform.position = new Vector3(0, 0, 15);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            typeof(AbilitySystemComponent).GetMethod("OnEnable", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.Invoke(playerAsc, null);
             go.transform.position = Vector3.zero;
 
             var sensor = new RangeSensor { MinRange = 1f, MaxRange = 10f };
@@ -467,25 +527,31 @@ namespace AISystem.Tests
             agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
 
             // Target in range (5f is between 1f and 10f) -> true
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // Target out of range (15f) -> false
             targetMock.SetupGet(t => t.Position).Returns(new Vector3(0, 0, 15));
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
         }
 
         [Test]
         public void RoleSensor_ChecksRolesCorrectly()
         {
             var (go, agentMock, _, _) = CreateMockAgent();
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             var dm = go.AddComponent<EnemyDecisionMaker>();
             dm.Role = EnemyRole.Flanker;
 
             var sensor = new RoleSensor { TargetRole = EnemyRole.Flanker };
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             sensor.TargetRole = EnemyRole.Vanguard;
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
         }
 
         [Test]
@@ -504,13 +570,19 @@ namespace AISystem.Tests
 
             var (go, agentMock, _, _) = CreateMockAgent();
             go.transform.position = new Vector3(1000, 1000, 1000);
+            var actionData = new GoapAbilityAction.Data();
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
 
             // Setup a player threat
-            var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("Player", "Player");
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
-            var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
+            var target = sensor.Sense(agentMock.Object, null, null);
 
             Assert.IsNotNull(target);
             Assert.AreEqual(pt.Position, target.Position);
@@ -521,14 +593,20 @@ namespace AISystem.Tests
         public void TagSensor_ChecksGameplayTagsCorrectly()
         {
             var (go, agentMock, abilitySystemMock, asc) = CreateMockAgent();
+            var actionData = new GoapAbilityAction.Data { Target = new TransformTarget(go.transform) };
+            var actionMock = new Mock<IAction>();
+            var actionStateMock = new Mock<IActionState>();
+            actionStateMock.SetupGet(a => a.Action).Returns(actionMock.Object);
+            actionStateMock.SetupGet(a => a.Data).Returns(actionData);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
             var sensor = new TagSensor { TagName = "Status.Stunned", CheckTarget = false };
 
             // Self does not have tag
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // Grant tag to self
             asc.AbilitySystem.TagManager.AddTag(new Tag("Status.Stunned"));
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
         }
 
         [Test]
@@ -538,7 +616,14 @@ namespace AISystem.Tests
             var sensor = new TargetDeadSensor();
 
             // Case 1: No target/action -> true
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            var actionData1 = new GoapAbilityAction.Data();
+            var actionMock1 = new Mock<IAction>();
+            var actionStateMock1 = new Mock<IActionState>();
+            actionStateMock1.SetupGet(a => a.Action).Returns(actionMock1.Object);
+            actionStateMock1.SetupGet(a => a.Data).Returns(actionData1);
+            agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock1.Object);
+
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // Case 2: Target is alive
             var (targetGo, _, _, targetAsc) = CreateMockAgent("Target", "Player");
@@ -553,11 +638,11 @@ namespace AISystem.Tests
             actionStateMock.SetupGet(a => a.Data).Returns(actionData);
             agentMock.SetupGet(a => a.ActionState).Returns(actionStateMock.Object);
 
-            Assert.IsFalse(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsFalse(ToBool(sensor.Sense(agentMock.Object, null)));
 
             // Case 3: Target is dead
             targetSet.Health.SetBaseValue(0f);
-            Assert.IsTrue(ToBool(sensor.Sense((IActionReceiver)agentMock.Object, null)));
+            Assert.IsTrue(ToBool(sensor.Sense(agentMock.Object, null)));
         }
 
         #endregion
@@ -575,6 +660,18 @@ namespace AISystem.Tests
             SetActionProperties(action, properties);
 
             var data = new GoapAbilityAction.Data();
+
+            // Set up action property using reflection to fix NRE
+            var actionConfigProp = typeof(GoapActionBase<GoapAbilityAction.Data, GoapAbilityAction.PropertiesClass>).GetProperty("Properties", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (actionConfigProp != null)
+            {
+                actionConfigProp.SetValue(action, properties);
+            }
+            else
+            {
+                var actionConfigField = typeof(GoapActionBase<GoapAbilityAction.Data, GoapAbilityAction.PropertiesClass>).GetField("<Properties>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                actionConfigField?.SetValue(action, properties);
+            }
 
             // Ability not present in manager -> returns Stop
             var contextMock = new Mock<IActionContext>();
