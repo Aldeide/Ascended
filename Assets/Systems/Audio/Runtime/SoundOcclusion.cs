@@ -243,18 +243,14 @@ namespace Systems.Audio
                 }
 
                 Vector3 start = sourcePos + offset;
-                Vector3 end = listenerPos + offset;
-                Vector3 sampleToListener = end - start;
-
-                float sampleSqrDistance = sampleToListener.sqrMagnitude;
-                float sampleDistance = sampleSqrDistance > 0.00001f ? Mathf.Sqrt(sampleSqrDistance) : 0f;
-                Vector3 sampleDir = sampleDistance > 0f ? sampleToListener / sampleDistance : Vector3.forward;
+                // (listenerPos + offset) - (sourcePos + offset) == listenerPos - sourcePos == toListener
+                // Therefore, sampleDistance == distance and sampleDir == direction
 
                 // Queue forward ray (Request ID: i)
                 AudioRaycastManager.Instance.QueueRaycast(
                     start,
-                    sampleDir,
-                    sampleDistance,
+                    direction,
+                    distance,
                     this,
                     i, // ID is the sample index (0 to 4)
                     OcclusionLayerMask
@@ -353,18 +349,14 @@ namespace Systems.Audio
             }
 
             Vector3 start = _cachedListener.transform.position + offset;
-            Vector3 end = transform.position + offset;
-            Vector3 sampleToSource = end - start;
-
-            float sampleSqrDistance = sampleToSource.sqrMagnitude;
-            float sampleDistance = sampleSqrDistance > 0.00001f ? Mathf.Sqrt(sampleSqrDistance) : 0f;
-            Vector3 sampleDir = sampleDistance > 0f ? sampleToSource / sampleDistance : Vector3.forward;
+            // (transform.position + offset) - (_cachedListener.transform.position + offset) == transform.position - _cachedListener.transform.position == -toListenerVec
+            // Therefore, sampleDistance == toListenerDistance and sampleDir == -direction
 
             _samples[index].BackwardPending = true;
             AudioRaycastManager.Instance.QueueRaycast(
                 start,
-                sampleDir,
-                sampleDistance,
+                -direction,
+                toListenerDistance,
                 this,
                 10 + index, // ID encodes backward ray for this sample index
                 OcclusionLayerMask
