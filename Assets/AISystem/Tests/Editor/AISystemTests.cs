@@ -55,6 +55,8 @@ namespace AISystem.Tests
             }
             _gameObjectsToCleanup.Clear();
 
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+
             // Reset singletons
             var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
             if (pointManager != null)
@@ -84,6 +86,10 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+
+            // In Edit Mode, Awake/OnEnable are not called automatically. We need to manually add to our static registry
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
+
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
