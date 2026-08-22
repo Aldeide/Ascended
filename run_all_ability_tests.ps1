@@ -7,7 +7,7 @@ if (Test-Path $logFile) { Remove-Item $logFile }
 if (Test-Path $testResults) { Remove-Item $testResults }
 
 Write-Host "Starting Unity to run ALL Ability System tests..."
-Start-Process -FilePath $unityPath -ArgumentList "-runTests", "-batchmode", "-projectPath", "$projectPath", "-logFile", "$logFile", "-testResults", "$testResults", "-testPlatform", "EditMode" -Wait
+Start-Process -FilePath $unityPath -ArgumentList "-runTests", "-batchmode", "-projectPath", "$projectPath", "-logFile", "$logFile", "-testResults", "$testResults", "-testPlatform", "EditMode", "-testFilter", "AbilitySystem" -Wait
 
 if (Test-Path $testResults) {
     Write-Host "Tests completed. Results saved to $testResults"
