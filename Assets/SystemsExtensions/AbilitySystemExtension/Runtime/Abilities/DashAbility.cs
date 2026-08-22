@@ -73,21 +73,28 @@ namespace AbilitySystemExtension.Runtime.Abilities
             Vector3 moveDelta = targetPosHorizontal - currentPos;
             moveDelta.y = 0; // Keep it horizontal for the wall check
             
-            float moveDist = moveDelta.magnitude;
+            // PERFORMANCE OPTIMIZATION:
+            // Use sqrMagnitude to avoid an expensive Mathf.Sqrt() call for the early exit check.
+            // When threshold is met, calculate Sqrt ONCE and cache it to compute normalization.
+            // This avoids multiple implicit square roots from calling `.magnitude` and `.normalized`.
+            float sqrMoveDist = moveDelta.sqrMagnitude;
             Vector3 nextPos = currentPos;
 
-            if (moveDist > 0.001f)
+            if (sqrMoveDist > 0.000001f)
             {
+                float moveDist = Mathf.Sqrt(sqrMoveDist);
+                Vector3 moveDirection = moveDelta / moveDist;
+
                 // Wall check at waist height (0.6m up) with a SphereCast.
                 // This allows us to "see over" stairs and small obstacles (usually < 0.3m)
                 // but still hit walls and large obstacles.
                 Vector3 castOrigin = currentPos + Vector3.up * 0.6f;
                 int environmentLayer = EnvironmentLayerMask;
                 
-                if (Physics.SphereCast(castOrigin, 0.3f, moveDelta.normalized, out var hit, moveDist, environmentLayer))
+                if (Physics.SphereCast(castOrigin, 0.3f, moveDirection, out var hit, moveDist, environmentLayer))
                 {
                     // We hit a wall! Stop at the hit point.
-                    nextPos = currentPos + moveDelta.normalized * Mathf.Max(0, hit.distance - 0.05f);
+                    nextPos = currentPos + moveDirection * Mathf.Max(0, hit.distance - 0.05f);
                     // Stop the dash progress if we hit a solid wall
                     _endPosition = nextPos;
                 }
