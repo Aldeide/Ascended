@@ -78,3 +78,7 @@ unity_*.txt
 TestResults*.xml
 UnityEditorTestRun.log
 unity_*.log
+
+# Additional test logs and results
+UnityLog_*.txt
+Results_*.xml
