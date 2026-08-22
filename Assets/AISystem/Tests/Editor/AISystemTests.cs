@@ -40,6 +40,8 @@ namespace AISystem.Tests
         public void SetUp()
         {
             _gameObjectsToCleanup = new List<GameObject>();
+            // Ignore missing tags from CreateGameObject in tests
+            UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error, new System.Text.RegularExpressions.Regex(".*Tag:.*is not defined.*"));
             UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
         }
 
@@ -390,6 +392,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -781,6 +784,16 @@ namespace AISystem.Tests
 
         private void SetActionProperties<TProps>(object action, TProps properties) where TProps : class, IActionProperties
         {
+            // First try injecting via IActionConfig
+            var configInterface = action.GetType().GetInterface("IActionConfig");
+            var configProp = action.GetType().GetProperty("Config", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (configProp != null && configProp.CanWrite)
+            {
+                var configMock = new Mock<IActionConfig>();
+                configMock.SetupGet(c => c.Properties).Returns(properties);
+                configProp.SetValue(action, configMock.Object);
+                return;
+            }
             var setConfigMethod = action.GetType().GetMethod("SetConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (setConfigMethod != null)
             {
@@ -789,6 +802,33 @@ namespace AISystem.Tests
                 setConfigMethod.Invoke(action, new object[] { configMock.Object });
                 return;
             }
+
+            // Goap v3 uses a Config property backed by IGoapConfig/IActionConfig, let's just force the backing field of Properties
+            var type_prop = action.GetType();
+            while (type_prop != null)
+            {
+                var field = type_prop.GetField("_properties", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (field == null) field = type_prop.GetField("properties", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (field == null) field = type_prop.GetField("<Properties>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+                if (field != null)
+                {
+                    field.SetValue(action, properties);
+                    return;
+                }
+                type_prop = type_prop.BaseType;
+            }
+
+            // fallback: check if we have a config object and set properties there
+            var c_field = action.GetType().GetField("Config", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (c_field != null)
+            {
+                 var configMock = new Mock<IActionConfig>();
+                 configMock.SetupGet(c => c.Properties).Returns(properties);
+                 c_field.SetValue(action, configMock.Object);
+                 return;
+            }
+
 
             var type = action.GetType();
             while (type != null)
