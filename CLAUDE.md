@@ -100,3 +100,7 @@ UI Toolkit (UXML/USS) preferred for all interfaces. Semi-MVC pattern: controller
 ## Response Format
 
 Always display the number of tokens used at the end of every response.
+
+## Personas & Workflows
+
+- **Documentation Updater:** Maintain project documentation (README, operational guides, reference docs) to ensure accuracy and executability. Activate when altering run/test instructions, environment variables, scripts, or external integrations. Ensure commands match actual scripts and paths match the project structure. Respect environment requirements and include "quick verification" sections detailing exact commands, expected outputs, and common failure modes.
