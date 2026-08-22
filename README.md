@@ -10,9 +10,14 @@ We use automated tests to verify code stability before integration. You can run 
 
 1.  **Environment Variable:** Ensure the `UNITY_PATH` environment variable is set to the absolute path of your Unity executable.
     *   **Default Fallback:** If not set, the script will default to `"C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe"`.
+    *   **Default Fallback (Linux/macOS):** If not set, the script will default to `"/Applications/Unity/Hub/Editor/6000.4.5f1/Unity.app/Contents/MacOS/Unity"`.
     *   **To set it (PowerShell example):**
         ```powershell
         $env:UNITY_PATH = "C:\Path\To\Your\Unity\Editor\Unity.exe"
+        ```
+    *   **To set it (Bash example):**
+        ```bash
+        export UNITY_PATH="/Path/To/Your/Unity/Editor/Unity"
         ```
 
 ### Running Tests
@@ -21,24 +26,35 @@ We use automated tests to verify code stability before integration. You can run 
     ```powershell
     .\run_tests.ps1
     ```
+    ```bash
+    ./run_tests.sh
+    ```
 
 
 *   **Run all ability system tests:**
     ```powershell
     .\run_all_ability_tests.ps1
     ```
+    ```bash
+    ./run_all_ability_tests.sh
+    ```
 *   **Run specific tests (Filter):**
     You can run specific test categories or methods by using the `-TestFilter` parameter.
     ```powershell
     .\run_tests.ps1 -TestFilter "ChargesAbilityTests"
     ```
+    ```bash
+    ./run_tests.sh -TestFilter "ChargesAbilityTests"
+    ```
 
 ### Quick Verification
 *   **Command:** `.\run_tests.ps1`
+*   **Command (Bash):** `./run_tests.sh`
 *   **Expected Output:** `Unity finished with exit code 0`
 *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
 
 *   **Ability Tests Verification:**
     *   **Command:** `.\run_all_ability_tests.ps1`
+    *   **Command (Bash):** `./run_all_ability_tests.sh`
     *   **Expected Output:** `Total: X, Passed: X, Failed: 0, Inconclusive: 0, Skipped: 0`
     *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
