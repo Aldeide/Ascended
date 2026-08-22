@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -89,6 +90,11 @@ namespace AISystem.Tests
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
+
+            // Force OnEnable to add to static registry for EditMode tests
+            var onEnableMethod = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (onEnableMethod != null)
+                onEnableMethod.Invoke(asc, null);
 
             var agentMock = new Mock<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
