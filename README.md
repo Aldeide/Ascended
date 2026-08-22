@@ -33,9 +33,15 @@ We use automated tests to verify code stability before integration. You can run 
     .\run_tests.ps1 -TestFilter "ChargesAbilityTests"
     ```
 
+*   **Run all Ability System tests:**
+    We provide a specific script to run all Ability System tests and output parsed results to the console.
+    ```powershell
+    .\run_all_ability_tests.ps1
+    ```
+
 ### Quick Verification
-*   **Command:** `.\run_tests.ps1`
-*   **Expected Output:** `Unity finished with exit code 0`
+*   **Command:** `.\run_tests.ps1` or `.\run_all_ability_tests.ps1`
+*   **Expected Output:** `Unity finished with exit code 0` (for `run_tests.ps1`) or `Tests completed. Results saved to ...` with a summary of passed/failed tests (for `run_all_ability_tests.ps1`).
 *   **Common Failure:** If the script fails to start Unity, ensure your `UNITY_PATH` environment variable is correct and points to an existing Unity `6000.4.5f1` installation.
 
 *   **Ability Tests Verification:**
