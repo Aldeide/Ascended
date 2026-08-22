@@ -374,12 +374,17 @@ namespace AISystem.Tests
             var playerGo = CreateGameObject("PlayerObj");
             playerGo.tag = "Player";
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
+            var playerAsc = playerGo.AddComponent<AbilitySystemComponent>();
+            var prop1 = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (prop1 != null) prop1.Invoke(playerAsc, null);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
             Assert.AreEqual(playerGo.transform.position, target.Position);
 
             // Case 2: Fallback (No player tagged object, search closest ASC)
+            var prop2 = typeof(AbilitySystemComponent).GetMethod("OnDisable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (prop2 != null) prop2.Invoke(playerAsc, null);
             UnityEngine.Object.DestroyImmediate(playerGo);
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
@@ -387,10 +392,15 @@ namespace AISystem.Tests
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
+            var prop3 = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (prop3 != null) prop3.Invoke(otherAsc, null);
 
             target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
             Assert.IsNotNull(target);
             Assert.AreEqual(otherEnemyGo.transform.position, target.Position);
+
+            var propDisable = typeof(AbilitySystemComponent).GetMethod("OnDisable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (propDisable != null) propDisable.Invoke(otherAsc, null);
         }
 
         [Test]
@@ -506,7 +516,9 @@ namespace AISystem.Tests
             go.transform.position = new Vector3(1000, 1000, 1000);
 
             // Setup a player threat
-            var (playerGo, _, _, _) = CreateMockAgent("Player", "Player");
+            var (playerGo, _, _, playerAsc) = CreateMockAgent("Player", "Player");
+            var propOnEnable = typeof(AbilitySystemComponent).GetMethod("OnEnable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (propOnEnable != null) propOnEnable.Invoke(playerAsc, null);
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var sensor = new TacticalPositionSensor { PreferFlanking = false };
@@ -515,6 +527,9 @@ namespace AISystem.Tests
             Assert.IsNotNull(target);
             Assert.AreEqual(pt.Position, target.Position);
             Assert.IsTrue(pt.IsOccupied);
+
+            var propOnDisable = typeof(AbilitySystemComponent).GetMethod("OnDisable", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (propOnDisable != null) propOnDisable.Invoke(playerAsc, null);
         }
 
         [Test]

@@ -1,3 +1,4 @@
+using AbilitySystem.Scripts;
 using CrashKonijn.Agent.Core;
 using CrashKonijn.Goap.Core;
 using CrashKonijn.Goap.Runtime;
@@ -27,25 +28,24 @@ namespace AISystem.Runtime.Sensors
             if (target == null)
             {
                 // Fallback: look for the closest player
-                var players = GameObject.FindGameObjectsWithTag("Player");
-                if (players != null && players.Length > 0)
+                GameObject closest = null;
+                float minDist = float.MaxValue;
+                foreach (var comp in AbilitySystemComponent.ActiveInstances)
                 {
-                    GameObject closest = null;
-                    float minDist = float.MaxValue;
-                    foreach (var p in players)
+                    if (comp != null && comp.gameObject != null && comp.gameObject.CompareTag("Player"))
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
+                        float d = Vector3.Distance(agent.Transform.position, comp.transform.position);
                         if (d < minDist)
                         {
                             minDist = d;
-                            closest = p;
+                            closest = comp.gameObject;
                         }
                     }
-                    if (closest != null)
-                    {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
-                    }
+                }
+
+                if (closest != null)
+                {
+                    return minDist >= MinRange && minDist <= MaxRange;
                 }
                 return false;
             }
