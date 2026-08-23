@@ -14,12 +14,13 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent lowestAlly = null;
             float lowestRatio = 1.0f;
 
             foreach (var comp in components)
             {
+                if (comp == null || comp.gameObject == null) continue; // Null check for active instances
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents
