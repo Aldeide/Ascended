@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Steamworks.Data;
 using MatchmakingSystem.Runtime;
+using Systems.Core.Utilities;
 
 namespace MatchmakingSystem.UI
 {
@@ -83,7 +84,10 @@ namespace MatchmakingSystem.UI
                 var label = entry.Q<Label>("LobbyNameLabel");
                 
                 if (label != null)
-                    label.text = $"{lobby.GetData("HostName")}'s Lobby ({lobby.MemberCount}/{lobby.MaxMembers})";
+                {
+                    string hostName = StringUtilities.SanitizeForRichText(lobby.GetData("HostName"));
+                    label.text = $"{hostName}'s Lobby ({lobby.MemberCount}/{lobby.MaxMembers})";
+                }
 
                 if (btn != null)
                     btn.clicked += () => SteamLobbyManager.Instance.JoinLobby(lobby);

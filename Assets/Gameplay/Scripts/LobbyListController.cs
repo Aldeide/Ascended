@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Steamworks.Data;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Systems.Core.Utilities;
 
 namespace Gameplay.Scripts
 {
@@ -40,7 +41,7 @@ namespace Gameplay.Scripts
                     Debug.Log("Data key: " + data.Key + " value: " + data.Value);
                 }
                 
-                _lobbyList.Add(lobby.GetData("LobbyName")); 
+                _lobbyList.Add(StringUtilities.SanitizeForRichText(lobby.GetData("LobbyName")));
             }
             FillList();
         }
