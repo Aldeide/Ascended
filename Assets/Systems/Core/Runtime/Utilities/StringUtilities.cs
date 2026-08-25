@@ -18,5 +18,19 @@ namespace Systems.Core.Utilities
             }
             return input;
         }
+
+        /// <summary>
+        /// Sanitizes a string to prevent TextMeshPro rich text injection (XSS equivalent).
+        /// Strips '<' and '>' characters.
+        /// </summary>
+        public static string SanitizeForRichText(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            if (input.Contains("<") || input.Contains(">"))
+            {
+                return input.Replace("<", "").Replace(">", "");
+            }
+            return input;
+        }
     }
 }
