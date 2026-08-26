@@ -18,6 +18,7 @@ namespace AbilitySystem.Test.Runtime.Calculations
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             
             _execution = ScriptableObject.CreateInstance<WeaponDamageExecution>();

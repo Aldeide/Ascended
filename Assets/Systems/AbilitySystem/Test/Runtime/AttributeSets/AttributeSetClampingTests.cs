@@ -99,6 +99,7 @@ namespace AbilitySystem.Test.Runtime.AttributeSets
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             _gapsAttributeSet = new GapsTestAttributeSet(Source);
             Source.AttributeSetManager.AddAttributeSet(typeof(GapsTestAttributeSet), _gapsAttributeSet);

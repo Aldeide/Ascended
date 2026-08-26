@@ -18,6 +18,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             // We need explicit client/server roles for these tests
             SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             TargetMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();

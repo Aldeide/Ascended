@@ -15,6 +15,7 @@ namespace AbilitySystem.Test.Runtime.Events
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             _eventReceived = false;
         }

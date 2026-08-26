@@ -17,6 +17,7 @@ namespace AbilitySystem.Test.Runtime.Abilities
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             TargetMock.Setup(x => x.IsServer()).Returns(true);
             

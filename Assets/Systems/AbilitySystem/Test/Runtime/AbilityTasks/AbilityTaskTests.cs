@@ -20,6 +20,7 @@ namespace AbilitySystem.Test.Runtime.AbilityTasks
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             
             _abilityDefinition = ScriptableObject.CreateInstance<LocalTestAbilityDefinition>();
