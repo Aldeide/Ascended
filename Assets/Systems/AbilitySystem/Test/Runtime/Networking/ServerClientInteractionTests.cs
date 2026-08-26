@@ -14,6 +14,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             // Specifically setup Source as Client and Target as Server for interaction tests
             SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             TargetMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();

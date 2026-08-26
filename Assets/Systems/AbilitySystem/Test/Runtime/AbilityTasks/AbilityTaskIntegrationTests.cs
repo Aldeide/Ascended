@@ -21,6 +21,7 @@ namespace AbilitySystem.Test.Runtime.AbilityTasks
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             // Setup source as client and target as server
             SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             TargetMock = AbilitySystemUtilities.CreateMockServerAbilitySystem();

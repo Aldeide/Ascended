@@ -20,6 +20,7 @@ namespace AbilitySystem.Test.Runtime.Cues
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             // Setup client system
             SourceMock = AbilitySystemUtilities.CreateMockClientAbilitySystem();
             _dataManager = ScriptableObject.CreateInstance<LocalMockDataManager>();

@@ -70,6 +70,7 @@ namespace AbilitySystem.Test.Runtime.Abilities.Targeting
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             SourceMock.Setup(s => s.IsLocalClient()).Returns(true);
             

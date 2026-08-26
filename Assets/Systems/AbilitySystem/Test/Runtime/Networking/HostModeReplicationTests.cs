@@ -21,6 +21,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [SetUp]
         public void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             _gameObject = new GameObject("HostPlayer");
             _component = _gameObject.AddComponent<AbilitySystemComponent>();
             

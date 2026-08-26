@@ -27,6 +27,7 @@ namespace AbilitySystem.Test.Utilities
         {
             InitializeMocks();
             InitializeAttributes();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         protected virtual void InitializeMocks()
@@ -57,6 +58,7 @@ namespace AbilitySystem.Test.Utilities
             }
             SourceMock = null;
             TargetMock = null;
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
     }
 }

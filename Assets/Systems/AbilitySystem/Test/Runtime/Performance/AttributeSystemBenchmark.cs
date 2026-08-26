@@ -22,6 +22,7 @@ namespace AbilitySystem.Test.Runtime.Performance
         [SetUp]
         public void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             _systems = new List<AbilitySystemManager>();
             _activeEffects = new List<Effect>();
 

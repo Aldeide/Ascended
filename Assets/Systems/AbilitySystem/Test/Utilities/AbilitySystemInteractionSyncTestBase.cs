@@ -23,6 +23,7 @@ namespace AbilitySystem.Test.Utilities
         public virtual void Setup()
         {
             DataManager = new InteractionMockDataManager();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             NetworkRegistry.Clear();
 
             // Setup Source
@@ -35,6 +36,12 @@ namespace AbilitySystem.Test.Utilities
 
             LinkPair(SourceServer, SourceClient);
             LinkPair(TargetServer, TargetClient);
+        }
+
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         public void TickAll()

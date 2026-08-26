@@ -16,6 +16,7 @@ namespace AbilitySystem.Test.Runtime.Modifiers
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             
             var effectDef = ScriptableObject.CreateInstance<EffectDefinition>();

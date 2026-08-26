@@ -16,6 +16,7 @@ namespace AbilitySystem.Test.Runtime.Effects
         [SetUp]
         public override void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             base.SetUp();
             _manager = new EffectManager(Source);
         }
