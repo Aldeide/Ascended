@@ -57,7 +57,7 @@ namespace AbilitySystem.Test.Utilities
             }
             SourceMock = null;
             TargetMock = null;
-            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
+            if (AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances != null) AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
     }
 }
