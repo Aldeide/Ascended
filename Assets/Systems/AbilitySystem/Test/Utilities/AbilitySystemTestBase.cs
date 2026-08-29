@@ -25,6 +25,7 @@ namespace AbilitySystem.Test.Utilities
         [SetUp]
         public virtual void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             InitializeMocks();
             InitializeAttributes();
         }
@@ -33,6 +34,12 @@ namespace AbilitySystem.Test.Utilities
         {
             if (SourceMock == null) SourceMock = AbilitySystemUtilities.CreateMockAbilitySystem(AddDefaultAttributes);
             if (TargetMock == null) TargetMock = AbilitySystemUtilities.CreateMockAbilitySystem(AddDefaultAttributes);
+        }
+
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         protected virtual void InitializeAttributes()
