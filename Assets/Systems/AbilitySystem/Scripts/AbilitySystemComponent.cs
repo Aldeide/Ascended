@@ -15,8 +15,11 @@ using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Scripts
 {
+    using System.Collections.Generic;
+
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        public static HashSet<AbilitySystemComponent> ActiveInstances { get; private set; } = new HashSet<AbilitySystemComponent>();
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
@@ -158,6 +161,16 @@ namespace AbilitySystem.Scripts
                 effectSyncData[k] = data;
             }
             SyncEffectsClientRpc(effectSyncData, clientRpcParams);
+        }
+
+        protected virtual void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            ActiveInstances.Remove(this);
         }
 
         public void Initialise()
