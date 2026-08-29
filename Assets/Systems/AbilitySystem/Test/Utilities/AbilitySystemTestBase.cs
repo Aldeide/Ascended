@@ -36,11 +36,7 @@ namespace AbilitySystem.Test.Utilities
             if (TargetMock == null) TargetMock = AbilitySystemUtilities.CreateMockAbilitySystem(AddDefaultAttributes);
         }
 
-        [TearDown]
-        public virtual void TearDown()
-        {
-            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
-        }
+
 
         protected virtual void InitializeAttributes()
         {
@@ -54,6 +50,7 @@ namespace AbilitySystem.Test.Utilities
         [TearDown]
         public virtual void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (SourceMock != null && Source.AttributeSetManager != null)
             {
                 Source.AttributeSetManager.Dispose();
