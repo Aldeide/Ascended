@@ -21,6 +21,7 @@ namespace AbilitySystem.Test.Utilities
         [SetUp]
         public virtual void Setup()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             DataManager = new MockDataManager();
             
             ServerSystem = new AbilitySystemManager(DataManager);
@@ -32,6 +33,12 @@ namespace AbilitySystem.Test.Utilities
             ClientSystem.ReplicationManager = new MockReplicationManager(ClientSystem) { DataManager = DataManager };
 
             LinkSystems();
+        }
+
+        [TearDown]
+        public virtual void TearDown()
+        {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         protected void LinkSystems()

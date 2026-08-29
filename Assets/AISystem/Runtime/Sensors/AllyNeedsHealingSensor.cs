@@ -15,10 +15,11 @@ namespace AISystem.Runtime.Sensors
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // BOLT: Replaced FindObjectsOfType with centralized static registry for better performance
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
-                if (comp.gameObject == agent.Transform.gameObject) continue;
+                if (comp == null || comp.gameObject == null || comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents
                 if (!comp.CompareTag("Enemy") && comp.GetComponent<EnemyDecisionMaker>() == null)
