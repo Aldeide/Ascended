@@ -36,8 +36,6 @@ namespace AbilitySystem.Test.Utilities
             if (TargetMock == null) TargetMock = AbilitySystemUtilities.CreateMockAbilitySystem(AddDefaultAttributes);
         }
 
-
-
         protected virtual void InitializeAttributes()
         {
             if (AddDefaultAttributes)
