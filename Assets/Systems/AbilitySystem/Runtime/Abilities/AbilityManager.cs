@@ -21,7 +21,7 @@ namespace AbilitySystem.Runtime.Abilities
         {
             _owner = owner;
             Abilities = new Dictionary<string, Ability>();
-            Debug.Log($"[AbilityManager] Created for System {owner.GetHashCode()}");
+
         }
 
         public Ability GrantAbility(AbilityDefinition abilityDefinition, int level = 1)
