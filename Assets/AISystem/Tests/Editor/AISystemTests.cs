@@ -85,6 +85,8 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            // Since it's EditMode and the component won't auto OnEnable, add it manually
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
