@@ -107,7 +107,8 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
-            var components = FindObjectsOfType<AbilitySystemComponent>();
+            // ⚡ Bolt: Iterating the static registry avoids GC allocation and CPU overhead of FindObjectsOfType.
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
                 if (comp.gameObject == gameObject) continue;

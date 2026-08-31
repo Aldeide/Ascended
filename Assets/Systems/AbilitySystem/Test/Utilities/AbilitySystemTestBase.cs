@@ -1,5 +1,6 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Test.Utilities;
+using AbilitySystem.Scripts;
 using Moq;
 using NUnit.Framework;
 
@@ -57,6 +58,7 @@ namespace AbilitySystem.Test.Utilities
             }
             SourceMock = null;
             TargetMock = null;
+            AbilitySystemComponent.ActiveInstances.Clear();
         }
     }
 }

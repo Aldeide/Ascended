@@ -32,12 +32,14 @@ namespace AbilitySystem.Test.Runtime.Networking
             _mockAbilitySystem.Setup(x => x.ReplicationManager).Returns(_mockReplicationManager.Object);
             
             _component.AbilitySystem = _mockAbilitySystem.Object;
+            AbilitySystemComponent.ActiveInstances.Add(_component);
         }
 
         [TearDown]
         public void TearDown()
         {
             Object.DestroyImmediate(_gameObject);
+            AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         [Test]
