@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
@@ -17,6 +18,17 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        public static readonly HashSet<AbilitySystemComponent> ActiveInstances = new();
+
+        protected virtual void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
