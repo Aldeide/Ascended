@@ -260,6 +260,8 @@ namespace AISystem.Tests
                 agentGo.AddComponent<AgentBehaviour>();
                 agentGo.AddComponent<GoapActionProvider>();
                 var decisionMaker = agentGo.AddComponent<EnemyDecisionMaker>();
+                var asc = agentGo.GetComponent<AbilitySystemComponent>();
+                if (asc == null) asc = agentGo.AddComponent<AbilitySystemComponent>();
                 AbilitySystemComponent.ActiveInstances.Add(asc);
                 agents.Add(decisionMaker);
                 coordinator.RegisterAgent(decisionMaker);
@@ -485,7 +487,7 @@ namespace AISystem.Tests
         [Test]
         public void RoleSensor_ChecksRolesCorrectly()
         {
-            var (go, agentMock, _, _) = CreateMockAgent();
+            var (go, agentMock, _, asc) = CreateMockAgent();
             var dm = go.AddComponent<EnemyDecisionMaker>();
             AbilitySystemComponent.ActiveInstances.Add(asc);
             dm.Role = EnemyRole.Flanker;
@@ -597,7 +599,7 @@ namespace AISystem.Tests
             asc.AbilitySystem.AbilityManager.Abilities.Add("Fireball", ability);
 
             // Ability can activate -> executes and returns Completed (since TestAbility starts inactive)
-            bool triggered = false;
+            // bool triggered = false;
             
             // Mock TryActivateAbility
             // Wait, does AbilitySystemComponent have TryActivateAbility?
@@ -696,7 +698,6 @@ namespace AISystem.Tests
             var provider = go.AddComponent<GoapActionProvider>();
             
             var dm = go.AddComponent<EnemyDecisionMaker>();
-            AbilitySystemComponent.ActiveInstances.Add(asc);
             dm.Role = EnemyRole.Vanguard;
 
             var awakeMethod = typeof(EnemyDecisionMaker).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic);
