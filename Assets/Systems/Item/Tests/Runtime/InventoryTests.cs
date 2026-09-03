@@ -10,13 +10,13 @@ using System.Collections.Generic;
 namespace Systems.Item.Tests
 {
     /// <summary>
-    /// Tests for the Inventory system, including item addition/removal, quantity checks, 
+    /// Tests for the Inventory system, including item addition/removal, quantity checks,
     /// and server-client replication triggers.
     /// </summary>
     public class InventoryTests : AbilitySystemTestBase
     {
         /// <summary>
-        /// Validates that adding an item on the server correctly updates the inventory list 
+        /// Validates that adding an item on the server correctly updates the inventory list
         /// and triggers a client notification.
         /// </summary>
         [Test]
@@ -25,9 +25,9 @@ namespace Systems.Item.Tests
             var mockReplicationManager = new Mock<IItemReplicationManager>();
             mockReplicationManager.Setup(m => m.IsServer()).Returns(true);
             var inventory = new InventoryManager(Source, mockReplicationManager.Object);
-            
+
             inventory.AddItem(TestItems.BasicItem());
-            
+
             Assert.AreEqual(1, inventory.Items.Count);
             Assert.AreEqual("BasicItem", inventory.Items[0].Name);
             mockReplicationManager.Verify(x => x.NotifyClientItemAdded("BasicItem", 1), Times.Once);
@@ -43,10 +43,10 @@ namespace Systems.Item.Tests
             mockRepl.Setup(m => m.IsServer()).Returns(true);
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
-            
+
             inventory.AddItem(item);
             Assert.AreEqual(1, inventory.Items.Count);
-            
+
             inventory.RemoveItem(item);
             Assert.AreEqual(0, inventory.Items.Count);
         }
@@ -77,10 +77,10 @@ namespace Systems.Item.Tests
             var mockRepl = new Mock<IItemReplicationManager>();
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
-            
+
             inventory.AddItem(item);
             inventory.AddItem(item);
-            
+
             Assert.IsTrue(inventory.HasItemQuantity(item, 2));
             Assert.IsFalse(inventory.HasItemQuantity(item, 3));
         }
@@ -94,16 +94,16 @@ namespace Systems.Item.Tests
             var mockRepl = new Mock<IItemReplicationManager>();
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
-            
+
             inventory.AddItem(item);
-            
+
             var requirements = new Dictionary<global::Item.Runtime.Definition.ItemDefinition, int>
             {
                 { item.Definition, 1 }
             };
-            
+
             Assert.IsTrue(inventory.HasItems(requirements));
-            
+
             requirements[item.Definition] = 2;
             Assert.IsFalse(inventory.HasItems(requirements));
         }
@@ -117,17 +117,17 @@ namespace Systems.Item.Tests
             var mockRepl = new Mock<IItemReplicationManager>();
             var inventory = new InventoryManager(Source, mockRepl.Object);
             var item = TestItems.BasicItem();
-            
+
             inventory.AddItem(item);
             inventory.AddItem(item);
-            
+
             var toConsume = new Dictionary<global::Item.Runtime.Definition.ItemDefinition, int>
             {
                 { item.Definition, 1 }
             };
-            
+
             inventory.ConsumeItems(toConsume);
-            
+
             Assert.AreEqual(1, inventory.Items.Count);
         }
 
@@ -139,19 +139,20 @@ namespace Systems.Item.Tests
         {
             var go = new UnityEngine.GameObject();
             var asc = go.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
-            
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
+
             var abilitySystemField = typeof(AbilitySystem.Scripts.AbilitySystemComponent).GetProperty("AbilitySystem", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
             abilitySystemField.SetValue(asc, Source);
-            
+
             var inventoryComponent = go.AddComponent<global::Item.Scripts.InventoryComponent>();
-            
+
             var mockReplicationManager = new Mock<IItemReplicationManager>();
             mockReplicationManager.Setup(m => m.IsServer()).Returns(true);
             inventoryComponent.ReplicationManager = mockReplicationManager.Object;
-            
+
             var itemDef = UnityEngine.ScriptableObject.CreateInstance<global::Item.Runtime.Definition.EquipmentDefinition>();
             itemDef.Name = "BasicItem";
-            
+
             var startingItemsDef = UnityEngine.ScriptableObject.CreateInstance<global::Item.Runtime.Definition.StartingItemsDefinition>();
             startingItemsDef.StartingItems = new List<global::Item.Runtime.Definition.StartingItemsDefinition.StartingItemEntry>
             {
@@ -168,17 +169,18 @@ namespace Systems.Item.Tests
             var itemsField = typeof(global::Item.Runtime.Database.ItemLibrary).GetField("_items", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var itemsDict = new Dictionary<string, global::Item.Runtime.Definition.ItemDefinition> { { "BasicItem", itemDef } };
             itemsField.SetValue(itemLibrary, itemsDict);
-            
+
             inventoryComponent.Initialise();
-            
+
             Assert.IsNotNull(inventoryComponent.InventoryManager);
             Assert.AreEqual(3, inventoryComponent.InventoryManager.Items.Count);
             Assert.AreEqual("BasicItem", inventoryComponent.InventoryManager.Items[0].Name);
 
             // Clean up
             instanceProperty.SetValue(null, null);
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             UnityEngine.Object.DestroyImmediate(go);
             UnityEngine.Object.DestroyImmediate(libGo);
         }
     }
-}
+}

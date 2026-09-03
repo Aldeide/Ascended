@@ -398,6 +398,7 @@ namespace Systems.Item.Tests
         {
             var go = new UnityEngine.GameObject();
             var asc = go.AddComponent<AbilitySystem.Scripts.AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemField = typeof(AbilitySystem.Scripts.AbilitySystemComponent).GetProperty("AbilitySystem", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
             abilitySystemField.SetValue(asc, Source);
 
@@ -423,6 +424,7 @@ namespace Systems.Item.Tests
             Assert.IsNotNull(equipped[new Tag("MainHand")]);
             Assert.AreEqual("StartingSword", equipped[new Tag("MainHand")].Name);
 
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             UnityEngine.Object.DestroyImmediate(go);
         }
     }
