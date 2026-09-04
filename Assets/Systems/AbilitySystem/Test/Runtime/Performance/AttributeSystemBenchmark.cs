@@ -68,6 +68,7 @@ namespace AbilitySystem.Test.Runtime.Performance
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var system in _systems)
             {
                 system.Dispose();
