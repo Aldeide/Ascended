@@ -23,6 +23,19 @@ namespace AbilitySystem.Scripts
         public bool IsInitialized => AbilitySystem != null;
         private CueManagerComponent _cueManagerComponent;
 
+
+        public static readonly System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new System.Collections.Generic.HashSet<AbilitySystemComponent>();
+
+        protected virtual void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
+
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
 
