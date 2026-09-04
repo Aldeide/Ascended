@@ -47,7 +47,7 @@ namespace AbilitySystem.Test.Utilities
         [TearDown]
         public virtual void TearDown()
         {
-            AbilitySystemComponent.ActiveInstances.Clear();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             if (SourceMock != null && Source.AttributeSetManager != null)
             {
                 Source.AttributeSetManager.Dispose();
