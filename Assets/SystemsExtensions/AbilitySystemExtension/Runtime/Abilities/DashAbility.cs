@@ -44,7 +44,8 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
             else
             {
-                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward.normalized;
+                // Bolt: Removed redundant .normalized call since transform.forward is already a normalized unit vector
+                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward;
             }
             
             _endPosition = _startPosition + direction * Distance;
