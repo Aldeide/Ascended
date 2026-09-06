@@ -1,5 +1,6 @@
 using AbilitySystem.Runtime.Core;
 using AbilitySystem.Test.Utilities;
+using AbilitySystem.Scripts;
 using Moq;
 using NUnit.Framework;
 

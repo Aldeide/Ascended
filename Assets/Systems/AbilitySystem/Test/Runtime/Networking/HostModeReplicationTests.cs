@@ -4,6 +4,7 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 using AbilitySystem.Test.Utilities;
+using AbilitySystem.Scripts;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
