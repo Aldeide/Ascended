@@ -4,6 +4,7 @@ using AbilitySystem.Runtime.Effects;
 using AbilitySystem.Runtime.Networking;
 using AbilitySystem.Scripts;
 using AbilitySystem.Test.Utilities;
+using AbilitySystem.Scripts;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         {
             _gameObject = new GameObject("HostPlayer");
             _component = _gameObject.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(_component);
             
             _mockAbilitySystem = new Mock<IAbilitySystem>();
             _mockReplicationManager = new Mock<IReplicationManager>();
@@ -37,6 +39,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             Object.DestroyImmediate(_gameObject);
         }
 
