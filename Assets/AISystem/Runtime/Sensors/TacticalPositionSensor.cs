@@ -103,14 +103,14 @@ namespace AISystem.Runtime.Sensors
             if (players != null && players.Length > 0)
             {
                 GameObject closest = null;
-                float minDist = float.MaxValue;
+                float minDistSq = float.MaxValue;
                 foreach (var p in players)
                 {
                     if (p == null) continue;
-                    float dist = Vector3.Distance(agentTransform.position, p.transform.position);
-                    if (dist < minDist)
+                    float distSq = (agentTransform.position - p.transform.position).sqrMagnitude;
+                    if (distSq < minDistSq)
                     {
-                        minDist = dist;
+                        minDistSq = distSq;
                         closest = p;
                     }
                 }
@@ -121,17 +121,16 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
             AbilitySystemComponent closestComp = null;
-            float closestDist = float.MaxValue;
-            foreach (var comp in components)
+            float closestDistSq = float.MaxValue;
+            foreach (var comp in AbilitySystemComponent.ActiveInstances)
             {
                 if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agentTransform.gameObject) continue;
-                float dist = Vector3.Distance(agentTransform.position, comp.transform.position);
-                if (dist < closestDist)
+                float distSq = (agentTransform.position - comp.transform.position).sqrMagnitude;
+                if (distSq < closestDistSq)
                 {
-                    closestDist = dist;
+                    closestDistSq = distSq;
                     closestComp = comp;
                 }
             }
