@@ -26,7 +26,7 @@ namespace AISystem.Runtime.Sensors
                 {
                     if (comp == null || comp.gameObject == null) continue;
                     if (comp.gameObject == agent.Transform.gameObject) continue;
-                    float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
+                    float dist = (agent.Transform.position - comp.transform.position).sqrMagnitude;
                     if (dist < closestDist)
                     {
                         closestDist = dist;
