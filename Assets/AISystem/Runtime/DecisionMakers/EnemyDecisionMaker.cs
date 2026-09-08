@@ -1,4 +1,5 @@
 using AISystem.Runtime.Goals;
+using System.Collections.Generic;
 using AISystem.Runtime.Tactics;
 using AbilitySystem.Scripts;
 using CrashKonijn.Agent.Runtime;
@@ -107,7 +108,7 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
-            var components = FindObjectsOfType<AbilitySystemComponent>();
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
                 if (comp.gameObject == gameObject) continue;

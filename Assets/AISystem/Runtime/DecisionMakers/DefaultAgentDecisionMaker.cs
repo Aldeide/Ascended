@@ -1,4 +1,5 @@
 using AISystem.Runtime.Goals;
+using System.Collections.Generic;
 using CrashKonijn.Agent.Runtime;
 using CrashKonijn.Goap.Runtime;
 using Unity.Netcode;
