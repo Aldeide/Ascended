@@ -1,4 +1,5 @@
 using CrashKonijn.Agent.Core;
+using System.Collections.Generic;
 using CrashKonijn.Goap.Runtime;
 using AISystem.Runtime.Tactics;
 using AbilitySystem.Scripts;
@@ -121,7 +122,7 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;
             foreach (var comp in components)
