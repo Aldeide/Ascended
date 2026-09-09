@@ -80,10 +80,10 @@ namespace AISystem.Tests
             return go;
         }
 
-        private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
+        private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Untagged")
         {
             var go = CreateGameObject(name);
-            go.tag = tag;
+            try { go.tag = tag; } catch { UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error, $"Tag: {tag} is not defined."); }
 
             var asc = go.AddComponent<AbilitySystemComponent>();
             AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
@@ -375,7 +375,7 @@ namespace AISystem.Tests
 
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            try { playerGo.tag = "Player"; } catch { UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error, "Tag: Player is not defined."); }
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
