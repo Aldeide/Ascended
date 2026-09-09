@@ -39,6 +39,7 @@ namespace AISystem.Tests
         [SetUp]
         public void SetUp()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             _gameObjectsToCleanup = new List<GameObject>();
             UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
         }
@@ -46,6 +47,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -78,12 +80,13 @@ namespace AISystem.Tests
             return go;
         }
 
-        private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
+        private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Untagged")
         {
             var go = CreateGameObject(name);
-            go.tag = tag;
+            try { go.tag = tag; } catch { UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error, $"Tag: {tag} is not defined."); }
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
@@ -372,7 +375,7 @@ namespace AISystem.Tests
 
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            try { playerGo.tag = "Player"; } catch { UnityEngine.TestTools.LogAssert.Expect(UnityEngine.LogType.Error, "Tag: Player is not defined."); }
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -384,6 +387,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystem.Scripts.AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
