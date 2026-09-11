@@ -169,7 +169,7 @@ namespace FIMSpace.FProceduralAnimation
                             defaultLocal = false;
 
                             // Remap for desired dir and apply to world space impulse
-                            Quaternion remap = BaseTransform.rotation * Quaternion.FromToRotation(BaseTransform.forward.normalized, desirDirNorm);
+                            Quaternion remap = BaseTransform.rotation * Quaternion.FromToRotation(BaseTransform.forward, desirDirNorm);
                              push = remap * push;
 
                             if (impulse.Elastic <= 0f)
@@ -207,7 +207,7 @@ namespace FIMSpace.FProceduralAnimation
 
                     if ( impulse.AlignDesired)
                     {
-                        if (Vector3.Dot(BaseTransform.forward.normalized, desirDirNorm) < 0f)
+                        if (Vector3.Dot(BaseTransform.forward, desirDirNorm) < 0f)
                         {
                             rotImpulse.z = -rotImpulse.z;
                         }
