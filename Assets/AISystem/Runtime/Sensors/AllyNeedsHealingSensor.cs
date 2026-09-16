@@ -15,9 +15,12 @@ namespace AISystem.Runtime.Sensors
 
         public override SenseValue Sense(IActionReceiver agent, IComponentReference references)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // PERFORMANCE: Use static registry instead of slow FindObjectsOfType to prevent allocations and scene traversal in hot path
+            var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {
+                // Safety check in case of lifecycle mismatches
+                if (comp == null || comp.gameObject == null) continue;
                 if (comp.gameObject == agent.Transform.gameObject) continue;
                 
                 // Only friendly AI agents

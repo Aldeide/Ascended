@@ -56,13 +56,13 @@ namespace AbilitySystem.Runtime.Networking
 
         private void HandleEffectStacksChanged(Effect effect, int oldStacks, int newStacks)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             NotifyClientsEffectAdded(effect);
         }
 
         public void NotifyClientsAttributeBaseValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             OnNotifyClientsAttributeBaseValueChanged?.Invoke(attribute.GetName(), newValue);
         }
 
@@ -73,7 +73,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             OnNotifyClientsAttributeCurrentValueChanged?.Invoke(attribute.GetName(), oldValue, newValue);
         }
 
@@ -101,7 +101,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientAbilityRemoved(AbilityDefinition abilityDefinition)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             OnNotifyClientAbilityRemoved?.Invoke(abilityDefinition);
         }
 
@@ -129,7 +129,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsEffectAdded(Effect effect)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
 
             var data = new EffectSyncData
             {
@@ -148,9 +148,17 @@ namespace AbilitySystem.Runtime.Networking
             }
 
             if (effect.Source != null && effect.Source.NetworkRole != null)
+            {
                 data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
-            else
+            }
+            else if (_owner.NetworkRole != null)
+            {
                 data.SourceId = _owner.NetworkRole.NetworkObjectId;
+            }
+            else
+            {
+                data.SourceId = 0;
+            }
 
             Debug.Log($"[ReplicationManager] NotifyClientsEffectAdded: {data.EffectName} on server={_owner.IsServer()}");
             OnNotifyClientsEffectAdded?.Invoke(data);
@@ -158,13 +166,13 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsEffectRemoved(Effect effect)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             OnNotifyClientsEffectRemoved?.Invoke(effect.Definition.name);
         }
 
         public void NotifyClientsAbilityChargesChanged(string abilityName, int current, int max)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             OnNotifyClientsAbilityChargesChanged?.Invoke(abilityName, current, max);
         }
 
@@ -285,7 +293,7 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityActivation(string name, PredictionKey key, AbilityData data)
         {
             Debug.Log($"[ReplicationManager] ProcessServerAbilityActivation for {name} on server={_owner.IsServer()}");
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
 
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
                 !AbilityManager.HasAuthorityToActivate(ability, true))
@@ -306,7 +314,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void ProcessServerAbilityUnpredictedActivation(string name, AbilityData data)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
             if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
 
@@ -315,7 +323,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void ProcessServerAbilityTermination(string name)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             _owner.AbilityManager.EndAbility(name);
         }
 
@@ -351,7 +359,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void ProcessServerSyncKey(string abilityName, PredictionKey key)
         {
-            if (!_owner.IsServer()) return;
+            if (!_owner.IsServer() || _owner.ReplicationManager == null) return;
             if (_owner.AbilityManager.Abilities.TryGetValue(abilityName, out var ability))
             {
                 ability.QueueSyncKey(key);
