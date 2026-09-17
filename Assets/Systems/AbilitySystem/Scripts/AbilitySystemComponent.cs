@@ -11,12 +11,25 @@ using GameplayTags.Runtime;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
+using System.Collections.Generic;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
 namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // Maintain a static registry to avoid slow FindObjectsOfType calls in hot paths.
+        public static HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
