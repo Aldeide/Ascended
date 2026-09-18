@@ -37,6 +37,7 @@ namespace AbilitySystem.Test.Runtime.Networking
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             Object.DestroyImmediate(_gameObject);
         }
 
