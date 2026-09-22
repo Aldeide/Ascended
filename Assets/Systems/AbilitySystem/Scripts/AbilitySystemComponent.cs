@@ -43,13 +43,20 @@ namespace AbilitySystem.Scripts
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
-            NotifyDebugDataClientRpc(debugInfo, rpcParams.Receive.SenderClientId);
+            // SENTINEL: Use targeted ClientRpc instead of SendTo.Everyone with client-side filtering
+            // to prevent Information Exposure of sensitive debug data over the network to unintended clients.
+            NotifyDebugDataClientRpc(debugInfo, new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new[] { rpcParams.Receive.SenderClientId }
+                }
+            });
         }
 
-        [Rpc(SendTo.Everyone)]
-        public void NotifyDebugDataClientRpc(string debugInfo, ulong targetId)
+        [ClientRpc]
+        public void NotifyDebugDataClientRpc(string debugInfo, ClientRpcParams clientRpcParams = default)
         {
-            if (NetworkManager.LocalClientId != targetId) return;
             ServerDebugString = debugInfo;
         }
 
