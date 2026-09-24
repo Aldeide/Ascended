@@ -69,6 +69,8 @@ namespace AISystem.Tests
                 UnityEngine.Object.DestroyImmediate(groupCoordinator.gameObject);
             }
             typeof(TacticalGroupCoordinator).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).SetValue(null, null);
+
+            AbilitySystemComponent.ActiveInstances.Clear();
         }
 
         private GameObject CreateGameObject(string name = "GameObject")
@@ -84,6 +86,7 @@ namespace AISystem.Tests
             go.tag = tag;
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
