@@ -90,7 +90,7 @@ namespace AbilitySystem.Runtime.Effects
             if (effect.Definition.IsInstant())
             {
                 effect.Execute();
-                if (_owner.IsServer())
+                if (_owner.IsServer() && _owner.ReplicationManager != null)
                 {
                     _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
                 }
@@ -116,7 +116,7 @@ namespace AbilitySystem.Runtime.Effects
                 {
                     Effects.Add(effect);
                     OnEffectAdded?.Invoke(effect);
-                    if (_owner.IsServer())
+                    if (_owner.IsServer() && _owner.ReplicationManager != null)
                     {
                         _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
                     }
@@ -185,7 +185,7 @@ namespace AbilitySystem.Runtime.Effects
             }
             Effects.Add(effect);
             OnEffectAdded?.Invoke(effect);
-            if (_owner.IsServer())
+            if (_owner.IsServer() && _owner.ReplicationManager != null)
             {
                 _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
             }
@@ -196,7 +196,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Effects.Remove(effect);
             OnEffectRemoved?.Invoke(effect);
-            if (_owner.IsServer())
+            if (_owner.IsServer() && _owner.ReplicationManager != null)
             {
                 _owner.ReplicationManager.NotifyClientsEffectRemoved(effect);
             }
