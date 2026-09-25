@@ -35,6 +35,10 @@ namespace AbilitySystem.Test.Runtime.Performance
                 var system = new AbilitySystemManager(dataMock.Object);
                 system.NetworkRole = netMock.Object;
                 
+                // Assign a mock ReplicationManager to avoid NullReferenceException
+                var mockRep = new Mock<IReplicationManager>();
+                system.ReplicationManager = mockRep.Object;
+
                 system.AttributeSetManager.AddAttributeSet(typeof(TestAttributeSet), new TestAttributeSet(system));
                 _systems.Add(system);
 
