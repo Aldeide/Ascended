@@ -196,7 +196,7 @@ namespace AbilitySystem.Runtime.Effects
         {
             Effects.Remove(effect);
             OnEffectRemoved?.Invoke(effect);
-            if (_owner.IsServer())
+            if (_owner.IsServer() && _owner.ReplicationManager != null)
             {
                 _owner.ReplicationManager.NotifyClientsEffectRemoved(effect);
             }
