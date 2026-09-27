@@ -37,7 +37,7 @@ jobs:
           artifactsPath: artifacts
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: Unity Test Results
-          cliVersion: 2.1.2
+          cliVersion: 2.1.1
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
