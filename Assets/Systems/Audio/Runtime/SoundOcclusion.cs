@@ -220,7 +220,7 @@ namespace Systems.Audio
             float distance = Mathf.Sqrt(sqrDistance);
             _activeSampleCount = (int)SampleMode;
             Vector3 direction = toListener / distance;
-            Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
+            Vector3 right = Vector3.Cross(direction, Vector3.up) * SpreadWidth;
             // Cross product of (magnitude 1) and (magnitude SpreadWidth) naturally yields (magnitude SpreadWidth)
             Vector3 up = Vector3.Cross(direction, right);
 
@@ -340,7 +340,7 @@ namespace Systems.Audio
             Vector3 toListenerVec = _cachedListener.transform.position - transform.position;
             float toListenerDistance = Mathf.Sqrt(toListenerVec.sqrMagnitude);
             Vector3 direction = toListenerDistance > 0.00001f ? toListenerVec / toListenerDistance : Vector3.forward;
-            Vector3 right = Vector3.Cross(direction, Vector3.up).normalized * SpreadWidth;
+            Vector3 right = Vector3.Cross(direction, Vector3.up) * SpreadWidth;
             // Cross product of (magnitude 1) and (magnitude SpreadWidth) naturally yields (magnitude SpreadWidth)
             Vector3 up = Vector3.Cross(direction, right);
 
@@ -460,7 +460,7 @@ namespace Systems.Audio
             Vector3 direction = listenerPos - start;
             // Cache direction.normalized to avoid duplicate square root calculations
             Vector3 dirNormalized = direction.normalized;
-            Vector3 right = Vector3.Cross(dirNormalized, Vector3.up).normalized * SpreadWidth;
+            Vector3 right = Vector3.Cross(dirNormalized, Vector3.up) * SpreadWidth;
             // Cross product of (magnitude 1) and (magnitude SpreadWidth) naturally yields (magnitude SpreadWidth)
             Vector3 up = Vector3.Cross(dirNormalized, right);
 
