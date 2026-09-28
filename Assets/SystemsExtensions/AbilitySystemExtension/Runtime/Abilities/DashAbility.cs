@@ -44,7 +44,7 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
             else
             {
-                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward.normalized;
+                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward; // transform.forward is inherently normalized
             }
             
             _endPosition = _startPosition + direction * Distance;
@@ -84,10 +84,11 @@ namespace AbilitySystemExtension.Runtime.Abilities
                 Vector3 castOrigin = currentPos + Vector3.up * 0.6f;
                 int environmentLayer = EnvironmentLayerMask;
                 
-                if (Physics.SphereCast(castOrigin, 0.3f, moveDelta.normalized, out var hit, moveDist, environmentLayer))
+                Vector3 moveDeltaNorm = moveDelta.normalized; // Cache normalized vector to avoid duplicate Sqrt
+                if (Physics.SphereCast(castOrigin, 0.3f, moveDeltaNorm, out var hit, moveDist, environmentLayer))
                 {
                     // We hit a wall! Stop at the hit point.
-                    nextPos = currentPos + moveDelta.normalized * Mathf.Max(0, hit.distance - 0.05f);
+                    nextPos = currentPos + moveDeltaNorm * Mathf.Max(0, hit.distance - 0.05f);
                     // Stop the dash progress if we hit a solid wall
                     _endPosition = nextPos;
                 }
