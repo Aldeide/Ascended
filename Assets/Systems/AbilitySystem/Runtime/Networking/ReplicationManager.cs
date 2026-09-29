@@ -268,7 +268,12 @@ namespace AbilitySystem.Runtime.Networking
             ProcessServerAbilityActivation(batch.AbilityName, batch.PredictionKey, batch.ActivationData);
             if (batch.EndAbilityImmediately)
             {
-                _owner.AbilityManager.EndAbility(batch.AbilityName);
+                // Sentinel: Ensure the client has authority to terminate the ability before ending it via batch
+                if (_owner.AbilityManager.Abilities.TryGetValue(batch.AbilityName, out var ability) &&
+                    AbilityManager.HasAuthorityToTerminate(ability, true)) // true indicates the check is for a client request
+                {
+                    _owner.AbilityManager.EndAbility(batch.AbilityName);
+                }
             }
         }
 
@@ -316,6 +321,15 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // Sentinel: Verify the client has authority to terminate the ability before processing it on the server
+            // Passing true to HasAuthorityToTerminate checks if a client has authority
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
+                !AbilityManager.HasAuthorityToTerminate(ability, true))
+            {
+                return;
+            }
+
             _owner.AbilityManager.EndAbility(name);
         }
 
