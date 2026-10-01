@@ -268,7 +268,13 @@ namespace AbilitySystem.Runtime.Networking
             ProcessServerAbilityActivation(batch.AbilityName, batch.PredictionKey, batch.ActivationData);
             if (batch.EndAbilityImmediately)
             {
-                _owner.AbilityManager.EndAbility(batch.AbilityName);
+                // Security: validate client authorization for termination in batch requests
+                // to prevent security bypasses.
+                if (_owner.AbilityManager.Abilities.TryGetValue(batch.AbilityName, out var ability) &&
+                    AbilityManager.HasAuthorityToTerminate(ability, isClient: true))
+                {
+                    _owner.AbilityManager.EndAbility(batch.AbilityName);
+                }
             }
         }
 
@@ -287,8 +293,10 @@ namespace AbilitySystem.Runtime.Networking
             Debug.Log($"[ReplicationManager] ProcessServerAbilityActivation for {name} on server={_owner.IsServer()}");
             if (!_owner.IsServer()) return;
 
+            // Security: explicitly validate client authorization before delegating to internal managers.
+            // Using named parameter isClient to avoid misinterpretation of boolean flag.
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
-                !AbilityManager.HasAuthorityToActivate(ability, true))
+                !AbilityManager.HasAuthorityToActivate(ability, isClient: true))
             {
                 OnAbilityActivationResponded?.Invoke(key, false);
                 return;
@@ -308,7 +316,9 @@ namespace AbilitySystem.Runtime.Networking
         {
             if (!_owner.IsServer()) return;
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
-            if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
+
+            // Security: explicitly validate client authorization before delegating to internal managers.
+            if (!AbilityManager.HasAuthorityToActivate(ability, isClient: true)) return;
 
             _owner.AbilityManager.TryActivateAbility(name, data);
         }
@@ -316,6 +326,12 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // Security: explicit check to ensure client has authority to terminate the ability,
+            // preventing unauthorized cancellation of server-side abilities.
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
+            if (!AbilityManager.HasAuthorityToTerminate(ability, isClient: true)) return;
+
             _owner.AbilityManager.EndAbility(name);
         }
 
