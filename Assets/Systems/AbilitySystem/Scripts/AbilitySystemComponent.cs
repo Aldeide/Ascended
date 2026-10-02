@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
@@ -17,6 +18,9 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // Bolt Optimization: Centralized static registry for scene-wide lookups
+        public static HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
@@ -64,6 +68,16 @@ namespace AbilitySystem.Scripts
         }
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
+
+        public void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        public void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public override void OnNetworkSpawn()
         {

@@ -14,7 +14,8 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
-            var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+            // Bolt Optimization: Using cached static registry instead of FindObjectsOfType
+            var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent lowestAlly = null;
             float lowestRatio = 1.0f;
 
