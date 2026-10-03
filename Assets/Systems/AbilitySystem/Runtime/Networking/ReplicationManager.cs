@@ -288,7 +288,7 @@ namespace AbilitySystem.Runtime.Networking
             if (!_owner.IsServer()) return;
 
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
-                !AbilityManager.HasAuthorityToActivate(ability, true))
+                !AbilityManager.HasAuthorityToActivate(ability, isClient: true))
             {
                 OnAbilityActivationResponded?.Invoke(key, false);
                 return;
@@ -308,7 +308,8 @@ namespace AbilitySystem.Runtime.Networking
         {
             if (!_owner.IsServer()) return;
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
-            if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
+            // Sentinel: Using named argument to clarify authorization check is for client requests
+            if (!AbilityManager.HasAuthorityToActivate(ability, isClient: true)) return;
 
             _owner.AbilityManager.TryActivateAbility(name, data);
         }
@@ -316,6 +317,14 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
+                !AbilityManager.HasAuthorityToTerminate(ability, isClient: true))
+            {
+                // Sentinel: Missing authorization check added for client requests to end abilities.
+                return;
+            }
+
             _owner.AbilityManager.EndAbility(name);
         }
 
