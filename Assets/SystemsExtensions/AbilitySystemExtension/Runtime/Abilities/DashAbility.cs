@@ -44,7 +44,9 @@ namespace AbilitySystemExtension.Runtime.Abilities
             }
             else
             {
-                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward.normalized;
+                // ⚡ Bolt Performance Optimization: Transform.forward is inherently normalized.
+                // Removing redundant .normalized call avoids unnecessary Mathf.Sqrt and division operations.
+                direction = ((UnityEngine.Component)Owner.NetworkRole).transform.forward;
             }
             
             _endPosition = _startPosition + direction * Distance;
