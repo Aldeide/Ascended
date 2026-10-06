@@ -316,6 +316,14 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // SECURITY: Validate authority before terminating ability via Server RPC
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
+                !AbilityManager.HasAuthorityToTerminate(ability, isClient: true))
+            {
+                return;
+            }
+
             _owner.AbilityManager.EndAbility(name);
         }
 
