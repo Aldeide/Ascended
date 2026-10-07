@@ -268,7 +268,12 @@ namespace AbilitySystem.Runtime.Networking
             ProcessServerAbilityActivation(batch.AbilityName, batch.PredictionKey, batch.ActivationData);
             if (batch.EndAbilityImmediately)
             {
-                _owner.AbilityManager.EndAbility(batch.AbilityName);
+                // SECURITY: Validate client authorization before allowing termination
+                if (_owner.AbilityManager.Abilities.TryGetValue(batch.AbilityName, out var ability) &&
+                    AbilityManager.HasAuthorityToTerminate(ability, isClient: true))
+                {
+                    _owner.AbilityManager.EndAbility(batch.AbilityName);
+                }
             }
         }
 
@@ -288,7 +293,7 @@ namespace AbilitySystem.Runtime.Networking
             if (!_owner.IsServer()) return;
 
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
-                !AbilityManager.HasAuthorityToActivate(ability, true))
+                !AbilityManager.HasAuthorityToActivate(ability, isClient: true))
             {
                 OnAbilityActivationResponded?.Invoke(key, false);
                 return;
@@ -308,7 +313,7 @@ namespace AbilitySystem.Runtime.Networking
         {
             if (!_owner.IsServer()) return;
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
-            if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
+            if (!AbilityManager.HasAuthorityToActivate(ability, isClient: true)) return;
 
             _owner.AbilityManager.TryActivateAbility(name, data);
         }
@@ -316,6 +321,11 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // SECURITY: Explicitly validate client authority since AbilityManager.EndAbility relies on IsLocalClient
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
+            if (!AbilityManager.HasAuthorityToTerminate(ability, isClient: true)) return;
+
             _owner.AbilityManager.EndAbility(name);
         }
 
