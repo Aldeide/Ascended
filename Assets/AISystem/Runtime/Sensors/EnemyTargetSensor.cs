@@ -18,7 +18,8 @@ namespace AISystem.Runtime.Sensors
             if (players == null || players.Length == 0)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = AbilitySystemComponent.ActiveInstances;
+                // Bolt Optimization: Use cached HashSet instead of FindObjectsOfType to eliminate O(N) scene traversal and GC allocations.
+            var components = AbilitySystemComponent.ActiveInstances;
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
                 foreach (var comp in components)

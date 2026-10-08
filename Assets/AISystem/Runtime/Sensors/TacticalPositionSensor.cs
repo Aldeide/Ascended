@@ -121,6 +121,7 @@ namespace AISystem.Runtime.Sensors
             }
 
             // Fallback to any AbilitySystemComponent that is not self
+            // Bolt Optimization: Use cached HashSet instead of FindObjectsOfType to eliminate O(N) scene traversal and GC allocations.
             var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent closestComp = null;
             float closestDist = float.MaxValue;

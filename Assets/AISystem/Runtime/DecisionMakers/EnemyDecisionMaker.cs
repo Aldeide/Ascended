@@ -107,6 +107,7 @@ namespace AISystem.Runtime.DecisionMakers
 
         private bool CheckAlliesNeedHealing()
         {
+            // Bolt Optimization: Use cached HashSet instead of FindObjectsOfType to eliminate O(N) scene traversal and GC allocations.
             var components = AbilitySystemComponent.ActiveInstances;
             foreach (var comp in components)
             {

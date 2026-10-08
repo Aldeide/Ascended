@@ -18,6 +18,7 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        // Bolt Optimization: Maintain a centralized registry of active instances to avoid slow FindObjectsOfType calls in hot paths.
         public static HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
 
         private void OnEnable()

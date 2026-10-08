@@ -14,6 +14,7 @@ namespace AISystem.Runtime.Sensors
 
         public override ITarget Sense(IActionReceiver agent, IComponentReference references, ITarget existingTarget)
         {
+            // Bolt Optimization: Use cached HashSet instead of FindObjectsOfType to eliminate O(N) scene traversal and GC allocations.
             var components = AbilitySystemComponent.ActiveInstances;
             AbilitySystemComponent lowestAlly = null;
             float lowestRatio = 1.0f;
