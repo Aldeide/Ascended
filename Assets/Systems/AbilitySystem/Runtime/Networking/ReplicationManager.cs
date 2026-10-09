@@ -268,7 +268,13 @@ namespace AbilitySystem.Runtime.Networking
             ProcessServerAbilityActivation(batch.AbilityName, batch.PredictionKey, batch.ActivationData);
             if (batch.EndAbilityImmediately)
             {
-                _owner.AbilityManager.EndAbility(batch.AbilityName);
+                // Sentinel Security Check: Explicitly validate client authority to terminate the ability.
+                // Bypassing this check allows unauthorized clients to end abilities they shouldn't.
+                if (_owner.AbilityManager.Abilities.TryGetValue(batch.AbilityName, out var ability) &&
+                    AbilityManager.HasAuthorityToTerminate(ability, isClient: true))
+                {
+                    _owner.AbilityManager.EndAbility(batch.AbilityName);
+                }
             }
         }
 
@@ -288,7 +294,7 @@ namespace AbilitySystem.Runtime.Networking
             if (!_owner.IsServer()) return;
 
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
-                !AbilityManager.HasAuthorityToActivate(ability, true))
+                !AbilityManager.HasAuthorityToActivate(ability, isClient: true))
             {
                 OnAbilityActivationResponded?.Invoke(key, false);
                 return;
@@ -308,7 +314,7 @@ namespace AbilitySystem.Runtime.Networking
         {
             if (!_owner.IsServer()) return;
             if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
-            if (!AbilityManager.HasAuthorityToActivate(ability, true)) return;
+            if (!AbilityManager.HasAuthorityToActivate(ability, isClient: true)) return;
 
             _owner.AbilityManager.TryActivateAbility(name, data);
         }
@@ -316,6 +322,12 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // Sentinel Security Check: Validate if the client has authority to terminate this ability.
+            // Internal manager checks may erroneously allow this on the server.
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
+            if (!AbilityManager.HasAuthorityToTerminate(ability, isClient: true)) return;
+
             _owner.AbilityManager.EndAbility(name);
         }
 
