@@ -299,6 +299,14 @@ namespace AbilitySystem.Test.Utilities
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // Security Fix: Prevent unauthorized ability termination bypass
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability) ||
+                !AbilityManager.HasAuthorityToTerminate(ability, isClient: true))
+            {
+                return;
+            }
+
             _owner.AbilityManager.EndAbility(name);
         }
 
