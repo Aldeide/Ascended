@@ -268,6 +268,11 @@ namespace AbilitySystem.Runtime.Networking
             ProcessServerAbilityActivation(batch.AbilityName, batch.PredictionKey, batch.ActivationData);
             if (batch.EndAbilityImmediately)
             {
+                // [SENTINEL] Fix authorization bypass: Added explicit client authority check
+                // for ability termination before processing the batch termination request to
+                // prevent clients from terminating abilities they do not have authority over.
+                if (!_owner.AbilityManager.Abilities.TryGetValue(batch.AbilityName, out var ability)) return;
+                if (!AbilityManager.HasAuthorityToTerminate(ability, isClient: true)) return;
                 _owner.AbilityManager.EndAbility(batch.AbilityName);
             }
         }
@@ -316,6 +321,13 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessServerAbilityTermination(string name)
         {
             if (!_owner.IsServer()) return;
+
+            // [SENTINEL] Fix authorization bypass: Added explicit client authority check
+            // for ability termination before processing the request to prevent clients
+            // from terminating abilities they do not have authority over (e.g. ServerOnly execution).
+            if (!_owner.AbilityManager.Abilities.TryGetValue(name, out var ability)) return;
+            if (!AbilityManager.HasAuthorityToTerminate(ability, isClient: true)) return;
+
             _owner.AbilityManager.EndAbility(name);
         }
 
