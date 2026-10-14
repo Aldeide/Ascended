@@ -4,3 +4,7 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+
+## 2026-10-14 - Redundant Vector Normalizations
+**Learning:** In Unity, properties like `Transform.forward`, `Transform.up`, and `Transform.right` inherently return normalized directional unit vectors. Calling `.normalized` on them is a redundant calculation that forces an unnecessary magnitude recalculation (square root and division).
+**Action:** Always avoid calling `.normalized` on `Transform.forward`, `Transform.up`, or `Transform.right`. Replace these calls with direct access to the properties.
