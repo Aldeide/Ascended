@@ -17,6 +17,17 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        public static System.Collections.Generic.HashSet<AbilitySystemComponent> ActiveInstances = new();
+
+        void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
