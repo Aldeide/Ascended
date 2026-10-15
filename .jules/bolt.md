@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2025-02-14 - Caching Object lookups in Unity Netcode
+**Learning:** Object.FindObjectsOfType is a significant performance bottleneck in hot paths like AI sensors. Even for Unity Netcode NetworkBehaviour components, maintaining a centralized static registry (e.g., HashSet<AbilitySystemComponent>) populated during OnEnable/OnDisable is crucial for performance.
+**Action:** Always maintain a static registry via OnEnable/OnDisable instead of using FindObjectsOfType for scene-wide lookups, and ensure test setups manually register/unregister to avoid state leakage.
