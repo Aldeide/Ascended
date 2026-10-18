@@ -56,7 +56,7 @@ namespace AbilitySystem.Runtime.Networking
 
         private void HandleEffectStacksChanged(Effect effect, int oldStacks, int newStacks)
         {
-            if (!_owner.IsServer()) return;
+            if (_owner == null || !_owner.IsServer()) return;
             NotifyClientsEffectAdded(effect);
         }
 
