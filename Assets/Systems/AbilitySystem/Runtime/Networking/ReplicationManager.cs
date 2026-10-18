@@ -56,7 +56,7 @@ namespace AbilitySystem.Runtime.Networking
 
         private void HandleEffectStacksChanged(Effect effect, int oldStacks, int newStacks)
         {
-            if (!_owner.IsServer()) return;
+            if (_owner == null || !_owner.IsServer()) return;
             NotifyClientsEffectAdded(effect);
         }
 
@@ -129,7 +129,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void NotifyClientsEffectAdded(Effect effect)
         {
-            if (!_owner.IsServer()) return;
+            if (_owner == null || !_owner.IsServer()) return;
 
             var data = new EffectSyncData
             {
@@ -149,10 +149,9 @@ namespace AbilitySystem.Runtime.Networking
 
             if (effect.Source != null && effect.Source.NetworkRole != null)
                 data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
-            else
+            else if (_owner.NetworkRole != null)
                 data.SourceId = _owner.NetworkRole.NetworkObjectId;
 
-            Debug.Log($"[ReplicationManager] NotifyClientsEffectAdded: {data.EffectName} on server={_owner.IsServer()}");
             OnNotifyClientsEffectAdded?.Invoke(data);
         }
 
