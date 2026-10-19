@@ -207,38 +207,41 @@ namespace Item.Scripts
         }
 
         // --- Owner client -> Server RPCs (predicted requests) ---
+        // 🛡️ Sentinel: Enforce RequireOwnership = true on Server RPCs
+        // Security Concern: Unity Netcode's [Rpc(SendTo.Server)] allows any client to invoke the RPC by default.
+        // Fix: Explicitly setting RequireOwnership = true prevents unauthorized clients from bypassing ownership checks and executing RPCs on objects they do not own.
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestEquipRpc(Tag slot, string equipmentName)
         {
             _replicationManager?.ProcessServerEquipRequested(slot, equipmentName);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestUnequipRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUnequipRequested(slot);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestAddModRpc(Tag slot, Tag modSlot, string modName)
         {
             _replicationManager?.ProcessServerAddModRequested(slot, modSlot, modName);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestRemoveModRpc(Tag slot, Tag modSlot)
         {
             _replicationManager?.ProcessServerRemoveModRequested(slot, modSlot);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestUpgradeRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUpgradeRequested(slot);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestSnapshotRpc()
         {
             if (_equipmentManager != null)
