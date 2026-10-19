@@ -78,7 +78,7 @@ namespace AISystem.Tests
             return go;
         }
 
-        private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
+        private (GameObject go, Mock<IActionReceiver> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
             go.tag = tag;
@@ -90,7 +90,7 @@ namespace AISystem.Tests
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
 
-            var agentMock = new Mock<IMonoAgent>();
+            var agentMock = new Mock<IActionReceiver>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
             return (go, agentMock, abilitySystemMock, asc);
