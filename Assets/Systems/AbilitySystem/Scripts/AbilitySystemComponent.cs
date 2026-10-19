@@ -39,7 +39,10 @@ namespace AbilitySystem.Scripts
             RequestDebugDataServerRpc();
         }
 
-        [Rpc(SendTo.Server)]
+        // 🛡️ Sentinel: Enforce RequireOwnership = true on Server RPCs
+        // Security Concern: Unity Netcode's [Rpc(SendTo.Server)] allows any client to invoke the RPC by default.
+        // Fix: Explicitly setting RequireOwnership = true prevents unauthorized clients from bypassing ownership checks and executing RPCs on objects they do not own.
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
@@ -267,31 +270,31 @@ namespace AbilitySystem.Scripts
             AbilitySystem.AbilityManager.TryActivateAbility(abilityName, data);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityActivation(abilityName, key, data);
         }
         
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityUnpredictedActivation(abilityName, data);
         }
         
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityTermination(abilityName);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerAbilityBatchRpc(AbilityBatchData batch, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityBatch(batch);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerSendSyncKeyRpc(string abilityName, PredictionKey key, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerSyncKey(abilityName, key);
