@@ -578,7 +578,7 @@ namespace AISystem.Tests
 
             // Ability not present in manager -> returns Stop
             var contextMock = new Mock<IActionContext>();
-            var state = action.Perform(agentMock.Object, data, contextMock.Object);
+            var state = action.Perform(agentMock.As<IActionReceiver>().Object, data, contextMock.Object);
             Assert.AreEqual(ActionRunState.Stop, state);
 
             // Grant Fireball Ability
@@ -596,7 +596,7 @@ namespace AISystem.Tests
             // Since it's a MonoBehaviour and we are invoking Perform, let's see how Perform is coded:
             // asc.TryActivateAbility(abilityName, abilityData);
             // Yes, let's see if we can trigger the action.
-            state = action.Perform(agentMock.Object, data, contextMock.Object);
+            state = action.Perform(agentMock.As<IActionReceiver>().Object, data, contextMock.Object);
             Assert.AreEqual(ActionRunState.Completed, state);
             Assert.IsTrue(data.AbilityTriggered);
         }
@@ -608,21 +608,21 @@ namespace AISystem.Tests
             var action = new IdleAction();
             var data = new IdleAction.Data();
 
-            action.Start(agentMock.Object, data);
+            action.Start(agentMock.As<IActionReceiver>().Object, data);
             Assert.Greater(data.Timer, 0f);
 
             var contextMock = new Mock<IActionContext>();
             contextMock.SetupGet(c => c.DeltaTime).Returns(0.1f);
 
             var initialTimer = data.Timer;
-            var state = action.Perform(agentMock.Object, data, contextMock.Object);
+            var state = action.Perform(agentMock.As<IActionReceiver>().Object, data, contextMock.Object);
 
             Assert.AreEqual(ActionRunState.Continue, state);
             Assert.AreEqual(initialTimer - 0.1f, data.Timer);
 
             // Set timer to 0 to complete
             data.Timer = 0f;
-            state = action.Perform(agentMock.Object, data, contextMock.Object);
+            state = action.Perform(agentMock.As<IActionReceiver>().Object, data, contextMock.Object);
             Assert.AreEqual(ActionRunState.Completed, state);
         }
 
