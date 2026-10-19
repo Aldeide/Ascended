@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2026-10-19 - Optimize scene-wide component lookups
+**Learning:** Calling Object.FindObjectsOfType frequently in update loops or sensor queries (like AI Sense) is a massive O(n) performance bottleneck that traverses the entire scene hierarchy and allocates garbage.
+**Action:** Replace Object.FindObjectsOfType with a centralized static registry (e.g. HashSet) on the target component type, populated correctly in OnEnable and OnDisable. Iterate this registry instead for O(m) performance where m is only the count of active instances.
