@@ -4,3 +4,6 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2026-10-20 - Optimize hot path scene queries using static registry
+**Learning:** `FindObjectsOfType` and `GameObject.FindGameObjectsWithTag` are slow, allocating methods that should never be used in hot paths like Update loops or AI sensor updates.
+**Action:** Replaced these calls with a centralized static registry (`HashSet<AbilitySystemComponent> ActiveInstances`) updated via `OnEnable`/`OnDisable` lifecycle methods. This dramatically speeds up iteration without allocating memory every frame.
