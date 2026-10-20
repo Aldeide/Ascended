@@ -208,37 +208,43 @@ namespace Item.Scripts
 
         // --- Owner client -> Server RPCs (predicted requests) ---
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestEquipRpc(Tag slot, string equipmentName)
         {
             _replicationManager?.ProcessServerEquipRequested(slot, equipmentName);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestUnequipRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUnequipRequested(slot);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestAddModRpc(Tag slot, Tag modSlot, string modName)
         {
             _replicationManager?.ProcessServerAddModRequested(slot, modSlot, modName);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestRemoveModRpc(Tag slot, Tag modSlot)
         {
             _replicationManager?.ProcessServerRemoveModRequested(slot, modSlot);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestUpgradeRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUpgradeRequested(slot);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         private void RequestSnapshotRpc()
         {
             if (_equipmentManager != null)

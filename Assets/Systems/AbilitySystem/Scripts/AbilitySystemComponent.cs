@@ -39,7 +39,8 @@ namespace AbilitySystem.Scripts
             RequestDebugDataServerRpc();
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void RequestDebugDataServerRpc(RpcParams rpcParams = default)
         {
             var debugInfo = CalculateFullDebugInfo();
@@ -267,31 +268,36 @@ namespace AbilitySystem.Scripts
             AbilitySystem.AbilityManager.TryActivateAbility(abilityName, data);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerTryActivateAbilityRpc(string abilityName, PredictionKey key, AbilityData data, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityActivation(abilityName, key, data);
         }
         
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerTryActivateUnpredictedAbilityRpc(string abilityName, AbilityData data, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityUnpredictedActivation(abilityName, data);
         }
         
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerTryEndAbilityRpc(string abilityName, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityTermination(abilityName);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerAbilityBatchRpc(AbilityBatchData batch, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerAbilityBatch(batch);
         }
 
-        [Rpc(SendTo.Server)]
+        // SECURITY: Enforce ownership on Server RPCs to prevent unauthorized client execution (authorization bypass).
+        [Rpc(SendTo.Server, RequireOwnership = true)]
         public void ServerSendSyncKeyRpc(string abilityName, PredictionKey key, RpcParams rpcParams = default)
         {
             AbilitySystem.ReplicationManager.ProcessServerSyncKey(abilityName, key);
