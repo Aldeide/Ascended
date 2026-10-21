@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.AttributeSets;
 using AbilitySystem.Runtime.Core;
@@ -25,6 +26,18 @@ namespace AbilitySystem.Scripts
 
         public string ServerDebugString { get; private set; }
         private float _lastDebugRequestTime;
+
+        public static readonly HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public void RequestUpdateFromServer()
         {
