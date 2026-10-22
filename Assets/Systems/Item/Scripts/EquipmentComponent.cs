@@ -208,37 +208,37 @@ namespace Item.Scripts
 
         // --- Owner client -> Server RPCs (predicted requests) ---
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)] // SECURITY: Enforce ownership to prevent authorization bypass
         private void RequestEquipRpc(Tag slot, string equipmentName)
         {
             _replicationManager?.ProcessServerEquipRequested(slot, equipmentName);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)] // SECURITY: Enforce ownership to prevent authorization bypass
         private void RequestUnequipRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUnequipRequested(slot);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)] // SECURITY: Enforce ownership to prevent authorization bypass
         private void RequestAddModRpc(Tag slot, Tag modSlot, string modName)
         {
             _replicationManager?.ProcessServerAddModRequested(slot, modSlot, modName);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)] // SECURITY: Enforce ownership to prevent authorization bypass
         private void RequestRemoveModRpc(Tag slot, Tag modSlot)
         {
             _replicationManager?.ProcessServerRemoveModRequested(slot, modSlot);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)] // SECURITY: Enforce ownership to prevent authorization bypass
         private void RequestUpgradeRpc(Tag slot)
         {
             _replicationManager?.ProcessServerUpgradeRequested(slot);
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, RequireOwnership = true)] // SECURITY: Enforce ownership to prevent authorization bypass
         private void RequestSnapshotRpc()
         {
             if (_equipmentManager != null)
