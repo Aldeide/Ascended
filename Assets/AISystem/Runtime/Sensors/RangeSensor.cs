@@ -34,7 +34,7 @@ namespace AISystem.Runtime.Sensors
                     float minDist = float.MaxValue;
                     foreach (var p in players)
                     {
-                        float d = Vector3.Distance(agent.Transform.position, p.transform.position);
+                        float d = (agent.Transform.position - p.transform.position).sqrMagnitude;
                         if (d < minDist)
                         {
                             minDist = d;
@@ -43,15 +43,15 @@ namespace AISystem.Runtime.Sensors
                     }
                     if (closest != null)
                     {
-                        float dist = Vector3.Distance(agent.Transform.position, closest.transform.position);
-                        return dist >= MinRange && dist <= MaxRange;
+                        float dist = (agent.Transform.position - closest.transform.position).sqrMagnitude;
+                        return dist >= (MinRange * MinRange) && dist <= (MaxRange * MaxRange);
                     }
                 }
                 return false;
             }
 
-            float distance = Vector3.Distance(agent.Transform.position, target.Position);
-            return distance >= MinRange && distance <= MaxRange;
+            float distance = (agent.Transform.position - target.Position).sqrMagnitude;
+            return distance >= (MinRange * MinRange) && distance <= (MaxRange * MaxRange);
         }
     }
 }
