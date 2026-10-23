@@ -2,3 +2,7 @@
 **Vulnerability:** A malicious client could send rich text tags (like `<color=red>`) in their `FixedString64Bytes` player name over a `ServerRpc`. TextMeshPro evaluates these tags indiscriminately, leading to UI spoofing or breaking layout for all clients when the lobby state is synced. This is the Unity equivalent of Cross-Site Scripting (XSS).
 **Learning:** `FixedString` types in Unity Collections do not have built-in sanitization and are often blindly passed to UI elements.
 **Prevention:** Always sanitize player-provided strings using a centralized utility (like `StringUtilities.SanitizeForRichText`) that strips `<` and `>` characters *before* updating authoritative network state via ServerRpc.
+## 2026-10-23 - Missing RequireOwnership on Server RPCs
+**Vulnerability:** Client components (like `EquipmentComponent` and `AbilitySystemComponent`) expose RPCs targeting the server with `[Rpc(SendTo.Server)]` without enforcing ownership. A malicious client could send these RPCs to spoof actions on another player's networked object, bypassing authorization checks.
+**Learning:** In Unity Netcode for GameObjects, the newer `[Rpc(SendTo.Server)]` attribute does not enforce ownership by default, unlike the older `[ServerRpc]`. Relying solely on internal manager checks (like `IsLocalClient()`) on the server may fail or bypass security policies.
+**Prevention:** Always explicitly enforce ownership using `[Rpc(SendTo.Server, RequireOwnership = true)]` for client-to-server RPCs on player-owned objects, unless intentionally allowing global access.
