@@ -90,7 +90,7 @@ namespace AbilitySystem.Runtime.Effects
             if (effect.Definition.IsInstant())
             {
                 effect.Execute();
-                if (_owner.IsServer())
+                if (_owner != null && _owner.IsServer() && _owner.ReplicationManager != null)
                 {
                     _owner.ReplicationManager.NotifyClientsEffectAdded(effect);
                 }
