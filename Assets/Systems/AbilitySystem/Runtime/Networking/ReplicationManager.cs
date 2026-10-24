@@ -68,7 +68,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void OnAttributeBaseValueChanged(string attributeName, float newValue)
         {
-            _owner.AttributeSetManager.GetAttribute(attributeName)?.SetBaseValue(newValue);
+            _owner?.AttributeSetManager?.GetAttribute(attributeName)?.SetBaseValue(newValue);
         }
 
         public void NotifyClientsAttributeCurrentValueChanged(Attribute attribute, float oldValue, float newValue)
@@ -79,7 +79,7 @@ namespace AbilitySystem.Runtime.Networking
 
         public void OnAttributeCurrentValueChanged(string attributeName, float newValue)
         {
-            _owner.AttributeSetManager.GetAttribute(attributeName)?.SetCurrentValue(newValue);
+            _owner?.AttributeSetManager?.GetAttribute(attributeName)?.SetCurrentValue(newValue);
         }
 
         public void NotifyClientsPlayCue(Tag cueTag, CueAction cueAction, CueData cueData)
@@ -179,7 +179,7 @@ namespace AbilitySystem.Runtime.Networking
         public void ProcessClientAbilityChargesChanged(string abilityName, int current, int max)
         {
             Debug.Log($"[ReplicationManager] ProcessClientAbilityChargesChanged for {abilityName}: {current}/{max} on server={_owner?.IsServer()}");
-            if (_owner.AbilityManager.Abilities.TryGetValue(abilityName, out var ability) && ability is ChargesAbility chargesAbility)
+            if (_owner != null && _owner.AbilityManager != null && _owner.AbilityManager.Abilities != null && _owner.AbilityManager.Abilities.TryGetValue(abilityName, out var ability) && ability is ChargesAbility chargesAbility)
             {
                 chargesAbility.SetCharges(current, max);
             }
