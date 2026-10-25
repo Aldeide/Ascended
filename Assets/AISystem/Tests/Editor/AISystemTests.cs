@@ -46,6 +46,8 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
+
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -81,9 +83,13 @@ namespace AISystem.Tests
         private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
-            go.tag = tag;
+            try { go.tag = tag; } catch { }
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            // Since tests don't run a full Unity lifecycle automatically for dynamically added components,
+            // we manually register the mock ASC in the static registry so sensors can find it.
+            AbilitySystemComponent.ActiveInstances.Add(asc);
+
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection

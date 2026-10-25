@@ -7,3 +7,6 @@
 ## 2026-10-25 - Replace FindObjectsOfType with static registry for AbilitySystemComponent
 **Learning:** Object.FindObjectsOfType is an O(N) operation that is too slow for hot paths like AI sensors and Update methods.
 **Action:** Used a static HashSet in AbilitySystemComponent populated during OnEnable/OnDisable to provide an O(1) registry for scene-wide lookups.
+## 2026-10-25 - Unit Tests and Mock Lifecycles with Static Registries
+**Learning:** When replacing `FindObjectsOfType` with a static registry (e.g., `ActiveInstances` populated on `OnEnable`), unit tests that dynamically add components (e.g., via `AddComponent`) may fail because `OnEnable` does not always fire automatically in the test runner's mock environment.
+**Action:** Always manually register mock components into the static registry during test setup (`ActiveInstances.Add(comp)`) and clear the registry in the `[TearDown]` method to prevent state leakage between tests.
