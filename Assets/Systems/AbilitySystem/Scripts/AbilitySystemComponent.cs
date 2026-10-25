@@ -10,6 +10,7 @@ using AbilitySystem.Runtime.Utilities;
 using GameplayTags.Runtime;
 using Unity.Netcode;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Serialization;
 using Attribute = AbilitySystem.Runtime.Attributes.Attribute;
 
@@ -17,6 +18,8 @@ namespace AbilitySystem.Scripts
 {
     public class AbilitySystemComponent : NetworkBehaviour, INetworkRole
     {
+        public static HashSet<AbilitySystemComponent> ActiveInstances = new HashSet<AbilitySystemComponent>();
+
         [FormerlySerializedAs("definition")] public AbilitySystemDefinition Definition;
         public IAbilitySystem AbilitySystem { get; internal set; }
         public Action OnAbilitySystemInitialised;
@@ -64,6 +67,16 @@ namespace AbilitySystem.Scripts
         }
         
         public double Time => NetworkManager != null ? NetworkManager.ServerTime.Time : UnityEngine.Time.time;
+
+        private void OnEnable()
+        {
+            ActiveInstances.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            ActiveInstances.Remove(this);
+        }
 
         public override void OnNetworkSpawn()
         {
