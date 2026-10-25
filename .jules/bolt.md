@@ -4,3 +4,9 @@
 ## 2025-02-14 - Remove redundant normalizations after cross product of orthogonal normalized vectors
 **Learning:** The cross product of two orthogonal, normalized vectors inherently results in a normalized vector. Calling `.normalized` on the result of `Vector3.Cross` in this scenario is an expensive and redundant `Mathf.Sqrt()` operation that should be avoided.
 **Action:** Avoid calling `.normalized` on the result of a cross product if the inputs are already known to be normalized and orthogonal.
+## 2026-10-25 - Replace FindObjectsOfType with static registry for AbilitySystemComponent
+**Learning:** Object.FindObjectsOfType is an O(N) operation that is too slow for hot paths like AI sensors and Update methods.
+**Action:** Used a static HashSet in AbilitySystemComponent populated during OnEnable/OnDisable to provide an O(1) registry for scene-wide lookups.
+## 2026-10-25 - Unit Tests and Mock Lifecycles with Static Registries
+**Learning:** When replacing `FindObjectsOfType` with a static registry (e.g., `ActiveInstances` populated on `OnEnable`), unit tests that dynamically add components (e.g., via `AddComponent`) may fail because `OnEnable` does not always fire automatically in the test runner's mock environment.
+**Action:** Always manually register mock components into the static registry during test setup (`ActiveInstances.Add(comp)`) and clear the registry in the `[TearDown]` method to prevent state leakage between tests.
