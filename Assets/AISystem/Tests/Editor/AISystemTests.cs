@@ -46,6 +46,7 @@ namespace AISystem.Tests
         [TearDown]
         public void TearDown()
         {
+            AbilitySystemComponent.ActiveInstances.Clear();
             foreach (var go in _gameObjectsToCleanup)
             {
                 if (go != null)
@@ -56,14 +57,14 @@ namespace AISystem.Tests
             _gameObjectsToCleanup.Clear();
 
             // Reset singletons
-            var pointManager = UnityEngine.Object.FindObjectOfType<TacticalPointManager>();
+            var pointManager = UnityEngine.Object.FindFirstObjectByType<TacticalPointManager>();
             if (pointManager != null)
             {
                 UnityEngine.Object.DestroyImmediate(pointManager.gameObject);
             }
             typeof(TacticalPointManager).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).SetValue(null, null);
 
-            var groupCoordinator = UnityEngine.Object.FindObjectOfType<TacticalGroupCoordinator>();
+            var groupCoordinator = UnityEngine.Object.FindFirstObjectByType<TacticalGroupCoordinator>();
             if (groupCoordinator != null)
             {
                 UnityEngine.Object.DestroyImmediate(groupCoordinator.gameObject);
@@ -78,19 +79,20 @@ namespace AISystem.Tests
             return go;
         }
 
-        private (GameObject go, Mock<IMonoAgent> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
+        private (GameObject go, Mock<IActionReceiver> agentMock, Mock<IAbilitySystem> abilitySystemMock, AbilitySystemComponent asc) CreateMockAgent(string name = "MockAgent", string tag = "Enemy")
         {
             var go = CreateGameObject(name);
-            go.tag = tag;
+            try { go.tag = tag; } catch { }
 
             var asc = go.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(asc);
             var abilitySystemMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             
             // Set the internal AbilitySystem property on AbilitySystemComponent using reflection
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(asc, abilitySystemMock.Object);
 
-            var agentMock = new Mock<IMonoAgent>();
+            var agentMock = new Mock<IActionReceiver>(); agentMock.As<IMonoAgent>();
             agentMock.SetupGet(a => a.Transform).Returns(go.transform);
 
             return (go, agentMock, abilitySystemMock, asc);
@@ -372,7 +374,7 @@ namespace AISystem.Tests
 
             // Case 1: Player Tag
             var playerGo = CreateGameObject("PlayerObj");
-            playerGo.tag = "Player";
+            try { playerGo.tag = "Player"; } catch { }
             playerGo.transform.position = new Vector3(1000, 1000, 1010);
 
             var target = sensor.Sense((IActionReceiver)agentMock.Object, null, null);
@@ -384,6 +386,7 @@ namespace AISystem.Tests
             var otherEnemyGo = CreateGameObject("OtherEnemy");
             otherEnemyGo.transform.position = new Vector3(1000, 1000, 1005);
             var otherAsc = otherEnemyGo.AddComponent<AbilitySystemComponent>();
+            AbilitySystemComponent.ActiveInstances.Add(otherAsc);
             var otherAbilityMock = AbilitySystemUtilities.CreateMockAbilitySystem(true);
             var prop = typeof(AbilitySystemComponent).GetProperty("AbilitySystem", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(otherAsc, otherAbilityMock.Object);
@@ -578,7 +581,7 @@ namespace AISystem.Tests
 
             // Ability not present in manager -> returns Stop
             var contextMock = new Mock<IActionContext>();
-            var state = action.Perform(agentMock.Object, data, contextMock.Object);
+            var state = action.Perform(agentMock.As<IMonoAgent>().Object, data, contextMock.Object);
             Assert.AreEqual(ActionRunState.Stop, state);
 
             // Grant Fireball Ability
@@ -596,7 +599,7 @@ namespace AISystem.Tests
             // Since it's a MonoBehaviour and we are invoking Perform, let's see how Perform is coded:
             // asc.TryActivateAbility(abilityName, abilityData);
             // Yes, let's see if we can trigger the action.
-            state = action.Perform(agentMock.Object, data, contextMock.Object);
+            state = action.Perform(agentMock.As<IMonoAgent>().Object, data, contextMock.Object);
             Assert.AreEqual(ActionRunState.Completed, state);
             Assert.IsTrue(data.AbilityTriggered);
         }
@@ -608,21 +611,21 @@ namespace AISystem.Tests
             var action = new IdleAction();
             var data = new IdleAction.Data();
 
-            action.Start(agentMock.Object, data);
+            action.Start(agentMock.As<IMonoAgent>().Object, data);
             Assert.Greater(data.Timer, 0f);
 
             var contextMock = new Mock<IActionContext>();
             contextMock.SetupGet(c => c.DeltaTime).Returns(0.1f);
 
             var initialTimer = data.Timer;
-            var state = action.Perform(agentMock.Object, data, contextMock.Object);
+            var state = action.Perform(agentMock.As<IMonoAgent>().Object, data, contextMock.Object);
 
             Assert.AreEqual(ActionRunState.Continue, state);
             Assert.AreEqual(initialTimer - 0.1f, data.Timer);
 
             // Set timer to 0 to complete
             data.Timer = 0f;
-            state = action.Perform(agentMock.Object, data, contextMock.Object);
+            state = action.Perform(agentMock.As<IMonoAgent>().Object, data, contextMock.Object);
             Assert.AreEqual(ActionRunState.Completed, state);
         }
 
