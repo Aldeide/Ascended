@@ -38,8 +38,9 @@ namespace AbilityGraph.Runtime.Nodes.Spatial
         protected override void Process()
         {
             var direction = End - Start;
-            var maxDist = Mathf.Min(MaxDistance, direction.magnitude);
-            direction.Normalize();
+            var dist = direction.magnitude;
+            var maxDist = Mathf.Min(MaxDistance, dist);
+            direction = dist > 1E-05f ? direction / dist : Vector3.zero;
             var rotation = Quaternion.Euler(OrientationEuler);
 
             if (Physics.BoxCast(Start, HalfExtents, direction, out RaycastHit hit, rotation, maxDist, LayerMask))
