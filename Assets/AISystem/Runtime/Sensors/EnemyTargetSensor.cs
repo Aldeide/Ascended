@@ -18,17 +18,17 @@ namespace AISystem.Runtime.Sensors
             if (players == null || players.Length == 0)
             {
                 // Fallback: search for any AbilitySystemComponent that is not self
-                var components = Object.FindObjectsOfType<AbilitySystemComponent>();
+                // Use centralized registry instead of Object.FindObjectsOfType
                 AbilitySystemComponent closest = null;
                 float closestDist = float.MaxValue;
-                foreach (var comp in components)
+                foreach (var comp in AbilitySystemComponent.ActiveInstances)
                 {
                     if (comp == null || comp.gameObject == null) continue;
                     if (comp.gameObject == agent.Transform.gameObject) continue;
-                    float dist = Vector3.Distance(agent.Transform.position, comp.transform.position);
-                    if (dist < closestDist)
+                    float sqrDist = (agent.Transform.position - comp.transform.position).sqrMagnitude;
+                    if (sqrDist < closestDist)
                     {
-                        closestDist = dist;
+                        closestDist = sqrDist;
                         closest = comp;
                     }
                 }
@@ -40,14 +40,14 @@ namespace AISystem.Runtime.Sensors
             }
 
             GameObject closestPlayer = null;
-            float minDist = float.MaxValue;
+            float minSqrDist = float.MaxValue;
             foreach (var player in players)
             {
                 if (player == null) continue;
-                float dist = Vector3.Distance(agent.Transform.position, player.transform.position);
-                if (dist < minDist)
+                float sqrDist = (agent.Transform.position - player.transform.position).sqrMagnitude;
+                if (sqrDist < minSqrDist)
                 {
-                    minDist = dist;
+                    minSqrDist = sqrDist;
                     closestPlayer = player;
                 }
             }
