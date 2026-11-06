@@ -150,7 +150,7 @@ namespace AbilitySystem.Runtime.Networking
             if (effect.Source != null && effect.Source.NetworkRole != null)
                 data.SourceId = effect.Source.NetworkRole.NetworkObjectId;
             else
-                data.SourceId = _owner.NetworkRole.NetworkObjectId;
+                data.SourceId = _owner.NetworkRole != null ? _owner.NetworkRole.NetworkObjectId : 0;
 
             Debug.Log($"[ReplicationManager] NotifyClientsEffectAdded: {data.EffectName} on server={_owner.IsServer()}");
             OnNotifyClientsEffectAdded?.Invoke(data);
