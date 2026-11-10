@@ -613,7 +613,7 @@ namespace AISystem.Tests
             var action = new IdleAction();
             var data = new IdleAction.Data();
 
-            action.Start(agentMock.Object, data);
+            action.Start(agentMock.As<IMonoAgent>().Object, data);
             Assert.Greater(data.Timer, 0f);
 
             var contextMock = new Mock<IActionContext>();
